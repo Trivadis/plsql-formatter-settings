@@ -14,9 +14,7 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
    BEGIN
       IF monthly_value <= 4000 THEN
          ilevel := 'Low Income';
-      ELSIF
-         monthly_value > 4000 AND monthly_value <= 7000
-      THEN
+      ELSIF monthly_value > 4000 AND monthly_value <= 7000 THEN
          ilevel := 'Avg Income';
       ELSE
          ilevel := 'High Income';

@@ -874,6 +874,9 @@ ignoreLineBreaksBeforeNode:
    !:breaksBeforeComma &    [node) ','
 |  [node) ';'
 |  [node-1) 'SET' & [node^) update_set_clause -- salvisberg: added to avoid line breaks between SET and first and only update_set_clause
+|  [node-1) 'IF' -- salvisberg: added to avoid line breaks between IF and condition (independent of length of condition)
+|  [node-1) 'ELSIF' -- salvisberg: added to avoid line breaks between ELSIF and condition (independent of length of condition)
+|  [node) 'THEN' -- salvisberg: added to avoid line breaks before THEN (independent of length of previous condition)
 ->
 ;
 ignoreLineBreaksAfterNode:
