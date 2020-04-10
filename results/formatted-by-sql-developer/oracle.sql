@@ -1,5 +1,4 @@
 -- based on the example in the formatting preferences of the Oracle SQL Developer 19.4
-
 CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
    tot_emps   NUMBER;
    tot_depts  NUMBER;
@@ -47,9 +46,9 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
                 3
            FROM wsh_new_deliveries wnd
            JOIN wsh_delivery_assignments wda
-         ON wnd.delivery_id = wda.delivery_id
+             ON wnd.delivery_id = wda.delivery_id
            JOIN hz_locations hl
-         ON hps.location_id = hl.location_id
+             ON hps.location_id = hl.location_id
       );
       INSERT INTO employees (
          employee_id,

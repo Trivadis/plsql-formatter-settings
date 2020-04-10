@@ -637,6 +637,7 @@ rightAlignments: :alignRight & (
   | [node) 'FROM'   &  [node^) from_clause
   --| [node) 'JOIN'   &  [node^) "inner_cross_join_clause" handled by "inner_cross_join_clause" alignment
   --| [node) 'RIGHT'         &  [node^)  "outer_join_clause"
+  | [node) 'ON'   &  [node^) on_using_condition -- salvisberg: added to fix indentation of ON
   | [node) 'WHERE'  &  [node^) where_clause 
   | [node) 'OR'     &  [node^) condition
   | [node) 'AND'    &  [node^) condition
