@@ -1,4 +1,5 @@
 -- based on the example in the formatting preferences of the Oracle SQL Developer 19.4
+
 CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
    tot_emps   NUMBER;
    tot_depts  NUMBER;
@@ -30,8 +31,8 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
             dbms_output.put_line('sal_raise := 0');
       END CASE;
       SELECT CASE "1"
-         WHEN 1 THEN
-            'XX'
+                WHEN 1 THEN
+                   'XX'
              END
         INTO new_empno
         FROM emp,
