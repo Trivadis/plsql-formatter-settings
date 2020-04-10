@@ -44,9 +44,9 @@ simpleIndentConditions:
      | [node) create_view#[107,114) & [node^) create_view#[104,120)
 | [node) alter_method_spec 
 | [node) and_expr & ![node) rel
-| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list
-| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) arg
-| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) arg
+| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list & ![node^^) constrained_type -- salvisberg: extended to avoid line breaks for precision and scale: first argument
+| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) arg & ![node^^) constrained_type -- salvisberg: extended to avoid line breaks for precision and scale: right parenthesis
+| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) arg & ![node^^^) constrained_type -- salvisberg: extended to avoid line breaks for precision and scale: second argument
 | [node) array_ty_def
 | [node) attr_dim_hierarchy 
 | [node) attribute_clause 

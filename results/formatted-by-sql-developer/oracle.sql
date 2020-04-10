@@ -10,10 +10,7 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
       salary         IN  NUMBER,
       department_id  IN  NUMBER
    ) RETURN NUMBER IS
-      new_empno NUMBER(
-         16,
-         0
-      );
+      new_empno NUMBER(16, 0);
    BEGIN
       IF monthly_value <= 4000 THEN
          ilevel := 'Low Income';
