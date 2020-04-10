@@ -26,8 +26,7 @@ BEGIN
    -- Check whether salary has changed
    IF r_employee.salary <> l_new_salary THEN
       UPDATE employees
-         SET
-         salary = l_new_salary
+         SET salary = l_new_salary
        WHERE employee_id = in_employee_id;
    END IF;
 END set_salary;

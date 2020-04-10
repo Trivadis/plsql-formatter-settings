@@ -249,8 +249,8 @@ simpleIndentConditions:
 | [node) tablespace_datafile_clauses 
 | [node) tempfile_reuse_clause
 | [node) type_constructor_expression &  ! [node^) create
-| :breaksAfterSelectFromWhere & [node) update_set_clause_expr & [node^^) update_set_clause
-| [node) update_set_clause_expr & ![node^^) update_set_clause
+| :breaksAfterSelectFromWhere & [node) update_set_clause_expr & [node^^) update_set_clause -- salvisberg: keep enabled, handles the first update_set_clause, but since :breaksAfterSelectFromWhere is FALSE, this should be OK
+| [node) update_set_clause_expr & ![node^^) update_set_clause -- salvisberg: keep enabled, handles subsequent update_set_clauses (after the first) 
 | [node) user_aux
 | [node) using_clause_opt
 | [node) using_index_clause 
@@ -482,7 +482,7 @@ _extraBrkBefore:
 | [node) 'NESTED' & [node^) column_properties
 | [node) 'MEASURES' --& [node^) model_column_clauses
 | [node) '(' & [node+1) cell_assignment --& [node^) model_rules_clause
-| [node) update_set_clause
+| [node) update_set_clause -- salvisberg: keep enabled, new line before update_set_clause is what we want
 | [node) 'ELSIF'
 | [node) 'ELSE'
 | [node) 'USING'  & [node^) merge 
@@ -775,7 +775,7 @@ pairwiseAlignments5:
 & predecessor=ancestor-1
 & ancestor < node
 ;
-pairwiseAlignments6: 
+pairwiseAlignments6: -- salvisberg: keep enabled, this does not effect the formatting for a standalone update_set_clause_expr
   [predecessor) update_set_clause_expr
 & [node) update_set_clause_expr
 & predecessor=ancestor-1
@@ -873,6 +873,7 @@ additional4Spaces:
 ignoreLineBreaksBeforeNode:
    !:breaksBeforeComma &    [node) ','
 |  [node) ';'
+|  [node-1) 'SET' & [node^) update_set_clause -- salvisberg: added to avoid line breaks between SET and first and only update_set_clause
 ->
 ;
 ignoreLineBreaksAfterNode:
