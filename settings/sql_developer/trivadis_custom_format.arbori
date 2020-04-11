@@ -337,6 +337,7 @@ _skipWSBeforeNode:
   | :spaceParenDefault        & [node) '('  &  [node^)  function_call
   | :spaceParenDefault        & [node) ')'  &  [node^)  function_call
   | [node) ext_tbl_string_literal[24,29)
+  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces before
 ;
 
 _skipWSBeforeAncNode: 
@@ -398,6 +399,7 @@ _skipWSAfterNode:
   | :spaceParenDefault       & [node) '('  &  [node^)  function_call
   | [node) ext_tbl_string_literal[24,29)
   | [node) integer & [node^) size_clause
+  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces before
 ;
 
 _skipWSAfterAncNode: 
@@ -529,6 +531,7 @@ _extraBrkAfter:
 --| [node) level_clause 
 --| [node) hierarchy_clause[14,29)#
 | :breaksAfterComma & .breaks4XML /*& .logTuple*/ & [node+1) aux_xml_value_expr           & [node) ','
+| [node) label -- salvisberg: added, add break after label
 --    -> { print("output="+ tuple) }
 ;
 
