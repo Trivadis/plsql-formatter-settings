@@ -903,29 +903,30 @@ indentConditionalSubqueries:
   :alignRight & :breakOnSubqueries & (
       [node)   subquery & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
     | [node)   subquery & [node-1) '(' & [node+1) ')' & [node^^) in_condition
+    | [node)   subquery & [node-1) '(' & [node+1) ')' & [node^)  query_table_expression
     | [node-1) subquery & [node-2) '(' & [node)   ')' & [node^)  exists_condition
     | [node-1) subquery & [node-2) '(' & [node)   ')' & [node^^) in_condition
+    | [node-1) subquery & [node-2) '(' & [node)   ')' & [node^)  query_table_expression
   )
   -> {
     var parentNode = tuple.get("node");
     var descendants = parentNode.descendants();
     var prevPos = 0
     var indentSpaces = struct.options.get("identSpaces")
-
     for (i = 0, len = descendants.length; i < len; i++) {
       var node = descendants.get(i);
       var pos = node.from;
       var nodeIndent = struct.getNewline(pos);
       if (nodeIndent != null && pos > prevPos) {
-        print("length of indent: " +  nodeIndent.length);
+        // print("length of indent: " +  nodeIndent.length);
         for (j = indentSpaces - 7; j < indentSpaces; j++) {
           nodeIndent = nodeIndent + " ";
         }
-        print("putnewline for " + pos);
+        // print("putnewline for " + pos);
         struct.putNewline(pos, nodeIndent);
         prevPos = pos
       }
     }
-    -- print("Incresed indentation of " + tuple);
+    // print("Incresed indentation of " + tuple);
   }
 ;
