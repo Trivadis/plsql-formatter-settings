@@ -254,7 +254,7 @@ simpleIndentConditions:
 | [node) tempfile_reuse_clause
 | [node) type_constructor_expression &  ! [node^) create
 | :breaksAfterSelectFromWhere & [node) update_set_clause_expr & [node^^) update_set_clause
-| [node) update_set_clause_expr & ![node^^) update_set_clause 
+| [node) update_set_clause_expr & ![node^^) update_set_clause
 | [node) user_aux
 | [node) using_clause_opt
 | [node) using_index_clause 
@@ -787,7 +787,7 @@ pairwiseAlignments5:
 & predecessor=ancestor-1
 & ancestor < node
 ;
-pairwiseAlignments6:
+pairwiseAlignments6: 
   [predecessor) update_set_clause_expr
 & [node) update_set_clause_expr
 & predecessor=ancestor-1
