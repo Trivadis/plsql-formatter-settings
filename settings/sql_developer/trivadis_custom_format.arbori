@@ -44,9 +44,12 @@ simpleIndentConditions:
      | [node) create_view#[107,114) & [node^) create_view#[104,120)
 | [node) alter_method_spec 
 | [node) and_expr & ![node) rel
-| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list & ![node^^) constrained_type -- salvisberg: extended to avoid line breaks for precision and scale: first argument
-| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) arg & ![node^^) constrained_type -- salvisberg: extended to avoid line breaks for precision and scale: right parenthesis
-| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) arg & ![node^^^) constrained_type -- salvisberg: extended to avoid line breaks for precision and scale: second argument
+--| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list     -- salvisberg: disabled, breaks for assoc_args only
+--| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) arg     -- salvisberg: disabled, breaks for assoc_args only
+--| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) arg                 -- salvisberg: disabled, breaks for assoc_args only
+| .breaksProcArgs & [node) assoc_arg & [node^) paren_expr_list & [node+1) arg_list -- salvisberg: added breaks only with assoc_arg: first argument
+| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) assoc_arg -- salvisberg: added breaks only with assoc_arg: right parenthesis
+| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) assoc_arg             -- salvisberg: added breaks only with assoc_arg: > first argument
 | [node) array_ty_def
 | [node) attr_dim_hierarchy 
 | [node) attribute_clause 
@@ -119,7 +122,7 @@ simpleIndentConditions:
 | :indentActions &  [node) expr  &  [node-1) 'ELSE'
 | :indentActions &  [node) expr  &  [node-1) 'THEN'
 | :indentConditions &  [node) expr  &  [node-1) 'WHEN'
-| .breaksProcArgs &  [node) "expr_list" & [node^) "(x,y,z)" & ![node) compound_expression & ![node) identifier
+--| .breaksProcArgs &  [node) "expr_list" & [node^) "(x,y,z)" & ![node) compound_expression & ![node) identifier -- salvisberg: disabled, break only with assoc_args
 | [node) expression_list  & ![node) grouping_expression_list
 | [node) external_table_data_props 
 | [node) fields_def

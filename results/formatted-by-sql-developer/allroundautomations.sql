@@ -82,9 +82,7 @@ CREATE OR REPLACE PROCEDURE insertdept (
 BEGIN
    -- Determine the maximum department number if necessary
    IF p_deptno IS NULL THEN
-      SELECT nvl(
-         MAX(deptno), 0
-      ) + 1
+      SELECT nvl(MAX(deptno), 0) + 1
         INTO p_deptno
         FROM dept;
    END IF;
