@@ -727,7 +727,8 @@ WITH apms_xml AS ( SELECT
  */
 incrementalAlignments:  [node) subquery
                      |  [node) JSON_OBJECT
-                     |  [node) case_expression -- salvisberg: added to support case expression as first item in select_list
+                     |  [node) case_expression     -- salvisberg: added to support case expression as first item in select_list
+                     |  [node) function_expression -- salvisberg: added to support function expression as first item in select_list
 ->
 ; 
 
