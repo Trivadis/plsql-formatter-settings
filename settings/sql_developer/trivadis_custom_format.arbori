@@ -338,7 +338,7 @@ _skipWSBeforeNode:
   | :spaceParenDefault        & [node) '('  &  [node^)  function_call
   | :spaceParenDefault        & [node) ')'  &  [node^)  function_call
   | [node) ext_tbl_string_literal[24,29)
-  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces before
+  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces before label identifier
 ;
 
 _skipWSBeforeAncNode: 
@@ -400,7 +400,7 @@ _skipWSAfterNode:
   | :spaceParenDefault       & [node) '('  &  [node^)  function_call
   | [node) ext_tbl_string_literal[24,29)
   | [node) integer & [node^) size_clause
-  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces before
+  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces after label identifier
 ;
 
 _skipWSAfterAncNode: 
