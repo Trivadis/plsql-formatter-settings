@@ -42,15 +42,15 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
           OR 3 = 4 )
          AND 0 = 1 + 2
          AND EXISTS (
-         SELECT 1,
-                2,
-                3
-           FROM wsh_new_deliveries wnd
-           JOIN wsh_delivery_assignments wda
-             ON wnd.delivery_id = wda.delivery_id
-           JOIN hz_locations hl
-             ON hps.location_id = hl.location_id
-      );
+                SELECT 1,
+                       2,
+                       3
+                  FROM wsh_new_deliveries wnd
+                  JOIN wsh_delivery_assignments wda
+                    ON wnd.delivery_id = wda.delivery_id
+                  JOIN hz_locations hl
+                    ON hps.location_id = hl.location_id
+             );
       INSERT INTO employees (
          employee_id,
          full_name,
