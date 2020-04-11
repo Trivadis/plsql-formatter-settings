@@ -910,7 +910,6 @@ indentConditionalSubqueries:
     var prevPos = 0
     var indentSpaces = struct.options.get("identSpaces")
 
-
     for (i = 0, len = descendants.length; i < len; i++) {
       var node = descendants.get(i);
       var pos = node.from;
