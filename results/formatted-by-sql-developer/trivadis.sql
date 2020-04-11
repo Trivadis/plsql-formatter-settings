@@ -6,13 +6,13 @@ CREATE OR REPLACE PROCEDURE set_salary (
    CURSOR c_employees (
       p_employee_id IN employees.employee_id%TYPE
    ) IS
-   SELECT last_name,
-          first_name,
-          salary
-     FROM employees
-    WHERE employee_id = p_employee_id
-    ORDER BY last_name,
-             first_name;
+      SELECT last_name,
+             first_name,
+             salary
+        FROM employees
+       WHERE employee_id = p_employee_id
+       ORDER BY last_name,
+                first_name;
    r_employee    c_employees%rowtype;
    l_new_salary  employees.salary%TYPE;
 BEGIN

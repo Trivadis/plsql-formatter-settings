@@ -50,6 +50,7 @@ simpleIndentConditions:
 | .breaksProcArgs & [node) assoc_arg & [node^) paren_expr_list & [node+1) arg_list -- salvisberg: added breaks only with assoc_arg: first argument
 | .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) assoc_arg -- salvisberg: added breaks only with assoc_arg: right parenthesis
 | .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) assoc_arg             -- salvisberg: added breaks only with assoc_arg: > first argument
+| [node) subquery & [node-1) 'IS' & [node-2) cursor_d                              -- salvisberg: added to indent subquery in cursor definition
 | [node) array_ty_def
 | [node) attr_dim_hierarchy 
 | [node) attribute_clause 
