@@ -78,7 +78,7 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
       proc1(
          p1111  => a1,
          p11    => a1,
-            p2     => a2
+         p2     => a2
       );
       return(new_empno);
    END;

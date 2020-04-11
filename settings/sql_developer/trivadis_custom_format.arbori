@@ -566,6 +566,7 @@ declare: runOnce
    var argNum = 1;
 }
 
+/* salvisberg: disabled since this leads to additional indentation for after the 2nd parameter
 breakAfterEvery5thArg: commasInProc 
 ->{
     argNum++;    	
@@ -595,6 +596,7 @@ breakAfterEvery5thArg: commasInProc
     	}        
     }
 }
+*/
 
 
 /**
