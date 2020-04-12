@@ -908,7 +908,7 @@ dontFormatNode: [node) numeric_literal
  */
 
 indentConditionalSubqueries:
-  :alignRight & :breakOnSubqueries & (
+  :breakOnSubqueries & (
       [node)   subquery & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
     | [node)   subquery & [node-1) '(' & [node+1) ')' & [node^^) in_condition
     | [node)   subquery & [node-1) '(' & [node+1) ')' & [node^)  query_table_expression
@@ -921,17 +921,25 @@ indentConditionalSubqueries:
     var descendants = parentNode.descendants();
     var prevPos = 0
     var indentSpaces = struct.options.get("identSpaces")
+    var alignRight = struct.options.get("alignRight")
+    var baseIndent
+    if (alignRight) {
+      baseIndent = "SELECT ".length;
+    } else {
+      baseIndent = "WHERE ".length;
+    }
+    var addIndent = ""
+    for (j = indentSpaces - baseIndent; j < indentSpaces; j++) {
+      addIndent = addIndent + " ";
+    }
+    print("length of addIndent: " +  addIndent.length);
     for (i = 0, len = descendants.length; i < len; i++) {
       var node = descendants.get(i);
       var pos = node.from;
       var nodeIndent = struct.getNewline(pos);
       if (nodeIndent != null && pos > prevPos) {
-        // print("length of indent: " +  nodeIndent.length);
-        for (j = indentSpaces - 7; j < indentSpaces; j++) {
-          nodeIndent = nodeIndent + " ";
-        }
         // print("putnewline for " + pos);
-        struct.putNewline(pos, nodeIndent);
+        struct.putNewline(pos, nodeIndent + addIndent);
         prevPos = pos
       }
     }
