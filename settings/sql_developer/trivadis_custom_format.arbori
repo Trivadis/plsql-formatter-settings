@@ -932,7 +932,7 @@ indentConditionalSubqueries:
     for (j = indentSpaces - baseIndent; j < indentSpaces; j++) {
       addIndent = addIndent + " ";
     }
-    print("length of addIndent: " +  addIndent.length);
+    // print("length of addIndent: " +  addIndent.length);
     for (i = 0, len = descendants.length; i < len; i++) {
       var node = descendants.get(i);
       var pos = node.from;
