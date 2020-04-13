@@ -30,7 +30,7 @@ Clone this repository or download the ZIP file and extract it.
    ![Advanced Format](images/advanced_format.png)
 5. Select [`trivadis_advanced_format.xml`](settings/sql_developer/trivadis_advanced_format.xml)
 6. Press `Open`
-7. Select `Code Editor` -> `Format` -> `Advanced Format` -> `Custom Format``
+7. Select `Code Editor` -> `Format` -> `Advanced Format` -> `Custom Format`
 8. Press `Import...`
    ![Custom Format](images/custom_format.png)
 9. Select [`trivadis_custom_format.arbori`](settings/sql_developer/trivadis_custom_format.arbori)
@@ -41,7 +41,7 @@ Clone this repository or download the ZIP file and extract it.
 
 1. Start PL/SQL Developer
 2. Open `Preferences`
-3. Select `User interface` -> `PL/SQL Beautifier``
+3. Select `User interface` -> `PL/SQL Beautifier`
 4. Press `Edit...`
 5. Press `Open...`
    ![PL/SQL Beautifier](images/plsql_beautifier.png)
