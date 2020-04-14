@@ -16,7 +16,7 @@
     <formatThreshold>1</formatThreshold>
     <spaceAroundOperators>true</spaceAroundOperators>
     <useTab>false</useTab>
-    <idCase>oracle.dbtools.app.Format.Case.lower</idCase>
+    <idCase>oracle.dbtools.app.Format.Case.NoCaseChange</idCase>
     <extraLinesAfterSignificantStatements>oracle.dbtools.app.Format.BreaksX2.Keep</extraLinesAfterSignificantStatements>
     <breaksConcat>oracle.dbtools.app.Format.Breaks.Before</breaksConcat>
     <spaceAroundBrackets>oracle.dbtools.app.Format.Space.Default</spaceAroundBrackets>
