@@ -20,11 +20,11 @@ BEGIN
        WHERE e.empno = p_empno
          AND m.empno = e.mgr
          AND d.deptno IN (
-         10,
-         20,
-         30,
-         40
-      );
+                10,
+                20,
+                30,
+                40
+             );
    END IF;
    return(result);
 EXCEPTION
