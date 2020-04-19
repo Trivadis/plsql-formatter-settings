@@ -5,6 +5,7 @@
 *._trace
 *.xtendbin
 **/xtend-gen
+**/generated-sources
 
 # Log file
 *.log
