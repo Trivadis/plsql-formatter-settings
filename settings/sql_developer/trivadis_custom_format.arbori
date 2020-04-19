@@ -907,15 +907,17 @@ dontFormatNode: [node) numeric_literal
  * ----------------------------------------------------------------------------
  */
 
-indentConditionalSubqueries:
+indentInExistsTable:
   :breakOnSubqueries & (
-      [node)   subquery & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
-    | [node)   subquery & [node-1) '(' & [node+1) ')' & [node^^) in_condition
-    | [node)   subquery & [node-1) '(' & [node+1) ')' & [node^)  query_table_expression
-    | [node-1) subquery & [node-2) '(' & [node)   ')' & [node^)  exists_condition
-    | [node-1) subquery & [node-2) '(' & [node)   ')' & [node^^) in_condition
-    | [node-1) subquery & [node-2) '(' & [node)   ')' & [node^)  query_table_expression
-  )
+      [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
+    | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^^) in_condition
+    | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  query_table_expression
+    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  exists_condition
+    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^^) in_condition
+    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  query_table_expression
+  ) 
+    | [node)   expression_list & [node-1) '(' & [node+1) ')' & [node^^) in_condition
+    | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^^) in_condition
   -> {
     var parentNode = tuple.get("node");
     var descendants = parentNode.descendants();
@@ -932,17 +934,45 @@ indentConditionalSubqueries:
     for (j = indentSpaces - baseIndent; j < indentSpaces; j++) {
       addIndent = addIndent + " ";
     }
-    // print("length of addIndent: " +  addIndent.length);
+    logger.fine(struct.getClass(), "--- indentInExistsTable ---");
+    logger.fine(struct.getClass(), "tuple: " +  tuple);
+    logger.fine(struct.getClass(), "length of addIndent: " +  addIndent.length);
     for (i = 0, len = descendants.length; i < len; i++) {
       var node = descendants.get(i);
       var pos = node.from;
       var nodeIndent = struct.getNewline(pos);
       if (nodeIndent != null && pos > prevPos) {
-        // print("putnewline for " + pos);
+        logger.finest(struct.getClass(), "addIndent on pos " + pos + " for token " + target.getSrc()[pos].content);
         struct.putNewline(pos, nodeIndent + addIndent);
         prevPos = pos
       }
     }
-    // print("Incresed indentation of " + tuple);
+  }
+;
+
+indentCaseExpression:
+  :breaksBeforeComma & [node) case_expression & [node^) select_term & [node^-1) ',' 
+  -> {
+    var parentNode = tuple.get("node");
+    var descendants = parentNode.descendants();
+    var prevPos = 0
+    var indentSpaces = struct.options.get("identSpaces")
+    var addIndent = ""
+    for (j = 0; j < 2 + indentSpaces; j++) {
+      addIndent = addIndent + " ";
+    }
+    logger.fine(struct.getClass(), "--- indentCaseExpression ---");
+    logger.fine(struct.getClass(), "tuple: " +  tuple);
+    logger.fine(struct.getClass(), "length of addIndent: " +  addIndent.length);
+    for (i = 1, len = descendants.length; i < len; i++) {
+      var node = descendants.get(i);
+      var pos = node.from;
+      var nodeIndent = struct.getNewline(pos);
+      if (nodeIndent != null && pos > prevPos) {
+        logger.finest(struct.getClass(), "addIndent on pos " + pos + " for token " + target.getSrc()[pos].content);
+        struct.putNewline(pos, nodeIndent + addIndent);
+        prevPos = pos
+      }
+    }
   }
 ;
