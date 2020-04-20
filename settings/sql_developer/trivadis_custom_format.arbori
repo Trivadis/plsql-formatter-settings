@@ -184,7 +184,8 @@ simpleIndentConditions:
              ([node^) aggregate_function | [node^) analytic_function | [node^) analytic_clause | [node^^) analytic_clause) --<-- not to ident order by in the main query block 
 | :breaksAfterSelectFromWhere & [node) "ord_by_1desc" & [node^) order_by_clause 
 | :breaksAfterSelectFromWhere & [node) order_by_clause[31,38) & [node^) order_by_clause
-| [node) original_method_body_specification
+--| [node) original_method_body_specification -- salvisberg, disabled, issue #5
+| [node) body_adt_field -- salvisberg, added, issue #5
 | [node) parallel_clause 
 | [node) password_parameters
 | [node) pdb_storage_clause
@@ -498,6 +499,7 @@ _extraBrkBefore:
 | [node) case_stmt_alt
 | [node) simple_case_expression[4,27)#
 | :breakAfterConditions & [node) 'THEN'
+| [node) method_specification & [node-1) ',' -- salvisberg, added, issue #5
 ;
 
 _extraBrkAfter: 
