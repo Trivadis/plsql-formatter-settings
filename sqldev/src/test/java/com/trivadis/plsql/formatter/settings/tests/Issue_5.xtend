@@ -26,7 +26,7 @@ class Issue_5 extends ConfiguredTestFormatter {
     }
 
     @Test
-    def object_type_spec_overriding_final_member_function() {
+    def object_type_spec_final_member_function() {
         '''
             create or replace type ut_xunit_reporter under ut_junit_reporter (
                constructor function ut_xunit_reporter (
@@ -79,6 +79,5 @@ class Issue_5 extends ConfiguredTestFormatter {
             /
         '''.formatAndAssert
     }
-
 
 }
