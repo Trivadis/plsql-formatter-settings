@@ -156,7 +156,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/Trivadis/plsql-formater-settings.git</connection>
 		<developerConnection>scm:git:git@github.com:Triviadis/plsql-formatter-settings.git</developerConnection>
-		<tag>master</tag>
+		<tag>main</tag>
 		<url>https://github.com/Trivadis/plsql-formatter-settings</url>
 	</scm>
 

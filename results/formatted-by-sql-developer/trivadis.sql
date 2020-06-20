@@ -1,4 +1,4 @@
--- based on https://github.com/Trivadis/plsql-and-sql-coding-guidelines/blob/master/docs/3-coding-style/coding-style.md#example
+-- based on https://github.com/Trivadis/plsql-and-sql-coding-guidelines/blob/main/docs/3-coding-style/coding-style.md#example
 
 CREATE OR REPLACE PROCEDURE set_salary (
    in_employee_id IN employees.employee_id%TYPE
