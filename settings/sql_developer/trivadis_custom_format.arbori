@@ -903,6 +903,37 @@ dontFormatNode: [node) numeric_literal
 ->
 ;
 
+/*
+ * ----------------------------------------------------------------------------
+ * Workaround for SQLDev 20.2 to fix unwanted indentation of comments
+ * original code provided by Vadim Tropashko, 
+ * see https://community.oracle.com/thread/4336648
+ * ----------------------------------------------------------------------------
+ */
+fixComments: runOnce -> {
+  var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+  var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+  var Token = Java.type('oracle.dbtools.parser.Token');
+  var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
+  var substitutions = new Substitutions(target.input);
+  var commentEnd = 0;
+
+  for( i = 0; i < tokens.length; i++ ) {
+    if (commentEnd == 0 && (tokens[i].type == Token.COMMENT || tokens[i].type == Token.LINE_COMMENT)) {
+      commentEnd = tokens[i].end;
+      continue;
+    }
+    if ((tokens[i].content == " " || tokens[i].content == "\t") && commentEnd != 0) {
+      substitutions.put(tokens[i].begin,tokens[i].end,"");
+      continue;
+    }
+    if (tokens[i].type != Token.WS) {
+      commentEnd = 0;
+    }
+  }
+  target.input = substitutions.transformInput();
+}
+
 /* 
  * ----------------------------------------------------------------------------
  * Additional Arbori Queries
