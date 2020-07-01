@@ -917,17 +917,23 @@ fixComments: runOnce -> {
   var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
   var substitutions = new Substitutions(target.input);
   var commentEnd = 0;
-
-  for( i = 0; i < tokens.length; i++ ) {
-    if (commentEnd == 0 && (tokens[i].type == Token.COMMENT || tokens[i].type == Token.LINE_COMMENT)) {
+  var firstSpace = 0;
+  for (i = 0; i < tokens.length; i++) {
+    if (tokens[i].type == Token.COMMENT || tokens[i].type == Token.LINE_COMMENT) {
       commentEnd = tokens[i].end;
+      var firstSpace = 0;
       continue;
     }
-    if ((tokens[i].content == " " || tokens[i].content == "\t") && commentEnd != 0) {
-      substitutions.put(tokens[i].begin,tokens[i].end,"");
+    if (tokens[i].content == " " && commentEnd != 0 && firstSpace == 0) {
+      firstSpace = tokens[i].begin;
+      commentEnd = 0;
       continue;
     }
     if (tokens[i].type != Token.WS) {
+      if (tokens[i].type != Token.COMMENT && tokens[i].type != Token.LINE_COMMENT && firstSpace != 0) {
+        substitutions.put(firstSpace,tokens[i].begin,"");
+      }
+      firstSpace = 0;          
       commentEnd = 0;
     }
   }
