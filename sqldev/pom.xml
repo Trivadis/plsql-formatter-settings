@@ -11,8 +11,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
-		<xtend.version>2.21.0</xtend.version>
-		<sqldev.basedir>/Applications/SQLDeveloper19.4.0.app/Contents/Resources/sqldeveloper</sqldev.basedir>
+		<xtend.version>2.22.0</xtend.version>
+		<sqldev.basedir>/Applications/SQLDeveloper20.2.0.app/Contents/Resources/sqldeveloper</sqldev.basedir>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>oracle.dbtools.</groupId>
 			<artifactId>dbtools-common</artifactId>
-			<version>19.4.0</version>
+			<version>20.2.0</version>
 			<scope>system</scope>
 			<systemPath>${sqldev.basedir}/sqldeveloper/lib/dbtools-common.jar</systemPath>
 		</dependency>

@@ -22,6 +22,71 @@ prelude: runOnce -> {
     }
 }
 
+/*
+ * ----------------------------------------------------------------------------
+ * Workaround for SQLDev 20.2 to fix unwanted indentation of comments
+ * original code provided by Vadim Tropashko, 
+ * see https://community.oracle.com/thread/4336648
+ * This fixes the input source (target.input) and the lexer tokens (target.src).
+ * The lexer tokens are used by some parts of the Arbori program.
+ * The input source is used after the Arbori program execution.
+ * Therefore this fix must run at the beginning of the Arbori program.
+ * ----------------------------------------------------------------------------
+ */
+fixComments: runOnce -> {
+  var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+  var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+  var Token = Java.type('oracle.dbtools.parser.Token');
+  var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
+  var substitutions = new Substitutions(target.input);
+  var commentEnd = 0;
+  var firstSpace = 0;
+  var removeDuplicateSpace = false;
+  for (i = 0; i < tokens.length; i++) {
+    if (tokens[i].content == "\n") {
+      removeDuplicateSpace = false
+    } else if (removeDuplicateSpace && tokens[i].content == " " && tokens[i-1].content == " ") {
+      // remove duplicate spaces to calculate correct pairwise alignments after removing WS before comments
+      substitutions.put(tokens[i-1].begin,tokens[i].begin,"");
+    }
+    if (tokens[i].type == Token.COMMENT || tokens[i].type == Token.LINE_COMMENT) {
+      // position of comment end
+      commentEnd = tokens[i].end;
+      var firstSpace = 0;
+      continue;
+    }
+    if (tokens[i].content == " " && commentEnd != 0 && firstSpace == 0) {
+      // position of first space after a comment on a new line
+      firstSpace = tokens[i].begin;
+      commentEnd = 0;
+      continue;
+    }
+    if (tokens[i].type != Token.WS) {
+      if (tokens[i].type != Token.COMMENT && tokens[i].type != Token.LINE_COMMENT && firstSpace != 0) {
+        // remove all WS on the subsequent line after a series of comments to enforce correct indentation
+        substitutions.put(firstSpace,tokens[i].begin,"");
+        removeDuplicateSpace = true;
+      }
+      firstSpace = 0;          
+      commentEnd = 0;
+    }
+  }
+  // update source code
+  target.input = substitutions.transformInput();
+
+  // tokens without WS and comments (mimicking default behaviour)
+  var Lexer = Java.type('oracle.dbtools.parser.Lexer');
+  var defaultTokens = Lexer.parse(target.input);
+
+  // produce a new parse tree based on the updated lexer tokens
+  var Parsed = Java.type('oracle.dbtools.parser.Parsed');
+  var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
+  var newTarget = new Parsed(target.input, defaultTokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+
+  // update token list based on fixed source code (without WS tokens)
+  target.src.clear();
+  target.src.addAll(newTarget.src);
+}
 
 /**
  * simpleIndentConditions  

@@ -1,0 +1,45 @@
+allLeaves: [leaf+1 = leaf);
+
+-- predicate with no attributes but one tuple:
+runOnce: \\leaf(allLeaves/*Anything non-empty would suffice*/) | []; 
+
+false: [];   
+
+"Global definitions": runOnce    
+-> {   
+    var logger = Java.type('oracle.dbtools.util.Logger');
+    // logger.info(null,"Defined logger"); 
+    // --also available: logger.severe(), .warn(), .fine() 
+    
+    var count = 0;
+    var accumulatedString = "";
+    var accumulatedSet = [];
+    var startedTimeMs = java.lang.System.currentTimeMillis();  
+    
+    function logTuple() {
+        print("evaluating "+tuple);
+        return true;
+    } 
+    
+    function removeTabsExcept( tabArray ) {
+        var execOrder = program.querySequence();
+        var copy = execOrder.clone();
+        for( tabNo = execOrder.length-1; 0 <= tabNo; tabNo=tabNo-1 ) {      
+            var exclude = true;
+            for( tIndex in tabArray ) {
+                if( tabArray[tIndex] == execOrder[tabNo] )
+                    exclude = false;
+            }
+            if( exclude ) {
+                execOrder.remove(tabNo);
+            }
+        }
+        var Thread = Java.type('java.lang.Thread');
+        new Thread(function () {
+             Thread.sleep(1000);
+             execOrder.clear();
+             execOrder.addAll(copy);
+        }).start();
+    }          
+     	   
+}
