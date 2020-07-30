@@ -722,7 +722,7 @@ rightAlignments: :alignRight & (
   | [node) 'HAVING' &  [node^) having_clause 
   | [node) 'ORDER'  &  [node^) order_by_clause
   | [node) 'UPDATE'  
-  | [node) 'SET'   
+  | [node) 'SET'  & ![node^) merge_update_clause & ![node^) SET -- salvisberg: extended to fix issue #13 
   | [node) 'FETCH' &  [node^) row_limiting_clause
   | [node) "inner_cross_join_clause"
   | [node) outer_join_type
