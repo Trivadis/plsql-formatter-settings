@@ -695,7 +695,8 @@ brkX2_1:
 | [node) original_method_body_specification
 | [node) subprg_body & ![node^) create_plsql
 | [node) basic_decl_item_list & [node+1) subprg_body
-| [node) is_or_as & [node+1) decl_list & [(node+1)+20 < (node+1)) -- long declarations
+-- | [node) is_or_as & [node+1) decl_list & [(node+1)+20 < (node+1)) -- long declarations -- salvisberg: disabled due to issue #12
+| [node) is_or_as & ([node^) pkg_body | [node^) pkg_spec)  -- salvisberg: added to solve issue #12 unconditional break after is_or_as of pkg_body/pkg_spec
 ;
 brkX2_2: child^=node & (
    [node) stmt & [child) sql_query_or_dml_stmt  
