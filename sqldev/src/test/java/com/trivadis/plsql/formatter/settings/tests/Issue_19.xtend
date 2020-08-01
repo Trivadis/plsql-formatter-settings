@@ -70,7 +70,13 @@ class Issue_19 extends ConfiguredTestFormatter {
                   f(1, 2),
                   f(1, 2, 3),
                   f(1, 2, 3, 4),
-                  f(1, 2, 3, 4, 5),
+                  f(
+                     1,
+                     2,
+                     3,
+                     4,
+                     5
+                  )
                );
             END;
             /
@@ -85,8 +91,14 @@ class Issue_19 extends ConfiguredTestFormatter {
                       f(1, 2),
                       f(1, 2, 3),
                       f(1, 2, 3, 4),
-                      f(1, 2, 3, 4, 5)
-                   ),
+                      f(
+                         1,
+                         2,
+                         3,
+                         4,
+                         5
+                      )
+                   )
               FROM dual;
         '''.formatAndAssert
     }
