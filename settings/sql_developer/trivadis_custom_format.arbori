@@ -149,6 +149,50 @@ maxOneEmptyLine: runOnce -> {
   target.src.addAll(newTarget.src);
 }
 
+-- salvisberg: added to identifiy splittable argument lists with >= 5 arguments to solve issue #19
+splittableArgList:
+  [parent) paren_expr_list 
+    & [arg1) arg_list 
+    & arg1^ = parent
+    & [arg2) arg_list 
+    & arg2^ = arg1
+    & [arg3) arg_list 
+    & arg3^ = arg2
+    & [arg4) arg_list 
+    & arg4^ = arg3
+;
+
+-- salvisberg: added to identifiy splittable expression lists with >= 5 arguments to solve issue #19
+splittableExprList:
+  [parent) "(x,y,z)" 
+    & [arg1) "expr_list" 
+    & parent < arg1
+    & [arg2) "expr_list" 
+    & arg2^ = arg1
+    & [arg3) "expr_list" 
+    & arg3^ = arg2
+    & [arg4) "expr_list" 
+    & arg4^ = arg3
+    & [arg5) "expr_list" 
+    & arg5^ = arg4
+;
+
+-- salvisberg: added to identifiy splittable arg (issue #19)
+splitArg:
+  .breaksProcArgs & [node) arg & ![node) assoc_arg & splittableArgList.parent < node
+;
+
+-- salvisberg: added to identifiy splittable expr (issue #19)
+splitExpr:
+  .breaksProcArgs & [node) expr & ![node^) assoc_arg & splittableExprList.parent < node
+;
+
+-- salvisberg: expression to be added to indentedNodes1 as single condition (issue #19)
+splitArguments:
+    splitArg
+  | splitExpr
+;
+
 /**
  * simpleIndentConditions  
  * Parse nodes to be indented with simple conditions, typically parse node payload, e.g.
@@ -415,7 +459,10 @@ ancestor < node & ![node^) "(x,y,z)" & [node) column  & (
 );
 
 
-indentedNodes1: simpleIndentConditions | closestAncestorDescendent
+indentedNodes1: 
+    simpleIndentConditions 
+  | closestAncestorDescendent 
+  | splitArguments              -- salvisberg: added to solve issue #19
 ->
 ;
 
