@@ -61,4 +61,34 @@ class Issue_19 extends ConfiguredTestFormatter {
         '''.formatAndAssert
     }
 
+    @Test
+    def nested_arg_list() {
+        '''
+            BEGIN
+               f(
+                  f(1),
+                  f(1, 2),
+                  f(1, 2, 3),
+                  f(1, 2, 3, 4),
+                  f(1, 2, 3, 4, 5),
+               );
+            END;
+            /
+        '''.formatAndAssert
+    }
+
+    @Test
+    def nested_expr_list() {
+        '''
+            SELECT f(
+                      f(1),
+                      f(1, 2),
+                      f(1, 2, 3),
+                      f(1, 2, 3, 4),
+                      f(1, 2, 3, 4, 5)
+                   ),
+              FROM dual;
+        '''.formatAndAssert
+    }
+
 }
