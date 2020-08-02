@@ -427,6 +427,86 @@ indentedNodes2: indentedNodes1
 ->
 ;
 
+/**
+ * salvisberg: start section "split arguments"
+ *
+ * Add line breaks if argument and expression lists have more than 4 argurments.
+ * Must run at this position where all other split and indentations are handled.
+ * Calling indentedNodes1 and indentedNodes2 manually due to Arbori query limitations.
+ * Solves issues #19 
+ */
+
+allArgList:
+  [parent) paren_expr_list
+;
+
+splittableArgList:
+  [parent) paren_expr_list 
+    & [arg1) arg_list 
+    & arg1^ = parent
+    & [arg2) arg_list 
+    & arg2^ = arg1
+    & [arg3) arg_list 
+    & arg3^ = arg2
+    & [arg4) arg_list 
+    & arg4^ = arg3
+;
+
+allExprList:
+  [parent) "(x,y,z)"
+;
+
+splittableExprList:
+  [parent) "(x,y,z)" 
+    & [arg1) "expr_list" 
+    & parent < arg1
+    & [arg2) "expr_list" 
+    & arg2^ = arg1
+    & [arg3) "expr_list" 
+    & arg3^ = arg2
+    & [arg4) "expr_list" 
+    & arg4^ = arg3
+    & [arg5) "expr_list" 
+    & arg5^ = arg4
+;
+
+splitArg:
+  .breaksProcArgs 
+    & [node) arg 
+    & ![node) assoc_arg 
+    & allArgList.parent < node
+    & splittableArgList.parent < node
+  -> {
+    // filter via JavaScript since "allArgList.parent = splittableArgList.parent" does not work as Arbori condition
+    var all = tuple.get("allArgList.parent");
+    var splittable = tuple.get("splittableArgList.parent");
+    if (all == splittable) {
+      struct.indentedNodes1(target, tuple);
+      struct.indentedNodes2(target, tuple);
+    }
+  }
+;
+
+splitExpr:
+  .breaksProcArgs 
+    & [node) expr 
+    & ![node) assoc_arg 
+    & allExprList.parent < node
+    & splittableExprList.parent < node
+  -> {
+    // filter via JavaScript since "allExprList.parent.parent = splittableExprList.parent" does not work as Arbori condition
+    var all = tuple.get("allExprList.parent");
+    var splittable = tuple.get("splittableExprList.parent");
+    if (all == splittable) {
+      struct.indentedNodes1(target, tuple);
+      struct.indentedNodes2(target, tuple);
+    }
+  }
+;
+
+/**
+ * salvisberg: stop section "split arguments"
+ */
 
 /**
  * The skipWhiteSpaceBeforeNode and skipWhiteSpaceBeforeNode are

@@ -8,7 +8,17 @@ class Paren_expr_list extends ConfiguredTestFormatter {
     @Test
     def unnamed_parameters() {
         '''
-            SELECT func(a, b, c, 100, 200, 300, 400, 500)
+            SELECT func(a, b, c, 100),
+                   func(
+                      a,
+                      b,
+                      c,
+                      100,
+                      200,
+                      300,
+                      400,
+                      500
+                   )
               FROM dual;
         '''.formatAndAssert
     }
