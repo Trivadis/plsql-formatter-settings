@@ -220,6 +220,7 @@ simpleIndentConditions:
 | [node) conditional_insert_clause
 | [node) conditional_insert_clause[58,99)#
 | [node) constraint_clauses & [node+10 < node) 
+| [node) cursor_open_statement & [node-1) 'FOR' -- salvisberg: to solve issue #20
 | [node) create_cluster[41,70)#
 | [node) create_cluster[71,143)#
 | [node) create_database[15,196)# 
