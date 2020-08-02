@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
 import org.junit.Test
 
-class Issue_20 extends ConfiguredTestFormatter {
+class Issue_21 extends ConfiguredTestFormatter {
     
     @Test
     def cursor_for() {
