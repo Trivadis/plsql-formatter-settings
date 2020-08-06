@@ -1122,13 +1122,16 @@ indentInExistsTable:
   :breakOnSubqueries & (
       [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
     | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^^) in_condition
+    | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^) in_condition
     | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  query_table_expression
     | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  exists_condition
     | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^^) in_condition
+    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^) in_condition
     | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  query_table_expression
   ) 
     | [node)   expression_list & [node-1) '(' & [node+1) ')' & [node^^) in_condition
     | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^^) in_condition
+    | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^) in_condition
   -> {
     var parentNode = tuple.get("node");
     var descendants = parentNode.descendants();
