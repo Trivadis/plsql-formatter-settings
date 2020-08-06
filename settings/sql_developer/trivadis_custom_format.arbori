@@ -721,6 +721,7 @@ _extraBrkAfter:
 | :breaksAfterComma &  [node^) group_by_list[5,12)    & [node) ','
 | :breaksAfterComma &  ([node+1) expr  | [node+1) column)               & [node) ',' 
                              & ![node^) aggregate_function & ![node^) analytic_function
+                             & ![node^^) in_condition  -- salvisberg: added, no line break in in_condition (#29)
                              -- & ... -- unable to keep (x,y) inline without referring to ancestor    
 | :breaksAfterComma &  [node+1) col_properties        & [node) ','
 | :breaksAfterComma &  [node^) colmapped_query_name[8,15)        & [node) ','
