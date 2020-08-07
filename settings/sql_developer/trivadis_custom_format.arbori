@@ -717,7 +717,7 @@ _extraBrkAfter:
 |  [node) stmt & ![node^) sqlplus_command 
 | :breaksAfterComma &  [node+1) alias_in_out_constraints           & [node) ','
 | :breaksAfterComma &  [node+1) select_term           & [node) ','
-| :breaksAfterComma &  [node+1) name                  & [node) ','
+| :breaksAfterComma &  [node+1) name                  & [node) ',' -- salvisberg: added to handle into clause (#30)
 | :breaksAfterComma &  [node+1) table_reference       & [node) ','
 | :breaksAfterComma &  [node^) order_by_clause[31,38) & [node) ','
 | :breaksAfterComma &  [node^) group_by_list[5,12)    & [node) ','
@@ -1073,8 +1073,8 @@ less2Spaces:   :breaksBeforeComma & (
     [node+1) arg & [node) ',' 
   | [node+1) prm_spec & [node) ',' 
   | [node+1) select_term & [node) ',' 
-  | [node+1) name & [node) ','                  -- salvisberg...
-  | [node+1) name_item & [node) ','             -- salvisberg...
+  | [node+1) name & [node) ','                  -- salvisberg: added to handle into clause (#30)
+  | [node+1) name_item & [node) ','             -- salvisberg: added to handle into clause (#30)
   | [node+1) group_by_col & [node) ','               
   | [node+1) "ord_by_1desc" & [node) ','             
   | [node+1) table_reference & [node) ',' 
