@@ -147,6 +147,9 @@ maxOneEmptyLine: runOnce -> {
   // update token list based on fixed source code (without WS tokens)
   target.src.clear();
   target.src.addAll(newTarget.src);
+
+  // enable next line to print all node names on the console (e.g. when SQLDev UI shows unnamed nodes)
+  // target.root.printTree();
 }
 
 /**
