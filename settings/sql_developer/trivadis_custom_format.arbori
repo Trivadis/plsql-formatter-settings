@@ -1207,4 +1207,40 @@ indentCaseExpression:
       }
     }
   }
+
+  indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+    var Token = Java.type('oracle.dbtools.parser.Token');
+    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+    var indentSpaces = struct.options.get("identSpaces")
+    var addIndent = ""
+    for (j = 0; j < indentSpaces; j++) {
+      addIndent = addIndent + " ";
+    }
+    var pos = 0;
+    var withinFirstBranch = false;
+    for (i = 0; i < tokens.length; i++) {
+      if (tokens[i].type == Token.MACRO_SKIP && tokens[i].content.toLowerCase().startsWith("$if ")) {
+        withinFirstBranch = true;
+        logger.fine(struct.getClass(), "--- withinFirstBranch = true ---");
+        continue;
+      }
+      if (withinFirstBranch && tokens[i].type == Token.MACRO_SKIP && tokens[i].content.startsWith("$")) {
+        withinFirstBranch = false;
+        logger.fine(struct.getClass(), "--- withinFirstBranch = false ---");
+        continue;
+      }
+      if (tokens[i].type != Token.WS && tokens[i].type != Token.MACRO_SKIP && tokens[i].type != Token.COMMENT && tokens[i].type != Token.LINE_COMMENT) {
+        if (withinFirstBranch) {
+          var nodeIndent = struct.getNewline(pos);
+          if (nodeIndent != null && nodeIndent.contains("\n")) {
+            logger.fine(struct.getClass(), "pos: " + pos + " type: " + tokens[i].type + " content: " + tokens[i].content + " nodeIndent.length: " + nodeIndent.length);
+            struct.putNewline(pos, nodeIndent + addIndent);
+          }
+        }
+        pos++;
+      }
+    }
+  }
+
 ;
