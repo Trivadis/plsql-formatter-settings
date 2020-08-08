@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.logging.LogManager;
 
 import org.junit.Assert;
 
@@ -16,8 +17,18 @@ public abstract class ConfiguredTestFormatter {
 
     public ConfiguredTestFormatter() {
         super();
+        loadLoggingConf();
         formatter = new Format();
         configureFormatter();
+    }
+    
+    private void loadLoggingConf() {
+        LogManager manager = LogManager.getLogManager();
+        try {
+            manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Map<String, Object> getOptions() {
