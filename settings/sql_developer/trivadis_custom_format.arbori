@@ -96,7 +96,7 @@ maxOneEmptyLine: runOnce -> {
         continue;
       }
       if (tokens[i].type != Token.WS) {
-        if (eolToken != 0 && tokens[i].type != Token.COMMENT) {
+        if (eolToken != 0 && tokens[i].type != Token.COMMENT && tokens[i].type != Token.MACRO_SKIP) {
           substitutions.put(eolToken.end,tokens[i].begin,"");
         }
         eolToken = 0;
@@ -1085,7 +1085,6 @@ less2Spaces:   :breaksBeforeComma & (
   | [node+1) prm_spec & [node) ',' 
   | [node+1) select_term & [node) ',' 
   | [node+1) name & [node) ','                  -- salvisberg: added to handle into clause (#30)
-  | [node+1) name_item & [node) ','             -- salvisberg: added to handle into clause (#30)
   | [node+1) group_by_col & [node) ','               
   | [node+1) "ord_by_1desc" & [node) ','             
   | [node+1) table_reference & [node) ',' 
@@ -1208,4 +1207,40 @@ indentCaseExpression:
       }
     }
   }
+
+  indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+    var Token = Java.type('oracle.dbtools.parser.Token');
+    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+    var indentSpaces = struct.options.get("identSpaces")
+    var addIndent = ""
+    for (j = 0; j < indentSpaces; j++) {
+      addIndent = addIndent + " ";
+    }
+    var pos = 0;
+    var withinFirstBranch = false;
+    for (i = 0; i < tokens.length; i++) {
+      if (tokens[i].type == Token.MACRO_SKIP && tokens[i].content.toLowerCase().startsWith("$if ")) {
+        withinFirstBranch = true;
+        logger.fine(struct.getClass(), "--- withinFirstBranch = true ---");
+        continue;
+      }
+      if (withinFirstBranch && tokens[i].type == Token.MACRO_SKIP && tokens[i].content.startsWith("$")) {
+        withinFirstBranch = false;
+        logger.fine(struct.getClass(), "--- withinFirstBranch = false ---");
+        continue;
+      }
+      if (tokens[i].type != Token.WS && tokens[i].type != Token.MACRO_SKIP && tokens[i].type != Token.COMMENT && tokens[i].type != Token.LINE_COMMENT) {
+        if (withinFirstBranch) {
+          var nodeIndent = struct.getNewline(pos);
+          if (nodeIndent != null && nodeIndent.contains("\n")) {
+            logger.fine(struct.getClass(), "pos: " + pos + " type: " + tokens[i].type + " content: " + tokens[i].content + " nodeIndent.length: " + nodeIndent.length);
+            struct.putNewline(pos, nodeIndent + addIndent);
+          }
+        }
+        pos++;
+      }
+    }
+  }
+
 ;
