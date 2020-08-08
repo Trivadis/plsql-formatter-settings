@@ -96,7 +96,7 @@ maxOneEmptyLine: runOnce -> {
         continue;
       }
       if (tokens[i].type != Token.WS) {
-        if (eolToken != 0 && tokens[i].type != Token.COMMENT) {
+        if (eolToken != 0 && tokens[i].type != Token.COMMENT && tokens[i].type != Token.MACRO_SKIP) {
           substitutions.put(eolToken.end,tokens[i].begin,"");
         }
         eolToken = 0;
