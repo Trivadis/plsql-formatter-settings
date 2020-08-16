@@ -155,7 +155,7 @@ var processAndValidateArgs = function () {
         }
         if (args[i].startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
-            if (!existsFile(arboriPath)) {
+            if (!"default".equals(arboriPath) && !existsFile(arboriPath)) {
                 ctx.write("file " + arboriPath + " does not exist.\n\n");
                 printUsage();
                 return false;
