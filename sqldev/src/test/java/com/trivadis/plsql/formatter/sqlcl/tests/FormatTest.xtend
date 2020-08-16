@@ -121,7 +121,7 @@ class FormatTest extends AbstractSqlclTest {
     }
     
     @Test
-    def void process_pkb_with_original_arbori() {
+    def void process_with_original_arbori() {
         // run
         val actual = runScript(tempDir.toString(), "arbori=" + File.getResource("/original/20.2.0/custom_format.arbori").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
@@ -182,7 +182,7 @@ class FormatTest extends AbstractSqlclTest {
     }
 
     @Test
-    def void process_pkb_with_default_arbori() {
+    def void process_with_default_arbori() {
         // run
         val actual = runScript(tempDir.toString(), "arbori=default")
         Assert.assertTrue(actual.contains("package_body.pkb"))
