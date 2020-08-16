@@ -27,56 +27,67 @@ var getFiles = function (rootPath, extensions) {
     return files;
 }
 
-var configure = function (formatter, arboriPath) {
+var configure = function (formatter, xmlPath, arboriPath) {
     var File = Java.type("java.io.File");
     var Format = Java.type("oracle.dbtools.app.Format");
     var arboriFileName = arboriPath;
+    if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && xmlPath != null) {
+        var Persist2XML = Java.type("oracle.dbtools.app.Persist2XML");
+        var url = new File(xmlPath).toURI().toURL();
+        var options = Persist2XML.read(url);
+        var Collectors = Java.type("java.util.stream.Collectors");
+        var keySet = options.keySet().stream().collect(Collectors.toList());
+        for (var j in keySet) {
+            formatter.options.put(keySet[j], options.get(keySet[j]));
+        }
+    } else if ("embedded".equals(xmlPath)) {
+        // General
+        formatter.options.put(formatter.kwCase, Format.Case.UPPER);                                     // default: Format.Case.UPPER
+        formatter.options.put(formatter.idCase, Format.Case.NoCaseChange);                              // default: Format.Case.lower
+        formatter.options.put(formatter.singleLineComments, Format.InlineComments.CommentsUnchanged);   // default: Format.InlineComments.CommentsUnchanged
+        // Alignment
+        formatter.options.put(formatter.alignTabColAliases, false);                                     // default: true
+        formatter.options.put(formatter.alignTypeDecl, true);                                           // default: true
+        formatter.options.put(formatter.alignNamedArgs, true);                                          // default: true
+        formatter.options.put(formatter.alignAssignments, true);                                        // default: false
+        formatter.options.put(formatter.alignEquality, false);                                          // default: false
+        formatter.options.put(formatter.alignRight, true);                                              // default: false
+        // Indentation
+        formatter.options.put(formatter.identSpaces, 3);                                                // default: 3
+        formatter.options.put(formatter.useTab, false);                                                 // default: false
+        // Line Breaks
+        formatter.options.put(formatter.breaksComma, Format.Breaks.After);                              // default: Format.Breaks.After
+        formatter.options.put("commasPerLine", 1);                                                      // default: 5
+        formatter.options.put(formatter.breaksConcat, Format.Breaks.Before);                            // default: Format.Breaks.Before
+        formatter.options.put(formatter.breaksAroundLogicalConjunctions, Format.Breaks.Before);         // default: Format.Breaks.Before
+        formatter.options.put(formatter.breakAnsiiJoin, true);                                          // default: false
+        formatter.options.put(formatter.breakParenCondition, true);                                     // default: false
+        formatter.options.put(formatter.breakOnSubqueries, true);                                       // default: true
+        formatter.options.put(formatter.maxCharLineSize, 120);                                          // default: 128
+        formatter.options.put(formatter.forceLinebreaksBeforeComment, false);                           // default: false
+        formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.X1);      // default: Format.BreaksX2.X2
+        formatter.options.put(formatter.breaksAfterSelect, false);                                      // default: true
+        formatter.options.put(formatter.flowControl, Format.FlowControl.IndentedActions);               // default: Format.FlowControl.IndentedActions
+        // White Space
+        formatter.options.put(formatter.spaceAroundOperators, true);                                    // default: true
+        formatter.options.put(formatter.spaceAfterCommas, true);                                        // default: true
+        formatter.options.put(formatter.spaceAroundBrackets, Format.Space.Default);                     // default: Format.Space.Default
+        // Hidden, not configurable in the GUI preferences dialog of SQLDev 20.2
+        formatter.options.put(formatter.breaksProcArgs, false);                                         // default: false (overridden in Arbori program based on other settings)
+        formatter.options.put(formatter.adjustCaseOnly, false);                                         // default: false (set true to skip formatting)
+        formatter.options.put(formatter.formatThreshold, 1);                                            // default: 1 (disables deprecated post-processing logic)
+    }
     if (!"default".equals(arboriPath)) {
         arboriFileName = new File(arboriPath).getAbsolutePath();
     }
-    // General
-    formatter.options.put(formatter.kwCase, Format.Case.UPPER);                                     // default: Format.Case.UPPER
-    formatter.options.put(formatter.idCase, Format.Case.NoCaseChange);                              // default: Format.Case.lower
-    formatter.options.put(formatter.singleLineComments, Format.InlineComments.CommentsUnchanged);   // default: Format.InlineComments.CommentsUnchanged
-    // Alignment
-    formatter.options.put(formatter.alignTabColAliases, false);                                     // default: true
-    formatter.options.put(formatter.alignTypeDecl, true);                                           // default: true
-    formatter.options.put(formatter.alignNamedArgs, true);                                          // default: true
-    formatter.options.put(formatter.alignAssignments, true);                                        // default: false
-    formatter.options.put(formatter.alignEquality, false);                                          // default: false
-    formatter.options.put(formatter.alignRight, true);                                              // default: false
-    // Indentation
-    formatter.options.put(formatter.identSpaces, 3);                                                // default: 3
-    formatter.options.put(formatter.useTab, false);                                                 // default: false
-    // Line Breaks
-    formatter.options.put(formatter.breaksComma, Format.Breaks.After);                              // default: Format.Breaks.After
-    formatter.options.put("commasPerLine", 1);                                                      // default: 5
-    formatter.options.put(formatter.breaksConcat, Format.Breaks.Before);                            // default: Format.Breaks.Before
-    formatter.options.put(formatter.breaksAroundLogicalConjunctions, Format.Breaks.Before);         // default: Format.Breaks.Before
-    formatter.options.put(formatter.breakAnsiiJoin, true);                                          // default: false
-    formatter.options.put(formatter.breakParenCondition, true);                                     // default: false
-    formatter.options.put(formatter.breakOnSubqueries, true);                                       // default: true
-    formatter.options.put(formatter.maxCharLineSize, 120);                                          // default: 128
-    formatter.options.put(formatter.forceLinebreaksBeforeComment, false);                           // default: false
-    formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.X1);      // default: Format.BreaksX2.X2
-    formatter.options.put(formatter.breaksAfterSelect, false);                                      // default: true
-    formatter.options.put(formatter.flowControl, Format.FlowControl.IndentedActions);               // default: Format.FlowControl.IndentedActions
-    // White Space
-    formatter.options.put(formatter.spaceAroundOperators, true);                                    // default: true
-    formatter.options.put(formatter.spaceAfterCommas, true);                                        // default: true
-    formatter.options.put(formatter.spaceAroundBrackets, Format.Space.Default);                     // default: Format.Space.Default
-    // Hidden, not configurable in the GUI preferences dialog of SQLDev 20.2
-    formatter.options.put(formatter.breaksProcArgs, false);                                         // default: false (overridden in Arbori program based on other settings)
-    formatter.options.put(formatter.adjustCaseOnly, false);                                         // default: false (set true to skip formatting)
-    formatter.options.put(formatter.formatThreshold, 1);                                            // default: 1 (disables deprecated post-processing logic)
     // Custom Format
-    formatter.options.put(formatter.formatProgramURL, arboriFileName);                              // default: "default" (= provided by SQLDev / SQLcl)
+    formatter.options.put(formatter.formatProgramURL, arboriFileName);                                  // default: "default" (= provided by SQLDev / SQLcl)
 }
 
-var getConfiguredFormatter = function (arboriPath) {
+var getConfiguredFormatter = function (xmlPath, arboriPath) {
     var Format = Java.type("oracle.dbtools.app.Format")
     var formatter = new Format();
-    configure(formatter, arboriPath);
+    configure(formatter, xmlPath, arboriPath);
     return formatter;
 }
 
@@ -130,19 +141,26 @@ var printUsage = function () {
     ctx.write("  <rootPath>     path to directory containing files to format (content will be replaced!)\n\n");
     ctx.write("options:\n");
     ctx.write("  ext=<ext>      comma separated list of file extensions to process, e.g. ext=sql,pks,pkb\n");
+    ctx.write("  xml=<file>     path to the file containing the xml file for advanced format settings\n");
     ctx.write("  arbori=<file>  path to the file containing the Arbori program for custom format settings\n\n");
+}
+
+var getPrefix = function() {
+    var suffix = "format";
+    if (args[0].endsWith(".js")) {
+        suffix += ".js";
+    }
+    return args[0].replace(suffix, "");
 }
 
 var processAndValidateArgs = function () {
     if (args.length < 2) {
         ctx.write("missing mandatory <rootPath> argument.\n\n");
-        printUsage();
         return false;
     }
     rootPath = args[1];
     if (!existsDirectory(rootPath)) {
         ctx.write("directory " + rootPath + " does not exist.\n\n");
-        printUsage();
         return false;
     }
     for (var i = 2; i < args.length; i++) {
@@ -153,17 +171,23 @@ var processAndValidateArgs = function () {
             }
             continue;
         }
+        if (args[i].startsWith("xml=")) {
+            xmlPath = args[i].substring(4);
+            if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && !existsFile(xmlPath)) {
+                ctx.write("file " + xmlPath + " does not exist.\n\n");
+                return false;
+            }
+            continue;
+        }
         if (args[i].startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
             if (!"default".equals(arboriPath) && !existsFile(arboriPath)) {
                 ctx.write("file " + arboriPath + " does not exist.\n\n");
-                printUsage();
                 return false;
             }
             continue;
         }
         ctx.write("invalid argument " + args[i] + ".\n\n");
-        printUsage();
         return false;
     }
     if (extensions.size() == 0) {
@@ -173,12 +197,15 @@ var processAndValidateArgs = function () {
             extensions.add("." + defaults[i]);
         }
     }
-    if (arboriPath == null) {
-        var suffix = "format";
-        if (args[0].endsWith(".js")) {
-            suffix += ".js";
+    if (xmlPath == null) {
+        xmlPath = getPrefix() + "../settings/sql_developer/trivadis_advanced_format.xml"
+        if (!existsFile(xmlPath)) {
+            ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
+            xmlPath = "embedded"; 
         }
-        arboriPath = args[0].replace(suffix, "") + "../settings/sql_developer/trivadis_custom_format.arbori"
+    }
+    if (arboriPath == null) {
+        arboriPath = getPrefix() + "../settings/sql_developer/trivadis_custom_format.arbori"
         if (!existsFile(arboriPath)) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
             arboriPath = "default"; 
@@ -192,10 +219,13 @@ var ArrayList = Java.type("java.util.ArrayList");
 printHeader();
 var rootPath = null;
 var extensions = new ArrayList();
+var xmlPath = null;
 var arboriPath = null;
-if (processAndValidateArgs()) {
+if (!processAndValidateArgs()) {
+    printUsage();
+} else {
     var files = getFiles(rootPath, extensions);
-    var formatter = getConfiguredFormatter(arboriPath);
+    var formatter = getConfiguredFormatter(xmlPath, arboriPath);
     for (var i in files) {
         ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
