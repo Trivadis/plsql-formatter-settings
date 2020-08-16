@@ -22,6 +22,7 @@ var getFiles = function (rootPath, extensions) {
         .filter(function (f) Files.isRegularFile(f)
             && extensions.stream().anyMatch(function (e) f.toString().endsWith(e))
         )
+        .sorted()
         .collect(Collectors.toList());
     return files;
 }
@@ -88,7 +89,7 @@ var hasParseErrors = function (content) {
     var syntaxError = parsed.getSyntaxError();
     if (syntaxError != null && syntaxError.getMessage() != null) {
         ctx.write(syntaxError.getDetailedMessage());
-        ctx.write(". ");
+        ctx.write("... ");
         return true;
     } 
     return false;
@@ -96,13 +97,14 @@ var hasParseErrors = function (content) {
 
 var readFile = function (file) {
     var Files = Java.type("java.nio.file.Files");
-    var content = Files.readString(file);
+    var String = Java.type("java.lang.String");
+    var content = new String(Files.readAllBytes(file));
     return content;
 }
 
 var writeFile = function (file, content) {
     var Files = Java.type("java.nio.file.Files");
-    Files.writeString(file, content);
+    Files.write(file, content.getBytes());
 }
 
 var existsDirectory = function(dir) {
@@ -153,7 +155,7 @@ var processAndValidateArgs = function () {
         }
         if (args[i].startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
-            if (!existsFile(arboriPath)) {
+            if (!"default".equals(arboriPath) && !existsFile(arboriPath)) {
                 ctx.write("file " + arboriPath + " does not exist.\n\n");
                 printUsage();
                 return false;
