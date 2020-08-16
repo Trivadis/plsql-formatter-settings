@@ -8,7 +8,7 @@ class FormatTest extends AbstractSqlclTest {
     
     @Test
     def void process_dir() {
-        // Console output
+        // console output
         val expected = '''
 
             format.js for SQLcl 20.2
