@@ -89,7 +89,7 @@ var hasParseErrors = function (content) {
     var syntaxError = parsed.getSyntaxError();
     if (syntaxError != null && syntaxError.getMessage() != null) {
         ctx.write(syntaxError.getDetailedMessage());
-        ctx.write(". ");
+        ctx.write("... ");
         return true;
     } 
     return false;
