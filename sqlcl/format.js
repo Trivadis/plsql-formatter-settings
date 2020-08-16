@@ -97,13 +97,14 @@ var hasParseErrors = function (content) {
 
 var readFile = function (file) {
     var Files = Java.type("java.nio.file.Files");
-    var content = Files.readString(file);
+    var String = Java.type("java.lang.String");
+    var content = new String(Files.readAllBytes(file));
     return content;
 }
 
 var writeFile = function (file, content) {
     var Files = Java.type("java.nio.file.Files");
-    Files.writeString(file, content);
+    Files.write(file, content.getBytes());
 }
 
 var existsDirectory = function(dir) {
