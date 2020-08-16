@@ -46,7 +46,7 @@ public abstract class AbstractSqlclTest {
         scriptContext.setAttribute("sqlcl", sqlcl, ScriptContext.ENGINE_SCOPE);
         try {
             tempDir = Files.createTempDirectory("plsql-formatter-test-");
-            final Path unformattedDir = Paths.get(File.class.getResource("/unformatted").getPath());
+            final Path unformattedDir = Paths.get(Thread.currentThread().getContextClassLoader().getResource("unformatted").getPath());
             final List<Path> sources = Files.walk(unformattedDir).filter(f -> Files.isRegularFile(f))
                     .collect(Collectors.toList());
             for (Path source : sources) {
@@ -60,7 +60,7 @@ public abstract class AbstractSqlclTest {
     }
     
     public String runScript(String... arguments) {
-        final URL script = File.class.getResource("/format.js");
+        final URL script = Thread.currentThread().getContextClassLoader().getResource("format.js");
         final String[] args = new String[arguments.length + 1];
         args[0] = "format.js";
         for (int i=0; i < arguments.length; i++) {
@@ -86,7 +86,7 @@ public abstract class AbstractSqlclTest {
     }
     
     public String getOriginalContent(String fileName) {
-        Path file = Paths.get(File.class.getResource("/unformatted/" + fileName).getPath());
+        Path file = Paths.get(Thread.currentThread().getContextClassLoader().getResource("unformatted/" + fileName).getPath());
         return getFileContent(file);
     }
     

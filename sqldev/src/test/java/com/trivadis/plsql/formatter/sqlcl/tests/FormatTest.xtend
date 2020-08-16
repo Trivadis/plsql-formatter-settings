@@ -123,7 +123,7 @@ class FormatTest extends AbstractSqlclTest {
     @Test
     def void process_with_original_arbori() {
         // run
-        val actual = runScript(tempDir.toString(), "arbori=" + File.getResource("/original/20.2.0/custom_format.arbori").path)
+        val actual = runScript(tempDir.toString(), "arbori=" + Thread.currentThread().getContextClassLoader().getResource("original/20.2.0/custom_format.arbori").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
 
@@ -246,7 +246,7 @@ class FormatTest extends AbstractSqlclTest {
     @Test
     def void process_with_xml() {
         // run
-        val actual = runScript(tempDir.toString(), "xml=" + File.getResource("/advanced_format.xml").path)
+        val actual = runScript(tempDir.toString(), "xml=" + Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
 

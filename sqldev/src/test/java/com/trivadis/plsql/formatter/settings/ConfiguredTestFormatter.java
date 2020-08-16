@@ -1,6 +1,5 @@
 package com.trivadis.plsql.formatter.settings;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,7 +33,7 @@ public abstract class ConfiguredTestFormatter {
     private Map<String, Object> getOptions() {
         Map<String, Object> map;
         try {
-            URL advancedFormat = File.class.getResource("/trivadis_advanced_format.xml"); // symbolic link
+            URL advancedFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_advanced_format.xml"); // symbolic link
             map = Persist2XML.read(advancedFormat);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
@@ -45,7 +44,7 @@ public abstract class ConfiguredTestFormatter {
     }
     
     private String getArboriFileName() {
-        URL customFormat = File.class.getResource("/trivadis_custom_format.arbori"); // symbolic link
+        URL customFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_custom_format.arbori"); // symbolic link
         return customFormat.getFile();
     }
 
