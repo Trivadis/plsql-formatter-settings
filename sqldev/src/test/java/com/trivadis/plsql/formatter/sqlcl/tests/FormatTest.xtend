@@ -121,7 +121,7 @@ class FormatTest extends AbstractSqlclTest {
     }
     
     @Test
-    def void process_pkb_with_original_arbori() {
+    def void process_with_original_arbori() {
         // run
         val actual = runScript(tempDir.toString(), "arbori=" + File.getResource("/original/20.2.0/custom_format.arbori").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
@@ -182,7 +182,7 @@ class FormatTest extends AbstractSqlclTest {
     }
 
     @Test
-    def void process_pkb_with_default_arbori() {
+    def void process_with_default_arbori() {
         // run
         val actual = runScript(tempDir.toString(), "arbori=default")
         Assert.assertTrue(actual.contains("package_body.pkb"))
@@ -238,6 +238,130 @@ class FormatTest extends AbstractSqlclTest {
                                           'Public Relations' )
              ORDER BY d.department_name,
                       v.employee_id;
+        '''.toString.trim
+        val actualQuery = getFormattedContent("query.sql")
+        Assert.assertEquals(expectedQuery, actualQuery)
+    }
+
+    @Test
+    def void process_with_xml() {
+        // run
+        val actual = runScript(tempDir.toString(), "xml=" + File.getResource("/advanced_format.xml").path)
+        Assert.assertTrue(actual.contains("package_body.pkb"))
+        Assert.assertTrue(actual.contains("query.sql"))
+
+        // package_body.pkb
+        val expectedPackageBody = '''
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+               FUNCTION to_int_table (
+                  in_integers  IN  VARCHAR2
+                , in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
+               ) RETURN sys.ora_mining_number_nt
+                  DETERMINISTIC
+                  ACCESSIBLE BY ( PACKAGE the_api.math, PACKAGE the_api.test_math )
+               IS
+                  l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                  l_pos     INTEGER := 1;
+                  l_int     INTEGER;
+               BEGIN
+                  <<integer_tokens>>
+                  LOOP
+                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     EXIT integer_tokens WHEN l_int IS NULL;
+                     l_result.extend;
+                     l_result(l_pos)     := l_int;
+                     l_pos               := l_pos + 1;
+                  END LOOP integer_tokens;
+                  RETURN l_result;
+               END to_int_table;
+            END math;
+            /
+        '''.toString.trim
+        val actualPackageBody = getFormattedContent("package_body.pkb")
+        Assert.assertEquals(expectedPackageBody, actualPackageBody)
+ 
+        // query.sql
+        val expectedQuery = '''
+            SELECT d.department_name
+                 , v.employee_id
+                 , v.last_name
+              FROM departments d CROSS APPLY (
+                      SELECT *
+                        FROM employees e
+                       WHERE e.department_id = d.department_id
+                   ) v
+             WHERE d.department_name IN (
+                      'Marketing'
+                    , 'Operations'
+                    , 'Public Relations'
+                   )
+             ORDER BY d.department_name
+                    , v.employee_id;
+        '''.toString.trim
+        val actualQuery = getFormattedContent("query.sql")
+        Assert.assertEquals(expectedQuery, actualQuery)
+    }
+
+    @Test
+    def void process_with_default_xml_default_arbori() {
+        // run
+        val actual = runScript(tempDir.toString(), "xml=default", "arbori=default")
+        Assert.assertTrue(actual.contains("package_body.pkb"))
+        Assert.assertTrue(actual.contains("query.sql"))
+
+        // package_body.pkb
+        val expectedPackageBody = '''
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+            
+                FUNCTION to_int_table (
+                    in_integers  IN  VARCHAR2,
+                    in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
+                ) RETURN sys.ora_mining_number_nt
+                    DETERMINISTIC
+                    ACCESSIBLE BY ( PACKAGE the_api.math, PACKAGE the_api.test_math )
+                IS
+            
+                    l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                    l_pos     INTEGER := 1;
+                    l_int     INTEGER;
+                BEGIN
+                    << integer_tokens >> LOOP
+                        l_int := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                        EXIT integer_tokens WHEN l_int IS NULL;
+                        l_result.extend;
+                        l_result(l_pos) := l_int;
+                        l_pos := l_pos + 1;
+                    END LOOP integer_tokens;
+            
+                    RETURN l_result;
+                END to_int_table;
+            
+            END math;
+            /
+        '''.toString.trim
+        val actualPackageBody = getFormattedContent("package_body.pkb")
+        Assert.assertEquals(expectedPackageBody, actualPackageBody)
+ 
+        // query.sql
+        val expectedQuery = '''
+            SELECT
+                d.department_name,
+                v.employee_id,
+                v.last_name
+            FROM
+                departments  d CROSS APPLY (
+                    SELECT
+                        *
+                    FROM
+                        employees e
+                    WHERE
+                        e.department_id = d.department_id
+                )            v
+            WHERE
+                d.department_name IN ( 'Marketing', 'Operations', 'Public Relations' )
+            ORDER BY
+                d.department_name,
+                v.employee_id;
         '''.toString.trim
         val actualQuery = getFormattedContent("query.sql")
         Assert.assertEquals(expectedQuery, actualQuery)
