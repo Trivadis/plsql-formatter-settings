@@ -22,8 +22,8 @@ class WrongArgumentTest extends AbstractSqlclTest {
             options:
               ext=<ext>      comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
               xml=<file>     path to the file containing the xml file for advanced format settings
-                             xml=default used default advanced settings included in sqlcl
-                             xml=embedded used advanced settings defined in format.js
+                             xml=default uses default advanced settings included in sqlcl
+                             xml=embedded uses advanced settings defined in format.js
               arbori=<file>  path to the file containing the Arbori program for custom format settings
                              arbori=default uses default Arbori program included in sqlcl
             
