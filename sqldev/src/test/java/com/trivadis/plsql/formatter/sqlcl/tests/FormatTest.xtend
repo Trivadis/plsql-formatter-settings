@@ -83,5 +83,41 @@ class FormatTest extends AbstractSqlclTest {
 
     }
 
+    @Test
+    def void process_pkb_only() {
+        // run
+        val actual = runScript(tempDir.toString(), "ext=pkb")
+        Assert.assertTrue(actual.contains("file 1 of 1"))
+        
+        // package_body.pkb
+        val expectedPackageBody = '''
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+               FUNCTION to_int_table (
+                  in_integers  IN  VARCHAR2,
+                  in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
+               ) RETURN sys.ora_mining_number_nt
+                  DETERMINISTIC
+                  ACCESSIBLE BY ( PACKAGE the_api.math, PACKAGE the_api.test_math )
+               IS
+                  l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                  l_pos     INTEGER := 1;
+                  l_int     INTEGER;
+               BEGIN
+                  <<integer_tokens>>
+                  LOOP
+                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     EXIT integer_tokens WHEN l_int IS NULL;
+                     l_result.extend;
+                     l_result(l_pos)     := l_int;
+                     l_pos               := l_pos + 1;
+                  END LOOP integer_tokens;
+                  RETURN l_result;
+               END to_int_table;
+            END math;
+            /
+        '''.toString.trim
+        val actualPackageBody = getFormattedContent("package_body.pkb")
+        Assert.assertEquals(expectedPackageBody, actualPackageBody)
+    }
 
 }
