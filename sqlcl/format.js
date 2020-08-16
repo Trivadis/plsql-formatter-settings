@@ -22,6 +22,7 @@ var getFiles = function (rootPath, extensions) {
         .filter(function (f) Files.isRegularFile(f)
             && extensions.stream().anyMatch(function (e) f.toString().endsWith(e))
         )
+        .sorted()
         .collect(Collectors.toList());
     return files;
 }
