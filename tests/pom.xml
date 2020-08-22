@@ -12,8 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 		<xtend.version>2.22.0</xtend.version>
-		<sqldev.basedir>/Applications/SQLDeveloper20.2.0.app/Contents/Resources/sqldeveloper</sqldev.basedir>
-        <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
+	    <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -27,15 +26,14 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- SQL Developer dependencies not available in public Maven repositories -->
+        <!-- SQLcl dependencies not available in public Maven repositories -->
 		<dependency>
 			<groupId>oracle.dbtools</groupId>
 			<artifactId>dbtools-common</artifactId>
 			<version>20.2.0</version>
 			<scope>system</scope>
-			<systemPath>${sqldev.basedir}/sqldeveloper/lib/dbtools-common.jar</systemPath>
+			<systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
 		</dependency>
-		<!-- SQLcl dependencies not available in public maven repositories -->
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-sqlcl</artifactId>
