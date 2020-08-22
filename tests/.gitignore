@@ -33,6 +33,9 @@ hs_err_pid*
 .classpath
 **/.settings
 
+# IntelliJ
+.idea
+
 # Windows
 Thumbs.db
 
