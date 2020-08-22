@@ -103,9 +103,9 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.2</version>
 				<configuration>
-					<!-- -noverify is required in some environments to avoid java.lang.VerifyError -->
-					<argLine>-noverify
-						-Djava.util.logging.config.file=${project.basedir}/src/test/resources/logging.conf</argLine>
+					<!-- "-noverify" is required in some environments to avoid java.lang.VerifyError -->
+					<!-- "-Dnashorn.args=<dash><dash>no-deprecation-warning" must not be used with JDK8 -->
+					<argLine>-noverify</argLine>
 					<includes>
 						<include>**/*.java</include>
 					</includes>
