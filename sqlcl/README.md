@@ -73,4 +73,4 @@ options:
                   arbori=default uses default Arbori program included in sqlcl
 ```
 
-It's very similar to `script format.js`. The advantage is, that you do not need to know where [`format.js`](format.js) is stored. You may pass relative paths for <rootPath> and <file>. The SQLcl `CD` command is honored to indentify the current directory.
+It's very similar to `script format.js`. The advantage is, that you do not need to know where [`format.js`](format.js) is stored. You may pass relative paths for `rootPath` and `file`. The SQLcl `CD` command is honored.
