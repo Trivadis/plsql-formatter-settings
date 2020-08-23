@@ -33,7 +33,6 @@ var getFiles = function (rootPath, extensions) {
 var configure = function (formatter, xmlPath, arboriPath) {
     var File = Java.type("java.io.File");
     var Format = Java.type("oracle.dbtools.app.Format");
-    var arboriFileName = arboriPath;
     if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && xmlPath != null) {
         var Persist2XML = Java.type("oracle.dbtools.app.Persist2XML");
         var url = new File(xmlPath).toURI().toURL();
@@ -80,6 +79,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.adjustCaseOnly, false);                                         // default: false (set true to skip formatting)
         formatter.options.put(formatter.formatThreshold, 1);                                            // default: 1 (disables deprecated post-processing logic)
     }
+    var arboriFileName = arboriPath;
     if (!"default".equals(arboriPath)) {
         arboriFileName = new File(arboriPath).getAbsolutePath();
     }
