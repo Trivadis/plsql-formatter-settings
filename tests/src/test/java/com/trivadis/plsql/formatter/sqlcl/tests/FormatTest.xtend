@@ -11,9 +11,6 @@ class FormatTest extends AbstractSqlclTest {
         // console output
         val expected = '''
 
-            format.js for SQLcl 20.2
-            Copyright 2020 by Philipp Salvisberg (philipp.salvisberg@trivadis.com)
-            
             Formatting file 1 of 3: «tempDir.toString()»«File.separator»package_body.pkb... done.
             Formatting file 2 of 3: «tempDir.toString()»«File.separator»query.sql... done.
             Formatting file 3 of 3: «tempDir.toString()»«File.separator»syntax_error.sql... Syntax Error at line 4, column 12
