@@ -14,13 +14,16 @@
 * limitations under the License.
 */
 
+"use strict";
+
 var getFiles = function (rootPath, extensions) {
     var Collectors = Java.type("java.util.stream.Collectors");
     var Files = Java.type("java.nio.file.Files");
     var Paths = Java.type("java.nio.file.Paths");
+    var Arrays = Java.type("java.util.Arrays");
     var files = Files.walk(Paths.get(rootPath))
         .filter(function (f) Files.isRegularFile(f)
-            && extensions.stream().anyMatch(function (e) f.toString().endsWith(e))
+            && Arrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
         )
         .sorted()
         .collect(Collectors.toList());
@@ -130,22 +133,24 @@ var existsFile = function(file) {
     return f.isFile();
 }
 
-var printHeader = function () {
-    ctx.write("\nformat.js for SQLcl 20.2\n");
-    ctx.write("Copyright 2020 by Philipp Salvisberg (philipp.salvisberg@trivadis.com)\n\n");
-}
-
-var printUsage = function () {
-    ctx.write("usage: script format.js <rootPath> [options]\n\n");
+var printUsage = function (asCommand) {
+    if (asCommand) {
+        ctx.write("usage: tvdformat <rootPath> [options]\n\n");
+    } else {
+        ctx.write("usage: script format.js <rootPath> [options]\n\n");
+    }
     ctx.write("mandatory arguments:\n");
-    ctx.write("  <rootPath>     path to directory containing files to format (content will be replaced!)\n\n");
+    ctx.write("  <rootPath>      path to directory containing files to format (content will be replaced!)\n\n");
     ctx.write("options:\n");
-    ctx.write("  ext=<ext>      comma separated list of file extensions to process, e.g. ext=sql,pks,pkb\n");
-    ctx.write("  xml=<file>     path to the file containing the xml file for advanced format settings\n");
-    ctx.write("                 xml=default uses default advanced settings included in sqlcl\n");
-    ctx.write("                 xml=embedded uses advanced settings defined in format.js\n");
-    ctx.write("  arbori=<file>  path to the file containing the Arbori program for custom format settings\n");
-    ctx.write("                 arbori=default uses default Arbori program included in sqlcl\n\n");
+    if (!asCommand) {
+        ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
+    }
+    ctx.write("  ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb\n");
+    ctx.write("  xml=<file>      path to the file containing the xml file for advanced format settings\n");
+    ctx.write("                  xml=default uses default advanced settings included in sqlcl\n");
+    ctx.write("                  xml=embedded uses advanced settings defined in format.js\n");
+    ctx.write("  arbori=<file>   path to the file containing the Arbori program for custom format settings\n");
+    ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n\n");
 }
 
 var getPrefix = function() {
@@ -156,51 +161,65 @@ var getPrefix = function() {
     return args[0].replace(suffix, "");
 }
 
-var processAndValidateArgs = function () {
+var processAndValidateArgs = function (args) {
+    var rootPath = null;
+    var extensions = [];
+    var xmlPath = null;
+    var arboriPath = null;
+
+    var result = function(valid) {
+        var result = {
+            rootPath : rootPath,
+            extensions : extensions,
+            xmlPath : xmlPath,
+            arboriPath : arboriPath, 
+            valid : valid
+        }
+        return result;
+    }
+
     if (args.length < 2) {
         ctx.write("missing mandatory <rootPath> argument.\n\n");
-        return false;
+        return result(false);
     }
     rootPath = args[1];
     if (!existsDirectory(rootPath)) {
         ctx.write("directory " + rootPath + " does not exist.\n\n");
-        return false;
+        return result(false);
     }
     for (var i = 2; i < args.length; i++) {
-        if (args[i].startsWith("ext=")) {
+        if (args[i].toLowerCase().startsWith("ext=")) {
             var values = args[i].substring(4).split(",");
             for (var j in values) {
-                extensions.add("." + values[j]);
+                extensions[extensions.length] = "." + values[j].toLowerCase();
             }
             continue;
         }
-        if (args[i].startsWith("xml=")) {
+        if (args[i].toLowerCase().startsWith("xml=")) {
             xmlPath = args[i].substring(4);
             if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && !existsFile(xmlPath)) {
                 ctx.write("file " + xmlPath + " does not exist.\n\n");
-                return false;
+                return result(false);
             }
             continue;
         }
-        if (args[i].startsWith("arbori=")) {
+        if (args[i].toLowerCase().startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
             if (!"default".equals(arboriPath) && !existsFile(arboriPath)) {
                 ctx.write("file " + arboriPath + " does not exist.\n\n");
-                return false;
+                return result(false);
             }
             continue;
         }
         ctx.write("invalid argument " + args[i] + ".\n\n");
-        return false;
+        return result(false);
     }
-    if (extensions.size() == 0) {
-        var defaults = Java.to(["sql", "prc", "fnc", "pks", "pkb", "trg", "vw", "tps", "tpb", "tbp", "plb", "pls", "rcv", "spc", "typ", "aqt", "aqp", "ctx",
-        "dbl", "tab", "dim", "snp", "con", "collt", "seq", "syn", "grt", "sp", "spb", "sps", "pck", "java.lang.String[]"]);
-        for (var i in defaults) {
-            extensions.add("." + defaults[i]);
-        }
+    if (extensions.length == 0) {
+        extensions = [".sql", ".prc", ".fnc", ".pks", ".pkb", ".trg", ".vw", ".tps", ".tpb", ".tbp", ".plb", ".pls", ".rcv", ".spc", ".typ", 
+            ".aqt", ".aqp", ".ctx", ".dbl", ".tab", ".dim", ".snp", ".con", ".collt", ".seq", ".syn", ".grt", ".sp", ".spb", ".sps", ".pck"];
     }
     if (xmlPath == null) {
+        // current directory is preservied at time of command registration, hence this works for format.js and tvdformat
         xmlPath = getPrefix() + "../settings/sql_developer/trivadis_advanced_format.xml"
         if (!existsFile(xmlPath)) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
@@ -208,37 +227,95 @@ var processAndValidateArgs = function () {
         }
     }
     if (arboriPath == null) {
+        // current directory is preservied at time of command registration, hence this works for format.js and tvdformat
         arboriPath = getPrefix() + "../settings/sql_developer/trivadis_custom_format.arbori"
         if (!existsFile(arboriPath)) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
             arboriPath = "default"; 
         }
     }
-    return true;
+    return result(true);
+}
+
+var run = function(args) { 
+    ctx.write("\n");
+    var options = processAndValidateArgs(args);
+    if (!options.valid) {
+        printUsage(args[0].equals("tvdformat"));
+    } else {
+        var files = getFiles(options.rootPath, options.extensions);
+        var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
+        for (var i in files) {
+            ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+            ctx.getOutputStream().flush();
+            var original = readFile(files[i])
+            if (hasParseErrors(original)) {
+                ctx.write("skipped.\n");
+            } else {
+                writeFile(files[i], formatter.format(original));
+                ctx.write("done.\n");
+            }
+            ctx.getOutputStream().flush();
+        }
+    }
+}
+
+var getArgs = function(cmdLine) {
+    var Pattern = Java.type("java.util.regex.Pattern");
+    var p = Pattern.compile("(\"[^\"]*\")|([^ ]+)");
+    var m = p.matcher(cmdLine.trim());
+    var args = [];
+    while (m.find()) {
+        args[args.length] = m.group();
+    }
+    return args;
+}
+
+var unregisterTvdFormat = function() {
+    var CommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
+    var SQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
+    var listeners = CommandRegistry.getListeners(null, ctx).get(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+    if (listeners != null) {
+        // remove all commands registered with CommandRegistry.addForAllStmtsListener
+        CommandRegistry.removeListener(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+        CommandRegistry.clearCaches(null, ctx);
+        var HashSet = Java.type("java.util.HashSet");
+        var notRemovedListeners = new HashSet(CommandRegistry.getListeners(null, ctx).get(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE));
+        // re-register all commands except for class TvdFormat and not removed listeners
+        for (var i in listeners) {
+            if (!listeners.get(i).getClass().getSimpleName().equals("TvdFormat") && notRemovedListeners.contains(listeners.get(i))) {
+               // CommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
+            }
+        }
+    }
+}
+
+var registerTvdFormat = function() {
+    var handleEvent = function(conn, ctx, cmd) {
+        var args = getArgs(cmd.getSql());
+        if (args[0].equalsIgnoreCase("tvdformat")) {
+            run(args);
+            return true;
+        }
+        return false;
+    }
+    var beginEvent = function(conn, ctx, cmd) {}
+    var endEvent = function(conn, ctx, cmd) {}
+    var CommandListener =  Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener")
+    var TvdFormat = Java.extend(CommandListener, {
+        handleEvent: handleEvent,
+        beginEvent: beginEvent,
+        endEvent: endEvent
+    });
+    unregisterTvdFormat();
+    var CommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
+    CommandRegistry.addForAllStmtsListener(TvdFormat.class);
+    ctx.write("tvdformat registered as SQLcl command.\n");
 }
 
 // main
-var ArrayList = Java.type("java.util.ArrayList");
-printHeader();
-var rootPath = null;
-var extensions = new ArrayList();
-var xmlPath = null;
-var arboriPath = null;
-if (!processAndValidateArgs()) {
-    printUsage();
+if (args.length >= 2 && (args[1].equals("-r") || args[1].equals("--register"))) {
+    registerTvdFormat();
 } else {
-    var files = getFiles(rootPath, extensions);
-    var formatter = getConfiguredFormatter(xmlPath, arboriPath);
-    for (var i in files) {
-        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
-        ctx.getOutputStream().flush();
-        var original = readFile(files[i])
-        if (hasParseErrors(original)) {
-            ctx.write("skipped.\n");
-        } else {
-            writeFile(files[i], formatter.format(original));
-            ctx.write("done.\n");
-        }
-        ctx.getOutputStream().flush();
-    }
-}
+    run(args);
+}    
