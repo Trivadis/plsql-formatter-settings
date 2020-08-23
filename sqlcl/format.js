@@ -241,7 +241,7 @@ var run = function(args) {
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
-        printUsage(args[0].equals("tvdformat"));
+        printUsage(args[0].equalsIgnoreCase("tvdformat"));
     } else {
         var files = getFiles(options.rootPath, options.extensions);
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
