@@ -1,11 +1,45 @@
 package com.trivadis.plsql.formatter.sqlcl.tests
 
 import java.io.File
+import oracle.dbtools.raptor.newscriptrunner.CommandRegistry
+import oracle.dbtools.raptor.newscriptrunner.SQLCommand
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
-class FormatTest extends AbstractSqlclTest {
+class TvdFormatTest extends AbstractSqlclTest {
     
+    @Before
+    def void register() {
+        runScript("--register")
+        byteArrayOutputStream.reset();
+    }
+    
+    @Test
+    def void duplicate_registration_using_mixed_case() {
+        reset();
+        val originalListeners = CommandRegistry.getListeners(null, ctx).get(
+            SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+        val expected = '''
+            tvdformat registered as SQLcl command.
+        '''
+                
+        // first registrations
+        val actual1 = runScript("--RegisteR")
+        Assert.assertEquals(expected, actual1)
+        val listeners1 = CommandRegistry.getListeners(null, ctx).get(
+            SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+        Assert.assertEquals(originalListeners.size() + 1, listeners1.size())
+
+        // second registration
+        byteArrayOutputStream.reset
+        val actual2 = runScript("-R")
+        Assert.assertEquals(expected, actual2)
+        val listeners2 = CommandRegistry.getListeners(null, ctx).get(
+            SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+        Assert.assertEquals(originalListeners.size() + 1, listeners2.size())
+    }
+
     @Test
     def void process_dir() {
         // console output
@@ -21,7 +55,7 @@ class FormatTest extends AbstractSqlclTest {
             
             Expected: name_wo_function_call,identifier,term,factor,name,... skipped.
         '''
-        val actual = runScript(tempDir.toString())
+        val actual = runCommand("tvdformat " + tempDir.toString())
         Assert.assertEquals(expected, actual)
         
         // package_body.pkb
@@ -83,7 +117,7 @@ class FormatTest extends AbstractSqlclTest {
     @Test
     def void process_pkb_only() {
         // run
-        val actual = runScript(tempDir.toString(), "ext=pkb")
+        val actual = runCommand("tvdformat " + tempDir.toString() + " ext=pkb")
         Assert.assertTrue(actual.contains("file 1 of 1"))
         
         // package_body.pkb
@@ -116,11 +150,12 @@ class FormatTest extends AbstractSqlclTest {
         val actualPackageBody = getFormattedContent("package_body.pkb")
         Assert.assertEquals(expectedPackageBody, actualPackageBody)
     }
-    
+
     @Test
     def void process_with_original_arbori() {
         // run
-        val actual = runScript(tempDir.toString(), "arbori=" + Thread.currentThread().getContextClassLoader().getResource("original/20.2.0/custom_format.arbori").path)
+        val actual = runCommand("tvdformat " + tempDir.toString() + " arbori=" +
+            Thread.currentThread().getContextClassLoader().getResource("original/20.2.0/custom_format.arbori").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
 
@@ -181,7 +216,7 @@ class FormatTest extends AbstractSqlclTest {
     @Test
     def void process_with_default_arbori() {
         // run
-        val actual = runScript(tempDir.toString(), "arbori=default")
+        val actual = runCommand("tvdformat " + tempDir.toString() + " arbori=default")
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
         
@@ -243,7 +278,8 @@ class FormatTest extends AbstractSqlclTest {
     @Test
     def void process_with_xml() {
         // run
-        val actual = runScript(tempDir.toString(), "xml=" + Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml").path)
+        val actual = runCommand("tvdformat " + tempDir.toString() + " xml=" +
+            Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
 
@@ -302,7 +338,7 @@ class FormatTest extends AbstractSqlclTest {
     @Test
     def void process_with_default_xml_default_arbori() {
         // run
-        val actual = runScript(tempDir.toString(), "xml=default", "arbori=default")
+        val actual = runCommand("tvdformat " + tempDir.toString() + " xml=default" + " arbori=default")
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
 

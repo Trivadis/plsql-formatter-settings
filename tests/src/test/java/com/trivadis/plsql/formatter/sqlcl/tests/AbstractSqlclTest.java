@@ -20,18 +20,30 @@ import javax.script.SimpleScriptContext;
 
 import org.junit.Before;
 
+import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
+import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
 import oracle.dbtools.raptor.newscriptrunner.ScriptExecutor;
 import oracle.dbtools.raptor.newscriptrunner.ScriptRunnerContext;
 import oracle.dbtools.raptor.newscriptrunner.WrapListenBufferOutputStream;
 
 public abstract class AbstractSqlclTest {
-    final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-    final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
-    final ScriptContext scriptContext = new SimpleScriptContext();
-    final ScriptRunnerContext ctx = new ScriptRunnerContext();
-    final ScriptExecutor sqlcl = new ScriptExecutor(null);
-    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    protected final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    protected final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
+    protected final ScriptContext scriptContext = new SimpleScriptContext();
+    protected final ScriptRunnerContext ctx = new ScriptRunnerContext();
+    protected final ScriptExecutor sqlcl = new ScriptExecutor(null);
+    protected final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     Path tempDir;
+    
+    AbstractSqlclTest() {
+        reset();
+    }
+
+    public void reset() {
+        CommandRegistry.removeListener(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+        CommandRegistry.clearCaches(null, ctx);
+        setup();
+    }
     
     @Before
     public void setup() {
@@ -72,6 +84,13 @@ public abstract class AbstractSqlclTest {
         } catch (ScriptException | IOException e) {
             throw new RuntimeException(e);
         }
+        return getConsoleOutput();
+    }
+    
+    public String runCommand(String cmdLine) {
+        ScriptExecutor executor = new ScriptExecutor(cmdLine, null);
+        executor.setScriptRunnerContext(ctx);
+        executor.run();
         return getConsoleOutput();
     }
     

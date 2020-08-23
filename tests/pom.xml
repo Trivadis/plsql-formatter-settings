@@ -1,39 +1,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<!-- The Basics -->
-	<groupId>com.trivadis</groupId>
-	<artifactId>plsql.formatter.settings</artifactId>
-	<version>20.2.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.8</jdk.version>
-		<xtend.version>2.22.0</xtend.version>
-	    <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.xtend</groupId>
-			<artifactId>org.eclipse.xtend.lib</artifactId>
-			<version>${xtend.version}</version>
-		</dependency>	
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
+    <!-- The Basics -->
+    <groupId>com.trivadis</groupId>
+    <artifactId>plsql.formatter.settings</artifactId>
+    <version>20.2.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>1.8</jdk.version>
+        <xtend.version>2.22.0</xtend.version>
+        <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.xtend</groupId>
+            <artifactId>org.eclipse.xtend.lib</artifactId>
+            <version>${xtend.version}</version>
+        </dependency>    
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
         <!-- SQLcl dependencies not available in public Maven repositories -->
-		<dependency>
-			<groupId>oracle.dbtools</groupId>
-			<artifactId>dbtools-common</artifactId>
-			<version>20.2.0</version>
-			<scope>system</scope>
-			<systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
-		</dependency>
+        <dependency>
+            <groupId>oracle.dbtools</groupId>
+            <artifactId>dbtools-common</artifactId>
+            <version>20.2.0</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-sqlcl</artifactId>
@@ -41,130 +41,151 @@
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-sqlcl.jar</systemPath>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>oracle.xml</groupId>
+            <artifactId>xmlparserv2-sans-jaxp-services</artifactId>
+            <version>20.2.0</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/xmlparserv2-sans-jaxp-services.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>oracle.i18n</groupId>
+            <artifactId>orai18n</artifactId>
+            <version>20.2.0</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/orai18n.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>oracle.soda</groupId>
+            <artifactId>orajsoda</artifactId>
+            <version>20.2.0</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/orajsoda.jar</systemPath>
+        </dependency>
+    </dependencies>
 
-	<!-- Build Settings -->
-	<build>
-		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>${project.basedir}/src/test/xtend-gen</directory>
-							<includes>
-								<include>**/*</include>
-							</includes>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.xtend</groupId>
-				<artifactId>xtend-maven-plugin</artifactId>
-				<version>${xtend.version}</version>
-				<executions>
-					<execution>
-						<id>test</id>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<javaSourceVersion>${jdk.version}</javaSourceVersion>
-							<testOutputDirectory>${project.basedir}/src/test/xtend-gen</testOutputDirectory>
-							<writeTraceFiles>false</writeTraceFiles>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<version>3.8.1</version>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<!-- "-noverify" is required in some environments to avoid java.lang.VerifyError -->
-					<!-- "-Dnashorn.args=<dash><dash>no-deprecation-warning" must not be used with JDK8 -->
-					<argLine>-noverify</argLine>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.10</version>
-				<configuration>
-					<classpathContainers>
-						<classpathContainer>
-							org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8
-						</classpathContainer>
-					</classpathContainers>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <!-- Build Settings -->
+    <build>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/src/test/xtend-gen</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.xtend</groupId>
+                <artifactId>xtend-maven-plugin</artifactId>
+                <version>${xtend.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <javaSourceVersion>${jdk.version}</javaSourceVersion>
+                            <testOutputDirectory>${project.basedir}/src/test/xtend-gen</testOutputDirectory>
+                            <writeTraceFiles>false</writeTraceFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.8.1</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <!-- "-noverify" is required in some environments to avoid java.lang.VerifyError -->
+                    <!-- "-Dnashorn.args=<dash><dash>no-deprecation-warning" must not be used with JDK8 -->
+                    <argLine>-noverify</argLine>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <classpathContainers>
+                        <classpathContainer>
+                            org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8
+                        </classpathContainer>
+                    </classpathContainers>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<!-- More Project Information -->
-	<name>com.trivadis.org.plsql.formatter.settings</name>
-	<description>Testing PL/SQL and SQL Formatter Settings for SQL Developer</description>
-	<url>https://github.com/Trivadis/plsql-formatter-settings</url>
-	<inceptionYear>2020</inceptionYear>
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	<organization>
-		<name>Trivadis</name>
-		<url>https://www.trivadis.com/</url>
-	</organization>
-	<developers>
-		<developer>
-			<email>philipp.salvisberg@trivadis.com</email>
-			<name>Philipp Salvisberg</name>
-			<url>https://github.com/PhilippSalvisberg/</url>
-			<id>PhilippSalvisberg</id>
-			<roles>
-				<role>lead</role>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
+    <!-- More Project Information -->
+    <name>com.trivadis.org.plsql.formatter.settings</name>
+    <description>Testing PL/SQL and SQL Formatter Settings for SQL Developer</description>
+    <url>https://github.com/Trivadis/plsql-formatter-settings</url>
+    <inceptionYear>2020</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>Trivadis</name>
+        <url>https://www.trivadis.com/</url>
+    </organization>
+    <developers>
+        <developer>
+            <email>philipp.salvisberg@trivadis.com</email>
+            <name>Philipp Salvisberg</name>
+            <url>https://github.com/PhilippSalvisberg/</url>
+            <id>PhilippSalvisberg</id>
+            <roles>
+                <role>lead</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
 
-	<!-- Environment Settings -->
-	<issueManagement>
-		<system>GitHub Issues</system>
-		<url>https://github.com/Trivadis/plsql-formatter-settings/issues</url>
-	</issueManagement>
-	<scm>
-		<connection>scm:git:git://github.com/Trivadis/plsql-formater-settings.git</connection>
-		<developerConnection>scm:git:git@github.com:Triviadis/plsql-formatter-settings.git</developerConnection>
-		<tag>main</tag>
-		<url>https://github.com/Trivadis/plsql-formatter-settings</url>
-	</scm>
+    <!-- Environment Settings -->
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/Trivadis/plsql-formatter-settings/issues</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git://github.com/Trivadis/plsql-formater-settings.git</connection>
+        <developerConnection>scm:git:git@github.com:Triviadis/plsql-formatter-settings.git</developerConnection>
+        <tag>main</tag>
+        <url>https://github.com/Trivadis/plsql-formatter-settings</url>
+    </scm>
 
 </project>
