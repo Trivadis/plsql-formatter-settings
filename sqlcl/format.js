@@ -282,7 +282,7 @@ var unregisterTvdFormat = function() {
         var Collectors = Java.type("java.util.stream.Collectors");
         var remainingListeners = CommandRegistry.getListeners(null, ctx).get(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
                 .stream().map(function(l) l.getClass()).collect(Collectors.toSet());
-        // re-register all commands except for class TvdFormat and and remaining listener classes
+        // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
         for (var i in listeners) {
             if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
                 CommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
