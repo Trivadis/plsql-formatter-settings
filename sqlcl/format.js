@@ -301,11 +301,16 @@ var registerTvdFormat = function() {
     }
     var beginEvent = function(conn, ctx, cmd) {}
     var endEvent = function(conn, ctx, cmd) {}
+    var toString = function() {
+        // to identify this dynamically created class during unregisterTvdFormat()
+        return "TvdFormat";
+    }
     var CommandListener =  Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener")
     var TvdFormat = Java.extend(CommandListener, {
         handleEvent: handleEvent,
         beginEvent: beginEvent,
-        endEvent: endEvent
+        endEvent: endEvent,
+        toString: toString
     });
     unregisterTvdFormat();
     var CommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
