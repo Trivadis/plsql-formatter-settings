@@ -32,7 +32,7 @@ class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
                               arbori=default uses default Arbori program included in sqlcl
 
         '''
-        val actual = runCommand("tvdformat")
+        val actual = runCommand("Tvdformat")
         Assert.assertEquals(expected, actual)
     }
 
