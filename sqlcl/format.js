@@ -314,7 +314,7 @@ var registerTvdFormat = function() {
 }
 
 // main
-if (args.length >= 2 && (args[1].equals("-r") || args[1].equals("--register"))) {
+if (args.length >= 2 && (args[1].equalsIgnoreCase("-r") || args[1].equalsIgnoreCase("--register"))) {
     registerTvdFormat();
 } else {
     run(args);
