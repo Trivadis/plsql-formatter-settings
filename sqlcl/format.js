@@ -284,7 +284,7 @@ var unregisterTvdFormat = function() {
         // re-register all commands except for class TvdFormat and not removed listeners
         for (var i in listeners) {
             if (!listeners.get(i).getClass().getSimpleName().equals("TvdFormat") && notRemovedListeners.contains(listeners.get(i))) {
-               // CommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
+                CommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
             }
         }
     }
