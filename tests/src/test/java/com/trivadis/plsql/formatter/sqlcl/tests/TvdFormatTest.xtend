@@ -16,7 +16,7 @@ class TvdFormatTest extends AbstractSqlclTest {
     }
     
     @Test
-    def void duplicate_registration() {
+    def void duplicate_registration_using_mixed_case() {
         reset();
         val originalListeners = CommandRegistry.getListeners(null, ctx).get(
             SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
@@ -25,7 +25,7 @@ class TvdFormatTest extends AbstractSqlclTest {
         '''
                 
         // first registrations
-        val actual1 = runScript("--register")
+        val actual1 = runScript("--RegisteR")
         Assert.assertEquals(expected, actual1)
         val listeners1 = CommandRegistry.getListeners(null, ctx).get(
             SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
@@ -33,7 +33,7 @@ class TvdFormatTest extends AbstractSqlclTest {
         
         // second registration
         byteArrayOutputStream.reset
-        val actual2 = runScript("-r")
+        val actual2 = runScript("-R")
         Assert.assertEquals(expected, actual2)
         val listeners2 = CommandRegistry.getListeners(null, ctx).get(
             SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
