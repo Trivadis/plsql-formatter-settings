@@ -30,7 +30,7 @@ class TvdFormatTest extends AbstractSqlclTest {
         val listeners1 = CommandRegistry.getListeners(null, ctx).get(
             SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
         Assert.assertEquals(originalListeners.size() + 1, listeners1.size())
-        
+
         // second registration
         byteArrayOutputStream.reset
         val actual2 = runScript("-R")
@@ -40,7 +40,7 @@ class TvdFormatTest extends AbstractSqlclTest {
         Assert.assertEquals(originalListeners.size() + 1, listeners2.size())
     }
 
- @Test
+    @Test
     def void process_dir() {
         // console output
         val expected = '''
