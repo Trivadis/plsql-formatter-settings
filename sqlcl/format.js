@@ -161,6 +161,25 @@ var getPrefix = function() {
     return args[0].replace(suffix, "");
 }
 
+var getCdPath = function(path) {
+    if (path.startsWith("/")) {
+        return path; // Unix, fully qualified
+    } else if (path.length > 1 && path.substring(1, 2) == ":") {
+        return path; // Windows, fully qualified, e.g. C:\mydir
+    }
+    var currentDir = ctx.getProperty("script.runner.cd_command");
+    if (currentDir == null) {
+        return path;
+    } else {
+        var File = Java.type("java.io.File");
+        if (path.endsWith(File.separator)) {
+            return currentdir + path;
+        } else {
+            return currentDir + File.separator + path;
+        }
+    }
+}
+
 var processAndValidateArgs = function (args) {
     var rootPath = null;
     var extensions = [];
@@ -182,7 +201,7 @@ var processAndValidateArgs = function (args) {
         ctx.write("missing mandatory <rootPath> argument.\n\n");
         return result(false);
     }
-    rootPath = args[1];
+    rootPath = getCdPath(args[1]);
     if (!existsDirectory(rootPath)) {
         ctx.write("directory " + rootPath + " does not exist.\n\n");
         return result(false);
@@ -197,17 +216,23 @@ var processAndValidateArgs = function (args) {
         }
         if (args[i].toLowerCase().startsWith("xml=")) {
             xmlPath = args[i].substring(4);
-            if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && !existsFile(xmlPath)) {
-                ctx.write("file " + xmlPath + " does not exist.\n\n");
-                return result(false);
+            if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
+                xmlPath = getCdPath(xmlPath);
+                if (!existsFile(xmlPath)) {
+                    ctx.write("file " + xmlPath + " does not exist.\n\n");
+                    return result(false);
+                }
             }
             continue;
         }
         if (args[i].toLowerCase().startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
-            if (!"default".equals(arboriPath) && !existsFile(arboriPath)) {
-                ctx.write("file " + arboriPath + " does not exist.\n\n");
-                return result(false);
+            if (!"default".equals(arboriPath)) {
+                arboriPath = getCdPath(arboriPath);
+                if (!existsFile(getCdPath(arboriPath))) {
+                    ctx.write("file " + arboriPath + " does not exist.\n\n");
+                    return result(false);
+                }
             }
             continue;
         }
