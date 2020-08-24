@@ -83,7 +83,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
     if (!"default".equals(arboriPath)) {
         arboriFileName = new File(arboriPath).getAbsolutePath();
     }
-    // Custom Format (must used formatter.formatProgramURL to avoid ClassCastException)
+    // Custom Format (must use formatter.formatProgramURL to avoid ClassCastException)
     formatter.options.put(formatter.formatProgramURL, arboriFileName);                               // default: "default" (= provided by SQLDev / SQLcl)
 }
 
@@ -244,7 +244,6 @@ var processAndValidateArgs = function (args) {
             ".aqt", ".aqp", ".ctx", ".dbl", ".tab", ".dim", ".snp", ".con", ".collt", ".seq", ".syn", ".grt", ".sp", ".spb", ".sps", ".pck"];
     }
     if (xmlPath == null) {
-        // current directory is preservied at time of command registration, hence this works for format.js and tvdformat
         xmlPath = getPrefix() + "../settings/sql_developer/trivadis_advanced_format.xml"
         if (!existsFile(xmlPath)) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
@@ -252,7 +251,6 @@ var processAndValidateArgs = function (args) {
         }
     }
     if (arboriPath == null) {
-        // current directory is preservied at time of command registration, hence this works for format.js and tvdformat
         arboriPath = getPrefix() + "../settings/sql_developer/trivadis_custom_format.arbori"
         if (!existsFile(arboriPath)) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
