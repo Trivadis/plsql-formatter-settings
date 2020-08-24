@@ -153,12 +153,8 @@ var printUsage = function (asCommand) {
     ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n\n");
 }
 
-var getPrefix = function() {
-    var suffix = "format";
-    if (args[0].endsWith(".js")) {
-        suffix += ".js";
-    }
-    return args[0].replace(suffix, "");
+var getJsPath = function(qualifiedJavaScript) {
+    return qualifiedJavaScript.replaceAll("[^\\\\\\/]+(\\.js)?$", "");
 }
 
 var getCdPath = function(path) {
@@ -244,14 +240,14 @@ var processAndValidateArgs = function (args) {
             ".aqt", ".aqp", ".ctx", ".dbl", ".tab", ".dim", ".snp", ".con", ".collt", ".seq", ".syn", ".grt", ".sp", ".spb", ".sps", ".pck"];
     }
     if (xmlPath == null) {
-        xmlPath = getPrefix() + "../settings/sql_developer/trivadis_advanced_format.xml"
+        xmlPath = getJsPath(args[0]) + "../settings/sql_developer/trivadis_advanced_format.xml"
         if (!existsFile(xmlPath)) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
             xmlPath = "embedded"; 
         }
     }
     if (arboriPath == null) {
-        arboriPath = getPrefix() + "../settings/sql_developer/trivadis_custom_format.arbori"
+        arboriPath = getJsPath(args[0]) + "../settings/sql_developer/trivadis_custom_format.arbori"
         if (!existsFile(arboriPath)) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
             arboriPath = "default"; 
