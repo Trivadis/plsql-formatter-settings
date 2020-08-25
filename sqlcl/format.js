@@ -263,25 +263,50 @@ var processAndValidateArgs = function (args) {
     return result(true);
 }
 
+var formatBuffer = function(formatter) {
+    ctx.write("Formatting SQLcl buffer... ");
+    ctx.getOutputStream().flush();
+    var original = ctx.getSQLPlusBuffer().getBufferSafe().getBuffer();
+    if (hasParseErrors(original)) {
+        ctx.write("skipped.\n");
+    } else {
+        var Arrays = Java.type("java.util.Arrays");
+        var formatted = Arrays.asList(formatter.format(original).split("\n"));
+        ctx.getSQLPlusBuffer().getBufferSafe().resetBuffer(formatted);
+        ctx.write("done.\n");
+        ctx.write(ctx.getSQLPlusBuffer().getBufferSafe().list(false));
+    }
+    ctx.write("\n");
+    ctx.getOutputStream().flush();
+}
+
+var formatFiles = function(files, formatter) {
+    for (var i in files) {
+        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+        ctx.getOutputStream().flush();
+        var original = readFile(files[i])
+        if (hasParseErrors(original)) {
+            ctx.write("skipped.\n");
+        } else {
+            writeFile(files[i], formatter.format(original));
+            ctx.write("done.\n");
+        }
+        ctx.getOutputStream().flush();
+    }
+}
+
 var run = function(args) { 
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
         printUsage(args[0].equalsIgnoreCase("tvdformat"));
     } else {
-        var files = getFiles(options.rootPath, options.extensions);
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
-        for (var i in files) {
-            ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
-            ctx.getOutputStream().flush();
-            var original = readFile(files[i])
-            if (hasParseErrors(original)) {
-                ctx.write("skipped.\n");
-            } else {
-                writeFile(files[i], formatter.format(original));
-                ctx.write("done.\n");
-            }
-            ctx.getOutputStream().flush();
+        if (options.rootPath == "*") {
+            formatBuffer(formatter);
+        } else {
+            var files = getFiles(options.rootPath, options.extensions);
+            formatFiles(files, formatter);
         }
     }
 }
