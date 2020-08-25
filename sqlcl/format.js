@@ -205,8 +205,8 @@ var processAndValidateArgs = function (args) {
         return result(false);
     }
     rootPath = getCdPath(args[1]);
-    if (!existsDirectory(rootPath)) {
-        ctx.write("directory " + rootPath + " does not exist.\n\n");
+    if (rootPath != "*" && !existsFile(rootPath) && !existsDirectory(rootPath)) {
+        ctx.write("file or directory " + rootPath + " does not exist.\n\n");
         return result(false);
     }
     for (var i = 2; i < args.length; i++) {
