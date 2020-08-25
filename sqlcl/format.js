@@ -144,7 +144,8 @@ var printUsage = function (asCommand) {
         ctx.write("usage: script format.js <rootPath> [options]\n\n");
     }
     ctx.write("mandatory arguments:\n");
-    ctx.write("  <rootPath>      path to directory containing files to format (content will be replaced!)\n\n");
+    ctx.write("  <rootPath>      file or path to directory containing files to format (content will be replaced!)\n");
+    ctx.write("                  use * to format the SQLcl buffer\n\n");
     ctx.write("options:\n");
     if (!asCommand) {
         ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
