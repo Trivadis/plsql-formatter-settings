@@ -36,7 +36,8 @@ However, [`format.js`](format.js) works also as a standalone script. Here's the 
 usage: script format.js <rootPath> [options]
 
 mandatory arguments:
-  <rootPath>      path to directory containing files to format (content will be replaced!)
+  <rootPath>      file or path to directory containing files to format (content will be replaced!)
+                  use * to format the SQLcl buffer
 
 options:
   --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required
@@ -62,7 +63,8 @@ Afterwards you can type `tvdformat` to get this usage help:
 usage: tvdformat <rootPath> [options]
 
 mandatory arguments:
-  <rootPath>      path to directory containing files to format (content will be replaced!)
+  <rootPath>      file or path to directory containing files to format (content will be replaced!)
+                  use * to format the SQLcl buffer
 
 options:
   ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
