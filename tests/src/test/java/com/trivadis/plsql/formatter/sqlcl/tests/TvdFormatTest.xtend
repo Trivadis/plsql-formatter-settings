@@ -47,7 +47,7 @@ class TvdFormatTest extends AbstractSqlclTest {
 
             Formatting file 1 of 3: «tempDir.toString()»«File.separator»package_body.pkb... done.
             Formatting file 2 of 3: «tempDir.toString()»«File.separator»query.sql... done.
-            Formatting file 3 of 3: «tempDir.toString()»«File.separator»syntax_error.sql... Syntax Error at line 4, column 12
+            Formatting file 3 of 3: «tempDir.toString()»«File.separator»syntax_error.sql... Syntax Error at line 5, column 12
             
             
                for r in /*(*/ select x.* from x join y on y.a = x.a)
