@@ -14,7 +14,8 @@ class FormatWrongArgumentTest extends AbstractSqlclTest {
             usage: script format.js <rootPath> [options]
             
             mandatory arguments:
-              <rootPath>      path to directory containing files to format (content will be replaced!)
+              <rootPath>      file or path to directory containing files to format (content will be replaced!)
+                              use * to format the SQLcl buffer
             
             options:
               --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required

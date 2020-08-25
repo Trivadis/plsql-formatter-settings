@@ -17,16 +17,21 @@
 "use strict";
 
 var getFiles = function (rootPath, extensions) {
-    var Collectors = Java.type("java.util.stream.Collectors");
-    var Files = Java.type("java.nio.file.Files");
-    var Paths = Java.type("java.nio.file.Paths");
     var Arrays = Java.type("java.util.Arrays");
-    var files = Files.walk(Paths.get(rootPath))
-        .filter(function (f) Files.isRegularFile(f)
-            && Arrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
-        )
-        .sorted()
-        .collect(Collectors.toList());
+    var Paths = Java.type("java.nio.file.Paths");
+    var files;
+    if (existsFile(rootPath)) {
+        files = Arrays.asList(Paths.get(rootPath));
+    } else {
+        var Collectors = Java.type("java.util.stream.Collectors");
+        var Files = Java.type("java.nio.file.Files");
+        files = Files.walk(Paths.get(rootPath))
+            .filter(function (f) Files.isRegularFile(f)
+                && Arrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
+            )
+            .sorted()
+            .collect(Collectors.toList());
+    }
     return files;
 }
 
@@ -97,8 +102,9 @@ var hasParseErrors = function (content) {
     var Lexer = Java.type('oracle.dbtools.parser.Lexer');
     var Parsed = Java.type('oracle.dbtools.parser.Parsed');
     var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
-    var tokens = Lexer.parse(content);
-    var parsed = new Parsed(content, tokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+    var newContent = "\n" + content; // ensure correct line number in case of an error
+    var tokens = Lexer.parse(newContent);
+    var parsed = new Parsed(newContent, tokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
     var syntaxError = parsed.getSyntaxError();
     if (syntaxError != null && syntaxError.getMessage() != null) {
         ctx.write(syntaxError.getDetailedMessage());
@@ -139,7 +145,8 @@ var printUsage = function (asCommand) {
         ctx.write("usage: script format.js <rootPath> [options]\n\n");
     }
     ctx.write("mandatory arguments:\n");
-    ctx.write("  <rootPath>      path to directory containing files to format (content will be replaced!)\n\n");
+    ctx.write("  <rootPath>      file or path to directory containing files to format (content will be replaced!)\n");
+    ctx.write("                  use * to format the SQLcl buffer\n\n");
     ctx.write("options:\n");
     if (!asCommand) {
         ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
@@ -198,8 +205,8 @@ var processAndValidateArgs = function (args) {
         return result(false);
     }
     rootPath = getCdPath(args[1]);
-    if (!existsDirectory(rootPath)) {
-        ctx.write("directory " + rootPath + " does not exist.\n\n");
+    if (rootPath != "*" && !existsFile(rootPath) && !existsDirectory(rootPath)) {
+        ctx.write("file or directory " + rootPath + " does not exist.\n\n");
         return result(false);
     }
     for (var i = 2; i < args.length; i++) {
@@ -256,25 +263,50 @@ var processAndValidateArgs = function (args) {
     return result(true);
 }
 
+var formatBuffer = function(formatter) {
+    ctx.write("Formatting SQLcl buffer... ");
+    ctx.getOutputStream().flush();
+    var original = ctx.getSQLPlusBuffer().getBufferSafe().getBuffer();
+    if (hasParseErrors(original)) {
+        ctx.write("skipped.\n");
+    } else {
+        var Arrays = Java.type("java.util.Arrays");
+        var formatted = Arrays.asList(formatter.format(original).split("\n"));
+        ctx.getSQLPlusBuffer().getBufferSafe().resetBuffer(formatted);
+        ctx.write("done.\n");
+        ctx.write(ctx.getSQLPlusBuffer().getBufferSafe().list(false));
+    }
+    ctx.write("\n");
+    ctx.getOutputStream().flush();
+}
+
+var formatFiles = function(files, formatter) {
+    for (var i in files) {
+        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+        ctx.getOutputStream().flush();
+        var original = readFile(files[i])
+        if (hasParseErrors(original)) {
+            ctx.write("skipped.\n");
+        } else {
+            writeFile(files[i], formatter.format(original));
+            ctx.write("done.\n");
+        }
+        ctx.getOutputStream().flush();
+    }
+}
+
 var run = function(args) { 
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
         printUsage(args[0].equalsIgnoreCase("tvdformat"));
     } else {
-        var files = getFiles(options.rootPath, options.extensions);
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
-        for (var i in files) {
-            ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
-            ctx.getOutputStream().flush();
-            var original = readFile(files[i])
-            if (hasParseErrors(original)) {
-                ctx.write("skipped.\n");
-            } else {
-                writeFile(files[i], formatter.format(original));
-                ctx.write("done.\n");
-            }
-            ctx.getOutputStream().flush();
+        if (options.rootPath == "*") {
+            formatBuffer(formatter);
+        } else {
+            var files = getFiles(options.rootPath, options.extensions);
+            formatFiles(files, formatter);
         }
     }
 }
