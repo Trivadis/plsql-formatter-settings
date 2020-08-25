@@ -102,8 +102,9 @@ var hasParseErrors = function (content) {
     var Lexer = Java.type('oracle.dbtools.parser.Lexer');
     var Parsed = Java.type('oracle.dbtools.parser.Parsed');
     var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
-    var tokens = Lexer.parse(content);
-    var parsed = new Parsed(content, tokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+    var newContent = "\n" + content; // ensure correct line number in case of an error
+    var tokens = Lexer.parse(newContent);
+    var parsed = new Parsed(newContent, tokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
     var syntaxError = parsed.getSyntaxError();
     if (syntaxError != null && syntaxError.getMessage() != null) {
         ctx.write(syntaxError.getDetailedMessage());
