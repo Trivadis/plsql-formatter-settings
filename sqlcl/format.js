@@ -17,16 +17,21 @@
 "use strict";
 
 var getFiles = function (rootPath, extensions) {
-    var Collectors = Java.type("java.util.stream.Collectors");
-    var Files = Java.type("java.nio.file.Files");
-    var Paths = Java.type("java.nio.file.Paths");
     var Arrays = Java.type("java.util.Arrays");
-    var files = Files.walk(Paths.get(rootPath))
-        .filter(function (f) Files.isRegularFile(f)
-            && Arrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
-        )
-        .sorted()
-        .collect(Collectors.toList());
+    var Paths = Java.type("java.nio.file.Paths");
+    var files;
+    if (existsFile(rootPath)) {
+        files = Arrays.asList(Paths.get(rootPath));
+    } else {
+        var Collectors = Java.type("java.util.stream.Collectors");
+        var Files = Java.type("java.nio.file.Files");
+        files = Files.walk(Paths.get(rootPath))
+            .filter(function (f) Files.isRegularFile(f)
+                && Arrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
+            )
+            .sorted()
+            .collect(Collectors.toList());
+    }
     return files;
 }
 
