@@ -326,18 +326,16 @@ var unregisterTvdFormat = function() {
     var CommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
     var SQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
     var listeners = CommandRegistry.getListeners(null, ctx).get(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-    if (listeners != null) {
-        // remove all commands registered with CommandRegistry.addForAllStmtsListener
-        CommandRegistry.removeListener(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        CommandRegistry.clearCaches(null, ctx);
-        var Collectors = Java.type("java.util.stream.Collectors");
-        var remainingListeners = CommandRegistry.getListeners(null, ctx).get(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
-                .stream().map(function(l) l.getClass()).collect(Collectors.toSet());
-        // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
-        for (var i in listeners) {
-            if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
-                CommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
-            }
+    // remove all commands registered with CommandRegistry.addForAllStmtsListener
+    CommandRegistry.removeListener(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+    CommandRegistry.clearCaches(null, ctx);
+    var Collectors = Java.type("java.util.stream.Collectors");
+    var remainingListeners = CommandRegistry.getListeners(null, ctx).get(SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
+            .stream().map(function(l) l.getClass()).collect(Collectors.toSet());
+    // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
+    for (var i in listeners) {
+        if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
+            CommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
         }
     }
 }
