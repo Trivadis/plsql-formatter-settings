@@ -28,7 +28,7 @@ So, if you want to have full control over the formatting result you have to use 
 
 ## Using `format.js`
 
-We recommend to download, clone or fork this repository when you plan to use [`format.js`](format.js). It’s easier because the SQL Developer settings - [`trivadis_advanced_format.xml`](../settings/sql_developer/trivadis_advanced_format.xml) and [`trivadis_custom_format.arbori`](../settings/sql_developer/trivadis_custom_format.arbori) are used by default. Therefore you do not need to pass them as command line arguments.
+We recommend to download, clone or fork this repository when you plan to use [`format.js`](format.js). It’s easier because the SQL Developer settings [`trivadis_advanced_format.xml`](../settings/sql_developer/trivadis_advanced_format.xml) and [`trivadis_custom_format.arbori`](../settings/sql_developer/trivadis_custom_format.arbori) are used by default. Therefore you do not need to pass them as command line arguments.
 
 However, [`format.js`](format.js) works also as a standalone script. Here's the usage:
 
