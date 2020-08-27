@@ -313,7 +313,7 @@ var run = function(args) {
 
 var getArgs = function(cmdLine) {
     var Pattern = Java.type("java.util.regex.Pattern");
-    var p = Pattern.compile("(\"[^\"]*\")|([^ ]+)");
+    var p = Pattern.compile('("[^"]*")|([^ ]+)');
     var m = p.matcher(cmdLine.trim());
     var args = [];
     while (m.find()) {
