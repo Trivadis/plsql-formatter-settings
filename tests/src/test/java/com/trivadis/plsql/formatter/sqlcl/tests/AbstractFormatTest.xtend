@@ -19,7 +19,7 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             
             Expected: name_wo_function_call,identifier,term,factor,name,... skipped.
         '''
-        val actual = run(runType, tempDir.toString())
+        val actual = run(runType, tempDir.toString(), "mext=")
         Assert.assertEquals(expected, actual)
         
         // package_body.pkb
@@ -80,7 +80,7 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     def void process_pkb_only(RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "ext=pkb")
+        val actual = run(runType, tempDir.toString(), "ext=pkb", "mext=")
         Assert.assertTrue(actual.contains("file 1 of 1"))
         
         // package_body.pkb
@@ -415,6 +415,118 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         '''.toString.trim
         val actualQuery = getFormattedContent("query.sql")
         Assert.assertEquals(expectedQuery, actualQuery)
+    }
+    
+    def process_markdown_only(RunType runType) {
+        // run
+        val actualConsole = run(runType, tempDir.toString(), "ext=")
+        Assert.assertTrue (actualConsole.contains('''Formatting file 1 of 1: «tempDir.toString()»«File.separator»markdown.md... done.'''))
+        
+        // markdown.md
+        val actualMarkdown = getFormattedContent("markdown.md").trim
+        val expectedMarkdown = '''
+            # Titel
+            
+            ## Introduction
+            
+            This is a Markdown file with some `code blocks`. 
+            
+            ## Package Body
+            
+            Here's the content of package_body.pkb
+            
+            ```sql
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+               FUNCTION to_int_table (
+                  in_integers  IN  VARCHAR2,
+                  in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
+               ) RETURN sys.ora_mining_number_nt
+                  DETERMINISTIC
+                  ACCESSIBLE BY ( PACKAGE the_api.math, PACKAGE the_api.test_math )
+               IS
+                  l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                  l_pos     INTEGER := 1;
+                  l_int     INTEGER;
+               BEGIN
+                  <<integer_tokens>>
+                  LOOP
+                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     EXIT integer_tokens WHEN l_int IS NULL;
+                     l_result.extend;
+                     l_result(l_pos)     := l_int;
+                     l_pos               := l_pos + 1;
+                  END LOOP integer_tokens;
+                  RETURN l_result;
+               END to_int_table;
+            END math;
+            /
+            ```
+            
+            ## Syntax Error
+            
+            Here's the content of syntax_error.sql
+            
+            ```  sql
+            declare
+                l_var1  integer;
+                l_var2  varchar2(20);
+            begin
+                for r in /*(*/ select x.* from x join y on y.a = x.a)
+                loop
+                  p(r.a, r.b, r.c);
+                end loop;
+            end;
+            /
+            ```
+            
+            ## Query (to be ignored)
+            
+            Here's the content of query.sql, but the code block must not be formatted:
+            
+            ```
+            Select d.department_name,v.  employee_id 
+            ,v 
+            . last_name frOm departments d CROSS APPLY(select*from employees e
+              wHERE e.department_id=d.department_id) v WHeRE 
+            d.department_name in ('Marketing'
+            ,'Operations',
+            'Public Relations') Order By d.
+            department_name,v.employee_id;
+            ```
+            
+            ## Query (to be formatted)
+            
+            Here's the content of query.sql:
+            
+            ``` sql
+            SELECT d.department_name,
+                   v.employee_id,
+                   v.last_name
+              FROM departments d CROSS APPLY (
+                      SELECT *
+                        FROM employees e
+                       WHERE e.department_id = d.department_id
+                   ) v
+             WHERE d.department_name IN (
+                      'Marketing',
+                      'Operations',
+                      'Public Relations'
+                   )
+             ORDER BY d.department_name,
+                      v.employee_id;
+            ```
+            
+            ## JavaScript code
+            
+            Here's another code wich must not be formatted
+            
+            ``` js
+            var foo = function (bar) {
+              return bar++;
+            };
+            ```
+        '''.toString.trim
+         Assert.assertEquals(expectedMarkdown, actualMarkdown)
     }
 
 }

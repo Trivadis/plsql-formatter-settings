@@ -73,5 +73,10 @@ class TvdFormatTest extends AbstractFormatTest {
     def void process_with_embedded_xml_default_arbori() {
         process_with_embedded_xml_default_arbori(RunType.TvdFormatCommand)
     }
+    
+    @Test
+    def void process_markdown_only() {
+        process_markdown_only(RunType.TvdFormatCommand)
+    }
 
 }

@@ -40,4 +40,9 @@ class FormatTest extends AbstractFormatTest {
 
     }
 
+    @Test
+    def void process_markdown_only() {
+        process_markdown_only(RunType.FormatJS)
+    }
+
 }
