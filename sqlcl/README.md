@@ -24,7 +24,7 @@ In SQLDeveloper the format options are the default chosen in the preferences.
 
 You can use a directory for `<input_file>` and `output_file`. It can be even the same. Only files that are parsed without errors are formatted. This is good. However, you cannot configure an `.arbori` file as input. `FORMAT RULES` can only load the `.xml` file. 
 
-So, if you want to have full control over the formatting result you have to use the script or the custom command.
+So, if you want to have full control over the formatting result you have to use the script or the custom command, especially if you want to format SQL code blocks within Markdown files.
 
 ## Using `format.js`
 
@@ -42,6 +42,7 @@ mandatory arguments:
 options:
   --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required
   ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
+  mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown
   xml=<file>      path to the file containing the xml file for advanced format settings
                   xml=default uses default advanced settings included in sqlcl
                   xml=embedded uses advanced settings defined in format.js
@@ -68,6 +69,7 @@ mandatory arguments:
 
 options:
   ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
+  mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown
   xml=<file>      path to the file containing the xml file for advanced format settings
                   xml=default uses default advanced settings included in sqlcl
                   xml=embedded uses advanced settings defined in format.js
