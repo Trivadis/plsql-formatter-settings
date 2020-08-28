@@ -98,7 +98,7 @@ var getConfiguredFormatter = function (xmlPath, arboriPath) {
     return formatter;
 }
 
-var hasParseErrors = function (content) {
+var hasParseErrors = function (content, consoleOutput) {
     var Lexer = Java.type("oracle.dbtools.parser.Lexer");
     var Parsed = Java.type("oracle.dbtools.parser.Parsed");
     var SqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley")
@@ -107,8 +107,10 @@ var hasParseErrors = function (content) {
     var parsed = new Parsed(newContent, tokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
     var syntaxError = parsed.getSyntaxError();
     if (syntaxError != null && syntaxError.getMessage() != null) {
-        ctx.write(syntaxError.getDetailedMessage());
-        ctx.write("... ");
+        if (consoleOutput) {
+            ctx.write(syntaxError.getDetailedMessage());
+            ctx.write("... ");
+        }
         return true;
     } 
     return false;
@@ -152,6 +154,7 @@ var printUsage = function (asCommand) {
         ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
     }
     ctx.write("  ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb\n");
+    ctx.write("  mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown\n");
     ctx.write("  xml=<file>      path to the file containing the xml file for advanced format settings\n");
     ctx.write("                  xml=default uses default advanced settings included in sqlcl\n");
     ctx.write("                  xml=embedded uses advanced settings defined in format.js\n");
@@ -185,7 +188,10 @@ var getCdPath = function(path) {
 
 var processAndValidateArgs = function (args) {
     var rootPath = null;
+    var extArgFound = false;
     var extensions = [];
+    var mextArgFound = false;
+    var markdownExtensions = [];
     var xmlPath = null;
     var arboriPath = null;
 
@@ -193,6 +199,7 @@ var processAndValidateArgs = function (args) {
         var result = {
             rootPath : rootPath,
             extensions : extensions,
+            markdownExtensions : markdownExtensions,
             xmlPath : xmlPath,
             arboriPath : arboriPath, 
             valid : valid
@@ -211,9 +218,22 @@ var processAndValidateArgs = function (args) {
     }
     for (var i = 2; i < args.length; i++) {
         if (args[i].toLowerCase().startsWith("ext=")) {
-            var values = args[i].substring(4).split(",");
-            for (var j in values) {
-                extensions[extensions.length] = "." + values[j].toLowerCase();
+            extArgFound = true;
+            if (args[i].length > 4) {
+                var values = args[i].substring(4).split(",");
+                for (var j in values) {
+                    extensions[extensions.length] = "." + values[j].toLowerCase();
+                }
+            }
+            continue;
+        }
+        if (args[i].toLowerCase().startsWith("mext=")) {
+            mextArgFound = true;
+            if (args[i].length > 5) {
+                var values = args[i].substring(5).split(",");
+                for (var j in values) {
+                    markdownExtensions[markdownExtensions.length] = "." + values[j].toLowerCase();
+                }
             }
             continue;
         }
@@ -242,9 +262,15 @@ var processAndValidateArgs = function (args) {
         ctx.write("invalid argument " + args[i] + ".\n\n");
         return result(false);
     }
-    if (extensions.length == 0) {
+    if (!extArgFound) {
         extensions = [".sql", ".prc", ".fnc", ".pks", ".pkb", ".trg", ".vw", ".tps", ".tpb", ".tbp", ".plb", ".pls", ".rcv", ".spc", ".typ", 
             ".aqt", ".aqp", ".ctx", ".dbl", ".tab", ".dim", ".snp", ".con", ".collt", ".seq", ".syn", ".grt", ".sp", ".spb", ".sps", ".pck"];
+    }
+    if (!mextArgFound) {
+        markdownExtensions = [".markdown", ".mdown", ".mkdn", ".md"];
+    }
+    for (var j in markdownExtensions) {
+        extensions[extensions.length] = markdownExtensions[j];
     }
     if (xmlPath == null) {
         xmlPath = getJsPath() + "../settings/sql_developer/trivadis_advanced_format.xml"
@@ -267,7 +293,7 @@ var formatBuffer = function(formatter) {
     ctx.write("Formatting SQLcl buffer... ");
     ctx.getOutputStream().flush();
     var original = ctx.getSQLPlusBuffer().getBufferSafe().getBuffer();
-    if (hasParseErrors(original)) {
+    if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
     } else {
         var Arrays = Java.type("java.util.Arrays");
@@ -280,16 +306,57 @@ var formatBuffer = function(formatter) {
     ctx.getOutputStream().flush();
 }
 
-var formatFiles = function(files, formatter) {
+var isMarkdownFile = function(file, markdownExtensions) {
+    for (var j in markdownExtensions) {
+        if (file.toString().toLowerCase().endsWith(markdownExtensions[j])) {
+            return true;
+        }
+    }
+    return false;
+} 
+
+var formatMarkdownFile = function(file, formatter) {
+    var original = readFile(file)
+    var Pattern = Java.type("java.util.regex.Pattern");
+    var p = Pattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", Pattern.DOTALL);
+    var m = p.matcher(original);
+    var result = "";
+    var pos = 0;
+    while (m.find()) {
+        result += original.substring(pos, m.end(1));
+        if (hasParseErrors(m.group(2), false)) {
+            result += original.substring(m.start(2), m.end(3));
+        } else {
+            result += formatter.format(m.group(2));
+            result += original.substring(m.end(2), m.end(3));
+        }
+        pos = m.end(3);
+    }
+    if (original.length > pos) {
+        result += original.substring(pos);
+    }
+    writeFile(file, result);
+    ctx.write("done.\n");
+}
+
+var formatFile = function(file, formatter) {
+    var original = readFile(file)
+    if (hasParseErrors(original, true)) {
+        ctx.write("skipped.\n");
+    } else {
+        writeFile(file, formatter.format(original));
+        ctx.write("done.\n");
+    }
+}
+
+var formatFiles = function(files, formatter, markdownExtensions) {
     for (var i in files) {
         ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
-        var original = readFile(files[i])
-        if (hasParseErrors(original)) {
-            ctx.write("skipped.\n");
+        if (isMarkdownFile(files[i], markdownExtensions)) {
+            formatMarkdownFile(files[i], formatter);
         } else {
-            writeFile(files[i], formatter.format(original));
-            ctx.write("done.\n");
+            formatFile(files[i], formatter);
         }
         ctx.getOutputStream().flush();
     }
@@ -306,7 +373,7 @@ var run = function(args) {
             formatBuffer(formatter);
         } else {
             var files = getFiles(options.rootPath, options.extensions);
-            formatFiles(files, formatter);
+            formatFiles(files, formatter, options.markdownExtensions);
         }
     }
 }
