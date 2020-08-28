@@ -20,6 +20,7 @@ class FormatWrongArgumentTest extends AbstractSqlclTest {
             options:
               --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required
               ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
+              mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown
               xml=<file>      path to the file containing the xml file for advanced format settings
                               xml=default uses default advanced settings included in sqlcl
                               xml=embedded uses advanced settings defined in format.js

@@ -71,6 +71,20 @@ public abstract class AbstractSqlclTest {
         
     }
     
+    public String run(RunType runType, String...arguments) {
+        if (runType == RunType.FormatJS) {
+            return runScript(arguments);
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("tvdformat");
+            for (int i = 0; i < arguments.length; i++) {
+                sb.append(" ");
+                sb.append(arguments[i]);
+            }
+            return runCommand (sb.toString());
+        }
+    }
+    
     public String runScript(String... arguments) {
         final URL script = Thread.currentThread().getContextClassLoader().getResource("format.js");
         final String[] args = new String[arguments.length + 1];
