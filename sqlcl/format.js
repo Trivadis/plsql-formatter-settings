@@ -410,7 +410,7 @@ var unregisterTvdFormat = function() {
 var registerTvdFormat = function() {
     var handleEvent = function(conn, ctx, cmd) {
         var args = getArgs(cmd.getSql());
-        if (args[0].equalsIgnoreCase("tvdformat")) {
+        if (args != null && typeof args[0] != "undefined" && args[0].equalsIgnoreCase("tvdformat")) {
             run(args);
             return true;
         }
