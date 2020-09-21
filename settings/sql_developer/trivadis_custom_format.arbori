@@ -406,6 +406,9 @@ simpleIndentConditions:
 | [node) XML_attributes_clause & [node^) XML_function
 | [node) xmlelement[58,78) & [node^) XML_function
 | :breaksAfterComma & .breaks4JSON & [node) regular_entry
+| [node) string & [node-2) 'XMLTABLE' & (:breaksAfterComma | :breaksBeforeComma) -- salvisberg, added, issue #57
+| [node) XML_passing_clause                                                      -- salvisberg, added, issue #57
+| [node) XMLTABLE_options[19,37)                                                 -- salvisberg, added, issue #57
 ;
 
 /**
@@ -719,6 +722,9 @@ _extraBrkBefore:
 | [node) method_specification & [node-1) ',' -- salvisberg, added, issue #5
 | [node) 'AUTOEXTEND' -- salvisberg, added (#26)
 | [node) file_specification & ![node-1) 'DATAFILE' & ![node-1) 'TEMPFILE' -- salvisberg: added, always after comma, no alignments of file_specifications, too much work for corner case DDL (#26)
+| [node) XML_table_column & [node-1) ',' & :breaksAfterComma  -- salvisberg, added, issue #57
+| [node+1) XML_table_column & [node) ',' & :breaksBeforeComma -- salvisberg, added, issue #57
+| [node) ')' & [node-4) 'XMLTABLE'                            -- salvisberg, added, issue #57
 ;
 
 _extraBrkAfter: 
@@ -931,7 +937,27 @@ _paddedIdsInScope2: (
 ) & scope < follower
 ;
 
-paddedIdsInScope: _paddedIdsInScope1 | _paddedIdsInScope2
+_paddedIdsInScopeXmlTableColumn:            -- salvisberg, added, issue #57
+  [predecessor) identifier & [follower) XML_table_column[5,72) 
+    & predecessor = follower-1
+    & [scope) XMLTABLE_options[19,37)
+    & scope<predecessor
+    & (:breaksAfterComma | :breaksBeforeComma)
+;
+
+_paddedIdsInScopeXmlTableColumnDatatype:    -- salvisberg, added, issue #57
+  [predecessor) datatype & [follower) 'PATH' 
+    & predecessor = follower-1
+    & [scope) XMLTABLE_options
+    & scope<predecessor
+    & (:breaksAfterComma | :breaksBeforeComma)
+;
+
+paddedIdsInScope: 
+  _paddedIdsInScope1 
+| _paddedIdsInScope2 
+| _paddedIdsInScopeXmlTableColumn           -- salvisberg, added, issue #57
+| _paddedIdsInScopeXmlTableColumnDatatype   -- salvisberg, added, issue #57
 ->
 ;
 
@@ -1064,7 +1090,19 @@ pairwiseAlignments9: -- https://community.oracle.com/thread/4210584
 & ancestor < node
 ;
 
- 
+pairwiseAlignmentXmlTable: -- salvisberg, added, issue #57
+    [predecessor) string & [node) 'PASSING' & predecessor=node^^-1
+  | [predecessor) XML_passing_clause & [node) XMLTABLE_options[19,37) & predecessor=node-1
+  | [predecessor) 'XMLTABLE' & [node) ')' & predecessor=node-4
+;
+
+pairwiseAlignmentXmlTableColumn: -- salvisberg, added, issue #57
+  :breaksAfterComma & [predecessor) XML_table_column & [ancestor) XMLTABLE_options[19,37) & [node) XML_table_column & [node-1) ',' 
+    & ancestor<predecessor & ancestor<node & ancestor=predecessor^
+| :breaksBeforeComma & [predecessor) XML_table_column & [ancestor) XMLTABLE_options[19,37) & [node+1) XML_table_column & [node) ',' 
+    & ancestor<predecessor & ancestor<node & ancestor=predecessor^
+;
+
 pairwiseAlignments: 
     pairwiseAlignments1 
   | pairwiseAlignments2 
@@ -1076,6 +1114,8 @@ pairwiseAlignments:
   | pairwiseAlignments7_3 
   | pairwiseAlignments8 
   | pairwiseAlignments9 
+  | pairwiseAlignmentXmlTable         -- salvisberg, added, issue #57
+  | pairwiseAlignmentXmlTableColumn   -- salvisberg, added, issue #57
 ->
 ;
 
@@ -1085,6 +1125,8 @@ less2Spaces:   :breaksBeforeComma & (
   | [node+1) prm_spec & [node) ',' 
   | [node+1) select_term & [node) ',' 
   | [node+1) name & [node) ','                  -- salvisberg: added to handle into clause (#30)
+  | [node+1) XML_table_column & [node) ','      -- salvisberg, added, issue #57
+  | [node) ')' & [node-4) 'XMLTABLE'            -- salvisberg, added, issue #57
   | [node+1) group_by_col & [node) ','               
   | [node+1) "ord_by_1desc" & [node) ','             
   | [node+1) table_reference & [node) ',' 
@@ -1136,7 +1178,7 @@ dontFormatNode: [node) numeric_literal
  * ----------------------------------------------------------------------------
  */
 
-indentInExistsTable:
+indentInExistsXmlTable:
   :breakOnSubqueries & (
       [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
     | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^^) in_condition
@@ -1147,9 +1189,13 @@ indentInExistsTable:
     | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^) in_condition
     | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  query_table_expression
   ) 
-    | [node)   expression_list & [node-1) '(' & [node+1) ')' & [node^^) in_condition
-    | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^^) in_condition
-    | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^) in_condition
+  | [node)   expression_list & [node-1) '(' & [node+1) ')' & [node^^) in_condition
+  | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^^) in_condition
+  | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^) in_condition
+  | :breaksBeforeComma & (
+      [node) string & [node-2) 'XMLTABLE'
+    | [node) XMLTABLE_options
+  )
   -> {
     var parentNode = tuple.get("node");
     var descendants = parentNode.descendants();
@@ -1166,7 +1212,7 @@ indentInExistsTable:
     for (j = indentSpaces - baseIndent; j < indentSpaces; j++) {
       addIndent = addIndent + " ";
     }
-    logger.fine(struct.getClass(), "--- indentInExistsTable ---");
+    logger.fine(struct.getClass(), "--- indentInExistsXmlTable ---");
     logger.fine(struct.getClass(), "tuple: " +  tuple);
     logger.fine(struct.getClass(), "length of addIndent: " +  addIndent.length);
     for (i = 0, len = descendants.length; i < len; i++) {
