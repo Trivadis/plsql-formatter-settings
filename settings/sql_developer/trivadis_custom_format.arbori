@@ -1136,7 +1136,13 @@ less2Spaces:   :breaksBeforeComma & (
     var node = tuple.get("node");       
     var nodeIndent = struct.getNewline(node.from);
     if( nodeIndent != null ) {
-        struct.putNewline(node.from, nodeIndent.substr(0,nodeIndent.length-2));
+        /* salvisberg, added/changed, issue #53 */
+        var spaceAfterCommas = struct.options.get("spaceAfterCommas");
+        var reduceNumberOfSpaces = 2;
+        if (!spaceAfterCommas) {
+          reduceNumberOfSpaces = 1;
+        }
+        struct.putNewline(node.from, nodeIndent.substr(0,nodeIndent.length-reduceNumberOfSpaces));
     }
 }
 
