@@ -924,7 +924,7 @@ _paddedIdsInScope1: (
 | [id) expr  & [id+1) 'THEN' & [id+2) expr & [scope) case_expression
 | :alignTabColAliases  & [id) expr & [id^) select_term & [id+1) as_alias & [scope) select_clause
 | :alignTabColAliases  & [id) query_table_expression & [id+1) identifier & [scope) from_clause
-          & ![id^+1) "inner_cross_join_clause"
+--          & ![id^+1) "inner_cross_join_clause"  -- salvisberg, disabled, issue #54
 --| :alignTabColAliases  & [id) table_reference & .logTuple & [id+1) on_using_condition & [scope) "inner_cross_join_clause"
 --
 --| [id) constrained_type & [id+1) default_expr_opt & [scope) decl_list
