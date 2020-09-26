@@ -1052,6 +1052,14 @@ pairwiseAlignments6:
 & predecessor=ancestor-1
 & ancestor < node
 ;
+
+pairwiseAlignments6_2: -- salvisberg, added, issue #63
+  :breaksBeforeComma & [predecessor) update_set_clause_expr
+& [node) ',' & [node+1) update_set_clause_expr
+& predecessor=ancestor-1
+& ancestor < node
+;
+
 -- https://community.oracle.com/thread/4119671
 -- WHEN NOT MATCHED THEN INSERT (
 --     crew_seqno,
@@ -1115,6 +1123,7 @@ pairwiseAlignments:
   | pairwiseAlignments4 
   | pairwiseAlignments5 
   | pairwiseAlignments6 
+  | pairwiseAlignments6_2             -- salvisberg, added, issue #63 
   | pairwiseAlignments7 
   | pairwiseAlignments7_3 
   | pairwiseAlignments8 
@@ -1137,6 +1146,7 @@ less2Spaces:   :breaksBeforeComma & (
   | [node+1) table_reference & [node) ',' 
   | [node+1) par_expr_list[19,31) & [node) ','  -- in insert clause
   | [node-1) "expr_list" & [node) ','           -- in insert clause
+  | [node+1) update_set_clause_expr & [node) ','  -- salvisberg, added, issue #63
 ) -> {
     var node = tuple.get("node");       
     var nodeIndent = struct.getNewline(node.from);
