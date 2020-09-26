@@ -391,7 +391,9 @@ simpleIndentConditions:
 | [node) tempfile_reuse_clause
 | [node) type_constructor_expression &  ! [node^) create
 | :breaksAfterSelectFromWhere & [node) update_set_clause_expr & [node^^) update_set_clause
-| [node) update_set_clause_expr & ![node^^) update_set_clause
+-- | [node) update_set_clause_expr & ![node^^) update_set_clause    -- salvisberg, disabled, issue #63
+| [node) update_set_clause_expr & [node-1) ',' & :breaksAfterComma  -- salvisberg, added, issue #63
+| [node) ',' & [node+1) update_set_clause_expr & :breaksBeforeComma -- salvisberg, added, issue #63
 | [node) user_aux
 | [node) using_clause_opt
 | [node) using_index_clause 
