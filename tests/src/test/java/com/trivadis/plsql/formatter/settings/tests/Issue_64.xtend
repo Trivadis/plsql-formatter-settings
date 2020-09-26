@@ -4,7 +4,7 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
 import oracle.dbtools.app.Format.Breaks
 import org.junit.Test
 
-class Issue_63 extends ConfiguredTestFormatter {
+class Issue_64 extends ConfiguredTestFormatter {
     
     @Test
     def update_commas_after() {
