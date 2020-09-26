@@ -409,6 +409,8 @@ simpleIndentConditions:
 | [node) string & [node-2) 'XMLTABLE' & (:breaksAfterComma | :breaksBeforeComma) -- salvisberg, added, issue #57
 | [node) XML_passing_clause                                                      -- salvisberg, added, issue #57
 | [node) XMLTABLE_options[19,37)                                                 -- salvisberg, added, issue #57
+| [node) xml_passing_clause                                                      -- salvisberg, added, issue #62
+| [node) xmlquery[17,31)                                                         -- salvisberg, added, issue #62
 ;
 
 /**
