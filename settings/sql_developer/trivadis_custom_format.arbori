@@ -391,7 +391,9 @@ simpleIndentConditions:
 | [node) tempfile_reuse_clause
 | [node) type_constructor_expression &  ! [node^) create
 | :breaksAfterSelectFromWhere & [node) update_set_clause_expr & [node^^) update_set_clause
-| [node) update_set_clause_expr & ![node^^) update_set_clause
+-- | [node) update_set_clause_expr & ![node^^) update_set_clause    -- salvisberg, disabled, issue #64
+| [node) update_set_clause_expr & [node-1) ',' & :breaksAfterComma  -- salvisberg, added, issue #64
+| [node) ',' & [node+1) update_set_clause_expr & :breaksBeforeComma -- salvisberg, added, issue #64
 | [node) user_aux
 | [node) using_clause_opt
 | [node) using_index_clause 
@@ -1050,6 +1052,14 @@ pairwiseAlignments6:
 & predecessor=ancestor-1
 & ancestor < node
 ;
+
+pairwiseAlignments6_2: -- salvisberg, added, issue #64
+  :breaksBeforeComma & [predecessor) update_set_clause_expr
+& [node) ',' & [node+1) update_set_clause_expr
+& predecessor=ancestor-1
+& ancestor < node
+;
+
 -- https://community.oracle.com/thread/4119671
 -- WHEN NOT MATCHED THEN INSERT (
 --     crew_seqno,
@@ -1113,6 +1123,7 @@ pairwiseAlignments:
   | pairwiseAlignments4 
   | pairwiseAlignments5 
   | pairwiseAlignments6 
+  | pairwiseAlignments6_2             -- salvisberg, added, issue #64 
   | pairwiseAlignments7 
   | pairwiseAlignments7_3 
   | pairwiseAlignments8 
@@ -1135,6 +1146,7 @@ less2Spaces:   :breaksBeforeComma & (
   | [node+1) table_reference & [node) ',' 
   | [node+1) par_expr_list[19,31) & [node) ','  -- in insert clause
   | [node-1) "expr_list" & [node) ','           -- in insert clause
+  | [node+1) update_set_clause_expr & [node) ','  -- salvisberg, added, issue #64
 ) -> {
     var node = tuple.get("node");       
     var nodeIndent = struct.getNewline(node.from);
@@ -1165,7 +1177,7 @@ additional4Spaces:
 ignoreLineBreaksBeforeNode:
    !:breaksBeforeComma &    [node) ','
 |  [node) ';'
-|  [node-1) 'SET' & [node^) update_set_clause -- salvisberg: added to avoid line breaks between SET and first and only update_set_clause
+|  [node-1) 'SET' & [node^) update_set_clause & !:breaksAfterSelectFromWhere -- salvisberg: added to avoid line breaks between SET and first and only update_set_clause
 |  [node-1) 'IF' -- salvisberg: added to avoid line breaks between IF and condition (independent of length of condition)
 |  [node-1) 'ELSIF' -- salvisberg: added to avoid line breaks between ELSIF and condition (independent of length of condition)
 |  [node) 'THEN' -- salvisberg: added to avoid line breaks before THEN (independent of length of previous condition)
