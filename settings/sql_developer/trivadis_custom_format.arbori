@@ -1274,7 +1274,7 @@ indentCaseExpression:
     }
   }
 
-  indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
+indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
     var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
     var Token = Java.type('oracle.dbtools.parser.Token');
     var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
