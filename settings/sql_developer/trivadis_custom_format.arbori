@@ -51,9 +51,38 @@ maxOneEmptyLine: runOnce -> {
   var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
   var Token = Java.type('oracle.dbtools.parser.Token');
   var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
+  var offOnRanges = [];
+
+  var populateOffOnRanges = function(tokens) {
+    var off = -1;
+    offOnRanges = [];
+    for (var i in tokens) {
+      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
+        if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
+          off = tokens[i].begin;
+        }
+        if (off != -1) {
+          if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
+            offOnRanges.push([off, tokens[i].end]);
+            off = -1;
+          }
+        }
+      } 
+    }
+  }
+
+  var inOffOnRange = function(pos) {
+    for (var x in offOnRanges) {
+      if (pos >= offOnRanges[x][0] && pos < offOnRanges[x][1]) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   var removeDuplicateEmptyLines = function() {
     var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+    populateOffOnRanges(tokens);
     var substitutions = new Substitutions(target.input);
     var firstEOLToken = 0;
     var secondEOLToken = 0;
@@ -75,7 +104,9 @@ maxOneEmptyLine: runOnce -> {
       }
       if (tokens[i].type != Token.WS) {
         if (lastEOLToken != 0) {
-          substitutions.put(secondEOLToken.begin,lastEOLToken.begin,"");
+          if (!inOffOnRange(secondEOLToken.begin)) {
+            substitutions.put(secondEOLToken.begin,lastEOLToken.begin,"");
+          }
         } 
         firstEOLToken = 0;
         secondEOLToken = 0;
@@ -88,6 +119,7 @@ maxOneEmptyLine: runOnce -> {
 
   var removeWSBeforeFirstTokenInLine = function() {
     var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+    populateOffOnRanges(tokens);
     var substitutions = new Substitutions(target.input);
     var eolToken = 0
     for (i = 0; i < tokens.length; i++) {
@@ -97,7 +129,9 @@ maxOneEmptyLine: runOnce -> {
       }
       if (tokens[i].type != Token.WS) {
         if (eolToken != 0 && tokens[i].type != Token.COMMENT && tokens[i].type != Token.MACRO_SKIP) {
-          substitutions.put(eolToken.end,tokens[i].begin,"");
+          if (!inOffOnRange(eolToken.end)) {
+            substitutions.put(eolToken.end,tokens[i].begin,"");
+          }
         }
         eolToken = 0;
       }
@@ -108,6 +142,7 @@ maxOneEmptyLine: runOnce -> {
 
   var removeWSOnEmptyLines = function() {
     var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+    populateOffOnRanges(tokens);
     var substitutions = new Substitutions(target.input);
     var eolToken = 0
     for (i = 0; i < tokens.length; i++) {
@@ -121,7 +156,9 @@ maxOneEmptyLine: runOnce -> {
       }
       if (tokens[i].content == "\n") {
         if (eolToken != 0) {
-          substitutions.put(eolToken.end,tokens[i].begin,"");
+          if (!inOffOnRange(eolToken.end)) {
+            substitutions.put(eolToken.end,tokens[i].begin,"");
+          }
         }
         eolToken = tokens[i];
       }
@@ -1247,7 +1284,6 @@ indentInExistsXmlTable:
       }
     }
   }
-;
 
 indentCaseExpression:
   :breaksBeforeComma & [node) case_expression & [node^) select_term & [node^-1) ',' 
@@ -1275,7 +1311,7 @@ indentCaseExpression:
     }
   }
 
-  indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
+indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
     var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
     var Token = Java.type('oracle.dbtools.parser.Token');
     var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
@@ -1310,4 +1346,29 @@ indentCaseExpression:
     }
   }
 
-;
+dontFormatOffOnRanges: runOnce -> {
+    var Integer = Java.type('java.lang.Integer');
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+    var Token = Java.type('oracle.dbtools.parser.Token');
+    var tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
+    var hiddenTokenCount = 0;
+    var format = true;
+    for (var i in tokens) {
+      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
+        if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
+          format = false;
+        }
+        if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
+          format = true;
+        }
+        hiddenTokenCount++;
+      } else if (tokens[i].type == Token.WS || tokens[i].type == Token.MACRO_SKIP || tokens[i].type == Token.SQLPLUSLINECONTINUE_SKIP) {
+        hiddenTokenCount++
+      } else {  
+        /* expected types: QUOTED_STRING, DQUOTED_STRING, BQUOTED_STRING, DIGITS, OPERATION, IDENTIFIER, AUXILIARY, INCOMPLETE */
+        if (!format) {
+          struct.unformattedPositions.add(new Integer(i-hiddenTokenCount));
+        }
+      }
+    }
+  }
