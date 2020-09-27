@@ -1247,7 +1247,6 @@ indentInExistsXmlTable:
       }
     }
   }
-;
 
 indentCaseExpression:
   :breaksBeforeComma & [node) case_expression & [node^) select_term & [node^-1) ',' 
