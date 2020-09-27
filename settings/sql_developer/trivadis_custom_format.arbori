@@ -1309,4 +1309,29 @@ indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
     }
   }
 
-;
+dontFormatOffOnRanges: runOnce -> {
+    var Integer = Java.type('java.lang.Integer');
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+    var Token = Java.type('oracle.dbtools.parser.Token');
+    var tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
+    var hiddenTokenCount = 0;
+    var format = true;
+    for (var i in tokens) {
+      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
+        if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
+          format = false;
+        }
+        if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
+          format = true;
+        }
+        hiddenTokenCount++;
+      } else if (tokens[i].type == Token.WS || tokens[i].type == Token.MACRO_SKIP || tokens[i].type == Token.SQLPLUSLINECONTINUE_SKIP) {
+        hiddenTokenCount++
+      } else {  
+        /* expected types: QUOTED_STRING, DQUOTED_STRING, BQUOTED_STRING, DIGITS, OPERATION, IDENTIFIER, AUXILIARY, INCOMPLETE */
+        if (!format) {
+          struct.unformattedPositions.add(new Integer(i-hiddenTokenCount));
+        }
+      }
+    }
+  }
