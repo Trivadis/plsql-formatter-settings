@@ -11,13 +11,13 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
 
             Formatting file 1 of 3: «tempDir.toString()»«File.separator»package_body.pkb... done.
             Formatting file 2 of 3: «tempDir.toString()»«File.separator»query.sql... done.
-            Formatting file 3 of 3: «tempDir.toString()»«File.separator»syntax_error.sql... Syntax Error at line 5, column 12
+            Formatting file 3 of 3: «tempDir.toString()»«File.separator»syntax_error.sql... Syntax Error at line 6, column 12
             
             
                for r in /*(*/ select x.* from x join y on y.a = x.a)
                         ^^^                                          
             
-            Expected: name_wo_function_call,identifier,term,factor,name,... skipped.
+            Expected: name_wo_function_call,identifier,term,factor,pri,n... skipped.
         '''
         val actual = run(runType, tempDir.toString(), "mext=")
         Assert.assertEquals(expected, actual)
@@ -116,7 +116,7 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
     
     def void process_with_original_arbori(RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "arbori=" + Thread.currentThread().getContextClassLoader().getResource("original/20.2.0/custom_format.arbori").path)
+        val actual = run(runType, tempDir.toString(), "arbori=" + Thread.currentThread().getContextClassLoader().getResource("original/20.3.0/custom_format.arbori").path)
         Assert.assertTrue(actual.contains("package_body.pkb"))
         Assert.assertTrue(actual.contains("query.sql"))
 
