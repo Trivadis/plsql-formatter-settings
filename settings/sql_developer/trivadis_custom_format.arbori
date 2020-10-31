@@ -27,20 +27,10 @@ prelude: runOnce -> {
  * Extend (override) "Preserve Original" behaviour of SQLDev to 
  * replace multiple, consecutive empty lines with one empty line
  *
- * To fix unwantend indentation in SQLDev 20.2 (after comments and in other
- * situations) additionally all spaces and tabs after a newline are removed 
- * before the first token, but only if the first token is not a comment.
- * See also original code by Vadim Tropashko, in the SQLDev forum:
- * https://community.oracle.com/thread/4336648
- *
  * It's important to note, that the indentation of comments is not handled
  * (not supported) by the formatter. This means the original indentation of
  * commments is left unchanged.
  *
- * It's expected that this code must be executed only if 
- * extraLinesAfterSignificantStatements == oracle.dbtools.app.Format.BreaksX2.keep
- * in future versions of SQLDev. For SQLDev 20.2 this code must run in any case.
- * 
  * This code changes the input source (target.input) and the lexer tokens (target.src).
  * The lexer tokens are used by some parts of the Arbori program, 
  * therefore this code must run at the beginning of the Arbori program.
@@ -117,29 +107,6 @@ maxOneEmptyLine: runOnce -> {
     target.input = substitutions.transformInput();
   }
 
-  var removeWSBeforeFirstTokenInLine = function() {
-    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
-    populateOffOnRanges(tokens);
-    var substitutions = new Substitutions(target.input);
-    var eolToken = 0
-    for (i = 0; i < tokens.length; i++) {
-      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].content == "\n") {
-        eolToken = tokens[i];
-        continue;
-      }
-      if (tokens[i].type != Token.WS) {
-        if (eolToken != 0 && tokens[i].type != Token.COMMENT && tokens[i].type != Token.MACRO_SKIP) {
-          if (!inOffOnRange(eolToken.end)) {
-            substitutions.put(eolToken.end,tokens[i].begin,"");
-          }
-        }
-        eolToken = 0;
-      }
-    }
-    // update source code
-    target.input = substitutions.transformInput();
-  }
-
   var removeWSOnEmptyLines = function() {
     var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
     populateOffOnRanges(tokens);
@@ -167,26 +134,28 @@ maxOneEmptyLine: runOnce -> {
     target.input = substitutions.transformInput();
   }
 
-  // replacements
-  removeDuplicateEmptyLines();
-  removeWSBeforeFirstTokenInLine();
-  removeWSOnEmptyLines();
+  var BreaksX2 = Java.type('oracle.dbtools.app.Format.BreaksX2')
+  if (struct.options.get("extraLinesAfterSignificantStatements") == BreaksX2.Keep) {
+    // replacements
+    removeDuplicateEmptyLines();
+    removeWSOnEmptyLines();
 
-  // tokens without WS and comments (mimicking default behaviour)
-  var Lexer = Java.type('oracle.dbtools.parser.Lexer');
-  var defaultTokens = Lexer.parse(target.input);
+    // tokens without WS and comments (mimicking default behaviour)
+    var Lexer = Java.type('oracle.dbtools.parser.Lexer');
+    var defaultTokens = Lexer.parse(target.input);
 
-  // produce a new parse tree based on the updated lexer tokens
-  var Parsed = Java.type('oracle.dbtools.parser.Parsed');
-  var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
-  var newTarget = new Parsed(target.input, defaultTokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+    // produce a new parse tree based on the updated lexer tokens
+    var Parsed = Java.type('oracle.dbtools.parser.Parsed');
+    var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
+    var newTarget = new Parsed(target.input, defaultTokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
 
-  // update token list based on fixed source code (without WS tokens)
-  target.src.clear();
-  target.src.addAll(newTarget.src);
+    // update token list based on fixed source code (without WS tokens)
+    target.src.clear();
+    target.src.addAll(newTarget.src);
 
-  // enable next line to print all node names on the console (e.g. when SQLDev UI shows unnamed nodes)
-  // target.root.printTree();
+    // enable next line to print all node names on the console (e.g. when SQLDev UI shows unnamed nodes)
+    // target.root.printTree();
+  }
 }
 
 /**
