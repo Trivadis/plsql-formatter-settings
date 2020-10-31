@@ -76,17 +76,17 @@ class FormatterOffOn extends ConfiguredTestFormatter {
         '''
             SELECT *
               FROM dual;
-            /* noformat start, however in SQLDev 20.2 keyword is uppercase nonetheless*/
-               DELETE
+            /* noformat start, however in SQLDev 20.2 keyword is uppercase nonetheless, indent lost in 20.3 */
+            DELETE
                   FrOm 
                      EmP where a
                                = b
             ;
-            /* @formatter:ON, the next statement is formatted by SQLDev */
+            /* @formatter:ON, the next statement is formatted by SQLDev, indent lost in 20.3 */
             DELETE FROM emp
              WHERE dept = 10;
             /* @formatter:OFF, the next statement is not formated by SQLDev */
-                      UPDATE
+            UPDATE
                     emp
                   set
                 sal = sal + 10
