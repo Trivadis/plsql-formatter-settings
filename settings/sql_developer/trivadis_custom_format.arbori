@@ -175,8 +175,8 @@ simpleIndentConditions:
 | [node) 'UPDATE' & [node-1) 'THEN' & ! [node-1-1) 'MATCHED'
 | [node) adt_field_list & [node-1) '('
 | [node) aggregate_function  & [node^) pivot_clause
-| [node) alias_in_out_constraints & [node^) create_view#[104,120)
-     | [node) create_view#[107,114) & [node^) create_view#[104,120)
+| [node) alias_in_out_constraints & [node^) create_view#[114,130)      -- salvisberg: changed to 20.3 variant (#70)
+     | [node) create_view#[117,124) & [node^) create_view#[114,130)    -- salvisberg: changed to 20.3 variant (#70)
 | [node) alter_method_spec 
 | [node) and_expr & ![node) rel
 --| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list     -- salvisberg: disabled, breaks for assoc_args only
