@@ -30,7 +30,7 @@ class Issue_13 extends ConfiguredTestFormatter {
                     new_empno NUMBER(16, 0);
                 BEGIN
                     --some code
-                    return(new_empno);
+                    RETURN ( new_empno );
                 END;
             
             END emp_mgmt;
