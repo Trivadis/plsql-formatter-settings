@@ -6,10 +6,13 @@ This repository provides formatter settings for the [coding style rules](https:/
 
 Settings are provided for
 
-- [Oracle SQL Developer, Version 20.2.0](https://www.oracle.com/database/technologies/appdev/sql-developer.html)
-- [Allround Automations PL/SQL Developer, Version 13.0.6](https://www.allroundautomations.com/products/pl-sql-developer/)
+- [Oracle SQLcl, Version 20.3.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQL Developer, Version 20.2.0](https://www.oracle.com/database/technologies/appdev/sql-developer.html) with [patched dbtools-common.jar from SQLcl 20.3.0](https://www.salvis.com/blog/2020/11/01/patching-sql-developer-20-2-with-sqlcls-formatter/)
+- [Allround Automations PL/SQL Developer, Version 14.0.3](https://www.allroundautomations.com/products/pl-sql-developer/)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
+
+See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) for settings supporting older versions.
 
 ## Deviating Settings
 
@@ -76,7 +79,7 @@ To get the most out of the dynamic JavaScript actions from an Arbori program, yo
 
 Variable | Type                                             | JAR File
 -------- | ------------------------------------------------ | -----------------------
-`struct` | oracle.dbtools.raptor.config.CustomFormat        | oracle.sqldeveloper.jar
+`struct` | oracle.dbtools.app.Format                        | dbtools-common.jar
 `target` | oracle.dbtools.parser.Parsed                     | dbtools-common.jar 
 `tuple`  | HashMap<String, oracle.dbtools.parser.ParseNode> | dbtools-common.jar
 `logger` | oracle.dbtools.util.Logger                       | dbtools-common.jar
