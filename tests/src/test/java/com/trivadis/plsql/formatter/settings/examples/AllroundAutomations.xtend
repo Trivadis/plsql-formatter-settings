@@ -34,10 +34,10 @@ class AllroundAutomations extends ConfiguredTestFormatter {
                             40
                          );
                END IF;
-               return(result);
+               RETURN ( result );
             EXCEPTION
                WHEN no_data_found THEN
-                  return(NULL);
+                  RETURN ( NULL );
             END;
             /
         '''.formatAndAssert

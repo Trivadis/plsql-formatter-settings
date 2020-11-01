@@ -88,7 +88,7 @@ class Oracle extends ConfiguredTestFormatter {
                      p11    => a1,
                      p2     => a2
                   );
-                  return(new_empno);
+                  RETURN ( new_empno );
                END;
             END emp_mgmt;
             /

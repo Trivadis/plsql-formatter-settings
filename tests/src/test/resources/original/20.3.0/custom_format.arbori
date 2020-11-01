@@ -9,9 +9,9 @@ prelude: runOnce -> {
     function breaks4XML() { return true; };
     
     function breaksProcArgs() { return struct.getCommasPerLine() == 1 }
+    function breaksAssocArgs() { return false }   
     
-    function padNode( len ) {
-    	var node = tuple.get("node");
+    function padNode( node, len ) {
     	var nodeIndent = struct.getNewline(node.from);
     	if( nodeIndent == null )
     	    return;
@@ -22,141 +22,6 @@ prelude: runOnce -> {
     }
 }
 
-/*
- * ----------------------------------------------------------------------------
- * Extend (override) "Preserve Original" behaviour of SQLDev to 
- * replace multiple, consecutive empty lines with one empty line
- *
- * It's important to note, that the indentation of comments is not handled
- * (not supported) by the formatter. This means the original indentation of
- * commments is left unchanged.
- *
- * This code changes the input source (target.input) and the lexer tokens (target.src).
- * The lexer tokens are used by some parts of the Arbori program, 
- * therefore this code must run at the beginning of the Arbori program.
- * The input source is also used after the Arbori program execution.
- * ----------------------------------------------------------------------------
- */
-maxOneEmptyLine: runOnce -> {
-  var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
-  var Token = Java.type('oracle.dbtools.parser.Token');
-  var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
-  var offOnRanges = [];
-
-  var populateOffOnRanges = function(tokens) {
-    var off = -1;
-    offOnRanges = [];
-    for (var i in tokens) {
-      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
-        if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
-          off = tokens[i].begin;
-        }
-        if (off != -1) {
-          if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
-            offOnRanges.push([off, tokens[i].end]);
-            off = -1;
-          }
-        }
-      } 
-    }
-  }
-
-  var inOffOnRange = function(pos) {
-    for (var x in offOnRanges) {
-      if (pos >= offOnRanges[x][0] && pos < offOnRanges[x][1]) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  var removeDuplicateEmptyLines = function() {
-    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
-    populateOffOnRanges(tokens);
-    var substitutions = new Substitutions(target.input);
-    var firstEOLToken = 0;
-    var secondEOLToken = 0;
-    var lastEOLToken = 0;
-    for (i = 0; i < tokens.length; i++) {
-      if (tokens[i].type == Token.LINE_COMMENT && firstEOLToken == 0) {
-        firstEOLToken = tokens[i];
-        continue;
-      }
-      if (tokens[i].content == "\n") {
-        if (firstEOLToken == 0) {
-          firstEOLToken = tokens[i];
-        } else if (secondEOLToken == 0) {
-          secondEOLToken = tokens[i];
-        } else {
-          lastEOLToken = tokens[i];
-        }
-        continue;
-      }
-      if (tokens[i].type != Token.WS) {
-        if (lastEOLToken != 0) {
-          if (!inOffOnRange(secondEOLToken.begin)) {
-            substitutions.put(secondEOLToken.begin,lastEOLToken.begin,"");
-          }
-        } 
-        firstEOLToken = 0;
-        secondEOLToken = 0;
-        lastEOLToken = 0;
-      }
-    }
-    // update source code
-    target.input = substitutions.transformInput();
-  }
-
-  var removeWSOnEmptyLines = function() {
-    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
-    populateOffOnRanges(tokens);
-    var substitutions = new Substitutions(target.input);
-    var eolToken = 0
-    for (i = 0; i < tokens.length; i++) {
-      if (tokens[i].type != Token.WS) {
-        eolToken = 0;
-        continue;
-      }
-      if (eolToken == 0 && (tokens[i].type == Token.LINE_COMMENT || tokens[i].content == "\n")) {
-        eolToken = tokens[i];
-        continue;
-      }
-      if (tokens[i].content == "\n") {
-        if (eolToken != 0) {
-          if (!inOffOnRange(eolToken.end)) {
-            substitutions.put(eolToken.end,tokens[i].begin,"");
-          }
-        }
-        eolToken = tokens[i];
-      }
-    }
-    // update source code
-    target.input = substitutions.transformInput();
-  }
-
-  var BreaksX2 = Java.type('oracle.dbtools.app.Format.BreaksX2')
-  if (struct.options.get("extraLinesAfterSignificantStatements") == BreaksX2.Keep) {
-    // replacements
-    removeDuplicateEmptyLines();
-    removeWSOnEmptyLines();
-
-    // tokens without WS and comments (mimicking default behaviour)
-    var Lexer = Java.type('oracle.dbtools.parser.Lexer');
-    var defaultTokens = Lexer.parse(target.input);
-
-    // produce a new parse tree based on the updated lexer tokens
-    var Parsed = Java.type('oracle.dbtools.parser.Parsed');
-    var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
-    var newTarget = new Parsed(target.input, defaultTokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
-
-    // update token list based on fixed source code (without WS tokens)
-    target.src.clear();
-    target.src.addAll(newTarget.src);
-
-    // enable next line to print all node names on the console (e.g. when SQLDev UI shows unnamed nodes)
-    // target.root.printTree();
-  }
-}
 
 /**
  * simpleIndentConditions  
@@ -175,27 +40,20 @@ simpleIndentConditions:
 | [node) 'UPDATE' & [node-1) 'THEN' & ! [node-1-1) 'MATCHED'
 | [node) adt_field_list & [node-1) '('
 | [node) aggregate_function  & [node^) pivot_clause
-| [node) alias_in_out_constraints & [node^) create_view#[114,130)      -- salvisberg: changed to 20.3 variant (#70)
-     | [node) create_view#[117,124) & [node^) create_view#[114,130)    -- salvisberg: changed to 20.3 variant (#70)
+| [node) alias_in_out_constraints & [node^) create_view#[114,130)
+     | [node) create_view#[117,124) & [node^) create_view#[114,130)
 | [node) alter_method_spec 
-| [node) and_expr & ![node) rel
---| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list     -- salvisberg: disabled, breaks for assoc_args only
---| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) arg     -- salvisberg: disabled, breaks for assoc_args only
---| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) arg                 -- salvisberg: disabled, breaks for assoc_args only
-| .breaksProcArgs & [node) assoc_arg & [node^) paren_expr_list & [node+1) arg_list -- salvisberg: added breaks only with assoc_arg: first argument
-| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) assoc_arg -- salvisberg: added breaks only with assoc_arg: right parenthesis
-| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) assoc_arg             -- salvisberg: added breaks only with assoc_arg: > first argument
-| [node) subquery & [node-1) 'IS' & [node-2) cursor_d                              -- salvisberg: added to indent subquery in cursor definition
+| [node) and_expr &  [node) pls_expr & ![node) rel 
+| .breaksProcArgs & [node) arg & [node^) paren_expr_list & [node+1) arg_list
+| .breaksProcArgs & [node) arg_list & [node^) paren_expr_list & [node-1) arg
+| .breaksProcArgs & [node) ',' & [node^) arg_list & [node+1) arg
+| .breaksAssocArgs & [node) assoc_arg & [node^) paren_expr_list & [node+1) arg_list
+| .breaksAssocArgs & [node) arg_list & [node^) paren_expr_list & [node-1) assoc_arg
+| .breaksAssocArgs & [node) ',' & [node^) arg_list & [node+1) assoc_arg
 | [node) array_ty_def
 | [node) attr_dim_hierarchy 
 | [node) attribute_clause 
--- | [node) autoextend_clause               -- salvisberg: disabled, avoid duplicate indentation (#26)
-| [node) permanent_tablespace_clause[12,30) -- salvisberg: added (#26)
-| [node) extent_management_clause           -- salvisberg: added (#26)
-| [node) undo_tablespace_clause[13,31)      -- salvisberg: added (#26)
-| [node) tablespace_retention_clause        -- salvisberg: added (#26)
-| [node) temporary_tablespace_clause[57,75) -- salvisberg: added (#26)
-| [node) tablespace_group_clause            -- salvisberg: added (#26)
+| [node) autoextend_clause 
 | [node) basic_decl_item   -- individual declarations glued together 
                            -- same effect as: [node) basic_decl_item_list & [node^) decl_list
                            -- with additional line breaks
@@ -208,7 +66,7 @@ simpleIndentConditions:
                                            --         ^^^^^^^^^ case_expr ^^^^^^^^^^^
                                            --         ^^^^^^^^^^^^^^ pls_expr ^^^^^^^^^^^        TODO: indent this pls_expr
 | [node) case_expr_alt
-| [node) case_expression & ![node) select_term & ![node^) "aliased_expr"
+| [node) case_expression & ![node) select_term & ![node^) "aliased_expr" & ![node^) comparison_condition
                            -- Causes awkward alignment:
                            -- select    
                            --         CASE
@@ -235,7 +93,6 @@ simpleIndentConditions:
 | [node) conditional_insert_clause
 | [node) conditional_insert_clause[58,99)#
 | [node) constraint_clauses & [node+10 < node) 
-| [node) cursor_open_statement & [node-1) 'FOR' -- salvisberg: to solve issue #21
 | [node) create_cluster[41,70)#
 | [node) create_cluster[71,143)#
 | [node) create_database[15,196)# 
@@ -245,14 +102,14 @@ simpleIndentConditions:
 | [node) cycle_clause
 | [node) database_logging_clauses
 | [node) database_logging_clauses[25,43) 
---| [node) datafile_tempfile_spec -- salvisberg: disabled, avoid duplicate indentation (#26)
+| [node) datafile_tempfile_spec 
 | [node) dblink_authentication 
 | [node) "db_link_auth" 
 | [node) default_tablespace
 | [node) dependent_handling_clause 
 | [node) dimension_join_clause 
 | [node) dml_event_clause
-| [node) else_clause
+--| [node) else_clause
 | [node) else_clause_opt & ![node^) if_stmt
 | [node) ELSE_expr_opt
 | [node) enable_pluggable_database 
@@ -262,16 +119,13 @@ simpleIndentConditions:
 | [node) export_keys[69,95) 
 | [node) expr  &  [node+1) par_expr_list[17,35)
 | [node-1) expr  &  [node) par_expr_list[17,35)
-| :indentActions &  [node) expr  &  [node-1) 'ELSE'
-| :indentActions &  [node) expr  &  [node-1) 'THEN'
-| :indentConditions &  [node) expr  &  [node-1) 'WHEN'
---| .breaksProcArgs &  [node) "expr_list" & [node^) "(x,y,z)" & ![node) compound_expression & ![node) identifier -- salvisberg: disabled, break only with assoc_args
-| [node) expression_list  & ![node) grouping_expression_list
+| .breaksProcArgs &  [node) "expr_list" & [node^) "(x,y,z)" & ![node) compound_expression & ![node) identifier
+--| [node) expression_list  & ![node) grouping_expression_list 
 | [node) external_table_data_props 
 | [node) fields_def
 | [node) field_list & [node-1) '('
 | [node) file_name_convert
---| [node) file_specification -- salvisberg, disabled (#26)
+| [node) file_specification
 | :breaksAfterSelectFromWhere &  [node) group_by_list
 | [node) hierarchy_clause 
 | [node) hierarchy_clause[14,29)#
@@ -289,6 +143,7 @@ simpleIndentConditions:
 | [node) insert_into_clause & ![node^) single_table_insert & ![node^) multi_table_insert[12,24)#
 | [node) insert_into_clause[16,23) & [node-1) column
 | [node) java_call_specification
+| [node) join_clause & [node-1) '('
 | [node) JSON_column_definition
 | [node) JSON_columns_clause 
 | [node) JSON_value_column 
@@ -315,7 +170,7 @@ simpleIndentConditions:
 | [node) modify_col_properties
 | [node) modify_col_visibility
 | [node) "mv_log_details"
--- | [node) name & [node^) name_list & ![node+1) '.'               -- salvisberg: disable to align into clause (#30)
+| [node) name & [node^) name_list & ![node+1) '.'
 | [node) nested_table_col_properties  & ![node)column_properties#  --  nested_table_col_properties->column_properties#->column_properties 
 | [node) column_properties  & [node^) nested_table_col_properties[49,69) 
 | [node) new_values_clause 
@@ -324,10 +179,9 @@ simpleIndentConditions:
 | [node) object_view_clause
 | [node) order_by_clause & 
              ([node^) aggregate_function | [node^) analytic_function | [node^) analytic_clause | [node^^) analytic_clause) --<-- not to ident order by in the main query block 
-| :breaksAfterSelectFromWhere & [node) "ord_by_1desc" & [node^) order_by_clause 
+| :breaksAfterSelectFromWhere & [node) "ord_by_1desc" & [node^) order_by_clause & ![node^) analytic_clause[6,12) 
 | :breaksAfterSelectFromWhere & [node) order_by_clause[31,38) & [node^) order_by_clause
---| [node) original_method_body_specification -- salvisberg, disabled, issue #5
-| [node) body_adt_field -- salvisberg, added, issue #5
+| [node) original_method_body_specification
 | [node) parallel_clause 
 | [node) password_parameters
 | [node) pdb_storage_clause
@@ -361,10 +215,9 @@ simpleIndentConditions:
 | [node) row_pattern_rows_per_match 
 | [node) row_pattern_skip_to
 | [node) search_clause
-| [node) searched_case_expression#
 | [node) security_clauses
 | :breaksAfterSelectFromWhere & [node) select_list & [node^) select_clause 
-| [node) simple_case_expression[4,27) & [node^) simple_case_expression
+--| [node) simple_case_expression[4,27) & [node^) simple_case_expression
 | [node) single_column_for_loop
 | [node) source_file_name_convert 
 | [node) standard_actions 
@@ -393,13 +246,11 @@ simpleIndentConditions:
                                                                 -- &! [node) nested_table_col_properties
 | [node) table_stmt -- for compound trigger
 | [node) tablespace_clauses 
--- | [node) tablespace_datafile_clauses -- salvisberg: disabled, avoid duplicate indentation (#26)
+| [node) tablespace_datafile_clauses 
 | [node) tempfile_reuse_clause
 | [node) type_constructor_expression &  ! [node^) create
 | :breaksAfterSelectFromWhere & [node) update_set_clause_expr & [node^^) update_set_clause
--- | [node) update_set_clause_expr & ![node^^) update_set_clause    -- salvisberg, disabled, issue #64
-| [node) update_set_clause_expr & [node-1) ',' & :breaksAfterComma  -- salvisberg, added, issue #64
-| [node) ',' & [node+1) update_set_clause_expr & :breaksBeforeComma -- salvisberg, added, issue #64
+| [node) update_set_clause_expr & ![node^^) update_set_clause
 | [node) user_aux
 | [node) using_clause_opt
 | [node) using_index_clause 
@@ -414,11 +265,6 @@ simpleIndentConditions:
 | [node) XML_attributes_clause & [node^) XML_function
 | [node) xmlelement[58,78) & [node^) XML_function
 | :breaksAfterComma & .breaks4JSON & [node) regular_entry
-| [node) string & [node-2) 'XMLTABLE' & (:breaksAfterComma | :breaksBeforeComma) -- salvisberg, added, issue #57
-| [node) XML_passing_clause                                                      -- salvisberg, added, issue #57
-| [node) XMLTABLE_options[19,37)                                                 -- salvisberg, added, issue #57
-| [node) xml_passing_clause                                                      -- salvisberg, added, issue #62
-| [node) xmlquery[17,31)                                                         -- salvisberg, added, issue #62
 ;
 
 /**
@@ -450,86 +296,6 @@ indentedNodes2: indentedNodes1
 ->
 ;
 
-/**
- * salvisberg: start section "split arguments"
- *
- * Add line breaks if argument and expression lists have more than 4 argurments.
- * Must run at this position where all other split and indentations are handled.
- * Calling indentedNodes1 and indentedNodes2 manually due to Arbori query limitations.
- * Solves issues #19 
- */
-
-allArgList:
-  [parent) paren_expr_list
-;
-
-splittableArgList:
-  [parent) paren_expr_list 
-    & [arg1) arg_list 
-    & arg1^ = parent
-    & [arg2) arg_list 
-    & arg2^ = arg1
-    & [arg3) arg_list 
-    & arg3^ = arg2
-    & [arg4) arg_list 
-    & arg4^ = arg3
-;
-
-allExprList:
-  [parent) "(x,y,z)"
-;
-
-splittableExprList:
-  [parent) "(x,y,z)" 
-    & [arg1) "expr_list" 
-    & parent < arg1
-    & [arg2) "expr_list" 
-    & arg2^ = arg1
-    & [arg3) "expr_list" 
-    & arg3^ = arg2
-    & [arg4) "expr_list" 
-    & arg4^ = arg3
-    & [arg5) "expr_list" 
-    & arg5^ = arg4
-;
-
-splitArg:
-  .breaksProcArgs 
-    & [node) arg 
-    & ![node) assoc_arg 
-    & allArgList.parent < node
-    & splittableArgList.parent < node
-  -> {
-    // filter via JavaScript since "allArgList.parent = splittableArgList.parent" does not work as Arbori condition
-    var all = tuple.get("allArgList.parent");
-    var splittable = tuple.get("splittableArgList.parent");
-    if (all == splittable) {
-      struct.indentedNodes1(target, tuple);
-      struct.indentedNodes2(target, tuple);
-    }
-  }
-;
-
-splitExpr:
-  .breaksProcArgs 
-    & [node) expr 
-    & ![node) assoc_arg 
-    & allExprList.parent < node
-    & splittableExprList.parent < node
-  -> {
-    // filter via JavaScript since "allExprList.parent.parent = splittableExprList.parent" does not work as Arbori condition
-    var all = tuple.get("allExprList.parent");
-    var splittable = tuple.get("splittableExprList.parent");
-    if (all == splittable) {
-      struct.indentedNodes1(target, tuple);
-      struct.indentedNodes2(target, tuple);
-    }
-  }
-;
-
-/**
- * salvisberg: stop section "split arguments"
- */
 
 /**
  * The skipWhiteSpaceBeforeNode and skipWhiteSpaceBeforeNode are
@@ -568,7 +334,6 @@ _skipWSBeforeNode:
   | :spaceParenDefault        & [node) '('  &  [node^)  function_call
   | :spaceParenDefault        & [node) ')'  &  [node^)  function_call
   | [node) ext_tbl_string_literal[24,29)
-  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces before label identifier
 ;
 
 _skipWSBeforeAncNode: 
@@ -630,7 +395,6 @@ _skipWSAfterNode:
   | :spaceParenDefault       & [node) '('  &  [node^)  function_call
   | [node) ext_tbl_string_literal[24,29)
   | [node) integer & [node^) size_clause
-  | [node) identifier & [node^) label -- salvisberg, added: suppress whitespaces after label identifier
 ;
 
 _skipWSAfterAncNode: 
@@ -681,17 +445,18 @@ _extraBrkBefore:
 | [node) group_by_clause 
 | [node) having_clause 
 | [node) order_by_clause 
+| [node) 'OVER'
 | [node) row_limiting_clause
 | [node) model_clause 
+| [node) searched_case_expression#
 | [node) segment_attributes_clause & ![node^) segment_attributes_clause
 | :breaksBeforeComma &  [node+1) alias_in_out_constraints           & [node) ','
 | :breaksBeforeComma &  [node+1) select_term           & [node) ','
-| :breaksBeforeComma &  [node+1) name                  & [node) ',' -- salvisberg: added to handle into clause (#30)
 | :breaksBeforeComma &  [node+1) table_reference       & [node) ','
 | :breaksBeforeComma &  [node^) order_by_clause[31,38) & [node) ','
 | :breaksBeforeComma &  [node^) group_by_list[5,12)    & [node) ','
-| :breaksBeforeComma &  [node+1) expr                  & [node) ',' & ![node^) xml_passing_clause[34,52) -- salvisberg, changed, issue #62
-| :breaksBeforeComma &  [node+1) column                & [node) ',' & ![node^) xml_passing_clause[34,52) -- salvisberg, changed, issue #62
+| :breaksBeforeComma &  [node+1) expr                  & [node) ','
+| :breaksBeforeComma &  [node+1) column                & [node) ','
 | :breaksBeforeComma &  [node+1) col_properties        & [node) ','
 --| [node) column & [node+1) insert_into_clause[16,23)
 --| [node) column_properties & ! [node^) column_properties --?++5 & ! [node^) relational_table
@@ -710,6 +475,8 @@ _extraBrkBefore:
                       --     dbms_output.put_line('hello' || 'world');
 | :breaksBeforeLogicalConjunction &  [node+1) condition  & [node) AND_OR  
 | :breaksBeforeLogicalConjunction &  [node+1) rel        & [node) AND_OR
+| :breaksBeforeLogicalConjunction &  [node+1) rel        & [node) 'AND' 
+| :breaksBeforeLogicalConjunction &  [node+1) arith_expr & [node) 'AND' 
 | [node) "inner_cross_join_clause"
 | [node) "outer_join_clause"
 | :breakAnsiiJoin &  [node) on_using_condition
@@ -726,15 +493,13 @@ _extraBrkBefore:
 | [node) 'INSERT' & [node^) merge_insert_clause 
 | [node) 'VALUES' & [node^) merge_insert_clause 
 | [node) 'SET'    & [node^) merge_update_clause 
+| [node) 'END'    & [node^) case_expression
 | [node) case_stmt_alt
 | [node) simple_case_expression[4,27)#
 | :breakAfterConditions & [node) 'THEN'
-| [node) method_specification & [node-1) ',' -- salvisberg, added, issue #5
-| [node) 'AUTOEXTEND' -- salvisberg, added (#26)
-| [node) file_specification & ![node-1) 'DATAFILE' & ![node-1) 'TEMPFILE' -- salvisberg: added, always after comma, no alignments of file_specifications, too much work for corner case DDL (#26)
-| [node) XML_table_column & [node-1) ',' & :breaksAfterComma  -- salvisberg, added, issue #57
-| [node+1) XML_table_column & [node) ',' & :breaksBeforeComma -- salvisberg, added, issue #57
-| [node) ')' & [node-4) 'XMLTABLE'                            -- salvisberg, added, issue #57
+| :indentActions &  [node) expr  &  [node-1) 'ELSE'
+| :indentActions &  [node) expr  &  [node-1) 'THEN'
+| :indentConditions &  [node) expr  &  [node-1) 'WHEN'
 ;
 
 _extraBrkAfter: 
@@ -744,14 +509,11 @@ _extraBrkAfter:
 |  [node) stmt & ![node^) sqlplus_command 
 | :breaksAfterComma &  [node+1) alias_in_out_constraints           & [node) ','
 | :breaksAfterComma &  [node+1) select_term           & [node) ','
-| :breaksAfterComma &  [node+1) name                  & [node) ',' -- salvisberg: added to handle into clause (#30)
 | :breaksAfterComma &  [node+1) table_reference       & [node) ','
 | :breaksAfterComma &  [node^) order_by_clause[31,38) & [node) ','
 | :breaksAfterComma &  [node^) group_by_list[5,12)    & [node) ','
 | :breaksAfterComma &  ([node+1) expr  | [node+1) column)               & [node) ',' 
                              & ![node^) aggregate_function & ![node^) analytic_function
-                             & ![node^^) in_condition  -- salvisberg: added, no line break in in_condition (#29)
-                             & ![node^) xml_passing_clause[34,52) -- salvisberg: added, issue #62
                              -- & ... -- unable to keep (x,y) inline without referring to ancestor    
 | :breaksAfterComma &  [node+1) col_properties        & [node) ','
 | :breaksAfterComma &  [node^) colmapped_query_name[8,15)        & [node) ','
@@ -772,7 +534,6 @@ _extraBrkAfter:
 --| [node) level_clause 
 --| [node) hierarchy_clause[14,29)#
 | :breaksAfterComma & .breaks4XML /*& .logTuple*/ & [node+1) aux_xml_value_expr           & [node) ','
-| [node) label -- salvisberg: added, add break after label
 --    -> { print("output="+ tuple) }
 ;
 
@@ -793,7 +554,9 @@ commasInProc: [node) ','
        & procedureCall < node 
        & (   [procedureCall) function_call 
            | [procedureCall) function &  (!.breaks4XML | ![procedureCall) XML_function  /*implication .breaks4XML -> ![procedureCall) XML_function */ )
-           | [procedureCall) procedure_call   )
+           | [procedureCall) procedure_call 
+           | [procedureCall) in_condition  
+           )
 ; --  eval time = 5305       (cardinality=9655)
 
 extraBrkBefore: 
@@ -807,14 +570,13 @@ extraBrkAfter:
 ->;
 
 
-declare: runOnce 
+"decl 1": runOnce 
 ->{
    var priorProc;
    var argNum = 1;
 }
 
-/* salvisberg: disabled since this leads to additional indentation for after the 2nd parameter
-breakAfterEvery5thArg: commasInProc 
+"Break long procedure argument lists": commasInProc 
 ->{
     argNum++;    	
 	var proc = tuple.get("procedureCall");    
@@ -825,25 +587,64 @@ breakAfterEvery5thArg: commasInProc
     if( proc != priorProc ) {
         argNum = 1;
         priorProc = proc;
-    } else {
-        var breakEvery5thArg = struct.getCommasPerLine();
-    	if( argNum%breakEvery5thArg == 0 ) {
-			var node = tuple.get("node");
-			var procIndent = struct.getNewline(proc.from);
-			if( procIndent == null )
-				procIndent = "\n";
-			var pad = new java.lang.StringBuilder();
-			var i;
-			for( i = 0; i <= name.length(); i++ )  
-  				pad.append(" ");
-			if( struct.getBoolBind("breaksAfterComma") )   
-        		struct.putNewline(node.to, procIndent+pad.toString());
-  			if( struct.getBoolBind("breaksBeforeComma") )	
-        		struct.putNewline(node.from, procIndent+pad.toString());
-    	}        
-    }
+    } 
+    var breakEvery5thArg = struct.getCommasPerLine();
+	var node = tuple.get("node");
+	var procIndent = struct.getNewline(proc.from);
+	if( procIndent == null )
+		procIndent = "\n";
+	var pad = new java.lang.StringBuilder();
+	var i;
+	for( i = 0; i <= name.length(); i++ )  
+		pad.append(" ");
+	var argAfterComma = target.root.leafAtPos(node.to); 
+	var lineLen = procIndent.length+(target.src[argAfterComma.to].begin-target.src[proc.from].begin);
+	if( argNum%breakEvery5thArg == 0 
+	 || struct.getIntOption("maxCharLineSize") < lineLen+1
+	) {
+		if( struct.getBoolBind("breaksAfterComma") )   
+    		struct.putNewline(node.to, procIndent+pad.toString());
+		if( struct.getBoolBind("breaksBeforeComma") )	
+    		struct.putNewline(node.from, procIndent+pad.toString());
+    	argnum = 1;	
+	}        
 }
-*/
+
+"decl 2": runOnce 
+->{
+   var priorScope;
+   var cNum = 1;
+}
+
+"Break long concatenation lists": 
+        !:breaksBeforeConcat & !:breaksAfterConcat
+     &  [scope) and_expr 
+     & [node) binary_add_op
+     & scope < node
+->{
+    cNum++;    	
+	var scope = tuple.get("scope");    
+    if( scope != priorScope ) {
+        cNum = 1;
+        priorScope = scope;
+    } 
+    var breakEvery5thArg = struct.getCommasPerLine();
+	var node = tuple.get("node");
+	var indent = 20;    
+	var pad = new java.lang.StringBuilder();
+	var i;
+	for( i = 0; i <= indent; i++ )  
+		pad.append(" ");
+	var cAfter = target.root.leafAtPos(node.to); 
+	var lineLen = indent+(target.src[cAfter.to].begin-target.src[scope.from].begin);
+	if( cNum%breakEvery5thArg == 0 
+	 /*|| struct.getIntOption("maxCharLineSize") < lineLen+1*/
+	) {
+    	struct.putNewline(node.from, procIndent+pad.toString());
+    	cNum = 1;	
+	}        
+}
+
 
 
 /**
@@ -868,8 +669,7 @@ brkX2_1:
 | [node) original_method_body_specification
 | [node) subprg_body & ![node^) create_plsql
 | [node) basic_decl_item_list & [node+1) subprg_body
--- | [node) is_or_as & [node+1) decl_list & [(node+1)+20 < (node+1)) -- long declarations -- salvisberg: disabled due to issue #12
-| [node) is_or_as & ([node^) pkg_body | [node^) pkg_spec)  -- salvisberg: added to solve issue #12 unconditional break after is_or_as of pkg_body/pkg_spec
+| [node) is_or_as & [node+1) decl_list & [(node+1)+20 < (node+1)) -- long declarations
 ;
 brkX2_2: child^=node & (
    [node) stmt & [child) sql_query_or_dml_stmt  
@@ -887,7 +687,6 @@ rightAlignments: :alignRight & (
   | [node) 'FROM'   &  [node^) from_clause
   --| [node) 'JOIN'   &  [node^) "inner_cross_join_clause" handled by "inner_cross_join_clause" alignment
   --| [node) 'RIGHT'         &  [node^)  "outer_join_clause"
-  | [node) 'ON'   &  [node^) on_using_condition -- salvisberg: added to fix indentation of ON
   | [node) 'WHERE'  &  [node^) where_clause 
   | [node) 'OR'     &  [node^) condition
   | [node) 'AND'    &  [node^) condition
@@ -895,7 +694,7 @@ rightAlignments: :alignRight & (
   | [node) 'HAVING' &  [node^) having_clause 
   | [node) 'ORDER'  &  [node^) order_by_clause
   | [node) 'UPDATE'  
-  | [node) 'SET'  & ![node^) merge_update_clause & ![node^) SET -- salvisberg: extended to fix issue #13 
+  | [node) 'SET'   &  ![node^) merge_update_clause 
   | [node) 'FETCH' &  [node^) row_limiting_clause
   | [node) "inner_cross_join_clause"
   | [node) outer_join_type
@@ -925,7 +724,7 @@ _paddedIdsInScope1: (
 | :alignTypeDecl & ( :breaksAfterComma | :breaksBeforeComma ) & [id) decl_id & ([id+1) constrained_type | [id+1) object_d_rhs) & [scope) rec_ty_def
 | :alignTypeDecl & ( :breaksAfterComma | :breaksBeforeComma ) & [id) mode & [id+1) unconstrained_type  & [scope) subprg_spec
 -- =>
-| .breaksProcArgs & :alignNamedArgs & [id) sim_expr & [id+1) '=' & [id+2) '>' & [scope) paren_expr_list
+| .breaksAssocArgs & :alignNamedArgs & [id) sim_expr & [id+1) '=' & [id+2) '>' & [scope) paren_expr_list
 -- :=
 | :alignAssignments & [id) name & [id+1) ':' & [id+2) '=' & [scope) seq_of_stmts
 -- =
@@ -935,7 +734,7 @@ _paddedIdsInScope1: (
 | [id) expr  & [id+1) 'THEN' & [id+2) expr & [scope) case_expression
 | :alignTabColAliases  & [id) expr & [id^) select_term & [id+1) as_alias & [scope) select_clause
 | :alignTabColAliases  & [id) query_table_expression & [id+1) identifier & [scope) from_clause
---          & ![id^+1) "inner_cross_join_clause"  -- salvisberg, disabled, issue #54
+          & ![id^+1) "inner_cross_join_clause"
 --| :alignTabColAliases  & [id) table_reference & .logTuple & [id+1) on_using_condition & [scope) "inner_cross_join_clause"
 --
 --| [id) constrained_type & [id+1) default_expr_opt & [scope) decl_list
@@ -948,27 +747,7 @@ _paddedIdsInScope2: (
 ) & scope < follower
 ;
 
-_paddedIdsInScopeXmlTableColumn:            -- salvisberg, added, issue #57
-  [predecessor) identifier & [follower) XML_table_column[5,72) 
-    & predecessor = follower-1
-    & [scope) XMLTABLE_options[19,37)
-    & scope<predecessor
-    & (:breaksAfterComma | :breaksBeforeComma)
-;
-
-_paddedIdsInScopeXmlTableColumnDatatype:    -- salvisberg, added, issue #57
-  [predecessor) datatype & [follower) 'PATH' 
-    & predecessor = follower-1
-    & [scope) XMLTABLE_options
-    & scope<predecessor
-    & (:breaksAfterComma | :breaksBeforeComma)
-;
-
-paddedIdsInScope: 
-  _paddedIdsInScope1 
-| _paddedIdsInScope2 
-| _paddedIdsInScopeXmlTableColumn           -- salvisberg, added, issue #57
-| _paddedIdsInScopeXmlTableColumnDatatype   -- salvisberg, added, issue #57
+paddedIdsInScope: _paddedIdsInScope1 | _paddedIdsInScope2
 ->
 ;
 
@@ -989,42 +768,54 @@ WITH apms_xml AS ( SELECT
  */
 incrementalAlignments:  [node) subquery
                      |  [node) JSON_OBJECT
-                     |  [node) case_expression     -- salvisberg: added to support case expression as first item in select_list
-                     |  [node) function_expression -- salvisberg: added to support function expression as first item in select_list
 ->
 ; 
 
 /**
  * Align node to predecessor (if there is a break before the node)
  */ 
+pairwiseAlignments00: predecessor = node^^ & (  
+    [predecessor) function             & [node)   'OVER'
+);
+pairwiseAlignments0: predecessor = node^ & (  
+    [predecessor) case_expression      & [node)   'END'
+  | [predecessor) else_clause          & [node)   expr
+  | [predecessor) over_clause          & [node)   ')'
+  | [predecessor) function             & [node)   over_clause
+  | [predecessor) function             & [node)   'OVER'
+);
 pairwiseAlignments1: predecessor = node-1 & (  
     [predecessor) group_by_list[5,12)             & [node) ','
   | [predecessor) order_by_clause[31,38)          & [node) ','
   | [predecessor) select_list                     & [node) ',' 
-  | [predecessor) name                            & [node) ','  -- salvisberg: added to handle into clause (#30)
-  | [predecessor) name_list                       & [node) ','  -- salvisberg: added to handle into clause (#30)
   | [predecessor) cartesian_product               & [node) ',' 
   | [predecessor) merge_insert_clause[26,33)      & [node) ',' 
   | [predecessor) column                          & [node) merge_insert_clause[26,33) 
-  | [predecessor) "expr_list_def"[16,34)      & [node) ',' 
+  | [predecessor) "expr_list_def"[16,34)          & [node) ',' 
+  | [predecessor) "expr_list"                     & [node) ','           -- leading commas
   | [predecessor) column                          & [node) "expr_list_def"[16,34) 
   | [predecessor) merge_update_clause[36,56)      & [node) ',' 
-  | !:alignRight & [predecessor) condition              & [node) AND_OR 
+  | !:alignRight & [predecessor) condition        & [node) AND_OR 
   | [predecessor) expr                   & [node) compound_expression[25,44)
+  | [predecessor) '>'                    & [node) expr  & [node^) arg 
   | [predecessor) arith_expr             & [node)   binary_add_op
+  | [predecessor) 'CASE'      & [node)   searched_case_expression#
+  | [predecessor) searched_case_expression      & [node)   else_clause
+  | [predecessor) query_partition_clause        & [node)   order_by_clause
 );
 pairwiseAlignments2: predecessor=node-1-1  & (
     [predecessor) select_list    & [node) select_term & [node-1) ',' 
-  | [predecessor) name           & [node) name        & [node-1) ','  -- salvisberg: added to handle into clause (#30)
-  | [predecessor) name_list      & [node) name        & [node-1) ','  -- salvisberg: added to handle into clause (#30)
   | [predecessor) cartesian_product      & [node) table_reference   & [node-1) ',' 
   | [predecessor) condition      & [node) condition   & [node-1) AND_OR 
   | [predecessor) adt_field_list & [node) adt_field   & [node-1) ',' 
   | [predecessor) adt_field      & [node) adt_field   & [node-1) ',' 
   | [predecessor) "expr_list"    & [node) expr        & [node-1) ',' 
   | [predecessor) expr           & [node) expr        & [node-1) ',' 
+  | [predecessor) expr           & [node) expr        & [node-1) compound_expression[25,44) 
   | !:breakOnSubqueries  & [predecessor) '('    & [node) ')'  & [node-1) query_block & ![node^) par_subquery
-  | [predecessor) 'CASE'      & [node)   'END'
+);
+pairwiseAlignments30: predecessor=node-1-1-1  & (
+    [predecessor) 'OVER'           & [node) ')' 
 );
 pairwiseAlignments3: 
   [predecessor) group_by_list
@@ -1058,14 +849,6 @@ pairwiseAlignments6:
 & predecessor=ancestor-1
 & ancestor < node
 ;
-
-pairwiseAlignments6_2: -- salvisberg, added, issue #64
-  :breaksBeforeComma & [predecessor) update_set_clause_expr
-& [node) ',' & [node+1) update_set_clause_expr
-& predecessor=ancestor-1
-& ancestor < node
-;
-
 -- https://community.oracle.com/thread/4119671
 -- WHEN NOT MATCHED THEN INSERT (
 --     crew_seqno,
@@ -1109,33 +892,50 @@ pairwiseAlignments9: -- https://community.oracle.com/thread/4210584
 & ancestor < node
 ;
 
-pairwiseAlignmentXmlTable: -- salvisberg, added, issue #57
-    [predecessor) string & [node) 'PASSING' & predecessor=node^^-1
-  | [predecessor) XML_passing_clause & [node) XMLTABLE_options[19,37) & predecessor=node-1
-  | [predecessor) 'XMLTABLE' & [node) ')' & predecessor=node-4
+pairwiseAlignments9_1: -- https://community.oracle.com/message/15540233#15540233
+  [predecessor) column
+& [node) ',' & [node+1) column
+& predecessor=ancestor-3
+& ancestor < node
 ;
 
-pairwiseAlignmentXmlTableColumn: -- salvisberg, added, issue #57
-  :breaksAfterComma & [predecessor) XML_table_column & [ancestor) XMLTABLE_options[19,37) & [node) XML_table_column & [node-1) ',' 
-    & ancestor<predecessor & ancestor<node & ancestor=predecessor^
-| :breaksBeforeComma & [predecessor) XML_table_column & [ancestor) XMLTABLE_options[19,37) & [node+1) XML_table_column & [node) ',' 
-    & ancestor<predecessor & ancestor<node & ancestor=predecessor^
+pairwiseAlignments10: 
+  [predecessor) function_call
+& [node) ')'
+& predecessor=node^^
 ;
 
+pairwiseAlignments11: 
+  [predecessor) paren_expr_list
+& [node) arg 
+& predecessor < node
+;
+
+pairwiseAlignments12: 
+  [predecessor) query_partition_clause[12,33)
+& [node) ',' 
+& predecessor < node
+;
+
+ 
 pairwiseAlignments: 
-    pairwiseAlignments1 
+    pairwiseAlignments00
+  | pairwiseAlignments0 
+  | pairwiseAlignments1 
   | pairwiseAlignments2 
+  | pairwiseAlignments30 
   | pairwiseAlignments3 
   | pairwiseAlignments4 
   | pairwiseAlignments5 
   | pairwiseAlignments6 
-  | pairwiseAlignments6_2             -- salvisberg, added, issue #64 
   | pairwiseAlignments7 
   | pairwiseAlignments7_3 
   | pairwiseAlignments8 
   | pairwiseAlignments9 
-  | pairwiseAlignmentXmlTable         -- salvisberg, added, issue #57
-  | pairwiseAlignmentXmlTableColumn   -- salvisberg, added, issue #57
+  | pairwiseAlignments9_1 
+  | pairwiseAlignments10 
+  | pairwiseAlignments11 
+  | pairwiseAlignments12
 ->
 ;
 
@@ -1144,37 +944,53 @@ less2Spaces:   :breaksBeforeComma & (
     [node+1) arg & [node) ',' 
   | [node+1) prm_spec & [node) ',' 
   | [node+1) select_term & [node) ',' 
-  | [node+1) name & [node) ','                  -- salvisberg: added to handle into clause (#30)
-  | [node+1) XML_table_column & [node) ','      -- salvisberg, added, issue #57
-  | [node) ')' & [node-4) 'XMLTABLE'            -- salvisberg, added, issue #57
   | [node+1) group_by_col & [node) ','               
   | [node+1) "ord_by_1desc" & [node) ','             
   | [node+1) table_reference & [node) ',' 
   | [node+1) par_expr_list[19,31) & [node) ','  -- in insert clause
   | [node-1) "expr_list" & [node) ','           -- in insert clause
-  | [node+1) update_set_clause_expr & [node) ','  -- salvisberg, added, issue #64
+  | [node^) query_partition_clause[14,21) & [node) ','
+  | [node+1) alias_in_out_constraints & [node) ','  
+  | [node+1) column & [node+2) '=' & [node) ','  
 ) -> {
     var node = tuple.get("node");       
     var nodeIndent = struct.getNewline(node.from);
-    if( nodeIndent != null ) {
-        /* salvisberg, added/changed, issue #53 */
-        var spaceAfterCommas = struct.options.get("spaceAfterCommas");
-        var reduceNumberOfSpaces = 2;
-        if (!spaceAfterCommas) {
-          reduceNumberOfSpaces = 1;
-        }
-        struct.putNewline(node.from, nodeIndent.substr(0,nodeIndent.length-reduceNumberOfSpaces));
-    }
+    var offset = 2;
+    if( !struct.getBoolBind("spaceAfterCommas") )
+        offset = 1;
+    if( nodeIndent != null ) 
+        struct.putNewline(node.from, nodeIndent.substr(0,nodeIndent.length-offset));
 }
 
-additional5Spaces:
+extraIndent:
+   [node) searched_case_expression# 
+ | [node) else_clause 
+ | [node) expr & [node^) searched_case_expression#
+ | [node) expr & [node^) else_clause
+ | [node) expr & [node^) simple_case_expression[4,27)#
+ | [node) simple_comparison_condition & [node+1) 'AND' 
+ | [node) simple_case_expression[4,27)# 
+-> { 
+    var root = tuple.get("node");       
+    var indent = struct.indentLength();
+    var desc = root.descendants();
+    var processed = new java.util.TreeSet();
+    var forEach = Array.prototype.forEach;
+    forEach.call(desc, function(node) {
+        if( !processed.contains(node.from) ) {
+        	processed.add(node.from);
+        	padNode(node, indent);
+        	//print(node.interval());
+        }
+    });
+}
+
+extra5Spaces: /* 5 = "JOIN ".length */
    [node) table_reference & [node+1) "inner_cross_join_clause" 
--> { padNode(5) }
-
-additional4Spaces:
-   [node) simple_comparison_condition & [node+1) 'AND' 
--> { padNode(4) }
-
+-> {     
+    var node = tuple.get("node");
+    padNode(node, 5); 
+}
 
 /**
  * Extra condition to satisfy requirement of no breaks before parenthesis 
@@ -1183,10 +999,6 @@ additional4Spaces:
 ignoreLineBreaksBeforeNode:
    !:breaksBeforeComma &    [node) ','
 |  [node) ';'
-|  [node-1) 'SET' & [node^) update_set_clause & !:breaksAfterSelectFromWhere -- salvisberg: added to avoid line breaks between SET and first and only update_set_clause
-|  [node-1) 'IF' -- salvisberg: added to avoid line breaks between IF and condition (independent of length of condition)
-|  [node-1) 'ELSIF' -- salvisberg: added to avoid line breaks between ELSIF and condition (independent of length of condition)
-|  [node) 'THEN' -- salvisberg: added to avoid line breaks before THEN (independent of length of previous condition)
 ->
 ;
 ignoreLineBreaksAfterNode:
@@ -1199,145 +1011,17 @@ dontFormatNode: [node) numeric_literal
 ->
 ;
 
-/* 
- * ----------------------------------------------------------------------------
- * Additional Arbori Queries
- * ----------------------------------------------------------------------------
- */
 
-indentInExistsXmlTable:
-  :breakOnSubqueries & (
-      [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
-    | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^^) in_condition
-    | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^) in_condition
-    | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  query_table_expression
-    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  exists_condition
-    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^^) in_condition
-    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^) in_condition
-    | [node-1) subquery  & [node-2) '(' & [node)   ')' & [node^)  query_table_expression
-  ) 
-  | [node)   expression_list & [node-1) '(' & [node+1) ')' & [node^^) in_condition
-  | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^^) in_condition
-  | [node-1) expression_list & [node-2) '(' & [node)   ')' & [node^) in_condition
-  | :breaksBeforeComma & (
-      [node) string & [node-2) 'XMLTABLE'
-    | [node) XMLTABLE_options
-  )
-  -> {
-    var parentNode = tuple.get("node");
-    var descendants = parentNode.descendants();
-    var prevPos = 0
-    var indentSpaces = struct.options.get("identSpaces")
-    var alignRight = struct.options.get("alignRight")
-    var baseIndent
-    if (alignRight) {
-      baseIndent = "SELECT ".length;
-    } else {
-      baseIndent = "WHERE ".length;
-    }
-    var addIndent = ""
-    for (j = indentSpaces - baseIndent; j < indentSpaces; j++) {
-      addIndent = addIndent + " ";
-    }
-    logger.fine(struct.getClass(), "--- indentInExistsXmlTable ---");
-    logger.fine(struct.getClass(), "tuple: " +  tuple);
-    logger.fine(struct.getClass(), "length of addIndent: " +  addIndent.length);
-    for (i = 0, len = descendants.length; i < len; i++) {
-      var node = descendants.get(i);
-      var pos = node.from;
-      var nodeIndent = struct.getNewline(pos);
-      if (nodeIndent != null && pos > prevPos) {
-        logger.finest(struct.getClass(), "addIndent on pos " + pos + " for token " + target.getSrc()[pos].content);
-        struct.putNewline(pos, nodeIndent + addIndent);
-        prevPos = pos
-      }
-    }
-  }
+timestamp: runOnce & false -> {
+    var date = new java.util.Date();    
+    var formatted = "/* Formatted by SqlDev on ";
+    var index = target.input.indexOf(formatted);
+    if( index != 0 )
+        struct.putNewline(0, formatted+date+" */\n");  
+    else {
+        var timestampEnd = target.input.indexOf(" */");
+        target.input = formatted+date+target.input.substring(timestampEnd);
+    }   
+}
 
-indentCaseExpression:
-  :breaksBeforeComma & [node) case_expression & [node^) select_term & [node^-1) ',' 
-  -> {
-    var parentNode = tuple.get("node");
-    var descendants = parentNode.descendants();
-    var prevPos = 0
-    var indentSpaces = struct.options.get("identSpaces")
-    var addIndent = ""
-    for (j = 0; j < 2 + indentSpaces; j++) {
-      addIndent = addIndent + " ";
-    }
-    logger.fine(struct.getClass(), "--- indentCaseExpression ---");
-    logger.fine(struct.getClass(), "tuple: " +  tuple);
-    logger.fine(struct.getClass(), "length of addIndent: " +  addIndent.length);
-    for (i = 1, len = descendants.length; i < len; i++) {
-      var node = descendants.get(i);
-      var pos = node.from;
-      var nodeIndent = struct.getNewline(pos);
-      if (nodeIndent != null && pos > prevPos) {
-        logger.finest(struct.getClass(), "addIndent on pos " + pos + " for token " + target.getSrc()[pos].content);
-        struct.putNewline(pos, nodeIndent + addIndent);
-        prevPos = pos
-      }
-    }
-  }
 
-indentTokensOnNewLineOfFirstSelectionDirective: runOnce -> {
-    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
-    var Token = Java.type('oracle.dbtools.parser.Token');
-    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
-    var indentSpaces = struct.options.get("identSpaces")
-    var addIndent = ""
-    for (j = 0; j < indentSpaces; j++) {
-      addIndent = addIndent + " ";
-    }
-    var pos = 0;
-    var withinFirstBranch = false;
-    for (i = 0; i < tokens.length; i++) {
-      if (tokens[i].type == Token.MACRO_SKIP && tokens[i].content.toLowerCase().startsWith("$if ")) {
-        withinFirstBranch = true;
-        logger.fine(struct.getClass(), "--- withinFirstBranch = true ---");
-        continue;
-      }
-      if (withinFirstBranch && tokens[i].type == Token.MACRO_SKIP && tokens[i].content.startsWith("$")) {
-        withinFirstBranch = false;
-        logger.fine(struct.getClass(), "--- withinFirstBranch = false ---");
-        continue;
-      }
-      if (tokens[i].type != Token.WS && tokens[i].type != Token.MACRO_SKIP && tokens[i].type != Token.COMMENT && tokens[i].type != Token.LINE_COMMENT) {
-        if (withinFirstBranch) {
-          var nodeIndent = struct.getNewline(pos);
-          if (nodeIndent != null && nodeIndent.contains("\n")) {
-            logger.fine(struct.getClass(), "pos: " + pos + " type: " + tokens[i].type + " content: " + tokens[i].content + " nodeIndent.length: " + nodeIndent.length);
-            struct.putNewline(pos, nodeIndent + addIndent);
-          }
-        }
-        pos++;
-      }
-    }
-  }
-
-dontFormatOffOnRanges: runOnce -> {
-    var Integer = Java.type('java.lang.Integer');
-    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
-    var Token = Java.type('oracle.dbtools.parser.Token');
-    var tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
-    var hiddenTokenCount = 0;
-    var format = true;
-    for (var i in tokens) {
-      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
-        if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
-          format = false;
-        }
-        if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
-          format = true;
-        }
-        hiddenTokenCount++;
-      } else if (tokens[i].type == Token.WS || tokens[i].type == Token.MACRO_SKIP || tokens[i].type == Token.SQLPLUSLINECONTINUE_SKIP) {
-        hiddenTokenCount++
-      } else {  
-        /* expected types: QUOTED_STRING, DQUOTED_STRING, BQUOTED_STRING, DIGITS, OPERATION, IDENTIFIER, AUXILIARY, INCOMPLETE */
-        if (!format) {
-          struct.unformattedPositions.add(new Integer(i-hiddenTokenCount));
-        }
-      }
-    }
-  }
