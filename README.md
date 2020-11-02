@@ -24,6 +24,10 @@ Please note that these settings do not comply with rule 5. Line breaks are place
 
 Clone this repository or download the ZIP file and extract it. 
 
+### SQLcl
+
+See [sqlcl/README.md](sqlcl/README.md).
+
 ### SQL Developer
 
 1. Start SQL Developer
