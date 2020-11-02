@@ -36,7 +36,7 @@ We use the [Eclipse IDE for Java and DSL Developers](https://www.eclipse.org/dow
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ---------------< com.trivadis:plsql.formatter.settings >----------------
-[INFO] Building com.trivadis.org.plsql.formatter.settings 20.2.0-SNAPSHOT
+[INFO] Building com.trivadis.org.plsql.formatter.settings 20.3.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO] 
 ...
@@ -48,12 +48,12 @@ We use the [Eclipse IDE for Java and DSL Developers](https://www.eclipse.org/dow
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 52, Failures: 0, Errors: 0, Skipped: 0
+[[INFO] Tests run: 82, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  16.005 s
-[INFO] Finished at: 2020-08-22T12:38:51+02:00
+[INFO] Total time:  32.764 s
+[INFO] Finished at: 2020-11-02T05:24:13+01:00
 [INFO] ------------------------------------------------------------------------
 ```
