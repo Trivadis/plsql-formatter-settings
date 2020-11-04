@@ -72,7 +72,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.breakOnSubqueries, true);                                       // default: true
         formatter.options.put(formatter.maxCharLineSize, 120);                                          // default: 128
         formatter.options.put(formatter.forceLinebreaksBeforeComment, false);                           // default: false
-        formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.X1);      // default: Format.BreaksX2.X2
+        formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.Keep);    // default: Format.BreaksX2.X2
         formatter.options.put(formatter.breaksAfterSelect, false);                                      // default: true
         formatter.options.put(formatter.flowControl, Format.FlowControl.IndentedActions);               // default: Format.FlowControl.IndentedActions
         // White Space
