@@ -39,8 +39,8 @@ class Oracle extends ConfiguredTestFormatter {
                         dbms_output.put_line('sal_raise := 0');
                   END CASE;
                   SELECT CASE "1"
-                            WHEN 1 THEN
-                               'XX'
+                           WHEN 1 THEN
+                              'XX'
                          END
                     INTO new_empno
                     FROM emp,
