@@ -17,7 +17,7 @@
     <spaceAroundOperators>true</spaceAroundOperators>
     <useTab>false</useTab>
     <idCase>oracle.dbtools.app.Format.Case.NoCaseChange</idCase>
-    <extraLinesAfterSignificantStatements>oracle.dbtools.app.Format.BreaksX2.X1</extraLinesAfterSignificantStatements>
+    <extraLinesAfterSignificantStatements>oracle.dbtools.app.Format.BreaksX2.Keep</extraLinesAfterSignificantStatements>
     <breaksConcat>oracle.dbtools.app.Format.Breaks.Before</breaksConcat>
     <spaceAroundBrackets>oracle.dbtools.app.Format.Space.Default</spaceAroundBrackets>
     <flowControl>oracle.dbtools.app.Format.FlowControl.IndentedActions</flowControl>
