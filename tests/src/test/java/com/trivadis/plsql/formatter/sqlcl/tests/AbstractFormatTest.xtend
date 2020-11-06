@@ -25,7 +25,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         // package_body.pkb
         // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
-            CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+               FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
                   in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
                ) RETURN sys.ora_mining_number_nt
@@ -43,8 +44,10 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                      l_result.extend;
                      l_result(l_pos)     := l_int;
                      l_pos               := l_pos + 1;
-                  END LOOP integer_tokens;RETURN l_result;
-               END to_int_table;END math;
+                  END LOOP integer_tokens;
+                  RETURN l_result;
+               END to_int_table;
+            END math;
             /
         '''.toString.trim
         val actualPackageBody = getFormattedContent("package_body.pkb")
@@ -84,7 +87,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         // package_body.pkb
         // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
-            CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+               FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
                   in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
                ) RETURN sys.ora_mining_number_nt
@@ -102,8 +106,10 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                      l_result.extend;
                      l_result(l_pos)     := l_int;
                      l_pos               := l_pos + 1;
-                  END LOOP integer_tokens;RETURN l_result;
-               END to_int_table;END math;
+                  END LOOP integer_tokens;
+                  RETURN l_result;
+               END to_int_table;
+            END math;
             /
         '''.toString.trim
         val actualPackageBody = getFormattedContent("package_body.pkb")
@@ -424,7 +430,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             Here's the content of package_body.pkb
             
             ```sql
-            CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
+            CREATE OR REPLACE PACKAGE BODY the_api.math AS
+               FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
                   in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
                ) RETURN sys.ora_mining_number_nt
@@ -442,8 +449,10 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                      l_result.extend;
                      l_result(l_pos)     := l_int;
                      l_pos               := l_pos + 1;
-                  END LOOP integer_tokens;RETURN l_result;
-               END to_int_table;END math;
+                  END LOOP integer_tokens;
+                  RETURN l_result;
+               END to_int_table;
+            END math;
             /
             ```
             
