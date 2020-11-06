@@ -23,6 +23,39 @@ prelude: runOnce -> {
 }
 
 /*
+ * ---------------------------------------------------------------------------- 
+ * Moved brkX2_1 & brkX2_1 to the top for proper BreaksX2.Keep processing 
+ * see issue #74 Add at least one new line before a significant statement
+ * ----------------------------------------------------------------------------
+ */
+brkX2_keep: runOnce -> {
+  var HashSet = Java.type('java.util.HashSet');
+  var brkX2endNodes = new HashSet();
+}
+
+brkX2_1: 
+  [node) sql_statement
+| [node) full_cursor_body
+| [node) stmt & ![node^) loop_stmt & ([node^) seq_of_stmts | [node^) stmt_list_opt) & [node+18 < node)  
+| [node) ',' & [node+1) method_specification 
+| [node) original_method_body_specification
+| [node) subprg_body & ![node^) create_plsql
+| [node) basic_decl_item_list & [node+1) subprg_body
+-- | [node) is_or_as & [node+1) decl_list & [(node+1)+20 < (node+1)) -- long declarations -- salvisberg: disabled due to issue #12
+| [node) is_or_as & ([node^) pkg_body | [node^) pkg_spec)  -- salvisberg: added to solve issue #12 unconditional break after is_or_as of pkg_body/pkg_spec
+;
+brkX2_2: child^=node & (
+   [node) stmt & [child) sql_query_or_dml_stmt  
+ | [node) stmt & [child) open_cursor_reference_statement
+ | [node) basic_decl_item & [child) subprg_spec
+) ;
+
+populateBrkX2EndNodes: brkX2_1 | brkX2_2 -> {
+  var Integer = Java.type('java.lang.Integer');
+  brkX2endNodes.add(new Integer(tuple.get("node").to));
+}
+
+/*
  * ----------------------------------------------------------------------------
  * Extend (override) "Preserve Original" behaviour of SQLDev to 
  * replace multiple, consecutive empty lines with one empty line
@@ -134,11 +167,40 @@ maxOneEmptyLine: runOnce -> {
     target.input = substitutions.transformInput();
   }
 
+  var addMissingNewLines = function() {
+    var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+    populateOffOnRanges(tokens);
+    var substitutions = new Substitutions(target.input);
+    var Integer = Java.type('java.lang.Integer');
+    var hiddenTokenCount = 0;
+    var lastNewlinePos = -1;
+    var pos = -1;
+    for (var i in tokens) {
+      pos = new Integer(i-hiddenTokenCount)
+      if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
+        hiddenTokenCount++;
+      } else if (tokens[i].type == Token.WS || tokens[i].type == Token.MACRO_SKIP || tokens[i].type == Token.SQLPLUSLINECONTINUE_SKIP) {
+        hiddenTokenCount++;
+        if (tokens[i].content == "\n") {
+          lastNewlinePos = pos;
+        }
+      } else {  
+        /* expected types: QUOTED_STRING, DQUOTED_STRING, BQUOTED_STRING, DIGITS, OPERATION, IDENTIFIER, AUXILIARY, INCOMPLETE */
+        if (brkX2endNodes.contains(pos) && !inOffOnRange(pos) && lastNewlinePos != pos) {
+          substitutions.put(tokens[i].begin, tokens[i].end, "\n" + tokens[i].content);
+        }
+      }
+    }
+    // update source code
+    target.input = substitutions.transformInput();
+  }
+
   var BreaksX2 = Java.type('oracle.dbtools.app.Format.BreaksX2')
   if (struct.options.get("extraLinesAfterSignificantStatements") == BreaksX2.Keep) {
     // replacements
     removeDuplicateEmptyLines();
     removeWSOnEmptyLines();
+    addMissingNewLines();
 
     // tokens without WS and comments (mimicking default behaviour)
     var Lexer = Java.type('oracle.dbtools.parser.Lexer');
@@ -860,22 +922,6 @@ breakAfterEvery5thArg: commasInProc
  * just set Options->Advanced Format->Break->After statement to Single Break
  * to disable double line breaks altogether.
 **/
-brkX2_1: 
-  [node) sql_statement
-| [node) full_cursor_body
-| [node) stmt & ![node^) loop_stmt & ([node^) seq_of_stmts | [node^) stmt_list_opt) & [node+18 < node)  
-| [node) ',' & [node+1) method_specification 
-| [node) original_method_body_specification
-| [node) subprg_body & ![node^) create_plsql
-| [node) basic_decl_item_list & [node+1) subprg_body
--- | [node) is_or_as & [node+1) decl_list & [(node+1)+20 < (node+1)) -- long declarations -- salvisberg: disabled due to issue #12
-| [node) is_or_as & ([node^) pkg_body | [node^) pkg_spec)  -- salvisberg: added to solve issue #12 unconditional break after is_or_as of pkg_body/pkg_spec
-;
-brkX2_2: child^=node & (
-   [node) stmt & [child) sql_query_or_dml_stmt  
- | [node) stmt & [child) open_cursor_reference_statement
- | [node) basic_decl_item & [child) subprg_spec
-) ;
 brkX2: 
   brkX2_1 | brkX2_2
 ->
