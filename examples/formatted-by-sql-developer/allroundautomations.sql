@@ -1,5 +1,4 @@
 -- based on examples in Allround Automations PL/SQL Beautifier settings 
-
 CREATE OR REPLACE FUNCTION mgrname (
    p_empno IN emp.empno%TYPE
 ) RETURN emp.ename%TYPE IS
@@ -20,16 +19,13 @@ BEGIN
        WHERE e.empno = p_empno
          AND m.empno = e.mgr
          AND d.deptno IN (
-                10,
-                20,
-                30,
-                40
+                10, 20, 30, 40
              );
    END IF;
-   return(result);
+   RETURN ( result );
 EXCEPTION
    WHEN no_data_found THEN
-      return(NULL);
+      RETURN ( NULL );
 END;
 /
 

@@ -64,9 +64,7 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                        WHERE e.department_id = d.department_id
                    ) v
              WHERE d.department_name IN (
-                      'Marketing',
-                      'Operations',
-                      'Public Relations'
+                      'Marketing', 'Operations', 'Public Relations'
                    )
              ORDER BY d.department_name,
                       v.employee_id;
@@ -278,9 +276,7 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                        WHERE e.department_id = d.department_id
                    ) v
              WHERE d.department_name IN (
-                      'Marketing'
-                    , 'Operations'
-                    , 'Public Relations'
+                      'Marketing', 'Operations', 'Public Relations'
                    )
              ORDER BY d.department_name
                     , v.employee_id;
@@ -502,9 +498,7 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                        WHERE e.department_id = d.department_id
                    ) v
              WHERE d.department_name IN (
-                      'Marketing',
-                      'Operations',
-                      'Public Relations'
+                      'Marketing', 'Operations', 'Public Relations'
                    )
              ORDER BY d.department_name,
                       v.employee_id;
