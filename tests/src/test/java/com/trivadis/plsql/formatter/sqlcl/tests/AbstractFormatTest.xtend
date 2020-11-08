@@ -23,7 +23,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertEquals(expected, actual)
         
         // package_body.pkb
-        // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
                FUNCTION to_int_table (
@@ -83,7 +82,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertTrue(actual.contains("file 1 of 1"))
         
         // package_body.pkb
-        // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
                FUNCTION to_int_table (
@@ -121,7 +119,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertTrue(actual.contains("query.sql"))
 
         // package_body.pkb
-        // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
             CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
@@ -178,7 +175,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertTrue(actual.contains("query.sql")) 
 
         // package_body.pkb
-        // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
             CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
@@ -235,7 +231,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertTrue(actual.contains("query.sql"))
 
         // package_body.pkb
-        // Breaks.X1 leads to breaks after significant statements, that's better than the default Breaks.Keep in this case
         val expectedPackageBody = '''
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
                FUNCTION to_int_table (
@@ -356,7 +351,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertTrue(actual.contains("query.sql"))
 
         // package_body.pkb
-        // Breaks.Keep leads to no breaks after significant statements, that's correct
         val expectedPackageBody = '''
             CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
@@ -412,7 +406,6 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assert.assertTrue (actualConsole.contains('''Formatting file 1 of 1: «tempDir.toString()»«File.separator»markdown.md... done.'''))
         
         // markdown.md
-        // Breaks.Keep leads to no breaks after significant statements, that's correct
         val actualMarkdown = getFormattedContent("markdown.md").trim
         val expectedMarkdown = '''
             # Titel
