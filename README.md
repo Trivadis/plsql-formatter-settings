@@ -74,6 +74,8 @@ SQL Developer uses its own parse tree query language called Arbori for its advan
 - [Custom Formatting in SQLDev 4.2](https://vadimtropashko.wordpress.com/2017/01/03/custom-formatting-in-sqldev-4-2/)
 - [Formula for Formatting](https://vadimtropashko.wordpress.com/2017/09/28/formatting-formulas/) 
 - [Custom Syntax Coloring](https://vadimtropashko.wordpress.com/2018/10/10/custom-syntax-coloring/)
+- [Arbori 20.2](https://vadimtropashko.wordpress.com/2020/06/19/arbori-20-2/)
+- [Java Script Conditions](https://vadimtropashko.wordpress.com/2020/05/29/java-script-conditions/)
 
 Thank you, Vadim Tropashko for providing this valuable information.
 
