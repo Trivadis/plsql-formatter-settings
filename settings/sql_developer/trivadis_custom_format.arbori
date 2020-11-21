@@ -1388,7 +1388,7 @@ timestamp: runOnce & false -> {
  * ----------------------------------------------------------------------------
  */
 
-indentInExistsXmlTable:
+indentInExistsXmlTableScalarSubquery:
   :breakOnSubqueries & (
       [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^)  exists_condition
     | [node)   subquery  & [node-1) '(' & [node+1) ')' & [node^^) in_condition
@@ -1405,6 +1405,8 @@ indentInExistsXmlTable:
   | :breaksBeforeComma & (
       [node) string & [node-2) 'XMLTABLE'
     | [node) XMLTABLE_options
+    | [node) subquery & [node-1) '(' & [node^) scalar_subquery_expression & ([node^-1) ',' | [node^^-1) ',')
+    | [node-1) subquery & [node) ')' & [node^) scalar_subquery_expression & ([node^-1) ',' | [node^^-1) ',')
   )
   -> {
     var parentNode = tuple.get("node");
@@ -1422,7 +1424,7 @@ indentInExistsXmlTable:
     for (j = indentSpaces - baseIndent; j < indentSpaces; j++) {
       addIndent = addIndent + " ";
     }
-    logger.fine(struct.getClass(), "--- indentInExistsXmlTable ---");
+    logger.fine(struct.getClass(), "--- indentInExistsXmlTableScalarSubquery ---");
     logger.fine(struct.getClass(), "tuple: " +  tuple);
     logger.fine(struct.getClass(), "length of addIndent: " +  addIndent.length);
     for (i = 0, len = descendants.length; i < len; i++) {
