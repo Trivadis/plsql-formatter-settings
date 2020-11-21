@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
-        <xtend.version>2.22.0</xtend.version>
+        <xtend.version>2.23.0</xtend.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
     </properties>
     <dependencies>
