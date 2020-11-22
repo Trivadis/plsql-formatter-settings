@@ -1405,8 +1405,13 @@ indentInExistsXmlTableScalarSubquery:
   | :breaksBeforeComma & (
       [node) string & [node-2) 'XMLTABLE'
     | [node) XMLTABLE_options
-    | [node) subquery & [node-1) '(' & [node^) scalar_subquery_expression & ([node^-1) ',' | [node^^-1) ',')
-    | [node-1) subquery & [node) ')' & [node^) scalar_subquery_expression & ([node^-1) ',' | [node^^-1) ',')
+  )
+  | (:breaksBeforeComma | :breaksAfterComma 
+    & ([node^^-1) 'SELECT' | [node^^^-1) 'SELECT') & ![node^-1) ',')
+    & [node^) scalar_subquery_expression 
+    & (
+      [node) subquery & [node-1) '(' 
+    | [node-1) subquery & [node) ')'
   )
   -> {
     var parentNode = tuple.get("node");
