@@ -121,4 +121,28 @@ class Issue_78 extends ConfiguredTestFormatter {
         '''.formatAndAssert
     }
 
+    @Test
+    def subselect_with_single_select_term() {
+        '''
+            SELECT (
+                      SELECT COUNT(1)
+                        FROM user_indexes i
+                       WHERE i.table_name = t.table_name
+                   )
+              FROM user_tables t;
+        '''.formatAndAssert
+    }
+
+    @Test
+    def subselect_with_single_select_term_with_alias() {
+        '''
+            SELECT (
+                      SELECT COUNT(1)
+                        FROM user_indexes i
+                       WHERE i.table_name = t.table_name
+                   ) AS num_indexes
+              FROM user_tables t;
+        '''.formatAndAssert
+    }
+
 }
