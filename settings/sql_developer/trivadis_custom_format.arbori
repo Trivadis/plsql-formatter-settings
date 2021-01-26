@@ -571,7 +571,6 @@ splitArg:
       struct.indentedNodes2(target, tuple);
     }
   }
-;
 
 splitExpr:
   .breaksProcArgs 
@@ -588,7 +587,6 @@ splitExpr:
       struct.indentedNodes2(target, tuple);
     }
   }
-;
 
 /**
  * salvisberg: stop section "split arguments"
