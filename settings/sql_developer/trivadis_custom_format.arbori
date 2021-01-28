@@ -519,14 +519,59 @@ indentedNodes2: indentedNodes1
  * Add line breaks if argument and expression lists have more than 4 argurments.
  * Must run at this position where all other split and indentations are handled.
  * Calling indentedNodes1 and indentedNodes2 manually due to Arbori query limitations.
- * Solves issues #19 
+ * Solves issues #19, #33 
  */
+
+longArgList: runOnce -> {
+  var HashSet = Java.type('java.util.HashSet');
+  var longArgListSet = new HashSet();
+  var longExprListSet = new HashSet();
+  /* 80% of maxCharLineSize, to be on the save side and accept unnecessary line breaks to control outcome */
+  var maxLineSize = struct.options.get("maxCharLineSize") * .8;
+  var alreadyIndentedSet = new HashSet();
+  
+  function addToLongSet(set, nodeName) {
+    var node = tuple.get(nodeName);
+    var size = 0;
+    for(i = node.from; i < node.to; i++) {
+      // content plus 1 whitespace
+      size += (target.getSrc()[i].content.length) + 1;
+  	}
+  	if (size > maxLineSize) {
+  	  logger.fine(struct.getClass(), "addToLongSet (added): " + node);
+  	  set.add(node.interval());
+  	}
+  }
+
+  function isLongArgList(nodeName) {
+    var nodeInterval = tuple.get(nodeName).interval();
+    return longArgListSet.contains(nodeInterval);
+  }
+
+  function isLongExprList(nodeName) {
+    var nodeInterval = tuple.get(nodeName).interval();
+    return longExprListSet.contains(nodeInterval);
+  }
+  
+  function isAlreadyIndented(nodeName) {
+    var nodeInterval = tuple.get(nodeName).interval();
+    return alreadyIndentedSet.contains(nodeInterval);  	
+  }
+
+}
+
+addLongArgList: 
+  [parent) paren_expr_list 
+  -> {
+    logger.fine(struct.getClass(), "addLongArgList (found): " + tuple.get('parent'));
+    addToLongSet(longArgListSet, 'parent');
+  }
 
 allArgList:
   [parent) paren_expr_list
 ;
 
-splittableArgList:
+splittableArgList1:
   [parent) paren_expr_list 
     & [arg1) arg_list 
     & arg1^ = parent
@@ -538,11 +583,40 @@ splittableArgList:
     & arg4^ = arg3
 ;
 
+splittableArgList2:
+    [parent) paren_expr_list 
+  & .isLongArgList('parent')
+;
+
+splittableArgList:
+    splittableArgList1
+  | splittableArgList2 
+;
+
+addLongExprList: 
+  [parent) "(x,y,z)"
+  -> {
+    logger.fine(struct.getClass(), "addLongExprList (found): " + tuple.get('parent'));
+    addToLongSet(longExprListSet, 'parent');
+  }
+  
+addAlreadyIndented:
+  .breaksAssocArgs & (
+      [node) assoc_arg & [node^) paren_expr_list & [node+1) arg_list
+    | [node) arg_list & [node^) paren_expr_list & [node-1) assoc_arg
+    | [node) ',' & [node^) arg_list & [node+1) assoc_arg
+  )
+  -> {
+    var node = tuple.get('node');
+    logger.fine(struct.getClass(), "addAlreadyIndented: " + node);
+    alreadyIndentedSet.add(node.interval());
+  }
+
 allExprList:
   [parent) "(x,y,z)"
 ;
 
-splittableExprList:
+splittableExprList1:
   [parent) "(x,y,z)" 
     & [arg1) "expr_list" 
     & parent < arg1
@@ -556,33 +630,71 @@ splittableExprList:
     & arg5^ = arg4
 ;
 
+splittableExprList2:
+    [parent) "(x,y,z)" 
+  & .isLongExprList('parent')
+;
+
+splittableExprList:
+    splittableExprList1
+  | splittableExprList2
+;
+
+indentArgListParent:
+  .breaksProcArgs
+    & [argList) paren_expr_list
+    & [argList^^) assignment_stmt
+    & [node) name
+    & node = argList^
+    & splittableArgList.parent = argList
+  -> {
+    logger.fine(struct.getClass(), "indentArgListParent: " + tuple.get('node'));
+    struct.indentedNodes1(target, tuple);
+    struct.indentedNodes2(target, tuple);
+  }
+
 splitArg:
-  .breaksProcArgs 
+  .breaksProcArgs
     & [node) arg 
-    & ![node) assoc_arg 
     & allArgList.parent < node
     & splittableArgList.parent < node
   -> {
-    // filter via JavaScript since "allArgList.parent = splittableArgList.parent" does not work as Arbori condition
+    // filter via JavaScript
     var all = tuple.get("allArgList.parent");
     var splittable = tuple.get("splittableArgList.parent");
-    if (all == splittable) {
+    logger.fine(struct.getClass(), "splitArg (found): " + tuple.get('node'));
+    if (all == splittable && !isAlreadyIndented('node')) {
+      logger.fine(struct.getClass(), "splitArg (splitted): " + tuple.get('node'));
       struct.indentedNodes1(target, tuple);
       struct.indentedNodes2(target, tuple);
     }
   }
 
+indentAssocArgs:
+  .breaksProcArgs
+    & ([node) assoc_arg | [node) ')' & [node^) paren_expr_list)
+    & paren_expr_list = node 
+    & splittableExprList.parent < node
+  -> {
+    logger.fine(struct.getClass(), "indentExprList: " + tuple.get('node'));
+    struct.indentedNodes1(target, tuple);
+    struct.indentedNodes2(target, tuple);
+  }
+
 splitExpr:
   .breaksProcArgs 
     & [node) expr 
-    & ![node) assoc_arg 
+    & ![node^) assoc_arg 
+    & ![node^) compound_expression
     & allExprList.parent < node
     & splittableExprList.parent < node
   -> {
-    // filter via JavaScript since "allExprList.parent.parent = splittableExprList.parent" does not work as Arbori condition
+    // filter via JavaScript
     var all = tuple.get("allExprList.parent");
     var splittable = tuple.get("splittableExprList.parent");
-    if (all == splittable) {
+    logger.fine(struct.getClass(), "splitExpr (found): " + tuple.get('node'));
+    if (all == splittable && !isAlreadyIndented('node')) {
+      logger.fine(struct.getClass(), "splitExpr (splitted): " + tuple.get('node'));
       struct.indentedNodes1(target, tuple);
       struct.indentedNodes2(target, tuple);
     }
@@ -860,7 +972,7 @@ _extraBrkAfter:
 **/
 commasInProc: [node) ',' 
        & procedureCall < node 
-       & (   [procedureCall) function_call 
+       & (   [procedureCall) function_call
            | [procedureCall) function &  (!.breaks4XML | ![procedureCall) XML_function  /*implication .breaks4XML -> ![procedureCall) XML_function */ )
            | [procedureCall) procedure_call 
            | [procedureCall) in_condition & ![node+1) select_term -- salvisberg, exclude select_term (#76)
@@ -1261,6 +1373,16 @@ pairwiseAlignmentXmlTableColumn: -- salvisberg, added, issue #57
     & ancestor<predecessor & ancestor<node & ancestor=predecessor^
 ;
 
+pairwiseAlignementAssocArg:
+  :breaksAfterComma
+  & [node) assoc_arg
+  & [node-1) ','
+  & [ancestor) paren_expr_list
+  & ancestor < node
+  & [predecessor) assoc_arg
+  & predecessor^ = ancestor
+;
+
 pairwiseAlignments: 
   --  pairwiseAlignments00            -- salvisberg, disabled (#76)
   --| pairwiseAlignments0             -- salvisberg, disabled (#76)
@@ -1282,7 +1404,8 @@ pairwiseAlignments:
   --| pairwiseAlignments12            -- salvisberg, disabled (#76)
   | pairwiseAlignmentXmlTable         -- salvisberg, added, issue #57
   | pairwiseAlignmentXmlTableColumn   -- salvisberg, added, issue #57
-->
+  | pairwiseAlignementAssocArg        -- salvisberg, added, issue #33
+-> 
 ;
 
 
