@@ -67,7 +67,7 @@ SQL Developer uses its own parse tree query language called Arbori for its advan
 ### Links
 
 - [Formatting Code With SQL Developer](https://www.salvis.com/blog/2020/04/13/formatting-code-with-sql-developer/)
-- [SQL Developer 20.2 User Guide, Code Editor: Format](https://docs.oracle.com/en/database/oracle/sql-developer/20.2/rptug/sql-developer-concepts-usage.html#GUID-9421DA6E-A48A-427B-88C9-4414D83EC9D1__GUID-64BE7F6C-37D1-4D21-96A5-E9A19C7D3543)
+- [SQL Developer 20.4 User Guide, Code Editor: Format](https://docs.oracle.com/en/database/oracle/sql-developer/20.4/rptug/sql-developer-concepts-usage.html#GUID-9421DA6E-A48A-427B-88C9-4414D83EC9D1__GUID-64BE7F6C-37D1-4D21-96A5-E9A19C7D3543)
 - [Arbori Starter Manual](https://vadimtropashko.files.wordpress.com/2017/02/arbori-starter-manual.pdf)
 - [Semantic Analysis with Arbori](https://vadimtropashko.files.wordpress.com/2019/11/arbori.pdf)
 - [Arbori Semantic Actions](https://vadimtropashko.wordpress.com/2019/08/01/arbori-semantic-actions/)
