@@ -57,7 +57,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             SELECT d.department_name,
                    v.employee_id,
                    v.last_name
-              FROM departments d CROSS APPLY (
+              FROM departments d
+             CROSS APPLY (
                       SELECT *
                         FROM employees e
                        WHERE e.department_id = d.department_id
@@ -265,7 +266,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             SELECT d.department_name
                  , v.employee_id
                  , v.last_name
-              FROM departments d CROSS APPLY (
+              FROM departments d
+             CROSS APPLY (
                       SELECT *
                         FROM employees e
                        WHERE e.department_id = d.department_id
@@ -485,7 +487,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             SELECT d.department_name,
                    v.employee_id,
                    v.last_name
-              FROM departments d CROSS APPLY (
+              FROM departments d
+             CROSS APPLY (
                       SELECT *
                         FROM employees e
                        WHERE e.department_id = d.department_id
