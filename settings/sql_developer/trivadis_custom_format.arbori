@@ -1672,3 +1672,40 @@ dontFormatOffOnRanges: runOnce -> {
       }
     }
   }
+
+keepLineBreakAfterSelectHint: runOnce -> {
+    var Integer = Java.type('java.lang.Integer');
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken'); 
+    var Token = Java.type('oracle.dbtools.parser.Token');
+    var tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
+    var hiddenTokenCount = 0;
+    for (var i in tokens) {
+      var type = tokens[i].type;
+      if ((type == Token.LINE_COMMENT || type == Token.COMMENT) && tokens[i].content.length > 3) {
+        if (tokens[i].content.substring(2, 3) == "+") {
+          var prev = prevToken.content.toLowerCase();
+          if (prev == "select") {
+            prevToken = tokens[i];
+            var indent = struct.getNewline(new Integer(i-hiddenTokenCount-1));
+            if (indent == null) {
+              indent = "";
+            }
+            if (!indent.contains('\n')) {
+              indent = "\n" + indent;
+            }
+            for (var j=0; j<prev.length + 1; j++) {
+               indent += " ";
+            }
+            struct.putNewline(new Integer(i-hiddenTokenCount), indent);
+          }
+        }
+      }
+      if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS || 
+          type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
+      {
+        hiddenTokenCount++;
+      } else {
+        prevToken = tokens[i];
+      }
+    }
+  }
