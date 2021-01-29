@@ -259,16 +259,26 @@ longArgList: runOnce -> {
   }
 }
 
-addLongArgList: 
-  [parent) paren_expr_list 
+addLongLines: 
+    [node) paren_expr_list 
+  | [node) "(x,y,z)"
+  | [node) assignment_stmt
   -> {
-    logger.fine(struct.getClass(), "addLongArgList (found): " + tuple.get('parent'));
+    logger.fine(struct.getClass(), "addLongLines (found): " + tuple.get('node'));
+    addToLongSet('node');
+  }
+
+addLongDotted:
+  [parent) assignment_stmt
+  -> {
+    logger.fine(struct.getClass(), "addLongAssignmentStmt (found): " + tuple.get('parent'));
     addToLongSet('parent');
   }
 
 allArgList:
   [parent) paren_expr_list
 ;
+
 
 splittableArgList1:
   [parent) paren_expr_list 
@@ -291,13 +301,7 @@ splittableArgList:
     splittableArgList1
   | splittableArgList2 
 ;
-
-addLongExprList: 
-  [parent) "(x,y,z)"
-  -> {
-    logger.fine(struct.getClass(), "addLongExprList (found): " + tuple.get('parent'));
-    addToLongSet('parent');
-  }
+ 
 
 allExprList:
   [parent) "(x,y,z)"
@@ -383,12 +387,26 @@ indentFirstAssocArgs:
     splittedNodeSet.add(tuple.get('node').interval());
   }
 
+-- split long assignments by default logic, only add indentation after ":="
+splitLongAssignmentStmt:
+  .breaksProcArgs
+    & [node) dotted_expr
+    & [node-2) ':'
+    & [node-1) '='
+    & [node^) assignment_stmt
+    & .isLong('node^')
+  -> {
+    logger.fine(struct.getClass(), "splitLongAssignmentStmt: " + tuple.get('node'));
+    splittedNodeSet.add(tuple.get('node').interval());
+  }
+
 splittedNodes: 
   (
      [node) expr
    | [node) arg
    | [node) assoc_arg
    | [node) name
+   | [node) dotted_expr
   ) & .isSplitted('node')
 ;
 
