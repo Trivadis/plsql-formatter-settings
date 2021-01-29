@@ -843,6 +843,8 @@ _extraBrkBefore:
 | [node) having_clause 
 | [node) order_by_clause 
 --| [node) 'OVER'  -- salvisberg: disabled (#76)
+| [node) BULK_COLLECT_opt           -- salvisberg: added (#82)
+| [node) cross_outer_apply_clause   -- salvisberg: added (#82)
 | [node) row_limiting_clause
 | [node) model_clause 
 --| [node) searched_case_expression#  -- salvisberg: disabled (#76)
@@ -1082,6 +1084,9 @@ rightAlignments: :alignRight & (
   --| [node) 'JOIN'   &  [node^) "inner_cross_join_clause" handled by "inner_cross_join_clause" alignment
   --| [node) 'RIGHT'         &  [node^)  "outer_join_clause"
   | [node) 'ON'   &  [node^) on_using_condition -- salvisberg: added to fix indentation of ON
+  | [node) 'BULK' & [node^) BULK_COLLECT_opt          -- salvisberg: added for #82
+  | [node) 'OUTER' & [node^) cross_outer_apply_clause -- salvisberg: added for #82
+  | [node) 'CROSS' & [node^) cross_outer_apply_clause -- salvisberg: added for #82
   | [node) 'WHERE'  &  [node^) where_clause 
   | [node) 'OR'     &  [node^) condition
   | [node) 'AND'    &  [node^) condition
