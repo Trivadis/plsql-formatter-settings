@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.settings.examples
+package com.trivadis.plsql.formatter.settings.examples;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class Trivadis extends ConfiguredTestFormatter {
-    
+public class Trivadis extends ConfiguredTestFormatter {
+
     @Test
-    def set_salary() {
-        '''
+    public void set_salary() {
+        String sql = 
+            """
             CREATE OR REPLACE PROCEDURE set_salary (
                in_employee_id IN employees.employee_id%TYPE
             ) IS
@@ -39,7 +40,8 @@ class Trivadis extends ConfiguredTestFormatter {
                END IF;
             END set_salary;
             /
-        '''.formatAndAssert
+            """;
+        this.formatAndAssert(sql);
     }
 
 }
