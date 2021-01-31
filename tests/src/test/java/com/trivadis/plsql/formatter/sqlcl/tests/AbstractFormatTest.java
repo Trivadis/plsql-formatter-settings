@@ -22,7 +22,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             
             Expected: name_wo_function_call,identifier,term,factor,pri,n... skipped.
             """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final String actual = run(runType, this.tempDir.toString(), "mext=");
+        final String actual = run(runType, tempDir.toString(), "mext=");
         Assert.assertEquals(expected, actual);
 
         // package_body.pkb
@@ -53,7 +53,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             END math;
             /
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
@@ -74,16 +74,16 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
              ORDER BY d.department_name,
                       v.employee_id;
             """.trim();
-        final String actualQuery = this.getFormattedContent("query.sql");
+        final String actualQuery = getFormattedContent("query.sql");
         Assert.assertEquals(expectedQuery, actualQuery);
 
         // syntax_error.sql
-        Assert.assertEquals(this.getOriginalContent("syntax_error.sql"), this.getFormattedContent("syntax_error.sql"));
+        Assert.assertEquals(getOriginalContent("syntax_error.sql"), getFormattedContent("syntax_error.sql"));
     }
 
     public void process_pkb_only(final RunType runType) {
         // run
-        final String actual = this.run(runType, this.tempDir.toString(), "ext=pkb", "mext=");
+        final String actual = run(runType, tempDir.toString(), "ext=pkb", "mext=");
         Assert.assertTrue(actual.contains("file 1 of 1"));
 
         // package_body.pkb
@@ -114,7 +114,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             END math;
             /
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                END to_int_table;END math;
             /
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
@@ -173,13 +173,13 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
              ORDER BY d.department_name,
                       v.employee_id;
             """.trim();
-        final String actualQuery = this.getFormattedContent("query.sql");
+        final String actualQuery = getFormattedContent("query.sql");
         Assert.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_default_arbori(final RunType runType) {
         // run
-        final String actual = this.run(runType, this.tempDir.toString(), "arbori=default");
+        final String actual = run(runType, tempDir.toString(), "arbori=default");
         Assert.assertTrue(actual.contains("package_body.pkb"));
         Assert.assertTrue(actual.contains("query.sql"));
 
@@ -211,7 +211,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                END to_int_table;END math;
             /                
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
@@ -231,7 +231,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
              ORDER BY d.department_name,
                       v.employee_id;
             """.trim();
-        final String actualQuery = this.getFormattedContent("query.sql");
+        final String actualQuery = getFormattedContent("query.sql");
         Assert.assertEquals(expectedQuery, actualQuery);
     }
 
@@ -270,7 +270,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             END math;
             /
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
@@ -291,13 +291,13 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
              ORDER BY d.department_name
                     , v.employee_id;
             """.trim();
-        final String actualQuery = this.getFormattedContent("query.sql");
+        final String actualQuery = getFormattedContent("query.sql");
         Assert.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_default_xml_default_arbori(final RunType runType) {
         // run
-        final String actual = this.run(runType, this.tempDir.toString(), "xml=default", "arbori=default");
+        final String actual = run(runType, tempDir.toString(), "xml=default", "arbori=default");
         Assert.assertTrue(actual.contains("package_body.pkb"));
         Assert.assertTrue(actual.contains("query.sql"));
 
@@ -332,7 +332,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             END math;
             /
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
@@ -357,13 +357,13 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 d.department_name,
                 v.employee_id;
             """.trim();
-        final String actualQuery = this.getFormattedContent("query.sql");
+        final String actualQuery = getFormattedContent("query.sql");
         Assert.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_embedded_xml_default_arbori(final RunType runType) {
         // run
-        final String actual = this.run(runType, this.tempDir.toString(), "xml=embedded", "arbori=default");
+        final String actual = run(runType, tempDir.toString(), "xml=embedded", "arbori=default");
         Assert.assertTrue(actual.contains("package_body.pkb"));
         Assert.assertTrue(actual.contains("query.sql"));
 
@@ -395,7 +395,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                END to_int_table;END math;
             /
             """.trim();
-        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        final String actualPackageBody = getFormattedContent("package_body.pkb");
         Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
@@ -415,13 +415,13 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
              ORDER BY d.department_name,
                       v.employee_id;
             """.trim();
-        final String actualQuery = this.getFormattedContent("query.sql");
+        final String actualQuery = getFormattedContent("query.sql");
         Assert.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_markdown_only(final RunType runType) {
         // run
-        final String actualConsole = this.run(runType, this.tempDir.toString(), "ext=");
+        final String actualConsole = run(runType, tempDir.toString(), "ext=");
         Assert.assertTrue (actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
 
         // markdown.md

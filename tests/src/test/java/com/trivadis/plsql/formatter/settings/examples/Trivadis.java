@@ -41,7 +41,7 @@ public class Trivadis extends ConfiguredTestFormatter {
             END set_salary;
             /
             """;
-        this.formatAndAssert(sql);
+        formatAndAssert(sql);
     }
 
 }
