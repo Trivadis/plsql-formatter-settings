@@ -1,41 +1,46 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class Issue_83 extends ConfiguredTestFormatter {
-    
+public class Issue_83 extends ConfiguredTestFormatter {
+
     @Test
-    def select_single_column_with_hint() {
-        '''
-        	SELECT /*+ parallel(t, 2) */
-        	       a
-        	  FROM t;
-        '''.formatAndAssert
+    public void select_single_column_with_hint() {
+        final String sql = 
+            """
+            SELECT /*+ parallel(t, 2) */
+                   a
+              FROM t;
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def select_two_columns_with_hint() {
-        '''
-        	SELECT /*+ parallel(t, 2) */
-        	       a,
-        	       b
-        	  FROM t;
-        '''.formatAndAssert
+    public void select_two_columns_with_hint() {
+        final String sql = 
+            """
+            SELECT /*+ parallel(t, 2) */
+                   a,
+                   b
+              FROM t;
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def two_selects_with_hints() {
-        '''
-        	SELECT /*+ parallel(t, 2) */
-        	       a
-        	  FROM t;
+    public void two_selects_with_hints() {
+        final String sql = 
+            """
+            SELECT /*+ parallel(t, 2) */
+                   a
+              FROM t;
 
-        	SELECT /*+ parallel(t, 2) */
-        	       a
-        	  FROM t;
-        '''.formatAndAssert
+            SELECT /*+ parallel(t, 2) */
+                   a
+              FROM t;
+            """;
+        formatAndAssert(sql);
     }
-
 
 }
