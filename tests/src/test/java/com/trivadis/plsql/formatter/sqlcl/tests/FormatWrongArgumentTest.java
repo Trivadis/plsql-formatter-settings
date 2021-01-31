@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.sqlcl.tests
+package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import org.junit.Assert
-import org.junit.Test
+import org.junit.Assert;
+import org.junit.Test;
 
-class FormatWrongArgumentTest extends AbstractSqlclTest {
-    
+public class FormatWrongArgumentTest extends AbstractSqlclTest {
+
     @Test
-    def void no_arguments() {
-        val expected = '''
+    public void no_arguments() {
+        final String expected =
+            """
             
             missing mandatory <rootPath> argument.
             
@@ -27,21 +28,21 @@ class FormatWrongArgumentTest extends AbstractSqlclTest {
               arbori=<file>   path to the file containing the Arbori program for custom format settings
                               arbori=default uses default Arbori program included in sqlcl
 
-        '''
-        val actual = runScript()
-        Assert.assertEquals(expected, actual)
+            """;
+        final String actual = runScript();
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    def void wrong_root_path() {
-        val actual = runScript("/tmp/42")
-        Assert.assertTrue(actual.contains("directory /tmp/42 does not exist."))
+    public void wrong_root_path() {
+        final String actual = this.runScript("/tmp/42");
+        Assert.assertTrue(actual.contains("directory /tmp/42 does not exist."));
     }
 
     @Test
-    def void wrong_argument() {
-        val actual = runScript(tempDir.toString(), "xyz=10")
-        Assert.assertTrue(actual.contains("invalid argument xyz=10."))
+    public void wrong_argument() {
+        final String actual = this.runScript(this.tempDir.toString(), "xyz=10");
+        Assert.assertTrue(actual.contains("invalid argument xyz=10."));
     }
 
 }
