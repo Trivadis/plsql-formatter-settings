@@ -1,21 +1,22 @@
-package com.trivadis.plsql.formatter.sqlcl.tests
+package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
-    
+public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
+
     @Before
-    def void registerCommandBeforeTest() {
-        runScript("--register")
-        byteArrayOutputStream.reset
+    public void registerCommandBeforeTest() {
+        runScript("--register");
+        byteArrayOutputStream.reset();
     }
-    
+
     @Test
-    def void no_arguments() {
-        val expected = '''
-            
+    public void no_arguments() {
+        final String expected =
+            """
+
             missing mandatory <rootPath> argument.
             
             usage: tvdformat <rootPath> [options]
@@ -32,22 +33,22 @@ class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
                               xml=embedded uses advanced settings defined in format.js
               arbori=<file>   path to the file containing the Arbori program for custom format settings
                               arbori=default uses default Arbori program included in sqlcl
-
-        '''
-        val actual = runCommand("Tvdformat")
-        Assert.assertEquals(expected, actual)
+            
+            """;
+        final String actual = runCommand("Tvdformat");
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    def void wrong_root_path() {
-        val actual = runCommand("tvdformat /tmp/42")
-        Assert.assertTrue(actual.contains("directory /tmp/42 does not exist."))
+    public void wrong_root_path() {
+        final String actual = runCommand("tvdformat /tmp/42");
+        Assert.assertTrue(actual.contains("directory /tmp/42 does not exist."));
     }
 
     @Test
-    def void wrong_argument() {
-        val actual = runCommand("tvdformat " + tempDir.toString() +  " xyz=10")
-        Assert.assertTrue(actual.contains("invalid argument xyz=10."))
+    public void wrong_argument() {
+        final String actual = runCommand("tvdformat " + tempDir.toString() +  " xyz=10");
+        Assert.assertTrue(actual.contains("invalid argument xyz=10."));
     }
 
 }
