@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.settings.examples
+package com.trivadis.plsql.formatter.settings.examples;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class AllroundAutomations extends ConfiguredTestFormatter {
-    
+public class AllroundAutomations extends ConfiguredTestFormatter {
+
     @Test
-    def mgrname() {
-        '''
+    public void mgrname() {
+        String sql = 
+            """
             CREATE OR REPLACE FUNCTION mgrname (
                p_empno IN emp.empno%TYPE
             ) RETURN emp.ename%TYPE IS
@@ -37,12 +38,14 @@ class AllroundAutomations extends ConfiguredTestFormatter {
                   RETURN ( NULL );
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def emp_cursor() {
-        '''
+    public void emp_cursor() {
+        String sql =
+            """
             BEGIN
                FOR emp_cursor IN (
                   SELECT *
@@ -56,12 +59,14 @@ class AllroundAutomations extends ConfiguredTestFormatter {
                END LOOP;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def select_insert_update() {
-        '''
+    public void select_insert_update() {
+        String sql = 
+            """
             BEGIN
                -- Select
                SELECT depno AS department_number,
@@ -88,12 +93,14 @@ class AllroundAutomations extends ConfiguredTestFormatter {
                 WHERE deptno = 10;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def insertdept() {
-        '''
+    public void insertdept() {
+        String sql =
+            """
             CREATE OR REPLACE PROCEDURE insertdept (
                p_deptno  IN OUT  dept.deptno%TYPE,
                p_dname   IN      dept.dname%TYPE,
@@ -118,12 +125,14 @@ class AllroundAutomations extends ConfiguredTestFormatter {
                );
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def dept_record() {
-        '''
+    public void dept_record() {
+        String sql = 
+            """
             DECLARE
                TYPE dept_record IS RECORD (
                   deptno  NUMBER(2),
@@ -134,7 +143,8 @@ class AllroundAutomations extends ConfiguredTestFormatter {
                NULL;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
