@@ -7,7 +7,7 @@ public class Oracle extends ConfiguredTestFormatter {
 
     @Test
     public void emp_mgmt() {
-        String sql =
+        final String sql =
             """
             CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
                tot_emps   NUMBER;

@@ -7,7 +7,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
 
     @Test
     public void mgrname() {
-        String sql = 
+        final String sql =
             """
             CREATE OR REPLACE FUNCTION mgrname (
                p_empno IN emp.empno%TYPE
@@ -44,7 +44,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
 
     @Test
     public void emp_cursor() {
-        String sql =
+        final String sql =
             """
             BEGIN
                FOR emp_cursor IN (
@@ -65,7 +65,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
 
     @Test
     public void select_insert_update() {
-        String sql = 
+        final String sql =
             """
             BEGIN
                -- Select
@@ -99,7 +99,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
 
     @Test
     public void insertdept() {
-        String sql =
+        final String sql =
             """
             CREATE OR REPLACE PROCEDURE insertdept (
                p_deptno  IN OUT  dept.deptno%TYPE,
@@ -131,7 +131,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
 
     @Test
     public void dept_record() {
-        String sql = 
+        final String sql =
             """
             DECLARE
                TYPE dept_record IS RECORD (

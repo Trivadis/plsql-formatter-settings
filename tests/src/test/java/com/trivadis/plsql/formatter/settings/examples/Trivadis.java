@@ -7,7 +7,7 @@ public class Trivadis extends ConfiguredTestFormatter {
 
     @Test
     public void set_salary() {
-        String sql = 
+        final String sql =
             """
             CREATE OR REPLACE PROCEDURE set_salary (
                in_employee_id IN employees.employee_id%TYPE
