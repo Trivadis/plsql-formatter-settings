@@ -75,7 +75,7 @@ public class Issue_12 extends ConfiguredTestFormatter {
             END;
             /
             """;
-            formatAndAssert(sql);
+        formatAndAssert(sql);
     }
 
 }
