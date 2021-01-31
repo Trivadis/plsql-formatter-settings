@@ -1,33 +1,35 @@
-package com.trivadis.plsql.formatter.sqlcl.tests
+package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import org.junit.Assert
-import org.junit.Test
+import org.junit.Assert;
+import org.junit.Test;
 
-class TvdFormatRegisterTest extends AbstractSqlclTest {
-    
+public class TvdFormatRegisterTest extends AbstractSqlclTest {
+
     @Test
-    def void not_registered_feeback() {
+    public void not_registered_feeback() {
         reset();
-        val expected = '''
+        final String expected =
+            """
             Error starting at line : 1 in command -
             tvdformat
             Error report -
             Unknown Command
-        '''.toString().trim()
-        val actual = runCommand("tvdformat").trim()
+            """.trim();
+        final String actual = runCommand("tvdformat").trim();
         Assert.assertEquals(expected, actual);
-    }   
-    
+    }
+
     @Test
-    def void register_feedback() {
-        val expected = '''
+    public void register_feedback() {
+        final String expected =
+            """
             tvdformat registered as SQLcl command.
-        '''
-        val actual = runScript("--register")
-        Assert.assertEquals(expected, actual)
-        byteArrayOutputStream.reset
-        val actual2 = runScript("-r")
-        Assert.assertEquals(expected, actual2)
+            """;
+        final String actual = runScript("--register");
+        Assert.assertEquals(expected, actual);
+        byteArrayOutputStream.reset();
+        final String actual2 = runScript("-r");
+        Assert.assertEquals(expected, actual2);
     }
 
 }
