@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class Paren_expr_list extends ConfiguredTestFormatter {
+public class Paren_expr_list extends ConfiguredTestFormatter {
 
     @Test
-    def unnamed_parameters() {
-        '''
+    public void unnamed_parameters() {
+        final String sql = 
+            """
             SELECT func(a, b, c, 100),
                    func(
                       a,
@@ -20,12 +21,14 @@ class Paren_expr_list extends ConfiguredTestFormatter {
                       500
                    )
               FROM dual;
-        '''.formatAndAssert
+            """; 
+        formatAndAssert(sql);
     }
 
     @Test
-    def named_parameters() {
-        '''
+    public void named_parameters() {
+        final String sql = 
+            """
             SELECT func(
                       p1               => a,
                       p2               => b,
@@ -37,7 +40,8 @@ class Paren_expr_list extends ConfiguredTestFormatter {
                       p88888888888888  => 500
                    )
               FROM dual;
-        '''.formatAndAssert
+            """; 
+        formatAndAssert(sql);
     }
 
 }
