@@ -1,14 +1,15 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.Breaks
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Test;
 
-class Issue_64 extends ConfiguredTestFormatter {
-    
+public class Issue_64 extends ConfiguredTestFormatter {
+
     @Test
-    def update_commas_after() {
-        '''
+    public void update_commas_after() {
+        final String sql = 
+            """
             UPDATE my_table
                SET n01 = 1,
                    n02 = 2,
@@ -17,13 +18,15 @@ class Issue_64 extends ConfiguredTestFormatter {
              WHERE n01 = 1
                AND n02 = 2
                AND n03 = my_function(1, 2, 3);
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def update_commas_before() {
-        formatter.options.put(formatter.breaksComma, Breaks.Before);
-        '''
+    public void update_commas_before() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        final String sql = 
+            """
             UPDATE my_table
                SET n01 = 1
                  , n02 = 2
@@ -32,7 +35,8 @@ class Issue_64 extends ConfiguredTestFormatter {
              WHERE n01 = 1
                AND n02 = 2
                AND n03 = my_function(1, 2, 3);
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
