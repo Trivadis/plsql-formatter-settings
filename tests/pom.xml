@@ -10,11 +10,16 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>15</jdk.version>
         <xtend.version>2.24.0</xtend.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
     </properties>
     <dependencies>
+		<dependency>
+		  <groupId>org.openjdk.nashorn</groupId>
+		  <artifactId>nashorn-core</artifactId>
+		  <version>15.1.1</version>
+		</dependency>
         <dependency>
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>org.eclipse.xtend.lib</artifactId>
@@ -115,8 +120,7 @@
                 <version>3.8.1</version>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <release>${jdk.version}</release>
                 </configuration>
             </plugin>
             <plugin>
