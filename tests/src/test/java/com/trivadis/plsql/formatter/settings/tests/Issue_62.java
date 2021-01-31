@@ -1,14 +1,15 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.Breaks
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Test;
 
-class Issue_62 extends ConfiguredTestFormatter {
-    
+public class Issue_62 extends ConfiguredTestFormatter {
+
     @Test
-    def xquery_commas_after() {
-        '''
+    public void xquery_commas_after() {
+        final String sql = 
+            """
             CREATE OR REPLACE FUNCTION get_dep_cols (
                in_parse_tree  IN  XMLTYPE,
                in_column_pos  IN  INTEGER
@@ -26,13 +27,15 @@ class Issue_62 extends ConfiguredTestFormatter {
                RETURN l_result;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def xquery_commas_before() {
-        formatter.options.put(formatter.breaksComma, Breaks.Before);
-        '''
+    public void xquery_commas_before() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        final String sql = 
+            """
             CREATE OR REPLACE FUNCTION get_dep_cols (
                in_parse_tree  IN  XMLTYPE
              , in_column_pos  IN  INTEGER
@@ -50,7 +53,9 @@ class Issue_62 extends ConfiguredTestFormatter {
                RETURN l_result;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
+
     }
 
 }
