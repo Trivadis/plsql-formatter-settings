@@ -1,23 +1,25 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format
-import oracle.dbtools.app.Format.BreaksX2
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
+import java.io.IOException;
+
+public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
     @Before
-    def void setup() {
-        formatter.options.put(formatter.extraLinesAfterSignificantStatements, BreaksX2.Keep);
-        formatter.options.put(formatter.kwCase, Format.Case.NoCaseChange)
+    public void setup() {
+        getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.Keep);
+        getFormatter().options.put(getFormatter().kwCase, Format.Case.NoCaseChange);
     }
 
     @Test
-    def pkg() {
-        val input = '''
+    public void pkg() throws IOException {
+        final String input =
+            """
             /*
              * comment before pkg
              */
@@ -56,8 +58,9 @@ class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
                 
             end pkg;
             /
-        '''
-        val expected = '''
+            """;
+        final String expected = 
+            """
             /*
              * comment before pkg
              */
@@ -86,9 +89,9 @@ class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
             end pkg;
             /
-        '''.toString.trim
-        val actual = formatter.format(input)
-        Assert.assertEquals(expected, actual)
+            """.trim();
+        final String actual = getFormatter().format(input);
+        Assert.assertEquals(expected, actual);
     }
 
 }
