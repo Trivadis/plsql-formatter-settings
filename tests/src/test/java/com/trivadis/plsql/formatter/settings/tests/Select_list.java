@@ -1,14 +1,17 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format
-import org.junit.Test
+import org.junit.Test;
 
-class Select_list extends ConfiguredTestFormatter {
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+
+import oracle.dbtools.app.Format;
+
+public class Select_list extends ConfiguredTestFormatter {
 
     @Test
-    def select_list_comma_after() {
-        '''
+    public void select_list_comma_after() {
+        final String sql = 
+            """
             SELECT CASE a
                       WHEN 1  THEN
                          'one'
@@ -29,13 +32,15 @@ class Select_list extends ConfiguredTestFormatter {
                          'else'
                    END a3
               FROM t2;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def select_list_comma_before() {
-        formatter.options.put(formatter.breaksComma, Format.Breaks.Before)
-        '''
+    public void select_list_comma_before() {
+        formatter.options.put(formatter.breaksComma, Format.Breaks.Before);
+        final String sql = 
+            """
             SELECT CASE a
                       WHEN 1  THEN
                          'one'
@@ -56,7 +61,9 @@ class Select_list extends ConfiguredTestFormatter {
                          'else'
                    END a3
               FROM t2;
-        '''.formatAndAssert(true)
+            """;
+
+        formatAndAssert(sql, true);
     }
 
 }
