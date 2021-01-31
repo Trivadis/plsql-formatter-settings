@@ -1,20 +1,21 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format
-import org.junit.Before
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Before;
+import org.junit.Test;
 
-class Issue_5 extends ConfiguredTestFormatter {
-    
+public class Issue_5 extends ConfiguredTestFormatter {
+
     @Before
-    def void setup() {
-        formatter.options.put(formatter.kwCase, Format.Case.lower)
+    public void setup() {
+        getFormatter().options.put(getFormatter().kwCase, Format.Case.lower);
     }
-    
+
     @Test
-    def object_type_spec_overriding_member_function() {
-        '''
+    public void object_type_spec_overriding_member_function() {
+        final String sql = 
+            """
             create or replace type ut_xunit_reporter under ut_junit_reporter (
                constructor function ut_xunit_reporter (
                   self in out nocopy ut_xunit_reporter
@@ -22,12 +23,14 @@ class Issue_5 extends ConfiguredTestFormatter {
                overriding member function get_description return varchar2
             ) not final
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def object_type_spec_final_member_function() {
-        '''
+    public void object_type_spec_final_member_function() {
+        final String sql = 
+            """
             create or replace type ut_xunit_reporter under ut_junit_reporter (
                constructor function ut_xunit_reporter (
                   self in out nocopy ut_xunit_reporter
@@ -35,12 +38,14 @@ class Issue_5 extends ConfiguredTestFormatter {
                final member function get_description return varchar2
             ) not final
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def object_type_body_overriding_member_function() {
-        '''
+    public void object_type_body_overriding_member_function() {
+        final String sql = 
+            """
             create or replace type body ut_xunit_reporter is
                constructor function ut_xunit_reporter (
                   self in out nocopy ut_xunit_reporter
@@ -56,12 +61,14 @@ class Issue_5 extends ConfiguredTestFormatter {
                end;
             end;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def object_type_body_final_member_function() {
-        '''
+    public void object_type_body_final_member_function() {
+        final String sql = 
+            """
             create or replace type body ut_xunit_reporter is
                constructor function ut_xunit_reporter (
                   self in out nocopy ut_xunit_reporter
@@ -77,7 +84,8 @@ class Issue_5 extends ConfiguredTestFormatter {
                end;
             end;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
