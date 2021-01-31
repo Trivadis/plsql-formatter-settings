@@ -1,29 +1,33 @@
-package com.trivadis.plsql.formatter.sqlcl.tests
+package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import java.io.File
-import org.junit.Assert
+import org.junit.Assert;
 
-abstract class AbstractFormatTest extends AbstractSqlclTest {
-    
-    def void process_dir(RunType runType) {
+import java.io.File;
+import java.util.Objects;
+
+public abstract class AbstractFormatTest extends AbstractSqlclTest {
+
+    public void process_dir(final RunType runType) {
         // console output
-        val expected = '''
+        final String expected =
+            """
 
-            Formatting file 1 of 3: «tempDir.toString()»«File.separator»package_body.pkb... done.
-            Formatting file 2 of 3: «tempDir.toString()»«File.separator»query.sql... done.
-            Formatting file 3 of 3: «tempDir.toString()»«File.separator»syntax_error.sql... Syntax Error at line 6, column 12
+            Formatting file 1 of 3: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
+            Formatting file 2 of 3: #TEMP_DIR##FILE_SEP#query.sql... done.
+            Formatting file 3 of 3: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
             
             
                for r in /*(*/ select x.* from x join y on y.a = x.a)
-                        ^^^                                          
+                        ^^^                                         \s
             
             Expected: name_wo_function_call,identifier,term,factor,pri,n... skipped.
-        '''
-        val actual = run(runType, tempDir.toString(), "mext=")
-        Assert.assertEquals(expected, actual)
-        
+            """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final String actual = run(runType, this.tempDir.toString(), "mext=");
+        Assert.assertEquals(expected, actual);
+
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
                FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
@@ -48,12 +52,13 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                END to_int_table;
             END math;
             /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
-        val expectedQuery = '''
+        final String expectedQuery =
+            """
             SELECT d.department_name,
                    v.employee_id,
                    v.last_name
@@ -68,22 +73,22 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                    )
              ORDER BY d.department_name,
                       v.employee_id;
-        '''.toString.trim
-        val actualQuery = getFormattedContent("query.sql")
-        Assert.assertEquals(expectedQuery, actualQuery)
+            """.trim();
+        final String actualQuery = this.getFormattedContent("query.sql");
+        Assert.assertEquals(expectedQuery, actualQuery);
 
         // syntax_error.sql
-        Assert.assertEquals(getOriginalContent("syntax_error.sql"), getFormattedContent("syntax_error.sql"))
-
+        Assert.assertEquals(this.getOriginalContent("syntax_error.sql"), this.getFormattedContent("syntax_error.sql"));
     }
 
-    def void process_pkb_only(RunType runType) {
+    public void process_pkb_only(final RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "ext=pkb", "mext=")
-        Assert.assertTrue(actual.contains("file 1 of 1"))
-        
+        final String actual = this.run(runType, this.tempDir.toString(), "ext=pkb", "mext=");
+        Assert.assertTrue(actual.contains("file 1 of 1"));
+
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
                FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
@@ -108,19 +113,21 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                END to_int_table;
             END math;
             /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
     }
-    
-    def void process_with_original_arbori(RunType runType) {
+
+    public void process_with_original_arbori(final RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "arbori=" + Thread.currentThread().getContextClassLoader().getResource("original/20.3.0/custom_format.arbori").path)
-        Assert.assertTrue(actual.contains("package_body.pkb"))
-        Assert.assertTrue(actual.contains("query.sql"))
+        final String actual = run(runType, tempDir.toString(), "arbori=" +
+                Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("original/20.3.0/custom_format.arbori")).getPath());
+        Assert.assertTrue(actual.contains("package_body.pkb"));
+        Assert.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
                   in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
@@ -145,12 +152,13 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                   END LOOP integer_tokens;RETURN l_result;
                END to_int_table;END math;
             /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
- 
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+
         // query.sql
-        val expectedQuery = '''
+        final String expectedQuery =
+            """
             SELECT d.department_name,
                    v.employee_id,
                    v.last_name
@@ -164,19 +172,20 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                                           'Public Relations' )
              ORDER BY d.department_name,
                       v.employee_id;
-        '''.toString.trim
-        val actualQuery = getFormattedContent("query.sql")
-        Assert.assertEquals(expectedQuery, actualQuery)
+            """.trim();
+        final String actualQuery = this.getFormattedContent("query.sql");
+        Assert.assertEquals(expectedQuery, actualQuery);
     }
 
-    def void process_with_default_arbori(RunType runType) {
+    public void process_with_default_arbori(final RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "arbori=default")
-        Assert.assertTrue(actual.contains("package_body.pkb"))
-        Assert.assertTrue(actual.contains("query.sql")) 
+        final String actual = this.run(runType, this.tempDir.toString(), "arbori=default");
+        Assert.assertTrue(actual.contains("package_body.pkb"));
+        Assert.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
                   in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
@@ -200,13 +209,14 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                      l_pos               := l_pos + 1;
                   END LOOP integer_tokens;RETURN l_result;
                END to_int_table;END math;
-            /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
- 
+            /                
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+
         // query.sql
-        val expectedQuery = '''
+        final String expectedQuery =
+            """
             SELECT d.department_name,
                    v.employee_id,
                    v.last_name
@@ -220,19 +230,21 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                                           'Public Relations' )
              ORDER BY d.department_name,
                       v.employee_id;
-        '''.toString.trim
-        val actualQuery = getFormattedContent("query.sql")
-        Assert.assertEquals(expectedQuery, actualQuery)
+            """.trim();
+        final String actualQuery = this.getFormattedContent("query.sql");
+        Assert.assertEquals(expectedQuery, actualQuery);
     }
 
-    def void process_with_xml(RunType runType) {
+    public void process_with_xml(final RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "xml=" + Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml").path)
-        Assert.assertTrue(actual.contains("package_body.pkb"))
-        Assert.assertTrue(actual.contains("query.sql"))
+        final String actual = run(runType, tempDir.toString(), "xml=" +
+                Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml")).getPath());
+        Assert.assertTrue(actual.contains("package_body.pkb"));
+        Assert.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
                FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2
@@ -257,12 +269,13 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                END to_int_table;
             END math;
             /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
- 
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+
         // query.sql
-        val expectedQuery = '''
+        final String expectedQuery =
+            """
             SELECT d.department_name
                  , v.employee_id
                  , v.last_name
@@ -277,19 +290,20 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                    )
              ORDER BY d.department_name
                     , v.employee_id;
-        '''.toString.trim
-        val actualQuery = getFormattedContent("query.sql")
-        Assert.assertEquals(expectedQuery, actualQuery)
+            """.trim();
+        final String actualQuery = this.getFormattedContent("query.sql");
+        Assert.assertEquals(expectedQuery, actualQuery);
     }
 
-    def void process_with_default_xml_default_arbori(RunType runType) {
+    public void process_with_default_xml_default_arbori(final RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "xml=default", "arbori=default")
-        Assert.assertTrue(actual.contains("package_body.pkb"))
-        Assert.assertTrue(actual.contains("query.sql"))
+        final String actual = this.run(runType, this.tempDir.toString(), "xml=default", "arbori=default");
+        Assert.assertTrue(actual.contains("package_body.pkb"));
+        Assert.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS
             
                 FUNCTION to_int_table (
@@ -317,12 +331,13 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             
             END math;
             /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
- 
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+
         // query.sql
-        val expectedQuery = '''
+        final String expectedQuery =
+            """
             SELECT
                 d.department_name,
                 v.employee_id,
@@ -341,19 +356,20 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             ORDER BY
                 d.department_name,
                 v.employee_id;
-        '''.toString.trim
-        val actualQuery = getFormattedContent("query.sql")
-        Assert.assertEquals(expectedQuery, actualQuery)
+            """.trim();
+        final String actualQuery = this.getFormattedContent("query.sql");
+        Assert.assertEquals(expectedQuery, actualQuery);
     }
 
-    def void process_with_embedded_xml_default_arbori(RunType runType) {
+    public void process_with_embedded_xml_default_arbori(final RunType runType) {
         // run
-        val actual = run(runType, tempDir.toString(), "xml=embedded", "arbori=default")
-        Assert.assertTrue(actual.contains("package_body.pkb"))
-        Assert.assertTrue(actual.contains("query.sql"))
+        final String actual = this.run(runType, this.tempDir.toString(), "xml=embedded", "arbori=default");
+        Assert.assertTrue(actual.contains("package_body.pkb"));
+        Assert.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
-        val expectedPackageBody = '''
+        final String expectedPackageBody =
+            """
             CREATE OR REPLACE PACKAGE BODY the_api.math AS FUNCTION to_int_table (
                   in_integers  IN  VARCHAR2,
                   in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
@@ -378,12 +394,13 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                   END LOOP integer_tokens;RETURN l_result;
                END to_int_table;END math;
             /
-        '''.toString.trim
-        val actualPackageBody = getFormattedContent("package_body.pkb")
-        Assert.assertEquals(expectedPackageBody, actualPackageBody)
- 
+            """.trim();
+        final String actualPackageBody = this.getFormattedContent("package_body.pkb");
+        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+
         // query.sql
-        val expectedQuery = '''
+        final String expectedQuery =
+            """
             SELECT d.department_name,
                    v.employee_id,
                    v.last_name
@@ -397,24 +414,25 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
                                           'Public Relations' )
              ORDER BY d.department_name,
                       v.employee_id;
-        '''.toString.trim
-        val actualQuery = getFormattedContent("query.sql")
-        Assert.assertEquals(expectedQuery, actualQuery)
+            """.trim();
+        final String actualQuery = this.getFormattedContent("query.sql");
+        Assert.assertEquals(expectedQuery, actualQuery);
     }
-    
-    def process_markdown_only(RunType runType) {
+
+    public void process_markdown_only(final RunType runType) {
         // run
-        val actualConsole = run(runType, tempDir.toString(), "ext=")
-        Assert.assertTrue (actualConsole.contains('''Formatting file 1 of 1: «tempDir.toString()»«File.separator»markdown.md... done.'''))
-        
+        final String actualConsole = this.run(runType, this.tempDir.toString(), "ext=");
+        Assert.assertTrue (actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
+
         // markdown.md
-        val actualMarkdown = getFormattedContent("markdown.md").trim
-        val expectedMarkdown = '''
+        final String actualMarkdown = getFormattedContent("markdown.md").trim();
+        final String expectedMarkdown =
+            """
             # Titel
             
             ## Introduction
             
-            This is a Markdown file with some `code blocks`. 
+            This is a Markdown file with some `code blocks`.\s
             
             ## Package Body
             
@@ -469,10 +487,10 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
             Here's the content of query.sql, but the code block must not be formatted:
             
             ```
-            Select d.department_name,v.  employee_id 
-            ,v 
+            Select d.department_name,v.  employee_id\s
+            ,v\s
             . last_name frOm departments d CROSS APPLY(select*from employees e
-              wHERE e.department_id=d.department_id) v WHeRE 
+              wHERE e.department_id=d.department_id) v WHeRE\s
             d.department_name in ('Marketing'
             ,'Operations',
             'Public Relations') Order By d.
@@ -509,8 +527,8 @@ abstract class AbstractFormatTest extends AbstractSqlclTest {
               return bar++;
             };
             ```
-        '''.toString.trim
-         Assert.assertEquals(expectedMarkdown, actualMarkdown)
+            """.trim();
+        Assert.assertEquals(expectedMarkdown, actualMarkdown);
     }
 
 }
