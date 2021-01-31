@@ -1,14 +1,15 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.Breaks
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Test;
 
-class Issue_57 extends ConfiguredTestFormatter {
-    
+public class Issue_57 extends ConfiguredTestFormatter {
+
     @Test
-    def xmltable_commas_after() {
-        '''
+    public void xmltable_commas_after() {
+        final String sql = 
+            """
             SELECT stg.payload_type,
                    xt_hdr.*
               FROM stg,
@@ -20,13 +21,15 @@ class Issue_57 extends ConfiguredTestFormatter {
                               message_type  VARCHAR2(40)     PATH 'Message_Type',
                               company_id    NUMBER           PATH 'Company_ID'
                    ) hdr;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def xmltable_commas_before() {
-        formatter.options.put(formatter.breaksComma, Breaks.Before);
-        '''
+    public void xmltable_commas_before() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        final String sql = 
+            """
             SELECT stg.payload_type
                  , xt_hdr.*
               FROM stg
@@ -38,7 +41,8 @@ class Issue_57 extends ConfiguredTestFormatter {
                             , message_type  VARCHAR2(40)     PATH 'Message_Type'
                             , company_id    NUMBER           PATH 'Company_ID'
                    ) hdr;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
