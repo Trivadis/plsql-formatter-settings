@@ -1,21 +1,22 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.BreaksX2
-import org.junit.Before
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Before;
+import org.junit.Test;
 
-class Issue_13 extends ConfiguredTestFormatter {
-    
+public class Issue_13 extends ConfiguredTestFormatter {
+
     @Before
-    def void setup() {
-        formatter.options.put(formatter.identSpaces, 4)
-        formatter.options.put(formatter.extraLinesAfterSignificantStatements, BreaksX2.X2);
+    public void setup() {
+        getFormatter().options.put(getFormatter().identSpaces, 4);
+        getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X2);
     }
-    
+
     @Test
-    def original_case_with_unnecessary_semicolon_for_set() {
-        '''
+    public void original_case_with_unnecessary_semicolon_for_set() {
+        final String sql =
+            """
             SET ECHO OFF;
             
             CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
@@ -37,20 +38,22 @@ class Issue_13 extends ConfiguredTestFormatter {
             /
             
             SET ECHO ON
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
-
     @Test
-    def simplified_case() {
-        '''
+    public void simplified_case() {
+        final String sql =
+            """
             SET ECHO OFF
             
             SELECT *
               FROM dual;
             
             SET ECHO ON
-        '''.formatAndAssert
-    }
+            """;
+        formatAndAssert(sql);
 
+    }
 }
