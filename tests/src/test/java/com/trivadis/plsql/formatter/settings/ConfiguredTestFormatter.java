@@ -12,7 +12,7 @@ import oracle.dbtools.app.Format;
 import oracle.dbtools.app.Persist2XML;
 
 public abstract class ConfiguredTestFormatter {
-    private final Format formatter;
+    protected final Format formatter;
 
     public ConfiguredTestFormatter() {
         super();
