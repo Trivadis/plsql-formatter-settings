@@ -1,14 +1,17 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.eclipse.xtend2.lib.StringConcatenation;
+import org.junit.Test;
 
-class Issue_54 extends ConfiguredTestFormatter {
-    
+@SuppressWarnings("all")
+public class Issue_54 extends ConfiguredTestFormatter {
+
     @Test
-    def align_table_alias() {
-        formatter.options.put(formatter.alignTabColAliases, true);
-        '''
+    public void align_table_alias() {
+        getFormatter().options.put(getFormatter().alignTabColAliases, Boolean.valueOf(true));
+        final String sql = 
+            """
             BEGIN
                FOR rec IN (
                   SELECT r.country_region         AS region,
@@ -38,7 +41,8 @@ class Issue_54 extends ConfiguredTestFormatter {
                END LOOP;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
