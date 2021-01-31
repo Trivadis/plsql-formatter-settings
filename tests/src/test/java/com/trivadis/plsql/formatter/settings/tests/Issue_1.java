@@ -1,7 +1,6 @@
 package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import org.junit.Test;
 
 public class Issue_1 extends ConfiguredTestFormatter {
