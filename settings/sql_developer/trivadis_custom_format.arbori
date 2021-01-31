@@ -694,11 +694,26 @@ ancestor < node & ![node^) "(x,y,z)" & [node) column  & (
  | [ancestor) range_values_clause 
 );
 
+-- salvisberg: added to solve issue #68
+mergeStatementNodes:
+    [node) 'UPDATE' & [node^) merge_update_clause
+  | [node) 'SET' & [node^) merge_update_clause
+  | [node) 'DELETE' & [node^) merge_update_clause
+  | [node) where_clause & [node^) merge_update_clause
+  | [node) 'INSERT' & [node^) merge_insert_clause
+  | [node) merge_insert_clause[23,35)
+  | [node) merge_insert_clause[26,33)
+  | [node) 'VALUES' & [node^) merge_insert_clause
+  | [node) "expr_list_def" & [node^) merge_insert_clause[43,50)
+  | [node) where_clause & [node^) merge_insert_clause
+;
+
 
 indentedNodes1: 
     simpleIndentConditions 
   | closestAncestorDescendent 
   | splittedNodes               -- salvisberg: added to solve issue #33
+  | mergeStatementNodes         -- salvisberg: added to solve issue #68
 ->
 ;
 
@@ -709,6 +724,27 @@ indentedNodes1:
 indentedNodes2: indentedNodes1
 ->
 ;
+
+-- salvisberg: added to solve issue #68
+-- missing (null) or empty ('') entry in newLinePostition is treated differently by subsequent processing (e.g. pairwiseAlignments)
+removeNewlinesBeforeNode:
+    [node) column & [node-1) 'SET' & [node^) merge_update_clause
+  | [node) '(' & [node^) merge_insert_clause[23,35)
+  | [node) '(' & [node^) merge_insert_clause[43,50)
+  -> {
+    var node = tuple.get('node');
+    struct.putNewline(node.from, null);
+  }
+  
+-- salvisberg: added to solve issue #68
+-- these nodes need an explicit space as newLinePosition
+setSpaceBeforeNode:
+    [node) 'VALUES' & [node-1) merge_insert_clause[23,35)
+  | [node) identifier & [node-1) subquery & [node^) merge
+  -> {
+    var node = tuple.get('node');
+  	struct.putNewline(node.from, ' ');
+  }
 
 /**
  * The skipWhiteSpaceBeforeNode and skipWhiteSpaceBeforeNode are
@@ -908,6 +944,7 @@ _extraBrkBefore:
 | [node) 'ELSIF'
 | [node) 'ELSE'
 | [node) 'USING'  & [node^) merge 
+| [node) 'ON'     & [node^) merge                      -- salvisberg, issue #68
 | [node) 'INSERT' & [node^) merge_insert_clause 
 | [node) 'VALUES' & [node^) merge_insert_clause 
 | [node) 'SET'    & [node^) merge_update_clause 
@@ -1112,14 +1149,32 @@ rightAlignments: :alignRight & (
   | [node) 'HAVING' &  [node^) having_clause 
   | [node) 'ORDER'  &  [node^) order_by_clause
   | [node) 'UPDATE'  
-  | [node) 'SET'  & ![node^) merge_update_clause & ![node^) SET -- salvisberg: extended to fix issue #13
+  | [node) 'SET'  & ![node^) SET -- salvisberg: extended to fix issue #13, include merge_update_clause to fix #68
   | [node) 'FETCH' &  [node^) row_limiting_clause
   | [node) "inner_cross_join_clause"
   | [node) outer_join_type
 ) ->  
 ;
 
-
+-- salvisberg: added to fix issue #68, same logic as in rightAlignments callback but with shorter "merge" keyword
+rightAlignmentsMerge: 
+  :alignRight & (
+  	  [node) 'ON' & [node^) merge
+  	| [node) 'WHEN' & [node+1) 'MATCHED'
+  	| [node) 'WHEN' & [node+1) 'NOT' & [node+2) 'MATCHED'
+  )
+  -> {
+    var node = tuple.get("node");
+    var content = target.getSrc().get(node.from).content;
+    var delta = "merge".length - content.length;
+    var nodeIndent = struct.getNewline(node.from);
+    if (nodeIndent != null) {
+      for (var j=0; j<delta; j++) {
+        nodeIndent += ' ';
+      }
+      struct.putNewline(node.from, nodeIndent);
+    }
+  }
 
 /**
  * All alignments (paddings)
@@ -1402,6 +1457,13 @@ pairwiseAlignementCloseParen:
   & predecessor = node^^ 
 ;
 
+pairwiseAlignmentMergeUpdate:
+  :breaksBeforeComma
+  & [predecessor) column
+  & [node) merge_update_clause[36,56)
+  & predecessor = node-1-1-1
+;
+
 pairwiseAlignments: 
   --  pairwiseAlignments00            -- salvisberg, disabled (#76)
   --| pairwiseAlignments0             -- salvisberg, disabled (#76)
@@ -1425,6 +1487,7 @@ pairwiseAlignments:
   | pairwiseAlignmentXmlTableColumn   -- salvisberg, added, issue #57
   | pairwiseAlignementAssocArg        -- salvisberg, added, issue #33
   | pairwiseAlignementCloseParen      -- salvisberg, added, issue #33
+  | pairwiseAlignmentMergeUpdate      -- salvisberg, added, issue #68
 -> 
 ;
 
@@ -1443,8 +1506,9 @@ less2Spaces:   :breaksBeforeComma & (
   | [node-1) "expr_list" & [node) ','           -- in insert clause
   | [node^) query_partition_clause[14,21) & [node) ','
   | [node+1) alias_in_out_constraints & [node) ','  
-  | [node+1) column & [node+2) '=' & [node) ','  
+  --| [node+1) column & [node+2) '=' & [node) ',' -- salvisberg, disabled, issue #68 (redundant) 
   | [node+1) update_set_clause_expr & [node) ','  -- salvisberg, added, issue #64
+  | [node+1) column & [node) ','                  -- salvisberg, added, issue #68
 ) -> {
     var node = tuple.get("node");       
     var nodeIndent = struct.getNewline(node.from);
