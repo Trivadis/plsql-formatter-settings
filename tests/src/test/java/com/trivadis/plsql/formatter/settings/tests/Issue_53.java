@@ -1,16 +1,17 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.Breaks
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Test;
 
-class Issue_53 extends ConfiguredTestFormatter {
-    
+public class Issue_53 extends ConfiguredTestFormatter {
+
     @Test
-    def commas_before_no_ws() {
-        formatter.options.put(formatter.breaksComma, Breaks.Before);
-        formatter.options.put(formatter.spaceAfterCommas, false);
-        '''
+    public void commas_before_no_ws() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        getFormatter().options.put(getFormatter().spaceAfterCommas, Boolean.valueOf(false));
+        final String sql = 
+            """
             BEGIN
                FOR rec IN (
                   SELECT r.country_region AS region
@@ -40,7 +41,8 @@ class Issue_53 extends ConfiguredTestFormatter {
                END LOOP;
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
