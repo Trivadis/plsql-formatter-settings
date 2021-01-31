@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class Issue_36 extends ConfiguredTestFormatter {
-    
+public class Issue_36 extends ConfiguredTestFormatter {
+
     @Test
-    def if_only() {
-        '''
+    public void if_only() {
+        final String sql = 
+            """
             CREATE OR REPLACE PROCEDURE p IS
             BEGIN
                -- comment 1
@@ -18,13 +19,14 @@ class Issue_36 extends ConfiguredTestFormatter {
                $END
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
-
     @Test
-    def if_else() {
-        '''
+    public void if_else() {
+        final String sql = 
+            """
             CREATE OR REPLACE PROCEDURE p IS
             BEGIN
                -- comment 1
@@ -37,12 +39,14 @@ class Issue_36 extends ConfiguredTestFormatter {
                $END
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def if_elsif_else() {
-        '''
+    public void if_elsif_else() {
+        final String sql = 
+            """
             CREATE OR REPLACE PROCEDURE p IS
             BEGIN
                -- comment 1
@@ -58,12 +62,14 @@ class Issue_36 extends ConfiguredTestFormatter {
                $END
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def false_if_elsif_else_lower() {
-        '''
+    public void false_if_elsif_else_lower() {
+        final String sql = 
+            """
             CREATE OR REPLACE PROCEDURE p IS
             BEGIN
                -- comment 1
@@ -79,7 +85,8 @@ class Issue_36 extends ConfiguredTestFormatter {
                $end
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
