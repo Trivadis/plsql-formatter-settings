@@ -1,13 +1,15 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.eclipse.xtend2.lib.StringConcatenation;
+import org.junit.Test;
 
-class Issue_1 extends ConfiguredTestFormatter {
-    
+public class Issue_1 extends ConfiguredTestFormatter {
+
     @Test
-    def json_dot_notation() {
-        '''
+    public void json_dot_notation() {
+        final String sql =
+            """
             CREATE TABLE t (
                c CLOB CHECK ( c IS JSON )
             );
@@ -23,9 +25,10 @@ class Issue_1 extends ConfiguredTestFormatter {
                    j.c.accountType
               FROM t j
              WHERE j.c.accountType = 'A';
-            -- 
+            --\s
             DROP TABLE t PURGE;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
