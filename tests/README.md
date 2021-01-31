@@ -8,11 +8,10 @@ We've started with a few simple test cases and will add new tests based on the r
 
 ## How to Run Tests
 
-1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 20.2.0
-2. Download and install a JDK8, e.g. from
-   - https://www.java.com/en/download/
-   - https://github.com/graalvm/graalvm-ce-builds/releases
-   - https://openjdk.java.net/install/
+1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 20.4.0
+2. Download and install a JDK 15, e.g. from
+   - https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html
+   - https://jdk.java.net/
 3. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.6.3
 4. [Download](https://git-scm.com/downloads) and install a git command line client
 5. Clone the plsql-formatter-settings repository
@@ -26,19 +25,15 @@ We've started with a few simple test cases and will add new tests based on the r
 
 	Amend the parameter `sqlcl.libdir` to match the path of the lib directory of you SQLcl installation. This folder is used to reference the `dbtools-common.jar` library (containing the formatter and its dependencies) and the `dbtools-sqlcl.jar` (containing SQLcl related features) which are not available in public Maven repositories.
 
-## Eclipse IDE
-
-We use the [Eclipse IDE for Java and DSL Developers](https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-java-and-dsl-developers) because we use Xtend to handle multiline strings (unformatted and formatted code) in a convientient way. You may use any IDE that can import Maven projects. However, Xtend support is poor outside of the Eclipse ecosystem. You've been warned.
-
 ## Excerpt of `mvn clean test` Output
 
 ```
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ---------------< com.trivadis:plsql.formatter.settings >----------------
-[INFO] Building com.trivadis.org.plsql.formatter.settings 20.3.0-SNAPSHOT
+[INFO] Building com.trivadis.org.plsql.formatter.settings 20.4.0-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
-[INFO] 
+[INFO]  
 ...
 [INFO] 
 [INFO] -------------------------------------------------------
@@ -48,12 +43,12 @@ We use the [Eclipse IDE for Java and DSL Developers](https://www.eclipse.org/dow
 [INFO] 
 [INFO] Results:
 [INFO] 
-[[INFO] Tests run: 82, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 113, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  32.764 s
-[INFO] Finished at: 2020-11-02T05:24:13+01:00
+[INFO] Total time:  18.068 s
+[INFO] Finished at: 2021-01-31T22:57:41+01:00
 [INFO] ------------------------------------------------------------------------
 ```
