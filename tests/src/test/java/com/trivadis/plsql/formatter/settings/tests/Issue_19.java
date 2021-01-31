@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class Issue_19 extends ConfiguredTestFormatter {
-    
+public class Issue_19 extends ConfiguredTestFormatter {
+
     @Test
-    def arg_list_split_5_or_more_params() {
-        '''
+    public void arg_list_split_5_or_more_params() {
+        final String sql =
+            """
             BEGIN
                f();
                f(1);
@@ -31,12 +32,14 @@ class Issue_19 extends ConfiguredTestFormatter {
                );
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def expr_list_split_5_or_more_params() {
-        '''
+    public void expr_list_split_5_or_more_params() {
+        final String sql =
+            """
             SELECT f(),
                    f(1),
                    f(1, 2),
@@ -58,12 +61,14 @@ class Issue_19 extends ConfiguredTestFormatter {
                       6
                    )
               FROM dual;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def nested_arg_list() {
-        '''
+    public void nested_arg_list() {
+        final String sql =
+            """
             BEGIN
                f(
                   f(1),
@@ -80,12 +85,14 @@ class Issue_19 extends ConfiguredTestFormatter {
                );
             END;
             /
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def nested_expr_list() {
-        '''
+    public void nested_expr_list() {
+        final String sql =
+            """
             SELECT f(
                       f(1),
                       f(1, 2),
@@ -100,7 +107,8 @@ class Issue_19 extends ConfiguredTestFormatter {
                       )
                    )
               FROM dual;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
