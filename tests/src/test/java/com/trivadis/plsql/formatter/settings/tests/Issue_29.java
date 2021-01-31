@@ -1,14 +1,15 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.Breaks
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Test;
 
-class Issue_29 extends ConfiguredTestFormatter {
-    
+public class Issue_29 extends ConfiguredTestFormatter {
+
     @Test
-    def commas_after() {
-        '''
+    public void commas_after() {
+        final String sql = 
+            """
             SELECT *
               FROM dba_tables
              WHERE table_name IN (
@@ -22,13 +23,15 @@ class Issue_29 extends ConfiguredTestFormatter {
                    )
                AND temporary = 'N'
              ORDER BY blocks DESC;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def commas_before() {
-        formatter.options.put(formatter.breaksComma, Breaks.Before);
-        '''
+    public void commas_before() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        final String sql = 
+            """
             SELECT *
               FROM dba_tables
              WHERE table_name IN (
@@ -42,7 +45,8 @@ class Issue_29 extends ConfiguredTestFormatter {
                    )
                AND temporary = 'N'
              ORDER BY blocks DESC;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
 }
