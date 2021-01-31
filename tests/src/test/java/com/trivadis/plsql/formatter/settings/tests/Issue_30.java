@@ -1,14 +1,14 @@
-package com.trivadis.plsql.formatter.settings.tests
+package com.trivadis.plsql.formatter.settings.tests;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import oracle.dbtools.app.Format.Breaks
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.Test;
 
-class Issue_30 extends ConfiguredTestFormatter {
-    
+public class Issue_30 extends ConfiguredTestFormatter {
     @Test
-    def into_clause_commas_after() {
-        '''
+    public void into_clause_commas_after() {
+        final String sql = 
+            """
             SELECT namespace,
                    key,
                    scope
@@ -17,13 +17,15 @@ class Issue_30 extends ConfiguredTestFormatter {
                    l_scope
               FROM configuration
              WHERE id = p_id;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 
     @Test
-    def into_clause_commas_before() {
-        formatter.options.put(formatter.breaksComma, Breaks.Before);
-        '''
+    public void into_clause_commas_before() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        final String sql = 
+            """
             SELECT namespace
                  , key
                  , scope
@@ -32,6 +34,7 @@ class Issue_30 extends ConfiguredTestFormatter {
                  , l_scope
               FROM configuration
              WHERE id = p_id;
-        '''.formatAndAssert
+            """;
+        formatAndAssert(sql);
     }
 }
