@@ -1,13 +1,14 @@
-package com.trivadis.plsql.formatter.settings.examples
+package com.trivadis.plsql.formatter.settings.examples;
 
-import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter
-import org.junit.Test
+import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.Test;
 
-class Oracle extends ConfiguredTestFormatter {
-    
+public class Oracle extends ConfiguredTestFormatter {
+
     @Test
-    def emp_mgmt() {
-        '''
+    public void emp_mgmt() {
+        String sql =
+            """
             CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
                tot_emps   NUMBER;
                tot_depts  NUMBER;
@@ -92,7 +93,9 @@ class Oracle extends ConfiguredTestFormatter {
                END;
             END emp_mgmt;
             /
-        '''.formatAndAssert
+            """;
+
+        formatAndAssert(sql);
     }
 
 }
