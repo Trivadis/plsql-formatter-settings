@@ -10,16 +10,16 @@ public class Issue_57 extends ConfiguredTestFormatter {
     public void xmltable_commas_after() {
         final String sql = 
             """
-            SELECT stg.payload_type,
+            select stg.payload_type,
                    xt_hdr.*
-              FROM stg,
-                   XMLTABLE (
+              from stg,
+                   xmltable (
                       '/XML/Header'
-                      PASSING xmltype.createxml(stg.xml_payload)
-                      COLUMNS source        VARCHAR2(50)     PATH 'Source',
-                              action_type   VARCHAR2(50)     PATH 'Action_Type',
-                              message_type  VARCHAR2(40)     PATH 'Message_Type',
-                              company_id    NUMBER           PATH 'Company_ID'
+                      passing xmltype.createxml(stg.xml_payload)
+                      columns source        varchar2(50)     path 'Source',
+                              action_type   varchar2(50)     path 'Action_Type',
+                              message_type  varchar2(40)     path 'Message_Type',
+                              company_id    number           path 'Company_ID'
                    ) hdr;
             """;
         formatAndAssert(sql);
@@ -30,16 +30,16 @@ public class Issue_57 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT stg.payload_type
+            select stg.payload_type
                  , xt_hdr.*
-              FROM stg
-                 , XMLTABLE (
+              from stg
+                 , xmltable (
                       '/XML/Header'
-                      PASSING xmltype.createxml(stg.xml_payload)
-                      COLUMNS source        VARCHAR2(50)     PATH 'Source'
-                            , action_type   VARCHAR2(50)     PATH 'Action_Type'
-                            , message_type  VARCHAR2(40)     PATH 'Message_Type'
-                            , company_id    NUMBER           PATH 'Company_ID'
+                      passing xmltype.createxml(stg.xml_payload)
+                      columns source        varchar2(50)     path 'Source'
+                            , action_type   varchar2(50)     path 'Action_Type'
+                            , message_type  varchar2(40)     path 'Message_Type'
+                            , company_id    number           path 'Company_ID'
                    ) hdr;
             """;
         formatAndAssert(sql);

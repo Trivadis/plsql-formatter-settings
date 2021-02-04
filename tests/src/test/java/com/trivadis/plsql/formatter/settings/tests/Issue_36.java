@@ -9,15 +9,15 @@ public class Issue_36 extends ConfiguredTestFormatter {
     public void if_only() {
         final String sql = 
             """
-            CREATE OR REPLACE PROCEDURE p IS
-            BEGIN
+            create or replace procedure p is
+            begin
                -- comment 1
-               $IF DBMS_DB_VERSION.VER_LE_12_2 $THEN
+               $if dbms_db_version.ver_le_12_2 $then
                   -- comment 2
                   dbms_output.put_line('older: first line');
                   dbms_output.put_line('older: second line');
-               $END
-            END;
+               $end
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -27,17 +27,17 @@ public class Issue_36 extends ConfiguredTestFormatter {
     public void if_else() {
         final String sql = 
             """
-            CREATE OR REPLACE PROCEDURE p IS
-            BEGIN
+            create or replace procedure p is
+            begin
                -- comment 1
-               $IF DBMS_DB_VERSION.VER_LE_12_2 $THEN
+               $if dbms_db_version.ver_le_12_2 $then
                   -- comment 2
                   dbms_output.put_line('older');
-               $ELSE
+               $else
                   -- comment 3
                   dbms_output.put_line('newer');
-               $END
-            END;
+               $end
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -47,20 +47,20 @@ public class Issue_36 extends ConfiguredTestFormatter {
     public void if_elsif_else() {
         final String sql = 
             """
-            CREATE OR REPLACE PROCEDURE p IS
-            BEGIN
+            create or replace procedure p is
+            begin
                -- comment 1
-               $IF DBMS_DB_VERSION.VER_LE_12_2 $THEN
+               $if dbms_db_version.ver_le_12_2 $then
                   -- comment 2
                   dbms_output.put_line('older');
-               $ELSIF DBMS_DB_VERSION.VER_LE_18 $THEN
+               $elsif dbms_db_version.ver_le_18 $then
                   -- comment 3
                   dbms_output.put_line('newer');
-               $ELSE
+               $else
                   -- comment 4
                   dbms_output.put_line('newest');
-               $END
-            END;
+               $end
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -70,20 +70,20 @@ public class Issue_36 extends ConfiguredTestFormatter {
     public void false_if_elsif_else_lower() {
         final String sql = 
             """
-            CREATE OR REPLACE PROCEDURE p IS
-            BEGIN
+            create or replace procedure p is
+            begin
                -- comment 1
                $if false $then
                   -- comment 2
                   dbms_output.put_line('false');
-               $elsif DBMS_DB_VERSION.VER_LE_18 $then
+               $elsif dbms_db_version.ver_le_18 $then
                   -- comment 3
                   dbms_output.put_line('18c');
                $else
                   -- comment 4
                   dbms_output.put_line('newer than 18c');
                $end
-            END;
+            end;
             /
             """;
         formatAndAssert(sql);

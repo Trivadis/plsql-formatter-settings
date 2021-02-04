@@ -9,23 +9,23 @@ public class Issue_1 extends ConfiguredTestFormatter {
     public void json_dot_notation() {
         final String sql =
             """
-            CREATE TABLE t (
-               c CLOB CHECK ( c IS JSON )
+            create table t (
+               c clob check ( c is json )
             );
             --
-            INSERT INTO t VALUES ( '{accountNumber:123, accountName:"Name", accountType:"A"}' );
+            insert into t values ( '{accountNumber:123, accountName:"Name", accountType:"A"}' );
             --
-            COLUMN accountNumber FORMAT A15
-            COLUMN accountName FORMAT A15
-            COLUMN accountType FORMAT A10
+            column accountnumber format a15
+            column accountname format a15
+            column accounttype format a10
             --
-            SELECT j.c.accountNumber,
-                   j.c.accountName,
-                   j.c.accountType
-              FROM t j
-             WHERE j.c.accountType = 'A';
+            select j.c.accountnumber,
+                   j.c.accountname,
+                   j.c.accounttype
+              from t j
+             where j.c.accounttype = 'a';
             --\s
-            DROP TABLE t PURGE;
+            drop table t purge;
             """;
         formatAndAssert(sql);
     }

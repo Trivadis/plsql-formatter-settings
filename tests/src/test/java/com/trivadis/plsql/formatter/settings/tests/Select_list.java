@@ -12,26 +12,26 @@ public class Select_list extends ConfiguredTestFormatter {
     public void select_list_comma_after() {
         final String sql = 
             """
-            SELECT CASE a
-                      WHEN 1  THEN
+            select case a
+                      when 1  then
                          'one'
-                      WHEN 2  THEN
+                      when 2  then
                          'two'
-                      ELSE
+                      else
                          'else'
-                   END a2,
+                   end a2,
                    b,
                    c,
-                   to_char(d, 'YYYY-MM') AS d2,
-                   CASE
-                      WHEN a = 1  THEN
+                   to_char(d, 'yyyy-mm') as d2,
+                   case
+                      when a = 1  then
                          'one'
-                      WHEN a = 2  THEN
+                      when a = 2  then
                          'two'
-                      ELSE
+                      else
                          'else'
-                   END a3
-              FROM t2;
+                   end a3
+              from t2;
             """;
         formatAndAssert(sql);
     }
@@ -41,26 +41,26 @@ public class Select_list extends ConfiguredTestFormatter {
         formatter.options.put(formatter.breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT CASE a
-                      WHEN 1  THEN
+            select case a
+                      when 1  then
                          'one'
-                      WHEN 2  THEN
+                      when 2  then
                          'two'
-                      ELSE
+                      else
                          'else'
-                   END a2
+                   end a2
                  , b
                  , c
-                 , to_char(d, 'YYYY-MM') AS d2
-                 , CASE
-                      WHEN a = 1  THEN
+                 , to_char(d, 'yyyy-mm') as d2
+                 , case
+                      when a = 1  then
                          'one'
-                      WHEN a = 2  THEN
+                      when a = 2  then
                          'two'
-                      ELSE
+                      else
                          'else'
-                   END a3
-              FROM t2;
+                   end a3
+              from t2;
             """;
 
         formatAndAssert(sql, true);

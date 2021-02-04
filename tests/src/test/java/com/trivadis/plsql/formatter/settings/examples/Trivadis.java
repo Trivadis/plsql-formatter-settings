@@ -9,36 +9,36 @@ public class Trivadis extends ConfiguredTestFormatter {
     public void set_salary() {
         final String sql =
             """
-            CREATE OR REPLACE PROCEDURE set_salary (
-               in_employee_id IN employees.employee_id%TYPE
-            ) IS
-               CURSOR c_employees (
-                  p_employee_id IN employees.employee_id%TYPE
-               ) IS
-                  SELECT last_name,
+            create or replace procedure set_salary (
+               in_employee_id in employees.employee_id%type
+            ) is
+               cursor c_employees (
+                  p_employee_id in employees.employee_id%type
+               ) is
+                  select last_name,
                          first_name,
                          salary
-                    FROM employees
-                   WHERE employee_id = p_employee_id
-                   ORDER BY last_name,
+                    from employees
+                   where employee_id = p_employee_id
+                   order by last_name,
                             first_name;
                r_employee    c_employees%rowtype;
-               l_new_salary  employees.salary%TYPE;
-            BEGIN
-               OPEN c_employees(p_employee_id => in_employee_id);
-               FETCH c_employees INTO r_employee;
-               CLOSE c_employees;
+               l_new_salary  employees.salary%type;
+            begin
+               open c_employees(p_employee_id => in_employee_id);
+               fetch c_employees into r_employee;
+               close c_employees;
                new_salary(
                   in_employee_id  => in_employee_id,
                   out_salary      => l_new_salary
                );
-               -- Check whether salary has changed
-               IF r_employee.salary <> l_new_salary THEN
-                  UPDATE employees
-                     SET salary = l_new_salary
-                   WHERE employee_id = in_employee_id;
-               END IF;
-            END set_salary;
+               -- check whether salary has changed
+               if r_employee.salary <> l_new_salary then
+                  update employees
+                     set salary = l_new_salary
+                   where employee_id = in_employee_id;
+               end if;
+            end set_salary;
             /
             """;
         formatAndAssert(sql);

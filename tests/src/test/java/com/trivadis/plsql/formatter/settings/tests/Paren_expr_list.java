@@ -9,7 +9,7 @@ public class Paren_expr_list extends ConfiguredTestFormatter {
     public void unnamed_parameters() {
         final String sql = 
             """
-            SELECT func(a, b, c, 100),
+            select func(a, b, c, 100),
                    func(
                       a,
                       b,
@@ -20,7 +20,7 @@ public class Paren_expr_list extends ConfiguredTestFormatter {
                       400,
                       500
                    )
-              FROM dual;
+              from dual;
             """; 
         formatAndAssert(sql);
     }
@@ -29,7 +29,7 @@ public class Paren_expr_list extends ConfiguredTestFormatter {
     public void named_parameters() {
         final String sql = 
             """
-            SELECT func(
+            select func(
                       p1               => a,
                       p2               => b,
                       p300             => c,
@@ -39,7 +39,7 @@ public class Paren_expr_list extends ConfiguredTestFormatter {
                       p7               => 400,
                       p88888888888888  => 500
                    )
-              FROM dual;
+              from dual;
             """; 
         formatAndAssert(sql);
     }

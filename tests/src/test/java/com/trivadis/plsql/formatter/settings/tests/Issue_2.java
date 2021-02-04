@@ -17,12 +17,12 @@ public class Issue_2 extends ConfiguredTestFormatter {
 
     private final String expected =
         """
-        SELECT *
-          FROM dual;
+        select *
+          from dual;
         
         -- test comment
-        SELECT *
-          FROM dual;
+        select *
+          from dual;
         """.trim();
 
     public String windows(final CharSequence input) {

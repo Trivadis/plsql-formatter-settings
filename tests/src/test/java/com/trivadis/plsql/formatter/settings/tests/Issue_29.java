@@ -10,19 +10,19 @@ public class Issue_29 extends ConfiguredTestFormatter {
     public void commas_after() {
         final String sql = 
             """
-            SELECT *
-              FROM dba_tables
-             WHERE table_name IN (
-                      SELECT queue_table
-                        FROM dba_queue_tables
+            select *
+              from dba_tables
+             where table_name in (
+                      select queue_table
+                        from dba_queue_tables
                    )
-               AND ( owner, table_name ) NOT IN (
-                      SELECT owner,
+               and ( owner, table_name ) not in (
+                      select owner,
                              name
-                        FROM dba_snapshots
+                        from dba_snapshots
                    )
-               AND temporary = 'N'
-             ORDER BY blocks DESC;
+               and temporary = 'N'
+             order by blocks desc;
             """;
         formatAndAssert(sql);
     }
@@ -32,19 +32,19 @@ public class Issue_29 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT *
-              FROM dba_tables
-             WHERE table_name IN (
-                      SELECT queue_table
-                        FROM dba_queue_tables
+            select *
+              from dba_tables
+             where table_name in (
+                      select queue_table
+                        from dba_queue_tables
                    )
-               AND ( owner, table_name ) NOT IN (
-                      SELECT owner
+               and ( owner, table_name ) not in (
+                      select owner
                            , name
-                        FROM dba_snapshots
+                        from dba_snapshots
                    )
-               AND temporary = 'N'
-             ORDER BY blocks DESC;
+               and temporary = 'N'
+             order by blocks desc;
             """;
         formatAndAssert(sql);
     }

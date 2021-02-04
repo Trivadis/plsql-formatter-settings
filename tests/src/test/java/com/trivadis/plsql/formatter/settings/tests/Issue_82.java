@@ -9,18 +9,18 @@ public class Issue_82 extends ConfiguredTestFormatter {
     public void bulk_collect_outer_apply() {
         final String sql = 
             """
-            DECLARE
+            declare
                l_array my_array_tab;
-            BEGIN
-               SELECT t.a,
+            begin
+               select t.a,
                       t.b,
                       t.c,
                       n.stuff
-                 BULK COLLECT
-                 INTO l_array
-                 FROM some_table s
-                OUTER APPLY ( s.nested_tab ) n;
-            END;
+                 bulk collect
+                 into l_array
+                 from some_table s
+                outer apply ( s.nested_tab ) n;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -30,18 +30,18 @@ public class Issue_82 extends ConfiguredTestFormatter {
     public void bulk_collect_cross_apply() {
         final String sql = 
             """
-            DECLARE
+            declare
                l_array my_array_tab;
-            BEGIN
-               SELECT t.a,
+            begin
+               select t.a,
                       t.b,
                       t.c,
                       n.stuff
-                 BULK COLLECT
-                 INTO l_array
-                 FROM some_table s
-                CROSS APPLY ( s.nested_tab ) n;
-            END;
+                 bulk collect
+                 into l_array
+                 from some_table s
+                cross apply ( s.nested_tab ) n;
+            end;
             /
             """;
         formatAndAssert(sql);

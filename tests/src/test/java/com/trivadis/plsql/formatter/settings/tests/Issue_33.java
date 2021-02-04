@@ -10,11 +10,11 @@ public class Issue_33 extends ConfiguredTestFormatter {
     public void split_nested_args_commas_after() {
         final String sql = 
             """
-            CREATE PROCEDURE test_dedup_t_obj IS
+            create procedure test_dedup_t_obj is
                l_input     t_obj_type;
                l_actual    t_obj_type;
                l_expected  t_obj_type;
-            BEGIN
+            begin
                l_input     :=
                   t_obj_type(
                      obj_type('MY_OWNER', 'VIEW', 'MY_VIEW'),
@@ -29,7 +29,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                l_actual    := type_util.dedup(l_input);
                ut.expect(l_actual.count).to_equal(2);
                ut.expect(anydata.convertCollection(l_actual)).to_equal(anydata.convertCollection(l_expected)).unordered;
-            END test_dedup_t_obj;
+            end test_dedup_t_obj;
             """;
         formatAndAssert(sql);
     }
@@ -39,11 +39,11 @@ public class Issue_33 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            CREATE PROCEDURE test_dedup_t_obj IS
+            create procedure test_dedup_t_obj is
                l_input     t_obj_type;
                l_actual    t_obj_type;
                l_expected  t_obj_type;
-            BEGIN
+            begin
                l_input     :=
                   t_obj_type(
                      obj_type('MY_OWNER', 'VIEW', 'MY_VIEW')
@@ -58,7 +58,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                l_actual    := type_util.dedup(l_input);
                ut.expect(l_actual.count).to_equal(2);
                ut.expect(anydata.convertCollection(l_actual)).to_equal(anydata.convertCollection(l_expected)).unordered;
-            END test_dedup_t_obj;
+            end test_dedup_t_obj;
             """;
         formatAndAssert(sql);
     }
@@ -67,7 +67,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
     public void split_nested_functions() {
         final String sql = 
             """
-            SELECT some_quite_long_function_name(
+            select some_quite_long_function_name(
                       another_long_function_name(
                          first_Column_id
                          || another_Column_id
@@ -78,7 +78,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                          'another parameter'
                       )
                    )
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }
@@ -87,7 +87,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
     public void split_nested_nested_functions() {
         final String sql = 
             """
-            SELECT some_quite_long_function_name(
+            select some_quite_long_function_name(
                       another_long_function_name(
                          yet_another_long_function_name(
                             first_Column_id
@@ -100,7 +100,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                          )
                       )
                    )
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }
@@ -109,7 +109,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
     public void split_nested_functions_with_named_parameters() {
         final String sql = 
             """
-            SELECT some_quite_long_function_name(
+            select some_quite_long_function_name(
                       another_long_function_name(
                          a  => first_Column_id
                               || another_Column_id
@@ -120,7 +120,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                          b  => 'another parameter'
                       )
                    )
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }
@@ -129,7 +129,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
     public void split_nested_functions_with_named_parameters_only() {
         final String sql = 
             """
-            SELECT some_quite_long_function_name(
+            select some_quite_long_function_name(
                       a => another_long_function_name(
                               b  => first_Column_id
                                    || another_Column_id
@@ -140,7 +140,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                               c  => 'another parameter'
                            )
                    )
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }
@@ -149,7 +149,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
     public void split_nested_nested_functions_with_named_parameters() {
         final String sql = 
             """
-            SELECT some_quite_long_function_name(
+            select some_quite_long_function_name(
                       another_long_function_name(
                          yet_another_long_function_name(
                             a  => first_Column_id
@@ -162,7 +162,7 @@ public class Issue_33 extends ConfiguredTestFormatter {
                          )
                       )
                    )
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
 

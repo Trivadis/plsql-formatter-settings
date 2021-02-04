@@ -9,14 +9,14 @@ public class Issue_30 extends ConfiguredTestFormatter {
     public void into_clause_commas_after() {
         final String sql = 
             """
-            SELECT namespace,
+            select namespace,
                    key,
                    scope
-              INTO l_namespace,
+              into l_namespace,
                    l_key,
                    l_scope
-              FROM configuration
-             WHERE id = p_id;
+              from configuration
+             where id = p_id;
             """;
         formatAndAssert(sql);
     }
@@ -26,14 +26,14 @@ public class Issue_30 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT namespace
+            select namespace
                  , key
                  , scope
-              INTO l_namespace
+              into l_namespace
                  , l_key
                  , l_scope
-              FROM configuration
-             WHERE id = p_id;
+              from configuration
+             where id = p_id;
             """;
         formatAndAssert(sql);
     }
