@@ -1,57 +1,50 @@
 -- based on the example in the formatting preferences of the Oracle SQL Developer 19.4
 
-CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
-   tot_emps  NUMBER;
-   tot_depts NUMBER;
-   FUNCTION hire(last_name     IN VARCHAR2,
-                 job_id        IN VARCHAR2,
-                 manager_id    IN NUMBER,
-                 salary        IN NUMBER,
-                 department_id IN NUMBER) RETURN NUMBER IS
-      new_empno NUMBER(16, 0);
-   BEGIN
-      IF monthly_value <= 4000 THEN
+create or replace package body emp_mgmt as
+   tot_emps  number;
+   tot_depts number;
+   function hire(last_name     in varchar2,
+                 job_id        in varchar2,
+                 manager_id    in number,
+                 salary        in number,
+                 department_id in number) return number is
+      new_empno number(16, 0);
+   begin
+      if monthly_value <= 4000 then
          ilevel := 'Low Income';
-      ELSIF monthly_value > 4000 AND monthly_value <= 7000 THEN
+      elsif monthly_value > 4000 and monthly_value <= 7000 then
          ilevel := 'Avg Income';
-      ELSE
+      else
          ilevel := 'High Income';
-      END IF;
-      CASE
-         WHEN jobid = 'PU_CLE' THEN
+      end if;
+      case
+         when jobid = 'PU_CLE' then
             sal_raise := .09;
-         WHEN jobid = 'SH_CLERK' THEN
+         when jobid = 'SH_CLERK' then
             sal_raise := .08;
-         WHEN jobid = 'ST_CLERK222' THEN
+         when jobid = 'ST_CLERK222' then
             sal_raise := .07;
-         ELSE
+         else
             sal_raise := 0;
             dbms_output.put_line('sal_raise := 0');
-      END CASE;
-      SELECT CASE "1"
-                WHEN 1 THEN
+      end case;
+      select case "1"
+                when 1 then
                  'XX'
-             END
-        INTO new_empno
-        FROM emp, dual d1, dual d2
-       WHERE (1 = 2 OR 3 = 4)
-             AND 0 = 1 + 2
-             AND EXISTS (SELECT 1, 2, 3
-                FROM wsh_new_deliveries wnd
-                JOIN wsh_delivery_assignments wda
-                  ON wnd.delivery_id = wda.delivery_id
-                JOIN hz_locations hl
-                  ON hps.location_id = hl.location_id);
-      INSERT INTO employees
-         (employee_id,
-          full_name,
-          phone_number,
-          hire_date,
-          job_name,
-          value1,
-          value2,
-          value3)
-      VALUES
+             end
+        into new_empno
+        from emp, dual d1, dual d2
+       where (1 = 2 or 3 = 4)
+             and 0 = 1 + 2
+             and exists (select 1, 2, 3
+                from wsh_new_deliveries wnd
+                join wsh_delivery_assignments wda
+                  on wnd.delivery_id = wda.delivery_id
+                join hz_locations hl
+                  on hps.location_id = hl.location_id);
+      insert into employees
+         (employee_id, full_name, phone_number, hire_date, job_name, value1, value2, value3)
+      values
          (new_empno,
           'First' || 'Middle' || 'Last',
           '(415)555-0100',
@@ -64,7 +57,7 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
       out_rec.var_char1    := in_rec1.first_name;
       out_rec.var_char2222 := in_rec1.last_name;
       proc1(p1111 => a1, p11 => a1, p2 => a2);
-      RETURN(new_empno);
-   END;
-END emp_mgmt;
+      return(new_empno);
+   end;
+end emp_mgmt;
 /
