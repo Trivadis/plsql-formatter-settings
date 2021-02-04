@@ -12,16 +12,16 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     public void one_stmt_sl_comment_eclipse_style() {
         final String sql =
             """
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             -- @formatter:off
             SELECT
                *
                   from
                      dual
             ; -- @formatter:on
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             """;
         formatAndAssert(sql);
     }
@@ -30,16 +30,16 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     public void one_stmt_ml_comment_eclipse_style() {
         final String sql =
             """
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             /* @formatter:off */
             SELECT
                *
                   from
                      dual
             ; /* @formatter:on */
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             """;
         formatAndAssert(sql);
     }
@@ -48,16 +48,16 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     public void one_stmt_sl_comment_plsqldev_style() {
         final String sql =
             """
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             -- NoFormat Start
             SELECT
                *
                   from
                      dual
             ; -- NoFormat End
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             """;
         formatAndAssert(sql);
     }
@@ -66,16 +66,16 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     public void one_stmt_ml_comment_plsqldev_style() {
         final String sql = 
             """
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             /* NoFormat Start */
             SELECT
                *
                   from
                      dual
             ; /* NoFormat End */
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             """;
         formatAndAssert(sql);
     }
@@ -84,8 +84,8 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     public void two_stmt_mixed_style() {
         final String sql =
                 """
-                SELECT *
-                  FROM dual;
+                select *
+                  from dual;
                 /* noformat start, however in SQLDev 20.2 keyword is uppercase nonetheless, indent lost in 20.3 */
                 DELETE
                       FrOm\s
@@ -93,8 +93,8 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
                                    = b
                 ;
                 /* @formatter:ON, the next statement is formatted by SQLDev, indent lost in 20.3 */
-                DELETE FROM emp
-                 WHERE dept = 10;
+                delete from emp
+                 where dept = 10;
                 /* @formatter:OFF, the next statement is not formated by SQLDev */
                 UPDATE
                         emp
@@ -102,10 +102,10 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
                     sal = sal + 10
                    ;
                 -- noformat end, after this line everthing is formatted by SQLDev
-                SELECT *
-                  FROM emp
-                  JOIN dept
-                    ON dept.deptno = emp.deptno;
+                select *
+                  from emp
+                  join dept
+                    on dept.deptno = emp.deptno;
                 """;
         formatAndAssert(sql);
     }
@@ -125,13 +125,13 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
             """.trim();
         final String expected =
             """
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             -- @formatter:on @formatter:off
-            SELECT *
-              FROM dual; -- @formatter:on
-            SELECT *
-              FROM dual;
+            select *
+              from dual; -- @formatter:on
+            select *
+              from dual;
             """.trim();
         final String actual = formatter.format(unformatted);
         Assert.assertEquals(expected, actual);

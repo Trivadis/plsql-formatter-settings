@@ -17,21 +17,21 @@ public class Issue_12 extends ConfiguredTestFormatter {
     public void package_spec() {
         final String sql = 
             """
-            CREATE OR REPLACE PACKAGE abc AS
+            create or replace package abc as
             
-                FUNCTION get_id1 (
-                    p_1  NUMBER,
-                    p_2  NUMBER,
-                    p_3  NUMBER
-                ) RETURN NUMBER;
+                function get_id1 (
+                    p_1  number,
+                    p_2  number,
+                    p_3  number
+                ) return number;
             
-                FUNCTION get_id2 (
-                    p_1  my_table.id%TYPE,
-                    p_2  my_table.id%TYPE,
-                    p_3  my_table.id%TYPE
-                ) RETURN my_table.id%TYPE;
+                function get_id2 (
+                    p_1  my_table.id%type,
+                    p_2  my_table.id%type,
+                    p_3  my_table.id%type
+                ) return my_table.id%type;
             
-            END;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -41,38 +41,38 @@ public class Issue_12 extends ConfiguredTestFormatter {
     public void package_body() {
         final String sql =
             """
-            CREATE OR REPLACE PACKAGE BODY abc AS
+            create or replace package body abc as
             
-                FUNCTION get_id1 (
-                    p_1  NUMBER,
-                    p_2  NUMBER,
-                    p_3  NUMBER
-                ) RETURN NUMBER IS
-                    local_1  NUMBER;
-                    local_2  NUMBER;
-                    local_3  NUMBER;
-                    local_4  NUMBER;
-                    local_5  NUMBER;
-                BEGIN
-                    RETURN 9999;
-                END get_id1;
+                function get_id1 (
+                    p_1  number,
+                    p_2  number,
+                    p_3  number
+                ) return number is
+                    local_1  number;
+                    local_2  number;
+                    local_3  number;
+                    local_4  number;
+                    local_5  number;
+                begin
+                    return 9999;
+                end get_id1;
             
-                FUNCTION get_id2 (
-                    p_1  my_table.id%TYPE,
-                    p_2  my_table.id%TYPE,
-                    p_3  my_table.id%TYPE
-                ) RETURN my_table.id%TYPE IS
-                    local_1  my_table.id%TYPE;
-                    local_2  my_table.id%TYPE;
-                    local_3  my_table.id%TYPE;
-                    local_4  my_table.id%TYPE;
-                    local_5  my_table.id%TYPE;
-                BEGIN
+                function get_id2 (
+                    p_1  my_table.id%type,
+                    p_2  my_table.id%type,
+                    p_3  my_table.id%type
+                ) return my_table.id%type is
+                    local_1  my_table.id%type;
+                    local_2  my_table.id%type;
+                    local_3  my_table.id%type;
+                    local_4  my_table.id%type;
+                    local_5  my_table.id%type;
+                begin
                     -- some code
-                    RETURN 9999;
-                END get_id2;
+                    return 9999;
+                end get_id2;
             
-            END;
+            end;
             /
             """;
         formatAndAssert(sql);

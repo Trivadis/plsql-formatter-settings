@@ -28,5 +28,5 @@
     <identSpaces>3</identSpaces>
     <breaksAfterSelect>false</breaksAfterSelect>
     <spaceAfterCommas>true</spaceAfterCommas>
-    <kwCase>oracle.dbtools.app.Format.Case.UPPER</kwCase>
+    <kwCase>oracle.dbtools.app.Format.Case.lower</kwCase>
 </options>

@@ -9,9 +9,9 @@ public class Issue_83 extends ConfiguredTestFormatter {
     public void select_single_column_with_hint() {
         final String sql = 
             """
-            SELECT /*+ parallel(t, 2) */
+            select /*+ parallel(t, 2) */
                    a
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }
@@ -20,10 +20,10 @@ public class Issue_83 extends ConfiguredTestFormatter {
     public void select_two_columns_with_hint() {
         final String sql = 
             """
-            SELECT /*+ parallel(t, 2) */
+            select /*+ parallel(t, 2) */
                    a,
                    b
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }
@@ -32,13 +32,13 @@ public class Issue_83 extends ConfiguredTestFormatter {
     public void two_selects_with_hints() {
         final String sql = 
             """
-            SELECT /*+ parallel(t, 2) */
+            select /*+ parallel(t, 2) */
                    a
-              FROM t;
+              from t;
 
-            SELECT /*+ parallel(t, 2) */
+            select /*+ parallel(t, 2) */
                    a
-              FROM t;
+              from t;
             """;
         formatAndAssert(sql);
     }

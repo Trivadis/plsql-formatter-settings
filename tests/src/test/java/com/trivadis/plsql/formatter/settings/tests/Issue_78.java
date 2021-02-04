@@ -10,14 +10,14 @@ public class Issue_78 extends ConfiguredTestFormatter {
     public void subselect_with_commas_after() {
         final String sql = 
             """
-            SELECT table_name,
+            select table_name,
                    (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
                    ),
-                   t.BLOCKS
-              FROM user_tables t;
+                   t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -26,14 +26,14 @@ public class Issue_78 extends ConfiguredTestFormatter {
     public void subselect_with_commas_after_with_alias() {
         final String sql = 
             """
-            SELECT table_name,
+            select table_name,
                    (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
-                   ) AS num_indexes,
-                   t.BLOCKS
-              FROM user_tables t;
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
+                   ) as num_indexes,
+                   t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -43,14 +43,14 @@ public class Issue_78 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT table_name
+            select table_name
                  , (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
                    )
-                 , t.BLOCKS
-              FROM user_tables t;
+                 , t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -60,14 +60,14 @@ public class Issue_78 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT table_name
+            select table_name
                  , (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
-                   ) AS num_indexes
-                 , t.BLOCKS
-              FROM user_tables t;
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
+                   ) as num_indexes
+                 , t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -76,13 +76,13 @@ public class Issue_78 extends ConfiguredTestFormatter {
     public void first_subselect_with_commas_after() {
         final String sql = 
             """
-            SELECT (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
+            select (
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
                    ),
-                   t.BLOCKS
-              FROM user_tables t;
+                   t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -91,13 +91,13 @@ public class Issue_78 extends ConfiguredTestFormatter {
     public void first_subselect_with_commas_after_with_alias() {
         final String sql = 
             """
-            SELECT (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
-                   ) AS num_indexes,
-                   t.BLOCKS
-              FROM user_tables t;
+            select (
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
+                   ) as num_indexes,
+                   t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -107,13 +107,13 @@ public class Issue_78 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
+            select (
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
                    )
-                 , t.BLOCKS
-              FROM user_tables t;
+                 , t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -123,13 +123,13 @@ public class Issue_78 extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         final String sql = 
             """
-            SELECT (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
-                   ) AS num_indexes
-                 , t.BLOCKS
-              FROM user_tables t;
+            select (
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
+                   ) as num_indexes
+                 , t.blocks
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -138,12 +138,12 @@ public class Issue_78 extends ConfiguredTestFormatter {
     public void subselect_with_single_select_term() {
         final String sql = 
             """
-            SELECT (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
+            select (
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
                    )
-              FROM user_tables t;
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }
@@ -152,12 +152,12 @@ public class Issue_78 extends ConfiguredTestFormatter {
     public void subselect_with_single_select_term_with_alias() {
         final String sql = 
             """
-            SELECT (
-                      SELECT COUNT(1)
-                        FROM user_indexes i
-                       WHERE i.table_name = t.table_name
-                   ) AS num_indexes
-              FROM user_tables t;
+            select (
+                      select count(1)
+                        from user_indexes i
+                       where i.table_name = t.table_name
+                   ) as num_indexes
+              from user_tables t;
             """;
         formatAndAssert(sql);
     }

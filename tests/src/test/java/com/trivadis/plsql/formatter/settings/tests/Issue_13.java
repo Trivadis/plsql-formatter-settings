@@ -17,27 +17,27 @@ public class Issue_13 extends ConfiguredTestFormatter {
     public void original_case_with_unnecessary_semicolon_for_set() {
         final String sql =
             """
-            SET ECHO OFF;
+            set echo off;
             
-            CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
+            create or replace package body emp_mgmt as
             
-                FUNCTION hire (
-                    last_name      IN  VARCHAR2,
-                    job_id         IN  VARCHAR2,
-                    manager_id     IN  NUMBER,
-                    salary         IN  NUMBER,
-                    department_id  IN  NUMBER
-                ) RETURN NUMBER IS
-                    new_empno NUMBER(16, 0);
-                BEGIN
+                function hire (
+                    last_name      in  varchar2,
+                    job_id         in  varchar2,
+                    manager_id     in  number,
+                    salary         in  number,
+                    department_id  in  number
+                ) return number is
+                    new_empno number(16, 0);
+                begin
                     --some code
-                    RETURN ( new_empno );
-                END;
+                    return ( new_empno );
+                end;
             
-            END emp_mgmt;
+            end emp_mgmt;
             /
             
-            SET ECHO ON
+            set echo on
             """;
         formatAndAssert(sql);
     }
@@ -46,12 +46,12 @@ public class Issue_13 extends ConfiguredTestFormatter {
     public void simplified_case() {
         final String sql =
             """
-            SET ECHO OFF
+            set echo off
             
-            SELECT *
-              FROM dual;
+            select *
+              from dual;
             
-            SET ECHO ON
+            set echo on
             """;
         formatAndAssert(sql);
 

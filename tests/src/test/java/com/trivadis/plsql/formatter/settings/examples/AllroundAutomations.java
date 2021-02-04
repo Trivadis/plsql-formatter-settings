@@ -9,34 +9,34 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void mgrname() {
         final String sql =
             """
-            CREATE OR REPLACE FUNCTION mgrname (
-               p_empno IN emp.empno%TYPE
-            ) RETURN emp.ename%TYPE IS
-               result  emp.ename%TYPE;
-               i       INTEGER;
-            BEGIN
-               result  := NULL;
+            create or replace function mgrname (
+               p_empno in emp.empno%type
+            ) return emp.ename%type is
+               result  emp.ename%type;
+               i       integer;
+            begin
+               result  := null;
                i       := 1;
-               IF p_empno IS NULL THEN
+               if p_empno is null then
                   -- If empno is null, return an empty name
-                  result := NULL;
-               ELSE
+                  result := null;
+               else
                   -- Fetch the name of the manager
-                  SELECT m.ename
-                    INTO result
-                    FROM emp e,
+                  select m.ename
+                    into result
+                    from emp e,
                          emp m
-                   WHERE e.empno = p_empno
-                     AND m.empno = e.mgr
-                     AND d.deptno IN (
+                   where e.empno = p_empno
+                     and m.empno = e.mgr
+                     and d.deptno in (
                             10, 20, 30, 40
                          );
-               END IF;
-               RETURN ( result );
-            EXCEPTION
-               WHEN no_data_found THEN
-                  RETURN ( NULL );
-            END;
+               end if;
+               return ( result );
+            exception
+               when no_data_found then
+                  return ( null );
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -46,18 +46,18 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void emp_cursor() {
         final String sql =
             """
-            BEGIN
-               FOR emp_cursor IN (
-                  SELECT *
-                    FROM emp
-               ) LOOP
-                  IF emp_cursor.mgr IS NULL OR emp_cursor.mgr = 0 THEN
+            begin
+               for emp_cursor in (
+                  select *
+                    from emp
+               ) loop
+                  if emp_cursor.mgr is null or emp_cursor.mgr = 0 then
                      dbms_output.put_line('No manager');
-                  ELSE
-                     dbms_output.put_line('Manager = ' || to_char(emp_cursor));
-                  END IF;
-               END LOOP;
-            END;
+                  else
+                     dbms_output.put_line('manager = ' || to_char(emp_cursor));
+                  end if;
+               end loop;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -67,31 +67,31 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void select_insert_update() {
         final String sql =
             """
-            BEGIN
+            begin
                -- Select
-               SELECT depno AS department_number,
-                      dname AS departmen_name,
-                      loc AS department_location
-                 FROM dept,
+               select depno as department_number,
+                      dname as departmen_name,
+                      loc as department_location
+                 from dept,
                       emp
-                WHERE emp.empno = p_empno
-                  AND dept.deptno = emp.deptno;
+                where emp.empno = p_empno
+                  and dept.deptno = emp.deptno;
                -- Insert
-               INSERT INTO dept (
+               insert into dept (
                   deptno,
                   dname,
                   loc
-               ) VALUES (
+               ) values (
                   10,
-                  'Accounting',
-                  'New York'
+                  'accounting',
+                  'new york'
                );
                -- Update
-               UPDATE dept
-                  SET dname = 'Accounting',
-                      loc = 'New York'
-                WHERE deptno = 10;
-            END;
+               update dept
+                  set dname = 'accounting',
+                      loc = 'new york'
+                where deptno = 10;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -101,29 +101,29 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void insertdept() {
         final String sql =
             """
-            CREATE OR REPLACE PROCEDURE insertdept (
-               p_deptno  IN OUT  dept.deptno%TYPE,
-               p_dname   IN      dept.dname%TYPE,
-               p_loc     IN      dept.loc%TYPE
-            ) IS
-            BEGIN
+            create or replace procedure insertdept (
+               p_deptno  in out  dept.deptno%type,
+               p_dname   in      dept.dname%type,
+               p_loc     in      dept.loc%type
+            ) is
+            begin
                -- Determine the maximum department number if necessary
-               IF p_deptno IS NULL THEN
-                  SELECT nvl(MAX(deptno), 0) + 1
-                    INTO p_deptno
-                    FROM dept;
-               END IF;
+               if p_deptno is null then
+                  select nvl(max(deptno), 0) + 1
+                    into p_deptno
+                    from dept;
+               end if;
                -- Insert the new record
-               INSERT INTO dept (
+               insert into dept (
                   deptno,
                   dname,
                   loc
-               ) VALUES (
+               ) values (
                   p_deptno,
                   p_dname,
                   p_loc
                );
-            END;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -133,15 +133,15 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void dept_record() {
         final String sql =
             """
-            DECLARE
-               TYPE dept_record IS RECORD (
-                  deptno  NUMBER(2),
-                  dname   VARCHAR2(13),
-                  loc     VARCHAR2(13)
+            declare
+               type dept_record is record (
+                  deptno  number(2),
+                  dname   varchar2(13),
+                  loc     varchar2(13)
                );
-            BEGIN
-               NULL;
-            END;
+            begin
+               null;
+            end;
             /
             """;
         formatAndAssert(sql);

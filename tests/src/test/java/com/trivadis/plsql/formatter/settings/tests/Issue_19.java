@@ -9,7 +9,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
     public void arg_list_split_5_or_more_params() {
         final String sql =
             """
-            BEGIN
+            begin
                f();
                f(1);
                f(1, 2);
@@ -30,7 +30,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
                   5,
                   6
                );
-            END;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -40,7 +40,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
     public void expr_list_split_5_or_more_params() {
         final String sql =
             """
-            SELECT f(),
+            select f(),
                    f(1),
                    f(1, 2),
                    f(1, 2, 3),
@@ -60,7 +60,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
                       5,
                       6
                    )
-              FROM dual;
+              from dual;
             """;
         formatAndAssert(sql);
     }
@@ -69,7 +69,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
     public void nested_arg_list() {
         final String sql =
             """
-            BEGIN
+            begin
                f(
                   f(1),
                   f(1, 2),
@@ -83,7 +83,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
                      5
                   )
                );
-            END;
+            end;
             /
             """;
         formatAndAssert(sql);
@@ -93,7 +93,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
     public void nested_expr_list() {
         final String sql =
             """
-            SELECT f(
+            select f(
                       f(1),
                       f(1, 2),
                       f(1, 2, 3),
@@ -106,7 +106,7 @@ public class Issue_19 extends ConfiguredTestFormatter {
                          5
                       )
                    )
-              FROM dual;
+              from dual;
             """;
         formatAndAssert(sql);
     }
