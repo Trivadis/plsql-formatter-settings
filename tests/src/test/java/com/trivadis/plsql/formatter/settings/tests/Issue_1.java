@@ -12,19 +12,19 @@ public class Issue_1 extends ConfiguredTestFormatter {
             create table t (
                c clob check ( c is json )
             );
-            --
+            
             insert into t values ( '{accountNumber:123, accountName:"Name", accountType:"A"}' );
-            --
-            column accountnumber format a15
-            column accountname format a15
-            column accounttype format a10
-            --
-            select j.c.accountnumber,
-                   j.c.accountname,
-                   j.c.accounttype
+            
+            column accountNumber format a15
+            column accountName format a15
+            column accountType format a10
+            
+            select j.c.accountNumber,
+                   j.c.accountName,
+                   j.c.accountType
               from t j
-             where j.c.accounttype = 'a';
-            --\s
+             where j.c.accountType = 'A';
+            
             drop table t purge;
             """;
         formatAndAssert(sql);
