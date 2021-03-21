@@ -386,13 +386,14 @@ var formatFile = function(file, formatter) {
 }
 
 var formatFiles = function(files, formatter, markdownExtensions) {
-    for (var i in files) {
-        ctx.write("Formatting file " + parseInt(i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+    var fileIdx;
+    for (fileIdx = 0; fileIdx < files.length; fileIdx++) {
+        ctx.write("Formatting file " + (fileIdx+1) + " of " + files.length + ": " + files[fileIdx].toString() + "... ");
         ctx.getOutputStream().flush();
-        if (isMarkdownFile(files[i], markdownExtensions)) {
-            formatMarkdownFile(files[i], formatter);
+        if (isMarkdownFile(files[fileIdx], markdownExtensions)) {
+            formatMarkdownFile(files[fileIdx], formatter);
         } else {
-            formatFile(files[i], formatter);
+            formatFile(files[fileIdx], formatter);
         }
         ctx.getOutputStream().flush();
     }
