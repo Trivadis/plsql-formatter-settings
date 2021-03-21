@@ -24,13 +24,13 @@ var javaFiles = Java.type("java.nio.file.Files");
 var javaCollectors = Java.type("java.util.stream.Collectors");
 var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
 var javaPattern = Java.type("java.util.regex.Pattern");
-var odbtSQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
-var odbtFormat = Java.type("oracle.dbtools.app.Format");
-var odbtLexer = Java.type("oracle.dbtools.parser.Lexer");
-var odbtParsed = Java.type("oracle.dbtools.parser.Parsed");
-var odbtSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
-var odbtCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
-var odbtCommandListener =  Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
+var javaSQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
+var javaFormat = Java.type("oracle.dbtools.app.Format");
+var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
+var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
+var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
+var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
+var javaCommandListener =  Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
 
 var getFiles = function (rootPath, extensions) {
     var files;
@@ -57,9 +57,9 @@ var configure = function (formatter, xmlPath, arboriPath) {
         }
     } else if ("embedded".equals(xmlPath)) {
         // General
-        formatter.options.put(formatter.kwCase, odbtFormat.Case.UPPER);                                     // default: odbtFormat.Case.UPPER
-        formatter.options.put(formatter.idCase, odbtFormat.Case.NoCaseChange);                              // default: odbtFormat.Case.lower
-        formatter.options.put(formatter.singleLineComments, odbtFormat.InlineComments.CommentsUnchanged);   // default: odbtFormat.InlineComments.CommentsUnchanged
+        formatter.options.put(formatter.kwCase, javaFormat.Case.UPPER);                                     // default: javaFormat.Case.UPPER
+        formatter.options.put(formatter.idCase, javaFormat.Case.NoCaseChange);                              // default: javaFormat.Case.lower
+        formatter.options.put(formatter.singleLineComments, javaFormat.InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
         // Alignment
         formatter.options.put(formatter.alignTabColAliases, false);                                         // default: true
         formatter.options.put(formatter.alignTypeDecl, true);                                               // default: true
@@ -71,22 +71,22 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.identSpaces, 3);                                                    // default: 3
         formatter.options.put(formatter.useTab, false);                                                     // default: false
         // Line Breaks
-        formatter.options.put(formatter.breaksComma, odbtFormat.Breaks.After);                              // default: odbtFormat.Breaks.After
+        formatter.options.put(formatter.breaksComma, javaFormat.Breaks.After);                              // default: javaFormat.Breaks.After
         formatter.options.put("commasPerLine", 1);                                                          // default: 5
-        formatter.options.put(formatter.breaksConcat, odbtFormat.Breaks.Before);                            // default: odbtFormat.Breaks.Before
-        formatter.options.put(formatter.breaksAroundLogicalConjunctions, odbtFormat.Breaks.Before);         // default: odbtFormat.Breaks.Before
+        formatter.options.put(formatter.breaksConcat, javaFormat.Breaks.Before);                            // default: javaFormat.Breaks.Before
+        formatter.options.put(formatter.breaksAroundLogicalConjunctions, javaFormat.Breaks.Before);         // default: javaFormat.Breaks.Before
         formatter.options.put(formatter.breakAnsiiJoin, true);                                              // default: false
         formatter.options.put(formatter.breakParenCondition, true);                                         // default: false
         formatter.options.put(formatter.breakOnSubqueries, true);                                           // default: true
         formatter.options.put(formatter.maxCharLineSize, 120);                                              // default: 128
         formatter.options.put(formatter.forceLinebreaksBeforeComment, false);                               // default: false
-        formatter.options.put(formatter.extraLinesAfterSignificantStatements, odbtFormat.BreaksX2.Keep);    // default: odbtFormat.BreaksX2.X2
+        formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat.BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
         formatter.options.put(formatter.breaksAfterSelect, false);                                          // default: true
-        formatter.options.put(formatter.flowControl, odbtFormat.FlowControl.IndentedActions);               // default: odbtFormat.FlowControl.IndentedActions
+        formatter.options.put(formatter.flowControl, javaFormat.FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
         // White Space
         formatter.options.put(formatter.spaceAroundOperators, true);                                        // default: true
         formatter.options.put(formatter.spaceAfterCommas, true);                                            // default: true
-        formatter.options.put(formatter.spaceAroundBrackets, odbtFormat.Space.Default);                     // default: odbtFormat.Space.Default
+        formatter.options.put(formatter.spaceAroundBrackets, javaFormat.Space.Default);                     // default: javaFormat.Space.Default
         // Hidden, not configurable in the GUI preferences dialog of SQLDev 20.2
         formatter.options.put(formatter.breaksProcArgs, false);                                             // default: false (overridden in Arbori program based on other settings)
         formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
@@ -100,15 +100,15 @@ var configure = function (formatter, xmlPath, arboriPath) {
 }
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
-    var formatter = new odbtFormat();
+    var formatter = new javaFormat();
     configure(formatter, xmlPath, arboriPath);
     return formatter;
 }
 
 var hasParseErrors = function (content, consoleOutput) {
     var newContent = "\n" + content; // ensure correct line number in case of an error
-    var tokens = odbtLexer.parse(newContent);
-    var parsed = new odbtParsed(newContent, tokens, odbtSqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+    var tokens = javaLexer.parse(newContent);
+    var parsed = new javaParsed(newContent, tokens, javaSqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
     var syntaxError = parsed.getSyntaxError();
     if (syntaxError != null && syntaxError.getMessage() != null) {
         if (consoleOutput) {
@@ -425,16 +425,16 @@ var getArgs = function(cmdLine) {
 }
 
 var unregisterTvdFormat = function() {
-    var listeners = odbtCommandRegistry.getListeners(null, ctx).get(odbtSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-    // remove all commands registered with odbtCommandRegistry.addForAllStmtsListener
-    odbtCommandRegistry.removeListener(odbtSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-    odbtCommandRegistry.clearCaches(null, ctx);
-    var remainingListeners = odbtCommandRegistry.getListeners(null, ctx).get(odbtSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
+    var listeners = javaCommandRegistry.getListeners(null, ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+    // remove all commands registered with javaCommandRegistry.addForAllStmtsListener
+    javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+    javaCommandRegistry.clearCaches(null, ctx);
+    var remainingListeners = javaCommandRegistry.getListeners(null, ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
             .stream().map(function(l) l.getClass()).collect(javaCollectors.toSet());
     // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
     for (var i in listeners) {
         if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
-            odbtCommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
+            javaCommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
         }
     }
 }
@@ -454,14 +454,14 @@ var registerTvdFormat = function() {
         // to identify this dynamically created class during unregisterTvdFormat()
         return "TvdFormat";
     }
-    var TvdFormat = Java.extend(odbtCommandListener, {
+    var TvdFormat = Java.extend(javaCommandListener, {
         handleEvent: handleEvent,
         beginEvent: beginEvent,
         endEvent: endEvent,
         toString: toString
     });
     unregisterTvdFormat();
-    odbtCommandRegistry.addForAllStmtsListener(TvdFormat.class);
+    javaCommandRegistry.addForAllStmtsListener(TvdFormat.class);
     ctx.write("tvdformat registered as SQLcl command.\n");
 }
 
