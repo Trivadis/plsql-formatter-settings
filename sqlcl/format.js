@@ -404,7 +404,7 @@ var run = function(args) {
         if (options.rootPath == "*") {
             formatBuffer(formatter);
         } else {
-            if (options.files) {
+            if (options.files.length > 0) {
                 formatFiles(options.files, formatter, options.markdownExtensions);
             } else {
                 var files = getFiles(options.rootPath, options.extensions);
