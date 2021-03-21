@@ -187,6 +187,7 @@ var getCdPath = function(path) {
 }
 
 var processAndValidateArgs = function (args) {
+    var Paths = Java.type("java.nio.file.Paths");
     var rootPath = null;
     var extArgFound = false;
     var extensions = [];
@@ -194,10 +195,12 @@ var processAndValidateArgs = function (args) {
     var markdownExtensions = [];
     var xmlPath = null;
     var arboriPath = null;
-
+    var files = [];
+    var filexIdx;
     var result = function(valid) {
         var result = {
             rootPath : rootPath,
+            files: files,
             extensions : extensions,
             markdownExtensions : markdownExtensions,
             xmlPath : xmlPath,
@@ -216,6 +219,39 @@ var processAndValidateArgs = function (args) {
         ctx.write("file or directory " + rootPath + " does not exist.\n\n");
         return result(false);
     }
+
+    // If the rootPath ends with '.json', then the file is assumed to be a 
+    // <config.json> instead. 
+    if (rootPath.endsWith('.json')) {
+        var configJson = readFile(Paths.get(rootPath));
+        //ctx.write(JSON.stringify(configJson) + '\n');
+        try {
+            configJson = JSON.parse(configJson);
+        } catch (err) {
+            ctx.write("file " + rootPath + " is not valid JSON.\n\n");
+            return result(false);
+        }
+
+        // If the data type of the <config.json> is an array, then the file is
+        // assumed to be an array of file paths. Otherwise, it should be a
+        // config object with could have multiple properties.
+        if (Array.isArray(configJson)) {
+            files = configJson;
+        } else {
+            extensions = configJson.extensions;
+            markdownExtensions = configJson.markdownExtensions;
+            xmlPath = configJson.xmlPath;
+            arboriPath = configJson.arboriPath;
+            files = configJson.files;
+        }
+
+        // The file paths passed in need to be converted to Java Paths
+        // to work with 'readFile' correctly.
+        for (filexIdx = 0; filexIdx < files.length; filexIdx++) {
+            files[filexIdx] = Paths.get(files[filexIdx]);
+        }
+    }
+
     for (var i = 2; i < args.length; i++) {
         if (args[i].toLowerCase().startsWith("ext=")) {
             extArgFound = true;
@@ -351,7 +387,7 @@ var formatFile = function(file, formatter) {
 
 var formatFiles = function(files, formatter, markdownExtensions) {
     for (var i in files) {
-        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+        ctx.write("Formatting file " + parseInt(i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
         if (isMarkdownFile(files[i], markdownExtensions)) {
             formatMarkdownFile(files[i], formatter);
@@ -372,8 +408,12 @@ var run = function(args) {
         if (options.rootPath == "*") {
             formatBuffer(formatter);
         } else {
-            var files = getFiles(options.rootPath, options.extensions);
-            formatFiles(files, formatter, options.markdownExtensions);
+            if (options.files) {
+                formatFiles(options.files, formatter, options.markdownExtensions);
+            } else {
+                var files = getFiles(options.rootPath, options.extensions);
+                formatFiles(files, formatter, options.markdownExtensions);
+            }
         }
     }
 }
