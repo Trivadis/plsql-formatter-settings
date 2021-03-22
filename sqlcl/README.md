@@ -91,7 +91,7 @@ script format.js config.json
 
 While the name of the file doesn't matter, it must end with .json. If the content is a JSON array, then the array should contain a list of files to be formatted. If the file is an object, then the object should contain a `files` array attribute with a list of files to be formatted.
 
-If using the object format, addtional properties with names that match any of the options (e.g. `xml`, `arbori`, etc.) may be provided as an alternative means of providing option values. If an option value is provided in the configuration file and as an argument, then the argument will override the value in the file.
+If using the object format, additional properties with names that match any of the options (e.g. `xml`, `arbori`, etc.) may be provided as an alternative means of providing option values. If an option value is provided in the configuration file and as an argument, then the argument will override the value in the file.
 
 Here's an example configuration file:
 
