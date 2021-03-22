@@ -21,9 +21,10 @@ public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
             
             usage: tvdformat <rootPath> [options]
             
-            mandatory arguments:
+            mandatory argument: (one of the following)
               <rootPath>      file or path to directory containing files to format (content will be replaced!)
-                              use * to format the SQLcl buffer
+              <config.json>   configuration file in JSON format (must end with .json)
+              *               use * to format the SQLcl buffer
             
             options:
               ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
