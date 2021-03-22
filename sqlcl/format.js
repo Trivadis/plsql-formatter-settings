@@ -222,7 +222,6 @@ var processAndValidateArgs = function (args) {
     // <config.json> instead. 
     if (rootPath.endsWith('.json')) {
         var configJson = readFile(javaPaths.get(rootPath));
-        //ctx.write(JSON.stringify(configJson) + '\n');
         try {
             configJson = JSON.parse(configJson);
         } catch (err) {
