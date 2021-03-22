@@ -96,7 +96,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
     if (!"default".equals(arboriPath)) {
         arboriFileName = new javaFile(arboriPath).getAbsolutePath();
     }
-    formatter.options.put(formatter.formatProgramURL, arboriFileName);                                  // default: "default" (= provided by SQLDev / SQLcl)
+    formatter.options.put(formatter.formatProgramURL, arboriFileName);                                      // default: "default" (= provided by SQLDev / SQLcl)
 }
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
@@ -147,7 +147,7 @@ var printUsage = function (asCommand) {
     }
     ctx.write("mandatory argument: (one of the following)\n");
     ctx.write("  <rootPath>      file or path to directory containing files to format (content will be replaced!)\n");
-    ctx.write("  <config.json>   configuration file in JSON format (must end with .json)");
+    ctx.write("  <config.json>   configuration file in JSON format (must end with .json)\n");
     ctx.write("  *               use * to format the SQLcl buffer\n\n");
     ctx.write("options:\n");
     if (!asCommand) {
@@ -194,7 +194,6 @@ var processAndValidateArgs = function (args) {
     var xmlPath = null;
     var arboriPath = null;
     var files = [];
-    var filexIdx;
     var result = function(valid) {
         var result = {
             rootPath : rootPath,
@@ -222,7 +221,6 @@ var processAndValidateArgs = function (args) {
     // <config.json> instead. 
     if (rootPath.endsWith('.json')) {
         var configJson = readFile(javaPaths.get(rootPath));
-        //ctx.write(JSON.stringify(configJson) + '\n');
         try {
             configJson = JSON.parse(configJson);
         } catch (err) {
@@ -236,17 +234,55 @@ var processAndValidateArgs = function (args) {
         if (Array.isArray(configJson)) {
             files = configJson;
         } else {
-            extensions = configJson.extensions;
-            markdownExtensions = configJson.markdownExtensions;
-            xmlPath = configJson.xmlPath;
-            arboriPath = configJson.arboriPath;
-            files = configJson.files;
+            // All parameters are optional, but they need to be named as in printUsage
+            // Subsequent processing relies on correctly initialized variables.
+            // Wrong types in configJson may cause runtime exceptions.
+            // TODO: check all parameters in configJson as for args
+            if (typeof configJson.ext !== 'undefined') {
+                // only applicable if rootPath is provided
+                if (!Array.isArray(configJson.ext)) {
+                    ctx.write("ext in " + rootPath + " is not an array.\n\n");
+                }
+                extensions = configJson.ext;
+                extArgFound = true;
+            }
+            if (typeof configJson.mext !== 'undefined') {
+                if (!Array.isArray(configJson.mext)) {
+                    ctx.write("mext in " + rootPath + " is not an array.\n\n");
+                }
+                markdownExtensions = configJson.mext;
+                mextArgFound = true;
+            }
+            if (typeof configJson.xml !== 'undefined') {
+                xmlPath = configJson.xml;
+            }
+            if (typeof configJson.arbori !== 'undefined') {
+                arboriPath = configJson.arbori;
+            }
+            if (typeof configJson.files !== 'undefined') {
+                if (!Array.isArray(configJson.files)) {
+                    ctx.write("files in " + rootPath + " is not an array.\n\n");
+                }
+                files = configJson.files;
+            }
+            if (typeof configJson.rootPath !== 'undefined') {
+                // only applicable if files is not provided
+                rootPath = getCdPath(configJson.rootPath);
+                if (!existsFile(rootPath) && !existsDirectory(rootPath)) {
+                    ctx.write("file or directory " + rootPath + " does not exist.\n\n");
+                    return result(false);
+                }
+            }
+            if (typeof configJson.rootPath == 'undefined' && typeof configJson.files == 'undefined') {
+                ctx.write("rootPath " + " does not contain files nor rootPath.\n\n");
+                return result(false);
+            }
         }
 
         // The file paths passed in need to be converted to Java Paths
         // to work with 'readFile' correctly.
-        for (filexIdx = 0; filexIdx < files.length; filexIdx++) {
-            files[filexIdx] = javaPaths.get(files[filexIdx]);
+        for (var i = 0; i < files.length; i++) {
+            files[i] = javaPaths.get(files[i]);
         }
     }
 
@@ -256,7 +292,7 @@ var processAndValidateArgs = function (args) {
             if (args[i].length > 4) {
                 var values = args[i].substring(4).split(",");
                 for (var j in values) {
-                    extensions[extensions.length] = "." + values[j].toLowerCase();
+                    extensions.push("." + values[j].toLowerCase());
                 }
             }
             continue;
@@ -266,7 +302,7 @@ var processAndValidateArgs = function (args) {
             if (args[i].length > 5) {
                 var values = args[i].substring(5).split(",");
                 for (var j in values) {
-                    markdownExtensions[markdownExtensions.length] = "." + values[j].toLowerCase();
+                    markdownExtensions.push("." + values[j].toLowerCase());
                 }
             }
             continue;
@@ -304,7 +340,7 @@ var processAndValidateArgs = function (args) {
         markdownExtensions = [".markdown", ".mdown", ".mkdn", ".md"];
     }
     for (var j in markdownExtensions) {
-        extensions[extensions.length] = markdownExtensions[j];
+        extensions.push(markdownExtensions[j]);
     }
     if (xmlPath == null) {
         xmlPath = getJsPath() + "../settings/sql_developer/trivadis_advanced_format.xml"
@@ -382,14 +418,13 @@ var formatFile = function(file, formatter) {
 }
 
 var formatFiles = function(files, formatter, markdownExtensions) {
-    var fileIdx;
-    for (fileIdx = 0; fileIdx < files.length; fileIdx++) {
-        ctx.write("Formatting file " + (fileIdx+1) + " of " + files.length + ": " + files[fileIdx].toString() + "... ");
+    for (var i = 0; i < files.length; i++) {
+        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
-        if (isMarkdownFile(files[fileIdx], markdownExtensions)) {
-            formatMarkdownFile(files[fileIdx], formatter);
+        if (isMarkdownFile(files[i], markdownExtensions)) {
+            formatMarkdownFile(files[i], formatter);
         } else {
-            formatFile(files[fileIdx], formatter);
+            formatFile(files[i], formatter);
         }
         ctx.getOutputStream().flush();
     }
@@ -420,7 +455,7 @@ var getArgs = function(cmdLine) {
     var m = p.matcher(cmdLine.trim());
     var args = [];
     while (m.find()) {
-        args[args.length] = m.group();
+        args.push(m.group());
     }
     return args;
 }
