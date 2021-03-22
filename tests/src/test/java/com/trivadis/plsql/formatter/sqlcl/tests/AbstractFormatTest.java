@@ -536,17 +536,89 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     }
     
     public void process_config_file_array(final RunType runType) throws IOException {
-        String configFileContent = 
+        final String expected =
+                """
+                
+                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final String configFileContent =
             """
             [
                 "#TEMP_DIR##FILE_SEP#query.sql",
                 "#TEMP_DIR##FILE_SEP#markdown.md"
             ]
             """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         final String actual = run(runType, configFile.toString());
-        Assert.assertTrue(actual.contains("2 of 2"));
+        Assert.assertEquals(expected, actual);
+    }
+
+    public void process_config_file_object(final RunType runType) throws IOException {
+        final String expected =
+                """
+                
+                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md2... done.
+                """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        Files.move(Paths.get(tempDir.toString() + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
+        final String configFileContent =
+                """
+                {
+                    "files": [
+                        "#TEMP_DIR##FILE_SEP#query.sql",
+                        "#TEMP_DIR##FILE_SEP#markdown.md2"
+                    ],
+                    "mext": ["sql"],
+                    "mext": ["md2", "md3", "md4"],
+                    "xml": "default",
+                    "arbori": "default"
+                }
+                """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        Files.write(configFile, configFileContent.getBytes());
+        final String actual = run(runType, configFile.toString());
+        Assert.assertEquals(expected, actual);
+        final String original = getOriginalContent("markdown.md");
+        final String processed = getFormattedContent("markdown.md2");
+        Assert.assertNotEquals(original, processed);
+        final String formattedPart =
+                """
+                ``` sql
+                SELECT
+                    d.department_name,
+                    v.employee_id,
+                    v.last_name
+                FROM
+                """;
+        Assert.assertTrue(processed.contains(formattedPart));
+    }
+
+    public void process_config_file_object_and_param(final RunType runType) throws IOException {
+        final String expected =
+                """
+                
+                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final String configFileContent =
+                """
+                {
+                    "files": [
+                        "#TEMP_DIR##FILE_SEP#query.sql",
+                        "#TEMP_DIR##FILE_SEP#markdown.md"
+                    ]
+                }
+                """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        Files.write(configFile, configFileContent.getBytes());
+        final String actual = run(runType, configFile.toString(), "mext=md2");
+        Assert.assertEquals(expected, actual);
+        final String original = getOriginalContent("markdown.md");
+        // Formatter processed .md2 file as SQL file and throws now error. The file changed only slightly.
+        final String processed = getFormattedContent("markdown.md").replace("};```", "};\n```");
+        Assert.assertEquals(original, processed);
     }
 
 }
