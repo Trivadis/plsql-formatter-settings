@@ -147,7 +147,7 @@ var printUsage = function (asCommand) {
     }
     ctx.write("mandatory argument: (one of the following)\n");
     ctx.write("  <rootPath>      file or path to directory containing files to format (content will be replaced!)\n");
-    ctx.write("  <config.json>   configuration file in JSON format (must end with .json)");
+    ctx.write("  <config.json>   configuration file in JSON format (must end with .json)\n");
     ctx.write("  *               use * to format the SQLcl buffer\n\n");
     ctx.write("options:\n");
     if (!asCommand) {
