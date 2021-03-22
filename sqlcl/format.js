@@ -234,11 +234,49 @@ var processAndValidateArgs = function (args) {
         if (Array.isArray(configJson)) {
             files = configJson;
         } else {
-            extensions = configJson.extensions;
-            markdownExtensions = configJson.markdownExtensions;
-            xmlPath = configJson.xmlPath;
-            arboriPath = configJson.arboriPath;
-            files = configJson.files;
+            // All parameters are optional, but they need to be named as in printUsage
+            // Subsequent processing relies on correctly initialized variables.
+            // Wrong types in configJson may cause runtime exceptions.
+            // TODO: check all parameters in configJson as for args
+            if (typeof configJson.ext !== 'undefined') {
+                // only applicable if rootPath is provided
+                if (!Array.isArray(configJson.ext)) {
+                    ctx.write("ext in " + rootPath + " is not an array.\n\n");
+                }
+                extensions = configJson.ext;
+                extArgFound = true;
+            }
+            if (typeof configJson.mext !== 'undefined') {
+                if (!Array.isArray(configJson.mext)) {
+                    ctx.write("mext in " + rootPath + " is not an array.\n\n");
+                }
+                markdownExtensions = configJson.mext;
+                mextArgFound = true;
+            }
+            if (typeof configJson.xml !== 'undefined') {
+                xmlPath = configJson.xml;
+            }
+            if (typeof configJson.arbori !== 'undefined') {
+                arboriPath = configJson.arbori;
+            }
+            if (typeof configJson.files !== 'undefined') {
+                if (!Array.isArray(configJson.files)) {
+                    ctx.write("files in " + rootPath + " is not an array.\n\n");
+                }
+                files = configJson.files;
+            }
+            if (typeof configJson.rootPath !== 'undefined') {
+                // only applicable if files is not provided
+                rootPath = getCdPath(configJson.rootPath);
+                if (!existsFile(rootPath) && !existsDirectory(rootPath)) {
+                    ctx.write("file or directory " + rootPath + " does not exist.\n\n");
+                    return result(false);
+                }
+            }
+            if (typeof configJson.rootPath == 'undefined' && typeof configJson.files == 'undefined') {
+                ctx.write("rootPath " + " does not contain files nor rootPath.\n\n");
+                return result(false);
+            }
         }
 
         // The file paths passed in need to be converted to Java Paths
