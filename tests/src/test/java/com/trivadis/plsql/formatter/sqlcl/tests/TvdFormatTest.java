@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TvdFormatTest extends AbstractFormatTest {
@@ -81,6 +82,21 @@ public class TvdFormatTest extends AbstractFormatTest {
     @Test
     public void process_markdown_only() {
         process_markdown_only(RunType.TvdFormatCommand);
+    }
+
+    @Test
+    public void process_config_file_array() throws IOException {
+        process_config_file_array(RunType.TvdFormatCommand);
+    }
+
+    @Test
+    public void process_config_file_object() throws IOException {
+        process_config_file_object(RunType.TvdFormatCommand);
+    }
+
+    @Test
+    public void process_config_file_object_and_param() throws IOException {
+        process_config_file_object_and_param(RunType.TvdFormatCommand);
     }
 
 }
