@@ -264,7 +264,7 @@ var processAndValidateArgs = function (args) {
             if (args[i].length > 5) {
                 var values = args[i].substring(5).split(",");
                 for (var j in values) {
-                    markdownExtensions[markdownExtensions.length] = "." + values[j].toLowerCase();
+                    markdownExtensions.push("." + values[j].toLowerCase());
                 }
             }
             continue;
@@ -302,7 +302,7 @@ var processAndValidateArgs = function (args) {
         markdownExtensions = [".markdown", ".mdown", ".mkdn", ".md"];
     }
     for (var j in markdownExtensions) {
-        extensions[extensions.length] = markdownExtensions[j];
+        extensions.push(markdownExtensions[j]);
     }
     if (xmlPath == null) {
         xmlPath = getJsPath() + "../settings/sql_developer/trivadis_advanced_format.xml"
@@ -417,7 +417,7 @@ var getArgs = function(cmdLine) {
     var m = p.matcher(cmdLine.trim());
     var args = [];
     while (m.find()) {
-        args[args.length] = m.group();
+        args.push(m.group());
     }
     return args;
 }
