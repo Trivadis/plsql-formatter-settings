@@ -15,6 +15,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // console output
         final String expected =
             """
+            
             Formatting file 1 of 3: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
             Formatting file 2 of 3: #TEMP_DIR##FILE_SEP#query.sql... done.
             Formatting file 3 of 3: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
