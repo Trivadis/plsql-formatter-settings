@@ -194,7 +194,6 @@ var processAndValidateArgs = function (args) {
     var xmlPath = null;
     var arboriPath = null;
     var files = [];
-    var filexIdx;
     var result = function(valid) {
         var result = {
             rootPath : rootPath,
@@ -244,8 +243,8 @@ var processAndValidateArgs = function (args) {
 
         // The file paths passed in need to be converted to Java Paths
         // to work with 'readFile' correctly.
-        for (filexIdx = 0; filexIdx < files.length; filexIdx++) {
-            files[filexIdx] = javaPaths.get(files[filexIdx]);
+        for (var i = 0; i < files.length; i++) {
+            files[i] = javaPaths.get(files[i]);
         }
     }
 
@@ -255,7 +254,7 @@ var processAndValidateArgs = function (args) {
             if (args[i].length > 4) {
                 var values = args[i].substring(4).split(",");
                 for (var j in values) {
-                    extensions[extensions.length] = "." + values[j].toLowerCase();
+                    extensions.push("." + values[j].toLowerCase());
                 }
             }
             continue;
@@ -381,14 +380,13 @@ var formatFile = function(file, formatter) {
 }
 
 var formatFiles = function(files, formatter, markdownExtensions) {
-    var fileIdx;
-    for (fileIdx = 0; fileIdx < files.length; fileIdx++) {
-        ctx.write("Formatting file " + (fileIdx+1) + " of " + files.length + ": " + files[fileIdx].toString() + "... ");
+    for (var i = 0; i < files.length; i++) {
+        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
-        if (isMarkdownFile(files[fileIdx], markdownExtensions)) {
-            formatMarkdownFile(files[fileIdx], formatter);
+        if (isMarkdownFile(files[i], markdownExtensions)) {
+            formatMarkdownFile(files[i], formatter);
         } else {
-            formatFile(files[fileIdx], formatter);
+            formatFile(files[i], formatter);
         }
         ctx.getOutputStream().flush();
     }
