@@ -96,7 +96,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
     if (!"default".equals(arboriPath)) {
         arboriFileName = new javaFile(arboriPath).getAbsolutePath();
     }
-    formatter.options.put(formatter.formatProgramURL, arboriFileName);                                  // default: "default" (= provided by SQLDev / SQLcl)
+    formatter.options.put(formatter.formatProgramURL, arboriFileName);                                      // default: "default" (= provided by SQLDev / SQLcl)
 }
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
