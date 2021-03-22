@@ -1,9 +1,13 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import org.junit.Assert;
-
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
+
+import org.junit.Assert;
 
 public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
@@ -11,7 +15,6 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // console output
         final String expected =
             """
-
             Formatting file 1 of 3: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
             Formatting file 2 of 3: #TEMP_DIR##FILE_SEP#query.sql... done.
             Formatting file 3 of 3: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
@@ -529,6 +532,20 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             ```
             """.trim();
         Assert.assertEquals(expectedMarkdown, actualMarkdown);
+    }
+    
+    public void process_config_file_array(final RunType runType) throws IOException {
+        String configFileContent = 
+            """
+            [
+                "#TEMP_DIR##FILE_SEP#query.sql",
+                "#TEMP_DIR##FILE_SEP#markdown.md"
+            ]
+            """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        Files.write(configFile, configFileContent.getBytes());
+        final String actual = run(runType, configFile.toString());
+        Assert.assertTrue(actual.contains("2 of 2"));
     }
 
 }

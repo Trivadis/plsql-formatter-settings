@@ -1,5 +1,7 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 public class FormatTest extends AbstractFormatTest {
@@ -42,6 +44,11 @@ public class FormatTest extends AbstractFormatTest {
     @Test
     public void process_markdown_only() {
         process_markdown_only(RunType.FormatJS);
+    }
+    
+    @Test
+    public void process_config_file_array() throws IOException {
+        process_config_file_array(RunType.FormatJS);
     }
 
 }

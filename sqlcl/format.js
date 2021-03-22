@@ -145,9 +145,10 @@ var printUsage = function (asCommand) {
     } else {
         ctx.write("usage: script format.js <rootPath> [options]\n\n");
     }
-    ctx.write("mandatory arguments:\n");
+    ctx.write("mandatory argument: (one of the following)\n");
     ctx.write("  <rootPath>      file or path to directory containing files to format (content will be replaced!)\n");
-    ctx.write("                  use * to format the SQLcl buffer\n\n");
+    ctx.write("  <config.json>   configuration file in JSON format (must end with .json)");
+    ctx.write("  *               use * to format the SQLcl buffer\n\n");
     ctx.write("options:\n");
     if (!asCommand) {
         ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
