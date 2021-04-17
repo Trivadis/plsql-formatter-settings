@@ -6,11 +6,13 @@ This repository provides formatter settings for the [coding style rules](https:/
 
 Settings are provided for
 
-- [Oracle SQLcl, Version 20.4.2](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQLcl, Version 21.1.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
 - [Oracle SQL Developer, Version 20.4.1](https://www.oracle.com/database/technologies/appdev/sql-developer.html)
 - [Allround Automations PL/SQL Developer, Version 14.0.5](https://www.allroundautomations.com/products/pl-sql-developer/)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
+
+SQLcl 21.1.0 and SQLDev 20.4.1 use the same formatter class. Therefore the settings are compatible.
 
 See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) for settings supporting older versions.
 
