@@ -14,12 +14,13 @@
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
     </properties>
     <dependencies>
-		<dependency>
-		  <groupId>org.openjdk.nashorn</groupId>
-		  <artifactId>nashorn-core</artifactId>
-		  <version>15.1.1</version>
+        <!-- Nashorn JavaScript engine required by the formatter and used for SQLcl -->
+        <dependency>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.2</version>
             <scope>test</scope>
-		</dependency>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
