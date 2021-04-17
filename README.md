@@ -6,8 +6,8 @@ This repository provides formatter settings for the [coding style rules](https:/
 
 Settings are provided for
 
-- [Oracle SQLcl, Version 20.4.1](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
-- [Oracle SQL Developer, Version 20.4.2](https://www.oracle.com/database/technologies/appdev/sql-developer.html)
+- [Oracle SQLcl, Version 20.4.2](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQL Developer, Version 20.4.1](https://www.oracle.com/database/technologies/appdev/sql-developer.html)
 - [Allround Automations PL/SQL Developer, Version 14.0.5](https://www.allroundautomations.com/products/pl-sql-developer/)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
