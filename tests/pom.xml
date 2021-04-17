@@ -67,7 +67,6 @@
 
     <!-- Build Settings -->
     <build>
-        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <resources>
             <resource>
