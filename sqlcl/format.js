@@ -126,7 +126,8 @@ var readFile = function (file) {
 }
 
 var writeFile = function (file, content) {
-    javaFiles.write(file, content.getBytes());
+    var contentString = new javaString(content);
+    javaFiles.write(file, contentString.getBytes());
 }
 
 var existsDirectory = function(dir) {
