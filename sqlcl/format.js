@@ -126,7 +126,8 @@ var readFile = function (file) {
 }
 
 var writeFile = function (file, content) {
-    javaFiles.write(file, content.getBytes());
+    var contentString = new javaString(content);
+    javaFiles.write(file, contentString.getBytes());
 }
 
 var existsDirectory = function(dir) {
@@ -164,7 +165,7 @@ var printUsage = function (asCommand) {
 
 var getJsPath = function() {
     // use original args array at the time when the command was registered
-    return args[0].replaceAll("[^\\\\\\/]+(\\.js)?$", "");
+    return args[0].substring(0, args[0].lastIndexOf(javaFile.separator) + 1);
 }
 
 var getCdPath = function(path) {

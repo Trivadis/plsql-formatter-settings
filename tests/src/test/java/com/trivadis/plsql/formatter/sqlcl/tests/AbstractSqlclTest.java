@@ -10,12 +10,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 
 import org.junit.Before;
@@ -44,13 +47,22 @@ public abstract class AbstractSqlclTest {
         CommandRegistry.clearCaches(null, ctx);
         setup();
     }
-    
+
     @Before
     public void setup() {
         byteArrayOutputStream.reset();
         final BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         final WrapListenBufferOutputStream wrapListenBufferOutputStream = new WrapListenBufferOutputStream(bufferedOutputStream);
-        scriptContext.setBindings(scriptEngine.createBindings(), ScriptContext.ENGINE_SCOPE);
+        final Bindings bindings = new SimpleBindings();
+        bindings.put("polyglot.js.nashorn-compat", true);
+        bindings.put("polyglot.js.allowHostAccess", Boolean.TRUE);
+        bindings.put("polyglot.js.allowNativeAccess", Boolean.TRUE);
+        bindings.put("polyglot.js.allowCreateThread", Boolean.TRUE);
+        bindings.put("polyglot.js.allowIO", Boolean.TRUE);
+        bindings.put("polyglot.js.allowHostClassLoading", Boolean.TRUE);
+        bindings.put("polyglot.js.allowHostClassLookup",  (Predicate<String>) s -> true);
+        bindings.put("polyglot.js.allowAllAccess", Boolean.TRUE);
+        scriptContext.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
         sqlcl.setOut(bufferedOutputStream);
         ctx.setOutputStreamWrapper(wrapListenBufferOutputStream);
         sqlcl.setScriptRunnerContext(ctx);
@@ -70,7 +82,7 @@ public abstract class AbstractSqlclTest {
         }
         
     }
-    
+
     public String run(RunType runType, String...arguments) {
         if (runType == RunType.FormatJS) {
             return runScript(arguments);
