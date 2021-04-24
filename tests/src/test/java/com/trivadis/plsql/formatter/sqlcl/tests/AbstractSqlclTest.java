@@ -89,9 +89,9 @@ public abstract class AbstractSqlclTest {
         } else {
             StringBuilder sb = new StringBuilder();
             sb.append("tvdformat");
-            for (int i = 0; i < arguments.length; i++) {
+            for (String argument : arguments) {
                 sb.append(" ");
-                sb.append(arguments[i]);
+                sb.append(argument);
             }
             return runCommand (sb.toString());
         }
