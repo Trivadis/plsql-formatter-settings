@@ -2,6 +2,7 @@ package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class Issue_2 extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void macos() throws IOException {
         //formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.Keep)
         final String actual = getFormatter().format(macos(input));
@@ -43,6 +45,7 @@ public class Issue_2 extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void windows() throws IOException {
         //formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.Keep)
         final String actual = getFormatter().format(windows(input));

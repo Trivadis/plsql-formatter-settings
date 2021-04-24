@@ -5,6 +5,7 @@ import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
 import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -45,11 +46,13 @@ public class TvdFormatTest extends AbstractFormatTest {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void process_dir() {
         process_dir(RunType.TvdFormatCommand);
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void process_pkb_only() {
         process_pkb_only(RunType.TvdFormatCommand);
     }
@@ -65,6 +68,7 @@ public class TvdFormatTest extends AbstractFormatTest {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void process_with_xml() {
         process_with_xml(RunType.TvdFormatCommand);
     }
@@ -80,6 +84,7 @@ public class TvdFormatTest extends AbstractFormatTest {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void process_markdown_only() {
         process_markdown_only(RunType.TvdFormatCommand);
     }

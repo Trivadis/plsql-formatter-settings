@@ -2,6 +2,7 @@ package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.IOException;
 public class FormatterOffOn extends ConfiguredTestFormatter {
 
     @Test
+    @Disabled("LightweightFormatter")
     public void one_stmt_sl_comment_eclipse_style() {
         final String sql =
             """
@@ -27,6 +29,7 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void one_stmt_ml_comment_eclipse_style() {
         final String sql =
             """
@@ -45,6 +48,7 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void one_stmt_sl_comment_plsqldev_style() {
         final String sql =
             """
@@ -63,6 +67,7 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void one_stmt_ml_comment_plsqldev_style() {
         final String sql = 
             """
@@ -81,6 +86,7 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void two_stmt_mixed_style() {
         final String sql =
                 """
@@ -111,6 +117,7 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
+    @Disabled("LightweightFormatter")
     public void format_if_on_and_off_defined_in_same_comment() throws IOException {
         final String unformatted =
             """
