@@ -10,7 +10,6 @@ import java.io.IOException;
 public class FormatterOffOn extends ConfiguredTestFormatter {
 
     @Test
-    @Disabled("LightweightFormatter")
     public void one_stmt_sl_comment_eclipse_style() {
         final String sql =
             """
@@ -29,7 +28,6 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("LightweightFormatter")
     public void one_stmt_ml_comment_eclipse_style() {
         final String sql =
             """
@@ -48,7 +46,6 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("LightweightFormatter")
     public void one_stmt_sl_comment_plsqldev_style() {
         final String sql =
             """
@@ -67,7 +64,6 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("LightweightFormatter")
     public void one_stmt_ml_comment_plsqldev_style() {
         final String sql = 
             """
@@ -86,7 +82,6 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("LightweightFormatter")
     public void two_stmt_mixed_style() {
         final String sql =
                 """
