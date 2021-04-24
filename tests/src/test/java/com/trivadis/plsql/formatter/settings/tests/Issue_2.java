@@ -1,8 +1,8 @@
 package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -37,18 +37,18 @@ public class Issue_2 extends ConfiguredTestFormatter {
     public void macos() throws IOException {
         //formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.Keep)
         final String actual = getFormatter().format(macos(input));
-        Assert.assertEquals(macos(expected), macos(actual));
+        Assertions.assertEquals(macos(expected), macos(actual));
         final String actual2 = getFormatter().format(macos(actual));
-        Assert.assertEquals(macos(expected), macos(actual2));
+        Assertions.assertEquals(macos(expected), macos(actual2));
     }
 
     @Test
     public void windows() throws IOException {
         //formatter.options.put(formatter.extraLinesAfterSignificantStatements, Format.BreaksX2.Keep)
         final String actual = getFormatter().format(windows(input));
-        Assert.assertEquals(windows(expected), windows(actual));
+        Assertions.assertEquals(windows(expected), windows(actual));
         final String actual2 = getFormatter().format(windows(actual));
-        Assert.assertEquals(windows(expected), windows(actual2));
+        Assertions.assertEquals(windows(expected), windows(actual2));
     }
 
 }

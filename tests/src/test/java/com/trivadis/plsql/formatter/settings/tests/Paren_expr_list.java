@@ -1,7 +1,7 @@
 package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Paren_expr_list extends ConfiguredTestFormatter {
 

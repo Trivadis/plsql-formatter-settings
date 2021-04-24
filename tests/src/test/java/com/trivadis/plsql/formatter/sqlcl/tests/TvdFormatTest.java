@@ -3,16 +3,16 @@ package com.trivadis.plsql.formatter.sqlcl.tests;
 import oracle.dbtools.raptor.newscriptrunner.CommandListener;
 import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
 import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
 public class TvdFormatTest extends AbstractFormatTest {
 
-    @Before
+    @BeforeEach
     public void register() {
         runScript("--register");
         byteArrayOutputStream.reset();
@@ -30,18 +30,18 @@ public class TvdFormatTest extends AbstractFormatTest {
 
         // first registrations
         final String actual1 = runScript("--RegisteR");
-        Assert.assertEquals(expected, actual1);
+        Assertions.assertEquals(expected, actual1);
         final List<CommandListener> listeners1 = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        Assert.assertEquals(originalListeners.size() + 1, listeners1.size());
+        Assertions.assertEquals(originalListeners.size() + 1, listeners1.size());
 
         // second registration
         byteArrayOutputStream.reset();
         final String actual2 = runScript("-R");
-        Assert.assertEquals(expected, actual2);
+        Assertions.assertEquals(expected, actual2);
         final List<CommandListener> listeners2 = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        Assert.assertEquals(originalListeners.size() + 1, listeners2.size());
+        Assertions.assertEquals(originalListeners.size() + 1, listeners2.size());
     }
 
     @Test

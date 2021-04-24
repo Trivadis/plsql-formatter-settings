@@ -1,8 +1,8 @@
 package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -134,7 +134,7 @@ public class FormatterOffOn extends ConfiguredTestFormatter {
               from dual;
             """.trim();
         final String actual = formatter.format(unformatted);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 }

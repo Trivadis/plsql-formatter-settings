@@ -2,15 +2,15 @@ package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
-    @Before
+    @BeforeEach
     public void setup() {
         getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.Keep);
         getFormatter().options.put(getFormatter().kwCase, Format.Case.NoCaseChange);
@@ -42,7 +42,7 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
                 procedure p3;
                 
                 
-                    -- p4 (1)  
+                    -- p4 (1)
                     
                  
                     
@@ -78,7 +78,7 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
                procedure p3;
 
-                    -- p4 (1)  
+                    -- p4 (1)
 
                   -- p4 (2)
 
@@ -91,7 +91,7 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
             /
             """.trim();
         final String actual = getFormatter().format(input);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
 }

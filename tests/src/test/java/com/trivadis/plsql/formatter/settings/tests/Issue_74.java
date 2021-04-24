@@ -2,8 +2,8 @@ package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -83,21 +83,21 @@ public class Issue_74 extends ConfiguredTestFormatter {
     public void min_one_line_break_after_with_breaksx2_keep() throws IOException {
         getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.Keep);
         String actual = getFormatter().format(input);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void min_one_line_break_after_with_breaksx2_x1() throws IOException {
         getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X1);
         String actual = getFormatter().format(input);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void min_one_line_break_after_with_breaksx2_x2() throws IOException {
         getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X2);
         String actual = getFormatter().format(input);
-        Assert.assertEquals(expectedX2, actual);
+        Assertions.assertEquals(expectedX2, actual);
     }
 
 }

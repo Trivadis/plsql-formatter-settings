@@ -1,5 +1,19 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
+import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
+import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
+import oracle.dbtools.raptor.newscriptrunner.ScriptExecutor;
+import oracle.dbtools.raptor.newscriptrunner.ScriptRunnerContext;
+import oracle.dbtools.raptor.newscriptrunner.WrapListenBufferOutputStream;
+import org.junit.jupiter.api.BeforeEach;
+
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import javax.script.SimpleScriptContext;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,22 +26,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-import javax.script.SimpleScriptContext;
-
-import org.junit.Before;
-
-import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
-import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
-import oracle.dbtools.raptor.newscriptrunner.ScriptExecutor;
-import oracle.dbtools.raptor.newscriptrunner.ScriptRunnerContext;
-import oracle.dbtools.raptor.newscriptrunner.WrapListenBufferOutputStream;
 
 public abstract class AbstractSqlclTest {
     protected final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
@@ -48,7 +46,7 @@ public abstract class AbstractSqlclTest {
         setup();
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         byteArrayOutputStream.reset();
         final BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);

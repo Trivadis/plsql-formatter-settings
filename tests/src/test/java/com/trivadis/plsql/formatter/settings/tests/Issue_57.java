@@ -2,7 +2,7 @@ package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Issue_57 extends ConfiguredTestFormatter {
 

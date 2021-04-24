@@ -1,12 +1,12 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
 
-    @Before
+    @BeforeEach
     public void registerCommandBeforeTest() {
         runScript("--register");
         byteArrayOutputStream.reset();
@@ -37,19 +37,19 @@ public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
             
             """;
         final String actual = runCommand("Tvdformat");
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void wrong_root_path() {
         final String actual = runCommand("tvdformat /tmp/42");
-        Assert.assertTrue(actual.contains("directory /tmp/42 does not exist."));
+        Assertions.assertTrue(actual.contains("directory /tmp/42 does not exist."));
     }
 
     @Test
     public void wrong_argument() {
         final String actual = runCommand("tvdformat " + tempDir.toString() +  " xyz=10");
-        Assert.assertTrue(actual.contains("invalid argument xyz=10."));
+        Assertions.assertTrue(actual.contains("invalid argument xyz=10."));
     }
 
 }

@@ -1,7 +1,7 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TvdFormatRegisterTest extends AbstractSqlclTest {
 
@@ -16,7 +16,7 @@ public class TvdFormatRegisterTest extends AbstractSqlclTest {
             Unknown Command
             """.trim();
         final String actual = runCommand("tvdformat").trim();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -26,10 +26,10 @@ public class TvdFormatRegisterTest extends AbstractSqlclTest {
             tvdformat registered as SQLcl command.
             """;
         final String actual = runScript("--register");
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         byteArrayOutputStream.reset();
         final String actual2 = runScript("-r");
-        Assert.assertEquals(expected, actual2);
+        Assertions.assertEquals(expected, actual2);
     }
 
 }

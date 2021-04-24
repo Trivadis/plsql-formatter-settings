@@ -1,15 +1,13 @@
 package com.trivadis.plsql.formatter.settings;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.LogManager;
 
-import org.junit.Assert;
-
 import oracle.dbtools.app.Format;
 import oracle.dbtools.app.Persist2XML;
+import org.junit.jupiter.api.Assertions;
 
 public abstract class ConfiguredTestFormatter {
     protected final Format formatter;
@@ -34,9 +32,8 @@ public abstract class ConfiguredTestFormatter {
         Map<String, Object> map;
         try {
             URL advancedFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_advanced_format.xml"); // symbolic link
+            assert advancedFormat != null;
             map = Persist2XML.read(advancedFormat);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,6 +42,7 @@ public abstract class ConfiguredTestFormatter {
     
     private String getArboriFileName() {
         URL customFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_custom_format.arbori"); // symbolic link
+        assert customFormat != null;
         return customFormat.getFile();
     }
 
@@ -72,7 +70,7 @@ public abstract class ConfiguredTestFormatter {
         try {
             String expectedTrimmed = expected.toString().trim();
             String actual = formatter.format(expectedTrimmed);
-            Assert.assertEquals(expectedTrimmed, actual);
+            Assertions.assertEquals(expectedTrimmed, actual);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

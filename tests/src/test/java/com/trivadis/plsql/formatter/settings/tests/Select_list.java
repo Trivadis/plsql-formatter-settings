@@ -1,10 +1,8 @@
 package com.trivadis.plsql.formatter.settings.tests;
 
-import org.junit.Test;
-
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-
 import oracle.dbtools.app.Format;
+import org.junit.jupiter.api.Test;
 
 public class Select_list extends ConfiguredTestFormatter {
 

@@ -1,13 +1,13 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
+import org.junit.jupiter.api.Assertions;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-
-import org.junit.Assert;
 
 public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
@@ -27,7 +27,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             Expected: name_wo_function_call,identifier,term,factor,pri,n... skipped.
             """.replace("#TEMP_DIR#",tempDir.toString()).replace("#FILE_SEP#", File.separator);
         final String actual = run(runType, tempDir.toString(), "mext=");
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -58,7 +58,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
         final String expectedQuery =
@@ -79,16 +79,16 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                       v.employee_id;
             """.trim();
         final String actualQuery = getFormattedContent("query.sql");
-        Assert.assertEquals(expectedQuery, actualQuery);
+        Assertions.assertEquals(expectedQuery, actualQuery);
 
         // syntax_error.sql
-        Assert.assertEquals(getOriginalContent("syntax_error.sql"), getFormattedContent("syntax_error.sql"));
+        Assertions.assertEquals(getOriginalContent("syntax_error.sql"), getFormattedContent("syntax_error.sql"));
     }
 
     public void process_pkb_only(final RunType runType) {
         // run
         final String actual = run(runType, tempDir.toString(), "ext=pkb", "mext=");
-        Assert.assertTrue(actual.contains("file 1 of 1"));
+        Assertions.assertTrue(actual.contains("file 1 of 1"));
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -119,15 +119,15 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
     }
 
     public void process_with_original_arbori(final RunType runType) {
         // run
         final String actual = run(runType, tempDir.toString(), "arbori=" +
                 Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("original/20.3.0/custom_format.arbori")).getPath());
-        Assert.assertTrue(actual.contains("package_body.pkb"));
-        Assert.assertTrue(actual.contains("query.sql"));
+        Assertions.assertTrue(actual.contains("package_body.pkb"));
+        Assertions.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -158,7 +158,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
         final String expectedQuery =
@@ -178,14 +178,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                       v.employee_id;
             """.trim();
         final String actualQuery = getFormattedContent("query.sql");
-        Assert.assertEquals(expectedQuery, actualQuery);
+        Assertions.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_default_arbori(final RunType runType) {
         // run
         final String actual = run(runType, tempDir.toString(), "arbori=default");
-        Assert.assertTrue(actual.contains("package_body.pkb"));
-        Assert.assertTrue(actual.contains("query.sql"));
+        Assertions.assertTrue(actual.contains("package_body.pkb"));
+        Assertions.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -213,10 +213,10 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                      l_pos               := l_pos + 1;
                   end loop integer_tokens;return l_result;
                end to_int_table;end math;
-            /                
+            /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
         final String expectedQuery =
@@ -236,15 +236,15 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                       v.employee_id;
             """.trim();
         final String actualQuery = getFormattedContent("query.sql");
-        Assert.assertEquals(expectedQuery, actualQuery);
+        Assertions.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_xml(final RunType runType) {
         // run
         final String actual = run(runType, tempDir.toString(), "xml=" +
                 Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml")).getPath());
-        Assert.assertTrue(actual.contains("package_body.pkb"));
-        Assert.assertTrue(actual.contains("query.sql"));
+        Assertions.assertTrue(actual.contains("package_body.pkb"));
+        Assertions.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -275,7 +275,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
         final String expectedQuery =
@@ -296,14 +296,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     , v.employee_id;
             """.trim();
         final String actualQuery = getFormattedContent("query.sql");
-        Assert.assertEquals(expectedQuery, actualQuery);
+        Assertions.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_default_xml_default_arbori(final RunType runType) {
         // run
         final String actual = run(runType, tempDir.toString(), "xml=default", "arbori=default");
-        Assert.assertTrue(actual.contains("package_body.pkb"));
-        Assert.assertTrue(actual.contains("query.sql"));
+        Assertions.assertTrue(actual.contains("package_body.pkb"));
+        Assertions.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -337,7 +337,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
         final String expectedQuery =
@@ -362,14 +362,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 v.employee_id;
             """.trim();
         final String actualQuery = getFormattedContent("query.sql");
-        Assert.assertEquals(expectedQuery, actualQuery);
+        Assertions.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_with_embedded_xml_default_arbori(final RunType runType) {
         // run
         final String actual = run(runType, tempDir.toString(), "xml=embedded", "arbori=default");
-        Assert.assertTrue(actual.contains("package_body.pkb"));
-        Assert.assertTrue(actual.contains("query.sql"));
+        Assertions.assertTrue(actual.contains("package_body.pkb"));
+        Assertions.assertTrue(actual.contains("query.sql"));
 
         // package_body.pkb
         final String expectedPackageBody =
@@ -400,7 +400,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             /
             """.trim();
         final String actualPackageBody = getFormattedContent("package_body.pkb");
-        Assert.assertEquals(expectedPackageBody, actualPackageBody);
+        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
         // query.sql
         final String expectedQuery =
@@ -420,13 +420,13 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                       v.employee_id;
             """.trim();
         final String actualQuery = getFormattedContent("query.sql");
-        Assert.assertEquals(expectedQuery, actualQuery);
+        Assertions.assertEquals(expectedQuery, actualQuery);
     }
 
     public void process_markdown_only(final RunType runType) {
         // run
         final String actualConsole = run(runType, tempDir.toString(), "ext=");
-        Assert.assertTrue (actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
+        Assertions.assertTrue (actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
 
         // markdown.md
         final String actualMarkdown = getFormattedContent("markdown.md").trim();
@@ -532,7 +532,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             };
             ```
             """.trim();
-        Assert.assertEquals(expectedMarkdown, actualMarkdown);
+        Assertions.assertEquals(expectedMarkdown, actualMarkdown);
     }
     
     public void process_config_file_array(final RunType runType) throws IOException {
@@ -552,7 +552,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         final String actual = run(runType, configFile.toString());
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     public void process_config_file_object(final RunType runType) throws IOException {
@@ -579,10 +579,10 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         final String actual = run(runType, configFile.toString());
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         final String original = getOriginalContent("markdown.md");
         final String processed = getFormattedContent("markdown.md2");
-        Assert.assertNotEquals(original, processed);
+        Assertions.assertNotEquals(original, processed);
         final String formattedPart =
                 """
                 ``` sql
@@ -592,7 +592,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     v.last_name
                 FROM
                 """;
-        Assert.assertTrue(processed.contains(formattedPart));
+        Assertions.assertTrue(processed.contains(formattedPart));
     }
 
     public void process_config_file_object_and_param(final RunType runType) throws IOException {
@@ -614,11 +614,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         final String actual = run(runType, configFile.toString(), "mext=md2");
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         final String original = getOriginalContent("markdown.md");
         // Formatter processed .md2 file as SQL file and throws now error. The file changed only slightly.
         final String processed = getFormattedContent("markdown.md").replace("};```", "};\n```");
-        Assert.assertEquals(original, processed);
+        Assertions.assertEquals(original, processed);
     }
 
 }
