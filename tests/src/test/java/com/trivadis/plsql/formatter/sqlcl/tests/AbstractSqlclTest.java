@@ -104,6 +104,7 @@ public abstract class AbstractSqlclTest {
         System.arraycopy(arguments, 0, args, 1, arguments.length);
         scriptContext.setAttribute("args", args, ScriptContext.ENGINE_SCOPE);
         try {
+            assert script != null;
             scriptEngine.eval(new InputStreamReader(script.openStream()), scriptContext);
         } catch (ScriptException | IOException e) {
             throw new RuntimeException(e);
