@@ -616,8 +616,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         final String actual = run(runType, configFile.toString(), "mext=md2");
         Assertions.assertEquals(expected, actual);
         final String original = getOriginalContent("markdown.md");
-        // Formatter processed .md2 file as SQL file and throws now error. The file changed only slightly.
-        final String processed = getFormattedContent("markdown.md").replace("};```", "};\n```");
+        // Formatter processed .md2 file as SQL file and throws no error. The file changed only slightly.
+        final String processed = getFormattedContent("markdown.md").replace("}\n;```", "};\n```");
         Assertions.assertEquals(original, processed);
     }
 
