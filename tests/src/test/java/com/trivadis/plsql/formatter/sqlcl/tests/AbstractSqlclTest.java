@@ -112,9 +112,11 @@ public abstract class AbstractSqlclTest {
         return getConsoleOutput();
     }
     
+    @SuppressWarnings("CallToThreadRun")
     public String runCommand(String cmdLine) {
-        ScriptExecutor executor = new ScriptExecutor(cmdLine, null);
+        final ScriptExecutor executor = new ScriptExecutor(cmdLine, null);
         executor.setScriptRunnerContext(ctx);
+        // synchronous execution, that's what we want here
         executor.run();
         return getConsoleOutput();
     }
