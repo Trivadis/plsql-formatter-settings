@@ -68,7 +68,7 @@ department_name,v.employee_id;
 
 ## JavaScript code
 
-Here's another code wich must not be formatted
+Here's another code which must not be formatted
 
 ``` js
 var foo = function (bar) {
