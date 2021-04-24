@@ -68,8 +68,10 @@ public abstract class AbstractSqlclTest {
         scriptContext.setAttribute("sqlcl", sqlcl, ScriptContext.ENGINE_SCOPE);
         try {
             tempDir = Files.createTempDirectory("plsql-formatter-test-");
-            final Path unformattedDir = Paths.get(Thread.currentThread().getContextClassLoader().getResource("unformatted").getPath());
-            final List<Path> sources = Files.walk(unformattedDir).filter(f -> Files.isRegularFile(f))
+            final URL url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
+            assert url != null;
+            final Path unformattedDir = Paths.get(url.getPath());
+            final List<Path> sources = Files.walk(unformattedDir).filter(Files::isRegularFile)
                     .collect(Collectors.toList());
             for (Path source : sources) {
                 Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
@@ -124,12 +126,13 @@ public abstract class AbstractSqlclTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String result = new String(byteArrayOutputStream.toByteArray());
-        return result;
+        return byteArrayOutputStream.toString();
     }
     
     public String getOriginalContent(String fileName) {
-        Path file = Paths.get(Thread.currentThread().getContextClassLoader().getResource("unformatted/" + fileName).getPath());
+        final URL url = Thread.currentThread().getContextClassLoader().getResource("unformatted/" + fileName);
+        assert url != null;
+        final Path file = Paths.get(url.getPath());
         return getFileContent(file);
     }
     
