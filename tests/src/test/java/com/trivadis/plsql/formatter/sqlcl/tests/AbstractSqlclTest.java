@@ -101,9 +101,7 @@ public abstract class AbstractSqlclTest {
         final URL script = Thread.currentThread().getContextClassLoader().getResource("format.js");
         final String[] args = new String[arguments.length + 1];
         args[0] = "format.js";
-        for (int i=0; i < arguments.length; i++) {
-            args[i+1] = arguments[i];
-        }
+        System.arraycopy(arguments, 0, args, 1, arguments.length);
         scriptContext.setAttribute("args", args, ScriptContext.ENGINE_SCOPE);
         try {
             scriptEngine.eval(new InputStreamReader(script.openStream()), scriptContext);
