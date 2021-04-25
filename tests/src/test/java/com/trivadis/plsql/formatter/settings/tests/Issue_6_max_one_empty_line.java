@@ -4,7 +4,6 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,7 +17,6 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("LightweightFormatter")
     public void pkg() throws IOException {
         final String input =
             """
