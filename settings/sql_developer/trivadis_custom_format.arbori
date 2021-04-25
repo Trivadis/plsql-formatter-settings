@@ -511,7 +511,7 @@ r3_indent_nodes:
         var key = it.next();
         var level = posLevel.get(key);
         var value = newlinePositions.get(key);
-        var spaces = value.length()-value.lastIndexOf("\n");
+        var spaces = value.length()-value.lastIndexOf("\n")-1; // 0 = first column
         var comma = 0;
         var spacesAfterComma = 0;
         if (key < target.getSrc().size()) {
@@ -524,7 +524,7 @@ r3_indent_nodes:
             }
         }
         if (level*indentSpaces >= spaces) {
-            for (var i=0; i<=level*indentSpaces-spaces-comma-spacesAfterComma; i++) {
+            for (var i=0; i<level*indentSpaces-spaces-comma-spacesAfterComma; i++) {
                 value+=" ";
             }
             struct.putNewline(key, value);
@@ -553,6 +553,7 @@ r3_indent_nodes:
 -- It's important to note that the lines may be a bit longer than the configured max char line width.
 -- That's expected and matches the SQLDev logic. It ensures also that corner cases can be handled by
 -- this code (e.g. string tokens > max char line width).
+-- Due to this simple algorithm, it is expected that a subsequent formatter call will produce a different result.
 
 a4_add_line_breaks_with_indent:
     runOnce
