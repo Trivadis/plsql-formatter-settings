@@ -71,8 +71,6 @@ defineGlobalVariables:
     runOnce
 -> {
     // Java classes
-    var ArrayList = Java.type('java.util.ArrayList');
-    var BreaksX2 = Java.type('oracle.dbtools.app.Format.BreaksX2')
     var Format = Java.type('oracle.dbtools.app.Format');
     var HashMap = Java.type('java.util.HashMap');
     var Integer = Java.type('java.lang.Integer');
