@@ -73,6 +73,7 @@ defineGlobalVariables:
     // Java classes
     var Format = Java.type('oracle.dbtools.app.Format');
     var HashMap = Java.type('java.util.HashMap');
+    var HashSet = Java.type('java.util.HashSet');
     var Integer = Java.type('java.lang.Integer');
     var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
     var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
@@ -420,11 +421,94 @@ a3_dont_format_off_on_ranges:
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- R-3: One command per line.
--- --------------------------------------------------------------------------------------------------------------------
-
--- --------------------------------------------------------------------------------------------------------------------
 -- R-4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
 -- --------------------------------------------------------------------------------------------------------------------
+
+r3_stmt_in_first_conditional_compilation_branch:
+    runOnce
+-> {
+    var posInConditionalBranch = new HashSet();
+    var pos = 0;
+    var withinFirstBranch = false;
+    for (i = 0; i < tokens.length; i++) {
+        var type = tokens[i].type
+        var content = tokens[i].content.toLowerCase()
+        if (type == Token.MACRO_SKIP && content.startsWith("$if ")) {
+            withinFirstBranch = true;
+            continue;
+        }
+        if (withinFirstBranch && type == Token.MACRO_SKIP && content.startsWith("$")) {
+            withinFirstBranch = false;
+            continue;
+        }
+        if (type != Token.WS && type != Token.MACRO_SKIP && type != Token.COMMENT && type != Token.LINE_COMMENT) {
+            if (withinFirstBranch) {
+                posInConditionalBranch.add(new Integer(pos));
+                logger.fine(struct.getClass(), "r3_stmt_in_first_conditional_compilation_branch: ignore node at position " + pos);
+            }
+            pos++;
+        }
+    }
+}
+
+r3_sqlplus_commands:
+    [node) sqlplus_command
+;
+
+r3_sql_commands:
+    [node) sql_statement
+;
+
+r3_plsql_commands:
+      [node) subprg_spec
+          & ![node^^) create            -- standalone function/procedure
+          & ![node-1) member_or_static  -- object type spec
+          & ![node^-1) member_or_static -- object type body
+          & ![node-1) 'CONSTRUCTOR'     -- object type spec
+          & ![node^-1) 'CONSTRUCTOR'    -- object type body
+    | [node) basic_decl_item
+    | [node) stmt
+;
+
+r3_plsql_keywords:
+      [node) 'LOOP' & ![node-1) 'END'
+    | [node) 'WHEN'
+          & ![node^^) exit_stmt
+          & ![node^) merge_insert_clause
+          & ![node^) merge_update_clause
+    | [node) 'BEGIN'
+    | [node) 'END'
+    | [node) 'ELSIF'
+    | [node) 'ELSE'
+;
+
+r3_case_expressions:
+      [parent) case_expression
+    & ([node) 'WHEN' | [node) 'ELSE' | [node) 'END')
+    & parent < node
+;
+
+r3_commands:
+      r3_sqlplus_commands
+    | r3_sql_commands
+    | r3_plsql_commands
+    | (r3_plsql_keywords - r3_case_expressions)
+-> {
+    var node = tuple.get("node");
+    if (!posInConditionalBranch.contains(node.from)) {
+        var indent = getIndent(node.from);
+        if (!indent.contains("\n")) {
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "r3_commands: added line break at position " + node.from);
+        } else {
+            /* remove existing indentation, enforce conformity in these cases */
+            var indent = newlinePositions.get(node.from);
+            var newIndent = indent.substring(0, indent.lastIndexOf("\n")+1);
+            struct.putNewline(node.from, newIndent);
+            logger.fine(struct.getClass(), "r3_commands: removed indentation at position " + node.from);
+        }
+    }
+}
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- R-5: Commas in front of separated elements.
