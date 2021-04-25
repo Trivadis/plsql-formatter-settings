@@ -438,7 +438,7 @@ a3_dont_format_off_on_ranges:
 -- ensure that the indentation is >= the level*indentSpaces, if not add missing spaces.
 -- This code must be executed after missing line breaks have been added.
 
-r3_init_pos_level:
+r2_init_pos_level:
     runOnce
 -> {
     var posLevel = new HashMap();
@@ -448,7 +448,7 @@ r3_init_pos_level:
         var value = newlinePositions.get(key);
         if (value.contains("\n")) {
             posLevel.put(key, new Integer(0));
-            logger.fine(struct.getClass(), "r3_init_pos_level: initialized posLevel for position " + key);
+            logger.fine(struct.getClass(), "r2_init_pos_level: initialized posLevel for position " + key);
         }
     }
 
@@ -467,7 +467,7 @@ r3_init_pos_level:
     }
 }
 
-r3_common_nodes:
+r2_common_nodes:
       [node) basic_d
     | [node) full_cursor_body
     | [node) stmt
@@ -490,20 +490,20 @@ r3_common_nodes:
     | [node) ',' & [node+1) field
 ;
 
-r3_body_nodes:
+r2_body_nodes:
       [node) subprg_body
     & [parent) pkg_body
     & parent < node
 ;
 
-r3_populate_pos_level:
-      r3_common_nodes
-    | r3_body_nodes
+r2_populate_pos_level:
+      r2_common_nodes
+    | r2_body_nodes
 -> {
     increaseLevel(tuple.get("node"));
 }
 
-r3_indent_nodes:
+r2_indent_nodes:
     runOnce
 -> {
     var it = posLevel.keySet().iterator();
@@ -528,7 +528,7 @@ r3_indent_nodes:
                 value+=" ";
             }
             struct.putNewline(key, value);
-            logger.fine(struct.getClass(), "r3_indent_nodes: fixed indentation for position " + key);
+            logger.fine(struct.getClass(), "r2_indent_nodes: fixed indentation for position " + key);
         }
     }
 }
