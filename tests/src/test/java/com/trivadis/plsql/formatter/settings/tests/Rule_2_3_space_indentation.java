@@ -1,12 +1,20 @@
 package com.trivadis.plsql.formatter.settings.tests;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import oracle.dbtools.app.Format;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
+
+    @BeforeEach
+    public void setup() {
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+    }
 
     @Nested
     class Anonymous_plsql_block {
@@ -155,7 +163,7 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
                        );
                        p2 (
                           1
-                        , 2
+                         ,2
                        );
                     end;
                     /
