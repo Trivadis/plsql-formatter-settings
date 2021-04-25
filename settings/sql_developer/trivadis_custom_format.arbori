@@ -137,8 +137,8 @@ defineGlobalFunctions:
     }
 
     /* returns the column of a node, considers all preceding nodes */
-    function columnOfNode(node) {
-        var startPos=node.from;
+    function columnOfNode(nodeFrom) {
+        var startPos=nodeFrom;
         var col=numCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
         for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
@@ -161,8 +161,8 @@ defineGlobalFunctions:
 
     /* returns true if single-line or multi-line comments exists between two node positions */
     function hasCommentsBetweenPos(startPos, endPos) {
-        tokenStartPos = mapParserPosToLexerPos.get(startPos);
-        tokenEndPos = mapParserPosToLexerPos.get(endPos);
+        tokenStartPos = mapParserPosToLexerPos.get(new Integer(startPos));
+        tokenEndPos = mapParserPosToLexerPos.get(new Integer(endPos));
         for (var i = tokenStartPos; i < tokenEndPos; i++) {
             var type = tokens[i].type;
             if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
@@ -175,8 +175,8 @@ defineGlobalFunctions:
     /* returns the the last comment (sl or ml) between two node positions */
     function getLastCommentBetweenPos(startPos, endPos) {
         var comment = "";
-        tokenStartPos = mapParserPosToLexerPos.get(startPos);
-        tokenEndPos = mapParserPosToLexerPos.get(endPos);
+        tokenStartPos = mapParserPosToLexerPos.get(new Integer(startPos));
+        tokenEndPos = mapParserPosToLexerPos.get(new Integer(endPos));
         for (var i = tokenStartPos; i < tokenEndPos; i++) {
             var type = tokens[i].type;
             if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
@@ -513,6 +513,110 @@ r3_commands:
 -- --------------------------------------------------------------------------------------------------------------------
 -- R-5: Commas in front of separated elements.
 -- --------------------------------------------------------------------------------------------------------------------
+
+-- Considers the following SQLDev settings:
+-- - Line Breaks On Comma
+--     "Before" enforces a line break before the comma (this is rule 5)
+--     "After" enforces line break after the comma
+--     "No Breaks" keeps line breaks before/after comma "as is"
+-- - White Space After Commas (option for lines starting with a comma)
+--     "checked" enforces exactly one space after the comma
+--     "unchecked" enforces no space after a comma
+
+r5_get_prefs:
+    runOnce
+-> {
+    /* boolean true=space, false=no space */
+    var spaceAfterCommas = struct.options.get("spaceAfterCommas");
+
+    function getIndentAfterComma(indent) {
+        var plus = 1;
+        if (spaceAfterCommas) {
+           plus++;
+        }
+        return indent + getSpaces(plus);
+    }
+
+    function getIndentForComma(indent) {
+        var len = indent.length() - 1;
+        if (spaceAfterCommas) {
+           len = len - 1;
+        }
+        return indent.substring(0, len);
+    }
+
+
+    function removeLeadingSpaces(nodeFrom) {
+        var indent = getIndent(nodeFrom);
+        if (indent.contains("\n")) {
+            var pos = 0;
+            for (var i=0; i<indent.length(); i++) {
+                if (indent.substring(i, i+1) == " ") {
+                    pos++;
+                } else {
+                    break;
+                }
+            }
+            struct.putNewline(nodeFrom, indent.substring(pos));
+        } else {
+            struct.putNewline(nodeFrom, "");
+        }
+    }
+}
+
+r5_commas:
+    [node) ','
+-> {
+    var commaNode = tuple.get("node");
+    var prevPos = commaNode.from-1;
+    var nextPos = commaNode.to;
+    if (struct.breaksAfterComma()) {
+        var indentCommaNode = getIndent(commaNode.from);
+        if (indentCommaNode.contains("\n") && !hasCommentsBetweenPos(prevPos, commaNode.to)) {
+            /* situation: a new line was added before the comma instead of after */
+            struct.putNewline(commaNode.to, getIndentAfterComma(indentCommaNode));
+            logger.fine(struct.getClass(), "r5_commas: fixed indent after comma at " + commaNode.to);
+            struct.putNewline(commaNode.from, "");
+        }
+    }
+    if (struct.breaksBeforeComma()) {
+        var indentCommaNode = getIndent(commaNode.from);
+        if (!indentCommaNode.contains("\n")) {
+            var indentNextNode = getIndent(nextPos);
+            if (indentNextNode.contains("\n")) {
+                /* situation: a new line was added after the comma instead of before */
+                struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
+                logger.fine(struct.getClass(), "r5_commas: fixed indent before comma at " + commaNode.from);
+                if (!hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
+                    /* remove all whitespace for node */
+                    struct.putNewline(nextPos, "");
+                } else {
+                    var comment = getLastCommentBetweenPos(commaNode.from-1, commaNode.to);
+                    if (comment.startsWith("--")) {
+                       /* we must not remove the newline after a single-line comment */
+                    } else {
+                       /* removing newline after multi-line comment is wanted, but does not work in SQLDev 20.4.1, it would remove indentation only but keep the newline */
+                       logger.fine(struct.getClass(), "r5_commas: SQLDev 20.4.1 bug: new line after a multi-line-comment cannot be set at " + commaNode.from);
+                    }
+                }
+            }
+        }
+    }
+    /* always handle space after comma */
+    removeLeadingSpaces(nextPos);
+    if (spaceAfterCommas) {
+        var indent = getIndent(nextPos);
+        if (!indent.contains("\n")) {
+            struct.putNewline(nextPos, " " + indent);
+        }
+    } else {
+        var indentCommaNode = getIndent(commaNode.from);
+        var indentNextNode = getIndent(nextPos);
+        if (!indentCommaNode.contains("\n") && !indentNextNode.contains("\n")) {
+            struct.putNewline(nextPos, " ");
+        }
+    }
+}
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- R-2: 3 space indention.
