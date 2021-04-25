@@ -80,4 +80,8 @@ public abstract class ConfiguredTestFormatter {
         }
     }
 
+    public void assertEquals(CharSequence expected, CharSequence actual) {
+        Assertions.assertEquals(expected.toString().trim().replaceAll("\r",""), actual.toString().replaceAll("\r",""));
+    }
+
 }
