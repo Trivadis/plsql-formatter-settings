@@ -20,7 +20,7 @@
  */
 
 -- ====================================================================================================================
--- Phase - Initialization and pre-processing
+-- Phase - Initialization and pre-processing.
 -- ====================================================================================================================
 
 -- Standard functionality such as "runOnce"
@@ -73,12 +73,12 @@ defineGlobalVariables:
     // Java classes
     var ArrayList = Java.type('java.util.ArrayList');
     var BreaksX2 = Java.type('oracle.dbtools.app.Format.BreaksX2')
-    var File = Java.type('java.io.File');
     var Format = Java.type('oracle.dbtools.app.Format');
     var HashMap = Java.type('java.util.HashMap');
     var Integer = Java.type('java.lang.Integer');
     var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
     var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
+    var System = Java.type('java.lang.System');
     var Token = Java.type('oracle.dbtools.parser.Token');
 
     // use reflection to access hidden field newlinePositions
@@ -97,9 +97,100 @@ defineGlobalVariables:
     var mapParserPosToLexerPos = new HashMap();
 }
 
--- Do not separate lines by more than one line
--- replace multiple, consecutive empty lines with one empty line
--- This code changes the input source (target.input) and the lexer tokens (target.src).
+-- Global functions, which are likely to be used in more than one Arbory action
+defineGlobalFunctions:
+    runOnce
+-> {
+    /* return a string with the requested number of spaces */
+    function getSpaces(count) {
+        var result = "";
+        for (var i=0; i<count; i++) {
+            result += " ";
+        }
+        return result;
+    }
+
+    /* return the indentation at a node position, converts the default null to a single space */
+    function getIndent(pos) {
+        var indent = newlinePositions.get(new Integer(pos));
+        if (indent == null) {
+            return " ";
+        }
+        return indent;
+    }
+
+    /* returns the indentation without leading new lines from a string */
+    function numCharsAfterNewLine(indent) {
+        if (indent.contains("\n")) {
+            return indent.length() - indent.lastIndexOf("\n") - 1;
+        }
+        return indent.length();
+    }
+
+    /* returns the leading new lines from a node (without trailing spaces) */
+    function leadingNewLinesOfNode(node) {
+        var startPos=node.from;
+        var indent = getIndent(startPos);
+        if (indent.contains("\n")) {
+            return indent.substring(0, indent.lastIndexOf("\n") + 1);
+        }
+        return "";
+    }
+
+    /* returns the column of a node, considers all preceding nodes */
+    function columnOfNode(node) {
+        var startPos=node.from;
+        var col=numCharsAfterNewLine(getIndent(startPos));
+        var indent = getIndent(startPos);
+        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
+            col += target.getSrc().get(i).content.length();
+            var indent = getIndent(i);
+            col += numCharsAfterNewLine(indent);
+        }
+        return col;
+    }
+
+    /* returns true if a node or one of its children contains an indentation with a new line character */
+    function containsLineBreak(node) {
+        for (var i = node.from; i < node.to; i++) {
+            var value = getIndent(i);
+            if (value.contains("\n")) {
+                return true;
+            }
+        }
+    }
+
+    /* returns true if single-line or multi-line comments exists between two node positions */
+    function hasCommentsBetweenPos(startPos, endPos) {
+        tokenStartPos = mapParserPosToLexerPos.get(startPos);
+        tokenEndPos = mapParserPosToLexerPos.get(endPos);
+        for (var i = tokenStartPos; i < tokenEndPos; i++) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* returns the the last comment (sl or ml) between two node positions */
+    function getLastCommentBetweenPos(startPos, endPos) {
+        var comment = "";
+        tokenStartPos = mapParserPosToLexerPos.get(startPos);
+        tokenEndPos = mapParserPosToLexerPos.get(endPos);
+        for (var i = tokenStartPos; i < tokenEndPos; i++) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
+                comment = tokens[i].content;
+            }
+        }
+        return comment;
+    }
+
+}
+
+-- Replace multiple, consecutive empty lines with one empty line.
+-- This code changes the input (target.input) and the lexer tokens (target.src).
 -- Therefore this code must run at the beginning of the Arbori program.
 max_one_empty_line: runOnce -> {
     var offOnRanges = [];
@@ -216,98 +307,6 @@ max_one_empty_line: runOnce -> {
     // target.root.printTree();
 }
 
--- Global functions, which are likely to be used in more than one Arbory action
-defineGlobalFunctions:
-    runOnce
--> {
-    /* return a string with the requested number of spaces */
-    function getSpaces(count) {
-        var result = "";
-        for (var i=0; i<count; i++) {
-            result += " ";
-        }
-        return result;
-    }
-
-    /* return the indentation at a node position, converts the default null to a single space */
-    function getIndent(pos) {
-        var indent = newlinePositions.get(new Integer(pos));
-        if (indent == null) {
-            return " ";
-        }
-        return indent;
-    }
-
-    /* returns the indentation without leading new lines from a string */
-    function numCharsAfterNewLine(indent) {
-        if (indent.contains("\n")) {
-            return indent.length() - indent.lastIndexOf("\n") - 1;
-        }
-        return indent.length();
-    }
-
-    /* returns the leading new lines from a node (without trailing spaces) */
-    function leadingNewLinesOfNode(node) {
-        var startPos=node.from;
-        var indent = getIndent(startPos);
-        if (indent.contains("\n")) {
-            return indent.substring(0, indent.lastIndexOf("\n") + 1);
-        }
-        return "";
-    }
-
-    /* returns the column of a node, considers all preceding nodes */
-    function columnOfNode(node) {
-        var startPos=node.from;
-        var col=numCharsAfterNewLine(getIndent(startPos));
-        var indent = getIndent(startPos);
-        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
-            col += target.getSrc().get(i).content.length();
-            var indent = getIndent(i);
-            col += numCharsAfterNewLine(indent);
-        }
-        return col;
-    }
-
-    /* returns true if a node or one of its children contains an indentation with a new line character */
-    function containsLineBreak(node) {
-        for (var i = node.from; i < node.to; i++) {
-            var value = getIndent(i);
-            if (value.contains("\n")) {
-                return true;
-            }
-        }
-    }
-
-    /* returns true if single-line or multi-line comments exists between two node positions */
-    function hasCommentsBetweenPos(startPos, endPos) {
-        tokenStartPos = mapParserPosToLexerPos.get(startPos);
-        tokenEndPos = mapParserPosToLexerPos.get(endPos);
-        for (var i = tokenStartPos; i < tokenEndPos; i++) {
-            var type = tokens[i].type;
-            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /* returns the the last comment (sl or ml) between two node positions */
-    function getLastCommentBetweenPos(startPos, endPos) {
-        var comment = "";
-        tokenStartPos = mapParserPosToLexerPos.get(startPos);
-        tokenEndPos = mapParserPosToLexerPos.get(endPos);
-        for (var i = tokenStartPos; i < tokenEndPos; i++) {
-            var type = tokens[i].type;
-            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
-                comment = tokens[i].content;
-            }
-        }
-        return comment;
-    }
-
-}
-
 -- add explicit whitespace before each leaf node, if the whitespace before is not a single space (default)
 keep_significant_whitespace_before_leaf_nodes:
     runOnce
@@ -344,11 +343,11 @@ keep_significant_whitespace_before_leaf_nodes:
 }
 
 -- ====================================================================================================================
--- Phase 2 - Processing rule by rule
+-- Phase 2 - Processing rule by rule.
 -- ====================================================================================================================
 
 -- --------------------------------------------------------------------------------------------------------------------
--- A-1: Do not use tabs
+-- A-1: Do not use tabs.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- replace tabs with the configured indentation (default is 3)
@@ -368,7 +367,7 @@ a1_replace_tabs_with_spaces:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- A-2: Remove trailing spaces
+-- A-2: Remove trailing spaces.
 -- --------------------------------------------------------------------------------------------------------------------
 
 a2_remove_trailing_spaces:
@@ -389,7 +388,7 @@ a2_remove_trailing_spaces:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- A-3: Do not format code between @formatter:off and @formatter:on comments
+-- A-3: Do not format code between @formatter:off and @formatter:on comments.
 -- --------------------------------------------------------------------------------------------------------------------
 
 a3_dont_format_off_on_ranges:
@@ -422,7 +421,130 @@ a3_dont_format_off_on_ranges:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- A-4: Split long lines
+-- R-3: One command per line.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- R-4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- R-5: Commas in front of separated elements.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- R-2: 3 space indention.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Determine the level for each position managed in newlinePositions with a newline char ("\n") and then
+-- ensure that the indentation is >= the level*indentSpaces, if not add missing spaces.
+-- This code must be executed after missing line breaks have been added.
+
+r3_init_pos_level:
+    runOnce
+-> {
+    var posLevel = new HashMap();
+    var it = newlinePositions.keySet().iterator();
+    while (it.hasNext()) {
+        var key = it.next();
+        var value = newlinePositions.get(key);
+        if (value.contains("\n")) {
+            posLevel.put(key, new Integer(0));
+            logger.fine(struct.getClass(), "r3_init_pos_level: initialized posLevel for position " + key);
+        }
+    }
+
+    /* increase level by 1 for parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
+    function increaseLevel(parent) {
+        var descendants = parent.descendants();
+        for (var i = 0, len = descendants.length; i < len; i++) {
+            var node = descendants.get(i);
+            var level = posLevel.get(node.from);
+            if (level != null) {
+                if (node.children().size() == 0) {
+                    posLevel.put(node.from, new Integer(level+1));
+                }
+            }
+        }
+    }
+}
+
+r3_common_nodes:
+      [node) basic_d
+    | [node) full_cursor_body
+    | [node) stmt
+    | [node) case_stmt_alt
+    | [node) else_clause_opt & [node^) case_stmt
+    | [node) select & [node^) full_cursor_body
+    | [node) excptn_handler
+    | [node) prm_spec
+    | [node) ',' & [node+1) prm_spec
+    | [node) adt_field
+    | [node) ',' & [node+1) adt_field
+    | [node) body_adt_field
+    | [node) subquery_factoring_clause
+    | [node) subquery & [node^) par_subquery
+    | [node) assoc_arg
+    | [node) ',' & [node+1) assoc_arg
+    | [node) arg
+    | [node) ',' & [node+1) arg
+    | [node) field
+    | [node) ',' & [node+1) field
+;
+
+r3_body_nodes:
+      [node) subprg_body
+    & [parent) pkg_body
+    & parent < node
+;
+
+r3_populate_pos_level:
+      r3_common_nodes
+    | r3_body_nodes
+-> {
+    increaseLevel(tuple.get("node"));
+}
+
+r3_indent_nodes:
+    runOnce
+-> {
+    var it = posLevel.keySet().iterator();
+    while (it.hasNext()) {
+        var key = it.next();
+        var level = posLevel.get(key);
+        var value = newlinePositions.get(key);
+        var spaces = value.length()-value.lastIndexOf("\n");
+        var comma = 0;
+        var spacesAfterComma = 0;
+        if (key < target.getSrc().size()) {
+            if (target.getSrc().get(key).content == ",") {
+               comma = 1;
+               var indentAfterComma = getIndent(new Integer(key+1));
+               if (!indentAfterComma.contains("\n")) {
+                  spacesAfterComma = indentAfterComma.length();
+               }
+            }
+        }
+        if (level*indentSpaces >= spaces) {
+            for (var i=0; i<=level*indentSpaces-spaces-comma-spacesAfterComma; i++) {
+                value+=" ";
+            }
+            struct.putNewline(key, value);
+            logger.fine(struct.getClass(), "r3_indent_nodes: fixed indentation for position " + key);
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- R-6: Call parameters aligned, operators aligned, values aligned.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- R-7: SQL keywords are right aligned within a SQL command.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A-4: Split long lines.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- This must run at the very end to override SQLDev's default behavior.
@@ -438,7 +560,7 @@ a4_add_line_breaks_with_indent:
     runOnce
 -> {
     var pos = 0;
-    var indent = File.separator; /* handle first line */
+    var indent = System.lineSeparator(); /* handle first line */
     for (var key=0; key<target.getSrc().size(); key++) {
         if (pos > maxCharLineSize && target.getSrc().get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
             struct.putNewline(key, indent + getSpaces(indentSpaces));
@@ -448,7 +570,7 @@ a4_add_line_breaks_with_indent:
             var value = getIndent(key);
             if (value.contains("\n")) {
                 pos = numCharsAfterNewLine(value);
-                indent = File.separator + getSpaces(pos);
+                indent = System.lineSeparator() + getSpaces(pos);
             } else {
                 pos += numCharsAfterNewLine(value);
             }
