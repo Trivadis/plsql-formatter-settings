@@ -50,7 +50,8 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                for emp_cursor in (
                   select *
                     from emp
-               ) loop
+               )
+               loop
                   if emp_cursor.mgr is null or emp_cursor.mgr = 0 then
                      dbms_output.put_line('No manager');
                   else

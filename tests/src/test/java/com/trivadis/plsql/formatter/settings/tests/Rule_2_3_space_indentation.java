@@ -367,7 +367,8 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
         public void for_loop_statement() throws IOException {
             var input = """
                     begin
-                    for i in 1..10 loop
+                    for i in 1..10
+                    loop
                     p1(i);
                     p2;
                     end loop;
@@ -377,7 +378,8 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       for i in 1..10 loop
+                       for i in 1..10
+                       loop
                           p1(i);
                           p2;
                        end loop;
@@ -417,7 +419,8 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
         public void while_loop_statement() throws IOException {
             var input = """
                     begin
-                    while a != b loop
+                    while a != b
+                    loop
                     p1;
                     p2;
                     end loop;
@@ -427,7 +430,8 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       while a != b loop
+                       while a != b
+                       loop
                           p1;
                           p2;
                        end loop;
@@ -471,7 +475,8 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
                     <<inner_block>>
                     begin
                     <<while_loop>>
-                    while a != b loop
+                    while a != b
+                    loop
                     <<p1_stmt>>
                     p1;
                     <<p2_stmt>>
@@ -488,7 +493,8 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
                        <<inner_block>>
                        begin
                           <<while_loop>>
-                          while a != b loop
+                          while a != b
+                          loop
                              <<p1_stmt>>
                              p1;
                              <<p2_stmt>>

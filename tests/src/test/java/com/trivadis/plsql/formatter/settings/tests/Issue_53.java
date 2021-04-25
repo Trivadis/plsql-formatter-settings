@@ -31,7 +31,8 @@ public class Issue_53 extends ConfiguredTestFormatter {
                            ,p.prod_category
                    order by r.country_region
                            ,p.prod_category
-               ) loop
+               )
+               loop
                   if rec.region = 'Asia' then
                      if rec.prod_category = 'Hardware' then
                         /* print only one line for demo purposes */
