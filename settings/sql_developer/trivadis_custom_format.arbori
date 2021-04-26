@@ -528,9 +528,13 @@ r3_commands:
     }
 }
 
--- Line Breaks On concatenation: only when expression consists of more than one concatenation (||)
+-- --------------------------------------------------------------------------------------------------------------------
+-- O-1: Line Breaks On concatenation. Options: Before; After; No Breaks.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- only when expression consists of more than one concatenation (||)
 -- add only missing line breaks, use indentation according column position of previous node
-r3_concatenation_option:
+o1_concatenation_option:
       (:breaksBeforeConcat | :breaksAfterConcat)
     & ?node+1 = '||'
     & ([parent) arith_expr | [parent) compound_expression)
@@ -550,12 +554,12 @@ r3_concatenation_option:
         if (struct.breaksBeforeConcat()) {
             if (!getIndent(concat.from).contains("\n")) {
                 struct.putNewline(concat.from, indent);
-                logger.fine(struct.getClass(), "r3_concatenation_option: added line break before concat at " + concat.from);
+                logger.fine(struct.getClass(), "o1_concatenation_option: added line break before concat at " + concat.from);
             }
         } else {
             if (!getIndent(concat.to).contains("\n")) {
                 struct.putNewline(concat.to, indent);
-                logger.fine(struct.getClass(), "r3_concatenation_option: added line break after concat at " + concat.to);
+                logger.fine(struct.getClass(), "o1_concatenation_option: added line break after concat at " + concat.to);
             }
         }
     }
