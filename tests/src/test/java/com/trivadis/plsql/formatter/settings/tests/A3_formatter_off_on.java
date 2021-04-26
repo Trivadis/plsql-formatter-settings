@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class FormatterOffOn extends ConfiguredTestFormatter {
+public class A3_formatter_off_on extends ConfiguredTestFormatter {
 
     @Test
     public void one_stmt_sl_comment_eclipse_style() {

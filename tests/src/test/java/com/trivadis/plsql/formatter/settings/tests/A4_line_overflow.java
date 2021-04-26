@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class Line_overflow extends ConfiguredTestFormatter {
+public class A4_line_overflow extends ConfiguredTestFormatter {
 
     @Test
     public void procedure_spec_with_long_line() throws IOException {

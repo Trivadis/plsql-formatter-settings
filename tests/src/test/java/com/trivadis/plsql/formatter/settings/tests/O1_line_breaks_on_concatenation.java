@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class Line_breaks_on_concatenation extends ConfiguredTestFormatter {
+public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {

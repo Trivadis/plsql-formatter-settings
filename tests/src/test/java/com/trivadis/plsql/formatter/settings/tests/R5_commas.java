@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class Rule_5_commas extends ConfiguredTestFormatter {
+public class R5_commas extends ConfiguredTestFormatter {
 
     @Nested
     class Commas_before {

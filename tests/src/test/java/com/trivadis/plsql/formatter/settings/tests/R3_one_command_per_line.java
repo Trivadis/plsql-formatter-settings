@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class Rule_3_one_command_per_line extends ConfiguredTestFormatter {
+public class R3_one_command_per_line extends ConfiguredTestFormatter {
 
     @Nested
     class sqlplus {

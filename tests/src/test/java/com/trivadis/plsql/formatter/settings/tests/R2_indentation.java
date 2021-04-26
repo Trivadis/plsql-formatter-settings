@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
+public class R2_indentation extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
