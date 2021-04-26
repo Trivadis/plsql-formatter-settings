@@ -753,28 +753,6 @@ public class Rule_2_3_space_indentation extends ConfiguredTestFormatter {
         }
 
         @Test
-        public void spec_with_long_line() throws IOException {
-            var input = """
-                    create or replace package pkg as
-                    procedure very_long_line (p_a_12345678901234567890 in integer, p_b_12345678901234567890 in integer, p_c_12345678901234567890 in integer, p_d_12345678901234567890 in integer, p_e_12345678901234567890 in integer, p_f_12345678901234567890 in integer, p_g_12345678901234567890 in integer);
-                    procedure short_line (p_a in integer);
-                    end;
-                    /
-                    """;
-            var actual = formatter.format(input);
-            var expected = """
-                    create or replace package pkg as
-                       procedure very_long_line (p_a_12345678901234567890 in integer, p_b_12345678901234567890 in integer, p_c_12345678901234567890
-                          in integer, p_d_12345678901234567890 in integer, p_e_12345678901234567890 in integer, p_f_12345678901234567890 in integer,
-                          p_g_12345678901234567890 in integer);
-                       procedure short_line (p_a in integer);
-                    end;
-                    /
-                    """;
-            assertEquals(expected, actual);
-        }
-
-        @Test
         public void formatted_spec_with_comments() {
             var sql = """
                     create or replace package pkg as
