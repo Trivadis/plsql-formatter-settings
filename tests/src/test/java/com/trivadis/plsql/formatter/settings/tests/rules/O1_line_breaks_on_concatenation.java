@@ -1,4 +1,4 @@
-package com.trivadis.plsql.formatter.settings.tests;
+package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
