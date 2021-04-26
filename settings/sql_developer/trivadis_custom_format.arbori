@@ -546,8 +546,12 @@ r5_get_prefs:
 -> {
     /* boolean true=space, false=no space */
     var spaceAfterCommas = struct.options.get("spaceAfterCommas");
+}
 
-    function getIndentAfterComma(indent) {
+r5_commas:
+    [node) ','
+-> {
+    var getIndentAfterComma = function(indent) {
         var plus = 1;
         if (spaceAfterCommas) {
            plus++;
@@ -555,7 +559,7 @@ r5_get_prefs:
         return indent + getSpaces(plus);
     }
 
-    function getIndentForComma(indent) {
+    var getIndentForComma = function(indent) {
         var len = indent.length() - 1;
         if (spaceAfterCommas) {
            len = len - 1;
@@ -563,7 +567,7 @@ r5_get_prefs:
         return indent.substring(0, len);
     }
 
-    function removeLeadingSpaces(nodeFrom) {
+    var removeLeadingSpaces = function(nodeFrom) {
         var indent = getIndent(nodeFrom);
         if (indent.contains("\n")) {
             var pos = 0;
@@ -579,34 +583,45 @@ r5_get_prefs:
             struct.putNewline(nodeFrom, "");
         }
     }
-}
 
-r5_commas:
-    [node) ','
--> {
-    var commaNode = tuple.get("node");
-    var prevPos = commaNode.from-1;
-    var nextPos = commaNode.to;
-    if (struct.breaksAfterComma()) {
+    var addSpacesAroundComma = function(commaNode) {
+        /* always handle space after comma */
+        removeLeadingSpaces(commaNode.to);
+        if (spaceAfterCommas) {
+            var indent = getIndent(commaNode.to);
+            if (!indent.contains("\n")) {
+                struct.putNewline(commaNode.to, " " + indent);
+            }
+        } else {
+            var indentCommaNode = getIndent(commaNode.from);
+            var indentNextNode = getIndent(commaNode.to);
+            if (!indentCommaNode.contains("\n") && !indentNextNode.contains("\n")) {
+                struct.putNewline(commaNode.to, " ");
+            }
+        }
+    }
+
+    var addBreakAfterComma = function(commaNode) {
         var indentCommaNode = getIndent(commaNode.from);
-        if (indentCommaNode.contains("\n") && !hasCommentsBetweenPos(prevPos, commaNode.to)) {
+        if (indentCommaNode.contains("\n") && !hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
             /* situation: a new line was added before the comma instead of after */
             struct.putNewline(commaNode.to, getIndentAfterComma(indentCommaNode));
             logger.fine(struct.getClass(), "r5_commas: fixed indent after comma at " + commaNode.to);
             struct.putNewline(commaNode.from, "");
         }
     }
-    if (struct.breaksBeforeComma()) {
+
+    var addBreakBeforeComma = function(commaNode) {
         var indentCommaNode = getIndent(commaNode.from);
         if (!indentCommaNode.contains("\n")) {
-            var indentNextNode = getIndent(nextPos);
+            var indentNextNode = getIndent(commaNode.to);
             if (indentNextNode.contains("\n")) {
                 /* situation: a new line was added after the comma instead of before */
                 struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
                 logger.fine(struct.getClass(), "r5_commas: fixed indent before comma at " + commaNode.from);
                 if (!hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
                     /* remove all whitespace for node */
-                    struct.putNewline(nextPos, "");
+                    struct.putNewline(commaNode.to, "");
                 } else {
                     var comment = getLastCommentBetweenPos(commaNode.from-1, commaNode.to);
                     if (comment.startsWith("--")) {
@@ -619,20 +634,15 @@ r5_commas:
             }
         }
     }
-    /* always handle space after comma */
-    removeLeadingSpaces(nextPos);
-    if (spaceAfterCommas) {
-        var indent = getIndent(nextPos);
-        if (!indent.contains("\n")) {
-            struct.putNewline(nextPos, " " + indent);
-        }
-    } else {
-        var indentCommaNode = getIndent(commaNode.from);
-        var indentNextNode = getIndent(nextPos);
-        if (!indentCommaNode.contains("\n") && !indentNextNode.contains("\n")) {
-            struct.putNewline(nextPos, " ");
-        }
+
+    var node = tuple.get("node");
+    if (struct.breaksAfterComma()) {
+        addBreakAfterComma(node);
     }
+    if (struct.breaksBeforeComma()) {
+        addBreakBeforeComma(node);
+    }
+    addSpacesAroundComma(node);
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -654,20 +664,6 @@ r2_init_pos_level:
         if (value.contains("\n")) {
             posLevel.put(key, new Integer(0));
             logger.fine(struct.getClass(), "r2_init_pos_level: initialized posLevel for position " + key);
-        }
-    }
-
-    /* increase level by 1 for parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
-    function increaseLevel(parent) {
-        var descendants = parent.descendants();
-        for (var i = 0, len = descendants.length; i < len; i++) {
-            var node = descendants.get(i);
-            var level = posLevel.get(node.from);
-            if (level != null) {
-                if (node.children().size() == 0) {
-                    posLevel.put(node.from, new Integer(level+1));
-                }
-            }
         }
     }
 }
@@ -705,6 +701,20 @@ r2_populate_pos_level:
       r2_common_nodes
     | r2_body_nodes
 -> {
+    var increaseLevel = function(parent) {
+        var descendants = parent.descendants();
+        for (var i = 0, len = descendants.length; i < len; i++) {
+            var node = descendants.get(i);
+            var level = posLevel.get(node.from);
+            if (level != null) {
+                if (node.children().size() == 0) {
+                    posLevel.put(node.from, new Integer(level+1));
+                }
+            }
+        }
+    }
+
+    /* increase level by 1 for parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
     increaseLevel(tuple.get("node"));
 }
 
