@@ -210,7 +210,8 @@ max_one_empty_line:
         var off = -1;
         offOnRanges = [];
         for (var i in tokens) {
-            if (tokens[i].type == Token.LINE_COMMENT || tokens[i].type == Token.COMMENT) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
                 if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
                     off = tokens[i].begin;
                 }
@@ -241,7 +242,8 @@ max_one_empty_line:
         var secondEOLToken = 0;
         var lastEOLToken = 0;
         for (i = 0; i < tokens.length; i++) {
-            if (tokens[i].type == Token.LINE_COMMENT && firstEOLToken == 0) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT && firstEOLToken == 0) {
                 firstEOLToken = tokens[i];
                 continue;
             }
@@ -255,7 +257,7 @@ max_one_empty_line:
                 }
                 continue;
             }
-            if (tokens[i].type != Token.WS) {
+            if (type != Token.WS) {
                 if (lastEOLToken != 0) {
                     if (!inOffOnRange(secondEOLToken.begin)) {
                         substitutions.put(secondEOLToken.begin,lastEOLToken.begin,"");
@@ -276,11 +278,12 @@ max_one_empty_line:
         var substitutions = new Substitutions(target.input);
         var eolToken = 0
         for (i = 0; i < tokens.length; i++) {
-            if (tokens[i].type != Token.WS) {
+            var type = tokens[i].type;
+            if (type != Token.WS) {
                 eolToken = 0;
                 continue;
             }
-            if (eolToken == 0 && (tokens[i].type == Token.LINE_COMMENT || tokens[i].content == "\n")) {
+            if (eolToken == 0 && (type == Token.LINE_COMMENT || tokens[i].content == "\n")) {
                 eolToken = tokens[i];
                 continue;
             }
