@@ -23,8 +23,9 @@
 -- Phase - Initialization and pre-processing.
 -- ====================================================================================================================
 
--- Standard functionality such as "runOnce"
-include "std.arbori"
+-- --------------------------------------------------------------------------------------------------------------------
+-- I-1: Minimal Arbori program (expected by the formatter).
+-- --------------------------------------------------------------------------------------------------------------------
 
 -- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
 dontFormatNode:
@@ -33,7 +34,7 @@ dontFormatNode:
 ;
 
 -- ":indentCondtions" must be used, otherwise the Arbori program will be considered invalid and the default is used.
--- This rule is never call, hence it does not matter what node is selected.
+-- This rule is never called, hence it does not matter what node is selected.
 -- However, I chose to use "identifier" to avoid an Arbori warning.
 dummy:
   :indentConditions & [node) identifier
@@ -66,9 +67,13 @@ identifiers:
 ->
 ;
 
+-- --------------------------------------------------------------------------------------------------------------------
+-- I-2: Globals.
+-- --------------------------------------------------------------------------------------------------------------------
+
 -- Global variables, which are likely to be used in more than one Arbori query/action
-defineGlobalVariables:
-    runOnce
+define_global_variables:
+    [runOnce) sql_statements
 -> {
     // Java classes
     var Format = Java.type('oracle.dbtools.app.Format');
@@ -76,6 +81,7 @@ defineGlobalVariables:
     var HashSet = Java.type('java.util.HashSet');
     var Integer = Java.type('java.lang.Integer');
     var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
+    var logger = Java.type('oracle.dbtools.util.Logger');
     var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
     var System = Java.type('java.lang.System');
     var Token = Java.type('oracle.dbtools.parser.Token');
@@ -97,8 +103,8 @@ defineGlobalVariables:
 }
 
 -- Global functions, which are likely to be used in more than one Arbory action
-defineGlobalFunctions:
-    runOnce
+define_global_functions:
+    [runOnce) sql_statements
 -> {
     /* return a string with the requested number of spaces */
     function getSpaces(count) {
@@ -188,10 +194,16 @@ defineGlobalFunctions:
 
 }
 
+-- --------------------------------------------------------------------------------------------------------------------
+-- I-3: Remove duplicate empty lines.
+-- --------------------------------------------------------------------------------------------------------------------
+
 -- Replace multiple, consecutive empty lines with one empty line.
 -- This code changes the input (target.input) and the lexer tokens (target.src).
 -- Therefore this code must run at the beginning of the Arbori program.
-max_one_empty_line: runOnce -> {
+max_one_empty_line:
+    [runOnce) sql_statements
+-> {
     var offOnRanges = [];
 
     var populateOffOnRanges = function(tokens) {
@@ -306,9 +318,13 @@ max_one_empty_line: runOnce -> {
     // target.root.printTree();
 }
 
+-- --------------------------------------------------------------------------------------------------------------------
+-- I-4: Keep existing whitespace.
+-- --------------------------------------------------------------------------------------------------------------------
+
 -- add explicit whitespace before each leaf node, if the whitespace before is not a single space (default)
 keep_significant_whitespace_before_leaf_nodes:
-    runOnce
+    [runOnce) sql_statements
 -> {
     tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
     var hiddenTokenCount = 0;
@@ -351,7 +367,7 @@ keep_significant_whitespace_before_leaf_nodes:
 
 -- replace tabs with the configured indentation (default is 3)
 a1_replace_tabs_with_spaces:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var indent = getSpaces(indentSpaces);
     var it = newlinePositions.keySet().iterator();
@@ -370,7 +386,7 @@ a1_replace_tabs_with_spaces:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a2_remove_trailing_spaces:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var indent = getSpaces(indentSpaces);
     var it = newlinePositions.keySet().iterator();
@@ -391,7 +407,7 @@ a2_remove_trailing_spaces:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a3_dont_format_off_on_ranges:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var hiddenTokenCount = 0;
     var format = true;
@@ -425,7 +441,7 @@ a3_dont_format_off_on_ranges:
 -- --------------------------------------------------------------------------------------------------------------------
 
 r3_stmt_in_first_conditional_compilation_branch:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var posInConditionalBranch = new HashSet();
     var pos = 0;
@@ -524,7 +540,7 @@ r3_commands:
 --     "unchecked" enforces no space after a comma
 
 r5_get_prefs:
-    runOnce
+    [runOnce) sql_statements
 -> {
     /* boolean true=space, false=no space */
     var spaceAfterCommas = struct.options.get("spaceAfterCommas");
@@ -544,7 +560,6 @@ r5_get_prefs:
         }
         return indent.substring(0, len);
     }
-
 
     function removeLeadingSpaces(nodeFrom) {
         var indent = getIndent(nodeFrom);
@@ -627,7 +642,7 @@ r5_commas:
 -- This code must be executed after missing line breaks have been added.
 
 r2_init_pos_level:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var posLevel = new HashMap();
     var it = newlinePositions.keySet().iterator();
@@ -692,7 +707,7 @@ r2_populate_pos_level:
 }
 
 r2_indent_nodes:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var it = posLevel.keySet().iterator();
     while (it.hasNext()) {
@@ -744,7 +759,7 @@ r2_indent_nodes:
 -- Due to this simple algorithm, it is expected that a subsequent formatter call will produce a different result.
 
 a4_add_line_breaks_with_indent:
-    runOnce
+    [runOnce) sql_statements
 -> {
     var pos = 0;
     var indent = System.lineSeparator(); /* handle first line */
