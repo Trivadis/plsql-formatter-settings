@@ -107,17 +107,17 @@ define_global_functions:
     [runOnce) sql_statements
 -> {
     /* return a string with the requested number of spaces */
-    function getSpaces(count) {
+    function getSpaces(numberOfSpaces) {
         var result = "";
-        for (var i=0; i<count; i++) {
+        for (var i=0; i<numberOfSpaces; i++) {
             result += " ";
         }
         return result;
     }
 
     /* return the indentation at a node position, converts the default null to a single space */
-    function getIndent(pos) {
-        var indent = newlinePositions.get(new Integer(pos));
+    function getIndent(nodeFrom) {
+        var indent = newlinePositions.get(new Integer(nodeFrom));
         if (indent == null) {
             return " ";
         }
@@ -125,16 +125,16 @@ define_global_functions:
     }
 
     /* returns the indentation without leading new lines from a string */
-    function numCharsAfterNewLine(indent) {
+    function getNumCharsAfterNewLine(indent) {
         if (indent.contains("\n")) {
             return indent.length() - indent.lastIndexOf("\n") - 1;
         }
         return indent.length();
     }
 
-    /* returns the leading new lines from a node (without trailing spaces) */
-    function leadingNewLinesOfNode(node) {
-        var startPos=node.from;
+    /* returns the leading new lines from a node position (without trailing spaces) */
+    function getLeadingNewLines(nodeFrom) {
+        var startPos=nodeFrom;
         var indent = getIndent(startPos);
         if (indent.contains("\n")) {
             return indent.substring(0, indent.lastIndexOf("\n") + 1);
@@ -142,15 +142,15 @@ define_global_functions:
         return "";
     }
 
-    /* returns the column of a node, considers all preceding nodes */
-    function columnOfNode(nodeFrom) {
+    /* returns the column of a node position, considers all preceding nodes */
+    function getColumn(nodeFrom) {
         var startPos=nodeFrom;
-        var col=numCharsAfterNewLine(getIndent(startPos));
+        var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
         for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
             col += target.getSrc().get(i).content.length();
             var indent = getIndent(i);
-            col += numCharsAfterNewLine(indent);
+            col += getNumCharsAfterNewLine(indent);
         }
         return col;
     }
@@ -521,8 +521,7 @@ r3_commands:
             logger.fine(struct.getClass(), "r3_commands: added line break at position " + node.from);
         } else {
             /* remove existing indentation, enforce conformity in these cases */
-            var indent = newlinePositions.get(node.from);
-            var newIndent = indent.substring(0, indent.lastIndexOf("\n")+1);
+            var newIndent = getLeadingNewLines(node.from);
             struct.putNewline(node.from, newIndent);
             logger.fine(struct.getClass(), "r3_commands: removed indentation at position " + node.from);
         }
@@ -769,16 +768,16 @@ a4_add_line_breaks_with_indent:
     var indent = System.lineSeparator(); /* handle first line */
     for (var key=0; key<target.getSrc().size(); key++) {
         if (pos > maxCharLineSize && target.getSrc().get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
-            struct.putNewline(key, indent );
+            struct.putNewline(key, indent);
             pos = indent.length() + target.getSrc().get(key).content.length();
             logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: added line break at position " + key);
         } else {
             var value = getIndent(key);
             if (value.contains("\n")) {
-                pos = numCharsAfterNewLine(value);
+                pos = getNumCharsAfterNewLine(value);
                 indent = System.lineSeparator() + getSpaces(pos);
             } else {
-                pos += numCharsAfterNewLine(value);
+                pos += getNumCharsAfterNewLine(value);
             }
             pos += target.getSrc().get(key).content.length();
         }
