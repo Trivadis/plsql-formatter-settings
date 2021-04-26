@@ -754,8 +754,9 @@ r2_indent_nodes:
 -- This must run at the very end to override SQLDev's default behavior.
 -- SQL Developer adds a line break after the token that exceeds max char line width.
 -- This behaviour is not wanted, since the indentation is not added.
--- This piece of code addresses this issue. It adds a new line with the indentation of the current line
--- plus one additional indentation (for long lines).
+-- This piece of code addresses this issue. It adds a new line with the indentation of the current line.
+-- No additional indentation is added to make this work for long argument lists as well
+-- (indentation might not be reduced on subsequent formatter calls).
 -- It's important to note that the lines may be a bit longer than the configured max char line width.
 -- That's expected and matches the SQLDev logic. It ensures also that corner cases can be handled by
 -- this code (e.g. string tokens > max char line width).
@@ -768,8 +769,8 @@ a4_add_line_breaks_with_indent:
     var indent = System.lineSeparator(); /* handle first line */
     for (var key=0; key<target.getSrc().size(); key++) {
         if (pos > maxCharLineSize && target.getSrc().get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
-            struct.putNewline(key, indent + getSpaces(indentSpaces));
-            pos = indent.length() + indentSpaces + target.getSrc().get(key).content.length();
+            struct.putNewline(key, indent );
+            pos = indent.length() + target.getSrc().get(key).content.length();
             logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: added line break at position " + key);
         } else {
             var value = getIndent(key);
