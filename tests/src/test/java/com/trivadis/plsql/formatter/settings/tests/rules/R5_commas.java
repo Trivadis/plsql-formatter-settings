@@ -20,6 +20,18 @@ public class R5_commas extends ConfiguredTestFormatter {
         }
 
         @Test
+        public void select_statement_single_line() throws IOException {
+            var input = """
+                    select a , b , c from t;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a, b, c from t;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
         public void select_statement_with_space() throws IOException {
             var input = """
                     select a,
