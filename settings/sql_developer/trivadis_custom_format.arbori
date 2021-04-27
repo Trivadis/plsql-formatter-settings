@@ -625,6 +625,7 @@ r5_commas:
 
     var addSpacesAroundComma = function(commaNode) {
         /* always handle space after comma */
+        removeLeadingSpaces(commaNode.from);
         removeLeadingSpaces(commaNode.to);
         if (spaceAfterCommas) {
             var indent = getIndent(commaNode.to);
