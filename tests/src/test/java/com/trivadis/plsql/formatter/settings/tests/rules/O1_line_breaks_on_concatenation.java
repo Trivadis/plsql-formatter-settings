@@ -27,14 +27,40 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
         var expected = """
                 begin
                    dbms_output.put_line(
-                      '1' 
-                      || '2' 
+                      '1'
+                      || '2'
                       || '3'
                    );
                 end;
                 """;
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void break_before_concat_with_after() throws IOException {
+        var input = """
+                begin
+                   dbms_output.put_line(
+                      '1' ||
+                      '2' ||
+                      '3'
+                   );
+                end;
+                """;
+        var actual = formatter.format(input);
+        var expected = """
+                begin
+                   dbms_output.put_line(
+                      '1'
+                      || '2'
+                      || '3'
+                   );
+                end;
+                """;
+        assertEquals(expected, actual);
+    }
+
+
 
     @Test
     public void break_after_concat() throws IOException {
@@ -58,6 +84,33 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                 """;
         assertEquals(expected, actual);
     }
+
+
+    @Test
+    public void break_after_concat_with_before() throws IOException {
+        getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.After);
+        var input = """
+                begin
+                   dbms_output.put_line(
+                      '1'
+                      || '2'
+                      || '3'
+                   );
+                end;
+                """;
+        var actual = formatter.format(input);
+        var expected = """
+                begin
+                   dbms_output.put_line(
+                      '1' ||
+                      '2' ||
+                      '3'
+                   );
+                end;
+                """;
+        assertEquals(expected, actual);
+    }
+
 
     @Test
     public void no_break_concat() throws IOException {
