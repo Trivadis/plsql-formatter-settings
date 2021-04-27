@@ -552,11 +552,13 @@ o1_concatenation_option:
         var concat = tuple.get("node+1");
         var indent = System.lineSeparator() + getSpaces(getColumn(node.from));
         if (struct.breaksBeforeConcat()) {
+            struct.putNewline(concat.to, " "); // Before and After is not an option
             if (!getIndent(concat.from).contains("\n")) {
                 struct.putNewline(concat.from, indent);
                 logger.fine(struct.getClass(), "o1_concatenation_option: added line break before concat at " + concat.from);
             }
         } else {
+            struct.putNewline(concat.from, " "); // Before and After is not an option
             if (!getIndent(concat.to).contains("\n")) {
                 struct.putNewline(concat.to, indent);
                 logger.fine(struct.getClass(), "o1_concatenation_option: added line break after concat at " + concat.to);
