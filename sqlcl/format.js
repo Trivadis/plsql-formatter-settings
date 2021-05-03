@@ -462,16 +462,12 @@ var getArgs = function(cmdLine) {
 }
 
 var unregisterTvdFormat = function() {
-    var listeners = javaCommandRegistry.getListeners(null, ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
+    var listeners = javaCommandRegistry.getListeners(ctx.getBaseConnection(), ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
     // remove all commands registered with javaCommandRegistry.addForAllStmtsListener
     javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-    javaCommandRegistry.clearCaches(null, ctx);
-    if (ctx.getBaseConnection() != null) {
-        // clear also the cache for the connection
-        javaCommandRegistry.clearCaches(ctx.getBaseConnection(), ctx);
-    }
-    var remainingListeners = javaCommandRegistry.getListeners(null, ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
-            .stream().map(function(l) l.getClass()).collect(javaCollectors.toSet());
+    javaCommandRegistry.clearCaches(ctx.getBaseConnection(), ctx);
+    var remainingListeners = javaCommandRegistry.getListeners(ctx.getBaseConnection(), ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
+        .stream().map(function(l) l.getClass()).collect(javaCollectors.toSet());
     // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
     for (var i in listeners) {
         if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
