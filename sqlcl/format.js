@@ -466,6 +466,10 @@ var unregisterTvdFormat = function() {
     // remove all commands registered with javaCommandRegistry.addForAllStmtsListener
     javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
     javaCommandRegistry.clearCaches(null, ctx);
+    if (ctx.getBaseConnection() != null) {
+        // clear also the cache for the connection
+        javaCommandRegistry.clearCaches(ctx.getBaseConnection(), ctx);
+    }
     var remainingListeners = javaCommandRegistry.getListeners(null, ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
             .stream().map(function(l) l.getClass()).collect(javaCollectors.toSet());
     // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
