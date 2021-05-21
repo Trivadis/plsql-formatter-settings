@@ -17,6 +17,46 @@
 /**
  * Lightweight Formatter for SQL Developer and SQLcl
  * The idea is to keep the code formatted "as is" and apply chosen formatting rules only.
+ *
+ * The Arbori program is processed from top to bottom in a single file.
+ * No include files are used. The reason is, that SQLDev 20.4.1
+ * cannot include files based on relative paths and absolute paths are not feasible.
+ *
+ * To structure the Arbori program the concept of "phases" and "sections" used.
+ * A phase consists of one ore more sections.
+ * A section consists of one or more Arbori queries.
+ *
+ * The following two phases are defined:
+ *
+ * - Phase 1 - Initialization and preprocessing.
+ * - Phase 2 - Processing section by section. The processing order is important.
+ *
+ * The start of a Phase is visualized by a comment series like this
+ *
+ * -- ================================
+ * -- Phase <PhaseNumber> - <Comment>.
+ * -- ================================
+ *
+ * The sections have the following format <Category><SectionNumber>.
+ * The next table explains the meaning of a category:
+ *
+ * Cat.  Meaning                 Description
+ * ----  ----------------------  ------------------------------------------------------
+ * I     Initialization Section  Identifies a section in a initialization phase.
+ * O     SQLDev Option           Handles a SQL Developer option (Advanced Format).
+ * R     Trivadis Rule           Implements a Trivadis PL/SQL & SQL Guideline.
+ * A     Add-on Section/Rule     Additional formatting rule, that is not based on
+ *                               the Trivadis PL/SQL & SQL Guidelines. Nonetheless it's
+ *                               considered important to improve the formatting result.
+ *
+ * The SectionNumber identifies a section within a category.
+ * The does not have an additional meaning.
+ *
+ * The start of a section is visualized by a comment series like this
+ *
+ * -- -------------------------------------
+ * -- <Category><SectionNumber>: <Comment>.
+ * -- -------------------------------------
  */
 
 -- ====================================================================================================================
