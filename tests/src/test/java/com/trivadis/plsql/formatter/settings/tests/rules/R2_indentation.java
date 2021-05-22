@@ -190,9 +190,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        l1 := f1(
-                          a => 1
-                         ,b => 2
-                       );
+                                a => 1
+                               ,b => 2
+                             );
                        l2 := f2 (
                           1
                          ,2
