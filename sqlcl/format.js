@@ -452,11 +452,11 @@ var run = function(args) {
 }
 
 var getArgs = function(cmdLine) {
-    var p = javaPattern.compile('("[^"]*")|([^ ]+)');
+    var p = javaPattern.compile('("([^"]*)")|([^ ]+)');
     var m = p.matcher(cmdLine.trim());
     var args = [];
     while (m.find()) {
-        args.push(m.group());
+        args.push(m.group(3) != null ? m.group(3) : m.group(2));
     }
     return args;
 }
