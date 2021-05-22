@@ -30,14 +30,14 @@ public class Paren_expr_list extends ConfiguredTestFormatter {
         final String sql = 
             """
             select func(
-                      p1               => a,
-                      p2               => b,
-                      p300             => c,
-                      p40000           => 100,
-                      p50              => 200,
-                      p6               => 300,
-                      p7               => 400,
-                      p88888888888888  => 500
+                      p1              => a,
+                      p2              => b,
+                      p300            => c,
+                      p40000          => 100,
+                      p50             => 200,
+                      p6              => 300,
+                      p7              => 400,
+                      p88888888888888 => 500
                    )
               from dual;
             """; 

@@ -85,9 +85,9 @@ public class Oracle extends ConfiguredTestFormatter {
                   out_rec.var_char1       := in_rec1.first_name;
                   out_rec.var_char2222    := in_rec1.last_name;
                   proc1(
-                     p1111  => a1,
-                     p11    => a1,
-                     p2     => a2
+                     p1111 => a1,
+                     p11   => a1,
+                     p2    => a2
                   );
                   return ( new_empno );
                end;

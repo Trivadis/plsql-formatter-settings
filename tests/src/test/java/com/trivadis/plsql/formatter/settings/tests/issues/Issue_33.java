@@ -111,13 +111,13 @@ public class Issue_33 extends ConfiguredTestFormatter {
             """
             select some_quite_long_function_name(
                       another_long_function_name(
-                         a  => first_Column_id
-                              || another_Column_id
-                              || third_Column_id
-                              || fourth_column_id
-                              || fifth_column
-                              || another_column,
-                         b  => 'another parameter'
+                         a => first_Column_id
+                             || another_Column_id
+                             || third_Column_id
+                             || fourth_column_id
+                             || fifth_column
+                             || another_column,
+                         b => 'another parameter'
                       )
                    )
               from t;
@@ -131,13 +131,13 @@ public class Issue_33 extends ConfiguredTestFormatter {
             """
             select some_quite_long_function_name(
                       a => another_long_function_name(
-                              b  => first_Column_id
-                                   || another_Column_id
-                                   || third_Column_id
-                                   || fourth_column_id
-                                   || fifth_column
-                                   || another_column,
-                              c  => 'another parameter'
+                              b => first_Column_id
+                                  || another_Column_id
+                                  || third_Column_id
+                                  || fourth_column_id
+                                  || fifth_column
+                                  || another_column,
+                              c => 'another parameter'
                            )
                    )
               from t;
@@ -152,13 +152,13 @@ public class Issue_33 extends ConfiguredTestFormatter {
             select some_quite_long_function_name(
                       another_long_function_name(
                          yet_another_long_function_name(
-                            a  => first_Column_id
-                                 || another_Column_id
-                                 || third_Column_id
-                                 || fourth_column_id
-                                 || fifth_column
-                                 || another_column,
-                            b  => 'another parameter'
+                            a => first_Column_id
+                                || another_Column_id
+                                || third_Column_id
+                                || fourth_column_id
+                                || fifth_column
+                                || another_column,
+                            b => 'another parameter'
                          )
                       )
                    )

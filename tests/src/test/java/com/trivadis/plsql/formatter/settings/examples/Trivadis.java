@@ -29,8 +29,8 @@ public class Trivadis extends ConfiguredTestFormatter {
                fetch c_employees into r_employee;
                close c_employees;
                new_salary(
-                  in_employee_id  => in_employee_id,
-                  out_salary      => l_new_salary
+                  in_employee_id => in_employee_id,
+                  out_salary     => l_new_salary
                );
                -- check whether salary has changed
                if r_employee.salary <> l_new_salary then
