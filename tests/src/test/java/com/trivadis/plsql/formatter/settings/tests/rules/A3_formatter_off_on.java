@@ -2,7 +2,6 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -112,14 +111,12 @@ public class A3_formatter_off_on extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("LightweightFormatter")
     public void format_if_on_and_off_defined_in_same_comment() throws IOException {
         final String unformatted =
             """
             select * from dual;
             -- @formatter:on @formatter:off
-            SELECT
-               *
+            SELECT *
                   from
                      dual
             ; -- @formatter:on
@@ -127,13 +124,11 @@ public class A3_formatter_off_on extends ConfiguredTestFormatter {
             """.trim();
         final String expected =
             """
-            select *
-              from dual;
+            select * from dual;
             -- @formatter:on @formatter:off
             select *
               from dual; -- @formatter:on
-            select *
-              from dual;
+            select * from dual;
             """.trim();
         final String actual = formatter.format(unformatted);
         Assertions.assertEquals(expected, actual);
