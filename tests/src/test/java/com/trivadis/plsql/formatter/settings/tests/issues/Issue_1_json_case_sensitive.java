@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_1 extends ConfiguredTestFormatter {
+public class Issue_1_json_case_sensitive extends ConfiguredTestFormatter {
 
     @Test
     public void json_dot_notation() {

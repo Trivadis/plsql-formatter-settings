@@ -5,7 +5,7 @@ import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class Issue_5 extends ConfiguredTestFormatter {
+public class Issue_5_type_members extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
