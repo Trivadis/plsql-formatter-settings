@@ -181,4 +181,148 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             assertEquals(expected, actual);
         }
     }
+
+    @Nested
+    class Insert {
+
+        @BeforeEach
+        public void setup() {
+            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+        }
+
+        @Test
+        public void single_table() throws IOException {
+            var input = """
+                    begin
+                    insert
+                    into t
+                    values ('a', 'b');
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       insert
+                         into t
+                       values ('a', 'b');
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void multi_table() throws IOException {
+            var input = """
+                    insert
+                    all
+                    into t1 (c1, c2) values (c1, c2)
+                    into t2 (c1, c2) values (c1, c2)
+                    into t3 (c1, c2) values (c1, c2)
+                    select c1, c2
+                    from t4;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    insert
+                       all
+                      into t1 (c1, c2) values (c1, c2)
+                      into t2 (c1, c2) values (c1, c2)
+                      into t3 (c1, c2) values (c1, c2)
+                    select c1, c2
+                      from t4;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void subselect() throws IOException {
+            var input = """
+                    begin
+                    insert
+                    into phs1 (c1)
+                              (
+                                 select 1 as c1
+                    from dual
+                              );
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       insert
+                         into phs1 (c1)
+                              (
+                                 select 1 as c1
+                                   from dual
+                              );
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Nested
+    class Update {
+
+        @BeforeEach
+        public void setup() {
+            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+        }
+
+        @Test
+        public void update() throws IOException {
+            var input = """
+                    update employees
+                    set job_id = 'SA_MAN'
+                    ,salary = salary + 1000
+                    ,department_id = 120
+                    where first_name = 'Douglas'
+                    and last_name = 'Grant';
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    update employees
+                       set job_id = 'SA_MAN',
+                           salary = salary + 1000,
+                           department_id = 120
+                     where first_name = 'Douglas'
+                       and last_name = 'Grant';
+                    """;
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Nested
+    class Delete {
+
+        @BeforeEach
+        public void setup() {
+            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+        }
+
+        @Test
+        public void delete() throws IOException {
+            var input = """
+                    delete
+                    from t
+                    where c1 = 1
+                    and c2 = 2;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    delete
+                      from t
+                     where c1 = 1
+                       and c2 = 2;
+                    """;
+            assertEquals(expected, actual);
+        }
+    }
 }
