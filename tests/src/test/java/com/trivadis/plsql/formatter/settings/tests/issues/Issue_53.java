@@ -9,7 +9,7 @@ public class Issue_53 extends ConfiguredTestFormatter {
     @Test
     public void commas_before_no_ws() {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-        getFormatter().options.put(getFormatter().spaceAfterCommas, Boolean.valueOf(false));
+        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
         final String sql = 
             """
             begin
