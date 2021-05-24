@@ -396,7 +396,7 @@ keep_significant_whitespace_before_leaf_nodes:
                 // add also empty strings to ensure that not a space is added between tokens
                 struct.putNewline(i-hiddenTokenCount, wsBefore);
                 logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: add "
-                    + wsBefore.length() + " whitespace before node at position " + (i-hiddenTokenCount));
+                    + wsBefore.length() + " whitespace at " + (i-hiddenTokenCount));
             }
             wsBefore = "";
         }
@@ -422,7 +422,7 @@ a1_replace_tabs_with_spaces:
         var value = newlinePositions.get(key);
         if (value.contains("\t")) {
             struct.putNewline(key, value.replaceAll("\t", indent));
-            logger.fine(struct.getClass(), "a1_replace_tabs_with_spaces: replaced tabs with spaces at position " + key);
+            logger.fine(struct.getClass(), "a1_replace_tabs_with_spaces: replaced tabs with spaces at " + key);
         }
     }
 }
@@ -443,7 +443,7 @@ a2_remove_trailing_spaces:
         var newValue = value.replaceAll("[ ]+\\n", "\n").replaceAll("[ ]+\\r\\n", "\r\n");
         if (!value.equals(newValue)) {
             struct.putNewline(key, newValue);
-            logger.fine(struct.getClass(), "a2_remove_trailing_spaces: removed trailings spaces at position " + key);
+            logger.fine(struct.getClass(), "a2_remove_trailing_spaces: removed trailings spaces at " + key);
         }
     }
 }
@@ -475,7 +475,7 @@ a3_dont_format_off_on_ranges:
             if (!format) {
                 var pos = new Integer(i-hiddenTokenCount);
                 struct.unformattedPositions.add(pos);
-                logger.fine(struct.getClass(), "a3_dont_format_off_on_ranges: do not format node at position " + pos);
+                logger.fine(struct.getClass(), "a3_dont_format_off_on_ranges: do not format node at " + pos);
             }
         }
     }
@@ -529,7 +529,7 @@ r3_stmt_in_first_conditional_compilation_branch:
         if (type != Token.WS && type != Token.MACRO_SKIP && type != Token.COMMENT && type != Token.LINE_COMMENT) {
             if (withinFirstBranch) {
                 posInConditionalBranch.add(new Integer(pos));
-                logger.fine(struct.getClass(), "r3_stmt_in_first_conditional_compilation_branch: ignore node at position " + pos);
+                logger.fine(struct.getClass(), "r3_stmt_in_first_conditional_compilation_branch: ignore node at " + pos);
             }
             pos++;
         }
@@ -584,12 +584,12 @@ r3_commands:
         var indent = getIndent(node.from);
         if (!indent.contains("\n")) {
             struct.putNewline(node.from, System.lineSeparator());
-            logger.fine(struct.getClass(), "r3_commands: added line break at position " + node.from);
+            logger.fine(struct.getClass(), "r3_commands: added line break at " + node.from);
         } else {
             /* remove existing indentation, enforce conformity in these cases */
             var newIndent = getLeadingNewLines(node.from);
             struct.putNewline(node.from, newIndent);
-            logger.fine(struct.getClass(), "r3_commands: removed indentation at position " + node.from);
+            logger.fine(struct.getClass(), "r3_commands: removed indentation at " + node.from);
         }
     }
 }
@@ -769,7 +769,7 @@ r2_init_pos_level:
         var value = newlinePositions.get(key);
         if (value.contains("\n")) {
             posLevel.put(key, new Integer(0));
-            logger.fine(struct.getClass(), "r2_init_pos_level: initialized posLevel for position " + key);
+            logger.fine(struct.getClass(), "r2_init_pos_level: initialized posLevel at " + key);
         }
     }
 
@@ -857,7 +857,7 @@ r2_indent_nodes:
                 value+=" ";
             }
             struct.putNewline(key, value);
-            logger.fine(struct.getClass(), "r2_indent_nodes: fixed indentation for position " + key);
+            logger.fine(struct.getClass(), "r2_indent_nodes: fixed indentation at " + key);
         }
     }
 }
@@ -896,7 +896,7 @@ r6_align_assoc_args:
         }
         // closing parenthesis
         struct.putNewline(new Integer(parent.to-1), System.lineSeparator() + getSpaces(grandParentCol));
-        logger.fine(struct.getClass(), "r6_align_assoc_args: aligned position " + assocArg.from);
+        logger.fine(struct.getClass(), "r6_align_assoc_args: at " + assocArg.from);
     }
 }
 
@@ -952,7 +952,7 @@ r6_assoc_args_align:
             if (maxCol > col) {
                 indent = indent + getSpaces(maxCol - col);
                 struct.putNewline(node.from, indent);
-                logger.fine(struct.getClass(), "r6_assoc_args_align: aligned position " + node.from);
+                logger.fine(struct.getClass(), "r6_align_assignments: at " + node.from);
             }
         }
     }
@@ -986,7 +986,7 @@ a4_add_line_breaks_with_indent:
         if (pos > maxCharLineSize && target.getSrc().get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
             struct.putNewline(key, indent);
             pos = indent.length() + target.getSrc().get(key).content.length();
-            logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: added line break at position " + key);
+            logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: added line break at " + key);
         } else {
             var value = getIndent(key);
             if (value.contains("\n")) {
