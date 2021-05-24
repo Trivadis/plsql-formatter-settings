@@ -80,13 +80,11 @@ dummy:
 ;
 
 -- "skipWhitespaceBeforeNode" must be defined, otherwise the Arbori program will be considered invalid and the default is used.
--- The rule is executed by the serializer, hence it selected node matters.
--- The node "'dummy_node_skip_ws_before'" does not exist and throws a "Symbol ''dummy_node_skip_ws_before'' not found" warning.
--- This warning is shown in the log or on the console and can be ignored. The normal SQLDev user will be not aware of this warning.
 skipWhiteSpaceBeforeNode:
-  [node) 'dummy_node_skip_ws_before'
-->
-;
+  [runOnce) sql_statements
+-> {
+    var doNotCallCallbackFunction;
+}
 
 -- analytic functions, to be treated as keywords
 "analytics":
