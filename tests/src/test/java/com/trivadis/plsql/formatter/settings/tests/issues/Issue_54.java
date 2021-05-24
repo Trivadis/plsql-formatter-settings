@@ -13,17 +13,17 @@ public class Issue_54 extends ConfiguredTestFormatter {
             """
             begin
                for rec in (
-                  select r.country_region         as region,
+                  select r.country_region   as region,
                          p.prod_category,
-                         sum(s.amount_sold)       as amount_sold
-                    from sales      s
-                    join products   p
+                         sum(s.amount_sold) as amount_sold
+                    from sales     s
+                    join products  p
                       on p.prod_id = s.prod_id
-                    join customers  cust
+                    join customers cust
                       on cust.cust_id = s.cust_id
-                    join times      t
+                    join times     t
                       on t.time_id = s.time_id
-                    join countries  r
+                    join countries r
                       on r.country_id = cust.country_id
                    where calendar_year = 2000
                    group by r.country_region,

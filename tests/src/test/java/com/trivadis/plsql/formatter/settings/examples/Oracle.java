@@ -47,8 +47,8 @@ public class Oracle extends ConfiguredTestFormatter {
                     from emp,
                          dual d1,
                          dual d2
-                   where ( 1 = 2
-                      or 3 = 4 )
+                   where (1 = 2
+                      or 3 = 4)
                      and 0 = 1 + 2
                      and exists (
                             select 1,
@@ -81,15 +81,15 @@ public class Oracle extends ConfiguredTestFormatter {
                      100,
                      110
                   );
-                  tot_emps                := tot_emps + 1;  -- := alignment
-                  out_rec.var_char1       := in_rec1.first_name;
-                  out_rec.var_char2222    := in_rec1.last_name;
+                  tot_emps             := tot_emps + 1;  -- := alignment
+                  out_rec.var_char1    := in_rec1.first_name;
+                  out_rec.var_char2222 := in_rec1.last_name;
                   proc1(
                      p1111 => a1,
                      p11   => a1,
                      p2    => a2
                   );
-                  return ( new_empno );
+                  return (new_empno);
                end;
             end emp_mgmt;
             /

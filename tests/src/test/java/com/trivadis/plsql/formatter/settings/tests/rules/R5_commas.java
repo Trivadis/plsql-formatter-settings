@@ -17,6 +17,7 @@ public class R5_commas extends ConfiguredTestFormatter {
         public void setup() {
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
             getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            getFormatter().options.put(getFormatter().alignRight, false);
         }
 
         @Test
@@ -194,6 +195,7 @@ public class R5_commas extends ConfiguredTestFormatter {
         public void setup() {
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
             getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            getFormatter().options.put(getFormatter().alignRight, false);
         }
 
         @Test

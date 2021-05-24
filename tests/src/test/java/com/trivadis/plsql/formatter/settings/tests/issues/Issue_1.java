@@ -10,10 +10,10 @@ public class Issue_1 extends ConfiguredTestFormatter {
         final String sql =
             """
             create table t (
-               c clob check ( c is json )
+               c clob check (c is json)
             );
             
-            insert into t values ( '{accountNumber:123, accountName:"Name", accountType:"A"}' );
+            insert into t values ('{accountNumber:123, accountName:"Name", accountType:"A"}');
             
             column accountNumber format a15
             column accountName format a15

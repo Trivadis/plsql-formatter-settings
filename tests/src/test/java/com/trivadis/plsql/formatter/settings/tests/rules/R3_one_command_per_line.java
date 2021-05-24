@@ -1,8 +1,6 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +50,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
             var expected = """
                     select * from emp;
                     delete from emp where empno = 9999;
-                    update emp set sal=sal+1 where empno=9999;
+                    update emp set sal = sal + 1 where empno = 9999;
                     """;
             assertEquals(expected, actual);
         }
@@ -63,7 +61,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
                     select * from emp;
 
                     delete from emp where empno = 9999;
-                    update emp set sal=sal+1 where empno=9999;
+                    update emp set sal = sal + 1 where empno = 9999;
                     """;
             formatAndAssert(sql);
         }

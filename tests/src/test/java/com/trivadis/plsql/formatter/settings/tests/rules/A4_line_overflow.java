@@ -1,11 +1,17 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 public class A4_line_overflow extends ConfiguredTestFormatter {
+
+    @BeforeEach
+    public void setup() {
+        getFormatter().options.put(getFormatter().alignRight, false);
+    }
 
     @Test
     public void procedure_spec_with_long_line() throws IOException {

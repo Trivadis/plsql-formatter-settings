@@ -16,7 +16,7 @@ public class Issue_29 extends ConfiguredTestFormatter {
                       select queue_table
                         from dba_queue_tables
                    )
-               and ( owner, table_name ) not in (
+               and (owner, table_name) not in (
                       select owner,
                              name
                         from dba_snapshots
@@ -38,7 +38,7 @@ public class Issue_29 extends ConfiguredTestFormatter {
                       select queue_table
                         from dba_queue_tables
                    )
-               and ( owner, table_name ) not in (
+               and (owner, table_name) not in (
                       select owner
                            , name
                         from dba_snapshots

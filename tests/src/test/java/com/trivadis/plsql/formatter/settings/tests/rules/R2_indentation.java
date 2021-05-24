@@ -14,6 +14,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
     public void setup() {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        getFormatter().options.put(getFormatter().alignRight, false);
     }
 
     @Nested
@@ -253,10 +254,10 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       if a=b then
+                       if a = b then
                           p1a;
                           p1b;
-                       elsif a=c then
+                       elsif a = c then
                           p2a;
                           p2b;
                        else
@@ -329,10 +330,10 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        case
-                          when a=b then
+                          when a = b then
                              p1a;
                              p1b;
-                          when a=c then
+                          when a = c then
                              p2a;
                              p2b;
                           else
@@ -361,7 +362,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        loop
-                          exit when a=b;
+                          exit when a = b;
                           p1;
                           p2;
                        end loop;

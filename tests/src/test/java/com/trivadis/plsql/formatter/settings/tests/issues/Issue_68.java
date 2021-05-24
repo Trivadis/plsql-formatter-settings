@@ -12,7 +12,7 @@ public class Issue_68 extends ConfiguredTestFormatter {
             """
             merge into people_target pt
             using people_source ps
-               on ( pt.person_id = ps.person_id )
+               on (pt.person_id = ps.person_id)
              when matched then
                update
                   set pt.first_name = ps.first_name,
@@ -44,7 +44,7 @@ public class Issue_68 extends ConfiguredTestFormatter {
             """
             merge into people_target pt
             using people_source ps
-               on ( pt.person_id = ps.person_id )
+               on (pt.person_id = ps.person_id)
              when matched then
                update
                   set pt.first_name = ps.first_name
@@ -81,7 +81,7 @@ public class Issue_68 extends ConfiguredTestFormatter {
                             title
                        from people_source
                   ) ps
-               on ( pt.person_id = ps.person_id )
+               on (pt.person_id = ps.person_id)
              when matched then
                update
                   set pt.first_name = ps.first_name,
@@ -120,7 +120,7 @@ public class Issue_68 extends ConfiguredTestFormatter {
                           , title                    -- title
                        from people_source
                   ) ps
-               on ( pt.person_id = ps.person_id )
+               on (pt.person_id = ps.person_id)
              when matched then
                update
                   set pt.first_name = ps.first_name  -- first_name

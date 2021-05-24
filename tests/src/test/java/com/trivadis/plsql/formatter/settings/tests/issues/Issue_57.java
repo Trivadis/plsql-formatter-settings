@@ -13,7 +13,7 @@ public class Issue_57 extends ConfiguredTestFormatter {
             select stg.payload_type,
                    xt_hdr.*
               from stg,
-                   xmltable (
+                   xmltable(
                       '/XML/Header'
                       passing xmltype.createxml(stg.xml_payload)
                       columns source        varchar2(50)     path 'Source',
@@ -33,7 +33,7 @@ public class Issue_57 extends ConfiguredTestFormatter {
             select stg.payload_type
                  , xt_hdr.*
               from stg
-                 , xmltable (
+                 , xmltable(
                       '/XML/Header'
                       passing xmltype.createxml(stg.xml_payload)
                       columns source        varchar2(50)     path 'Source'

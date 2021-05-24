@@ -19,7 +19,7 @@ public class Issue_82 extends ConfiguredTestFormatter {
                  bulk collect
                  into l_array
                  from some_table s
-                outer apply ( s.nested_tab ) n;
+                outer apply (s.nested_tab) n;
             end;
             /
             """;
@@ -40,7 +40,7 @@ public class Issue_82 extends ConfiguredTestFormatter {
                  bulk collect
                  into l_array
                  from some_table s
-                cross apply ( s.nested_tab ) n;
+                cross apply (s.nested_tab) n;
             end;
             /
             """;

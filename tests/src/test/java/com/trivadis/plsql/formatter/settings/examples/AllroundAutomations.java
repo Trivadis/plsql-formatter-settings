@@ -15,8 +15,8 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                result  emp.ename%type;
                i       integer;
             begin
-               result  := null;
-               i       := 1;
+               result := null;
+               i      := 1;
                if p_empno is null then
                   -- If empno is null, return an empty name
                   result := null;
@@ -32,10 +32,10 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                             10, 20, 30, 40
                          );
                end if;
-               return ( result );
+               return (result);
             exception
                when no_data_found then
-                  return ( null );
+                  return (null);
             end;
             /
             """;
