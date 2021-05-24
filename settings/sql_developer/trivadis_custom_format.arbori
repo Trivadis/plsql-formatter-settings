@@ -1418,7 +1418,9 @@ o5_declarations:
             return true;
         } else {
             var content = target.getSrc().get(node.to).content;
-            if (content == ",") {
+            if (content == ";") {
+                return true;
+            } else if (content == ",") {
                 if (getIndent(node.to+1).contains("\n")) {
                     return true;
                 }
