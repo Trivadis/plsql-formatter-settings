@@ -471,7 +471,7 @@ a1_replace_tabs_with_spaces:
         var value = newlinePositions.get(key);
         if (value.contains("\t")) {
             struct.putNewline(key, value.replaceAll("\t", indent));
-            logger.fine(struct.getClass(), "a1_replace_tabs_with_spaces: replaced tabs with spaces at " + key);
+            logger.fine(struct.getClass(), "a1_replace_tabs_with_spaces: at " + key);
         }
     }
 }
@@ -492,7 +492,7 @@ a2_remove_trailing_spaces:
         var newValue = value.replaceAll("[ ]+\\n", "\n").replaceAll("[ ]+\\r\\n", "\r\n");
         if (!value.equals(newValue)) {
             struct.putNewline(key, newValue);
-            logger.fine(struct.getClass(), "a2_remove_trailing_spaces: removed trailings spaces at " + key);
+            logger.fine(struct.getClass(), "a2_remove_trailing_spaces: at " + key);
         }
     }
 }
@@ -524,7 +524,7 @@ a3_dont_format_off_on_ranges:
             if (!format) {
                 var pos = new Integer(i-hiddenTokenCount);
                 struct.unformattedPositions.add(pos);
-                logger.fine(struct.getClass(), "a3_dont_format_off_on_ranges: do not format node at " + pos);
+                logger.fine(struct.getClass(), "a3_dont_format_off_on_ranges: at " + pos);
             }
         }
     }
@@ -711,11 +711,11 @@ a5_no_space_before:
     var content = target.getSrc().get(node.from).content;
     if (content == '/') {
         struct.putNewline(node.from, System.lineSeparator());
-        logger.fine(struct.getClass(), "a5_no_space_before: add line break at " + node.from);
+        logger.fine(struct.getClass(), "a5_no_space_before: <" + content + ">, add line break at " + node.from);
     } else if (content != '.' || !getIndent(node.from).contains("\n")) {
         // support fluent type methods across multiple lines
         struct.putNewline(node.from, "");
-        logger.fine(struct.getClass(), "a5_no_space_before: at " + node.from);
+        logger.fine(struct.getClass(), "a5_no_space_before: <" + content + "> at " + node.from);
     }
 }
 
@@ -907,12 +907,12 @@ r3_commands:
         var indent = getIndent(node.from);
         if (!indent.contains("\n")) {
             struct.putNewline(node.from, System.lineSeparator());
-            logger.fine(struct.getClass(), "r3_commands: added line break at " + node.from);
+            logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from);
         } else {
             /* remove existing indentation, enforce conformity in these cases */
             var newIndent = getLeadingNewLines(node.from);
             struct.putNewline(node.from, newIndent);
-            logger.fine(struct.getClass(), "r3_commands: removed indentation at " + node.from);
+            logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from);
         }
     }
 }
@@ -944,13 +944,13 @@ o1_concatenation_option:
             struct.putNewline(concat.to, " "); // Before and After is not an option
             if (!getIndent(concat.from).contains("\n")) {
                 struct.putNewline(concat.from, indent);
-                logger.fine(struct.getClass(), "o1_concatenation_option: added line break before concat at " + concat.from);
+                logger.fine(struct.getClass(), "o1_concatenation_option: add line break before at " + concat.from);
             }
         } else {
             struct.putNewline(concat.from, " "); // Before and After is not an option
             if (!getIndent(concat.to).contains("\n")) {
                 struct.putNewline(concat.to, indent);
-                logger.fine(struct.getClass(), "o1_concatenation_option: added line break after concat at " + concat.to);
+                logger.fine(struct.getClass(), "o1_concatenation_option: add line break after at " + concat.to);
             }
         }
     }
@@ -1035,7 +1035,7 @@ r5_commas:
         if (indentCommaNode.contains("\n") && !hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
             /* situation: a new line was added before the comma instead of after */
             struct.putNewline(commaNode.to, getIndentAfterComma(indentCommaNode));
-            logger.fine(struct.getClass(), "r5_commas: fixed indent after comma at " + commaNode.to);
+            logger.fine(struct.getClass(), "r5_commas: fix indent after comma at " + commaNode.to);
             struct.putNewline(commaNode.from, "");
         }
     }
@@ -1047,7 +1047,7 @@ r5_commas:
             if (indentNextNode.contains("\n")) {
                 /* situation: a new line was added after the comma instead of before */
                 struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
-                logger.fine(struct.getClass(), "r5_commas: fixed indent before comma at " + commaNode.from);
+                logger.fine(struct.getClass(), "r5_commas: fix indent before comma at " + commaNode.from);
                 if (!hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
                     /* remove all whitespace for node */
                     struct.putNewline(commaNode.to, "");
@@ -1181,7 +1181,7 @@ r2_indent_nodes:
                 value+=" ";
             }
             struct.putNewline(key, value);
-            logger.fine(struct.getClass(), "r2_indent_nodes: fixed indentation at " + key);
+            logger.fine(struct.getClass(), "r2_indent_nodes: fix indentation at " + key);
         }
     }
 }
@@ -1318,7 +1318,7 @@ r7_right_align_keywords:
             var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length() + comma;
             var keywordIndent = parentIndent + getSpaces(missingSpaces);
             struct.putNewline(keyword.from, keywordIndent);
-            logger.fine(struct.getClass(), "r7_right_align_keywords: aligned keyword at " + keyword.from);
+            logger.fine(struct.getClass(), "r7_right_align_keywords: align <" + content + "> at " + keyword.from);
         }
     }
 }
@@ -1510,7 +1510,7 @@ a4_add_line_breaks_with_indent:
         if (pos > maxCharLineSize && target.getSrc().get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
             struct.putNewline(key, indent);
             pos = indent.length() + target.getSrc().get(key).content.length();
-            logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: added line break at " + key);
+            logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: at " + key);
         } else {
             var value = getIndent(key);
             if (value.contains("\n")) {
