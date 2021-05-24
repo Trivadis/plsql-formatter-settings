@@ -555,7 +555,7 @@ a3_dont_format_off_on_ranges:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O2: White Space: Around operators. Options: true; false
+-- O2: White Space: Around operators. Options: true; false. (spaceAroundOperators).
 -- --------------------------------------------------------------------------------------------------------------------
 
 o2_whitespace_around_operators:
@@ -590,7 +590,7 @@ o2_whitespace_around_operators:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space.
+-- O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
 -- --------------------------------------------------------------------------------------------------------------------
 
 o3_whitespace_around_open_paren:
@@ -945,7 +945,7 @@ r3_commands:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O1: Line Breaks: On concatenation. Options: Before; After; No Breaks.
+-- O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- only when expression consists of more than one concatenation (||)
@@ -1350,7 +1350,7 @@ r7_right_align_keywords:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O4: Alignment: Assignment Operator :=. Options: true; false
+-- O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
 -- --------------------------------------------------------------------------------------------------------------------
 
 o4_declarations:
@@ -1383,7 +1383,7 @@ o4_align_assignments:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O5: Alignment: Column and Table aliases. Options: true; false
+-- O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
 -- --------------------------------------------------------------------------------------------------------------------
 
 o5_declarations:
