@@ -264,6 +264,26 @@ define_global_functions:
         }
         return maxCol;
     }
+
+    /* aligns all nodes per scope */
+    var align = function(map, nodeName, logText) {
+        var it = map.keySet().iterator();
+        while (it.hasNext()) {
+            var scope = it.next();
+            var list = map.get(scope);
+            var maxCol = getMaxColumn(list, nodeName);
+            for (var i=0; i<list.length; i++) {
+                var node = list.get(i).get(nodeName);
+                var indent = getIndent(node.from);
+                var col = getColumn(node.from);
+                if (maxCol > col) {
+                    indent = indent + getSpaces(maxCol - col);
+                    struct.putNewline(node.from, indent);
+                    logger.fine(struct.getClass(), logText + ": at " + node.from);
+                }
+            }
+        }
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -1369,22 +1389,7 @@ r6_find_assignment:
 r6_align_assignments:
     [runOnce) sql_statements
 -> {
-    var it = assocArgParents.keySet().iterator();
-    while (it.hasNext()) {
-        var parent = it.next();
-        var list = assocArgParents.get(parent);
-        var maxCol = getMaxColumn(list, "node");
-        for (var i=0; i<list.length; i++) {
-            var node = list.get(i).get("node");
-            var indent = getIndent(node.from);
-            var col = getColumn(node.from);
-            if (maxCol > col) {
-                indent = indent + getSpaces(maxCol - col);
-                struct.putNewline(node.from, indent);
-                logger.fine(struct.getClass(), "r6_align_assignments: at " + node.from);
-            }
-        }
-    }
+    align(assocArgParents, "node", "r6_align_assignments");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -1417,22 +1422,7 @@ o4_find_assignments:
 o4_align_assignments:
     [runOnce) sql_statements
 -> {
-    var it = assignments.keySet().iterator();
-    while (it.hasNext()) {
-        var scope = it.next();
-        var list = assignments.get(scope);
-        var maxCol = getMaxColumn(list, "node");
-        for (var i=0; i<list.length; i++) {
-            var node = list.get(i).get("node");
-            var indent = getIndent(node.from);
-            var col = getColumn(node.from);
-            if (maxCol > col) {
-                indent = indent + getSpaces(maxCol - col);
-                struct.putNewline(node.from, indent);
-                logger.fine(struct.getClass(), "o4_align_assignments: at " + node.from);
-            }
-        }
-    }
+    align(assignments, "node", "o4_align_assignments");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -1493,22 +1483,7 @@ o5_find_aliases:
 o5_align_aliases:
     [runOnce) sql_statements
 -> {
-    var it = aliases.keySet().iterator();
-    while (it.hasNext()) {
-        var scope = it.next();
-        var list = aliases.get(scope);
-        var maxCol = getMaxColumn(list, "node");
-        for (var i=0; i<list.length; i++) {
-            var node = list.get(i).get("node");
-            var indent = getIndent(node.from);
-            var col = getColumn(node.from);
-            if (maxCol > col) {
-                indent = indent + getSpaces(maxCol - col);
-                struct.putNewline(node.from, indent);
-                logger.fine(struct.getClass(), "o5_align_aliases: at " + node.from);
-            }
-        }
-    }
+    align(aliases, "node", "o5_align_aliases");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
