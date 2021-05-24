@@ -1092,7 +1092,6 @@ r2_init_pos_level:
         var value = newlinePositions.get(key);
         if (value.contains("\n")) {
             posLevel.put(key, new Integer(0));
-            logger.fine(struct.getClass(), "r2_init_pos_level: initialized posLevel at " + key);
         }
     }
 
@@ -1176,12 +1175,12 @@ r2_indent_nodes:
                }
             }
         }
-        if (level*indentSpaces >= spaces) {
+        if (level*indentSpaces-spaces-comma-spacesAfterComma > 0) {
             for (var i=0; i<level*indentSpaces-spaces-comma-spacesAfterComma; i++) {
                 value+=" ";
             }
             struct.putNewline(key, value);
-            logger.fine(struct.getClass(), "r2_indent_nodes: fix indentation at " + key);
+            logger.fine(struct.getClass(), "r2_indent_nodes: add " + (level*indentSpaces-spaces-comma-spacesAfterComma) + " spaces at " + key);
         }
     }
 }
