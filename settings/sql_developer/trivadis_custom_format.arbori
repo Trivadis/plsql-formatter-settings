@@ -72,6 +72,10 @@
  *   The formatter ignores this configuration.
  *   The idea of the lightweight formatter is to leave this decision to the developer.
  *
+ * - Line Breaks: After statements. Options: Double break; Single break; Preserve original. (extraLinesAfterSignificantStatements).
+ *   The formatter ignores this configuration.
+ *   The idea of the lightweight formatter is to leave this decision to the developer.
+ *
  * The following SQL options are honored, but not implemented by this Arbori program.
  * They are implemented by SQLDev's oracle.dbtools.app.Format class. As a result the behavior cannot be overridden.
  *
