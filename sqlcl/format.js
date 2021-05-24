@@ -30,7 +30,7 @@ var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
 var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
-var javaCommandListener =  Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
+var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
 
 var getFiles = function (rootPath, extensions) {
     var files;
@@ -116,7 +116,7 @@ var hasParseErrors = function (content, consoleOutput) {
             ctx.write("... ");
         }
         return true;
-    } 
+    }
     return false;
 }
 
@@ -130,12 +130,12 @@ var writeFile = function (file, content) {
     javaFiles.write(file, contentString.getBytes());
 }
 
-var existsDirectory = function(dir) {
+var existsDirectory = function (dir) {
     var f = new javaFile(dir);
     return f.isDirectory();
 }
 
-var existsFile = function(file) {
+var existsFile = function (file) {
     var f = new javaFile(file);
     return f.isFile();
 }
@@ -163,12 +163,12 @@ var printUsage = function (asCommand) {
     ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n\n");
 }
 
-var getJsPath = function() {
+var getJsPath = function () {
     // use original args array at the time when the command was registered
     return args[0].substring(0, args[0].lastIndexOf(javaFile.separator) + 1);
 }
 
-var getCdPath = function(path) {
+var getCdPath = function (path) {
     if (path.startsWith("/")) {
         return path; // Unix, fully qualified
     } else if (path.length > 1 && path.substring(1, 2) == ":") {
@@ -195,15 +195,15 @@ var processAndValidateArgs = function (args) {
     var xmlPath = null;
     var arboriPath = null;
     var files = [];
-    var result = function(valid) {
+    var result = function (valid) {
         var result = {
-            rootPath : rootPath,
+            rootPath: rootPath,
             files: files,
-            extensions : extensions,
-            markdownExtensions : markdownExtensions,
-            xmlPath : xmlPath,
-            arboriPath : arboriPath, 
-            valid : valid
+            extensions: extensions,
+            markdownExtensions: markdownExtensions,
+            xmlPath: xmlPath,
+            arboriPath: arboriPath,
+            valid: valid
         }
         return result;
     }
@@ -334,7 +334,7 @@ var processAndValidateArgs = function (args) {
         return result(false);
     }
     if (!extArgFound) {
-        extensions = [".sql", ".prc", ".fnc", ".pks", ".pkb", ".trg", ".vw", ".tps", ".tpb", ".tbp", ".plb", ".pls", ".rcv", ".spc", ".typ", 
+        extensions = [".sql", ".prc", ".fnc", ".pks", ".pkb", ".trg", ".vw", ".tps", ".tpb", ".tbp", ".plb", ".pls", ".rcv", ".spc", ".typ",
             ".aqt", ".aqp", ".ctx", ".dbl", ".tab", ".dim", ".snp", ".con", ".collt", ".seq", ".syn", ".grt", ".sp", ".spb", ".sps", ".pck"];
     }
     if (!mextArgFound) {
@@ -347,20 +347,20 @@ var processAndValidateArgs = function (args) {
         xmlPath = getJsPath() + "../settings/sql_developer/trivadis_advanced_format.xml"
         if (!existsFile(xmlPath)) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
-            xmlPath = "embedded"; 
+            xmlPath = "embedded";
         }
     }
     if (arboriPath == null) {
         arboriPath = getJsPath() + "../settings/sql_developer/trivadis_custom_format.arbori"
         if (!existsFile(arboriPath)) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
-            arboriPath = "default"; 
+            arboriPath = "default";
         }
     }
     return result(true);
 }
 
-var formatBuffer = function(formatter) {
+var formatBuffer = function (formatter) {
     ctx.write("Formatting SQLcl buffer... ");
     ctx.getOutputStream().flush();
     var original = ctx.getSQLPlusBuffer().getBufferSafe().getBuffer();
@@ -376,16 +376,16 @@ var formatBuffer = function(formatter) {
     ctx.getOutputStream().flush();
 }
 
-var isMarkdownFile = function(file, markdownExtensions) {
+var isMarkdownFile = function (file, markdownExtensions) {
     for (var j in markdownExtensions) {
         if (file.toString().toLowerCase().endsWith(markdownExtensions[j])) {
             return true;
         }
     }
     return false;
-} 
+}
 
-var formatMarkdownFile = function(file, formatter) {
+var formatMarkdownFile = function (file, formatter) {
     var original = readFile(file)
     var p = javaPattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
     var m = p.matcher(original);
@@ -408,7 +408,7 @@ var formatMarkdownFile = function(file, formatter) {
     ctx.write("done.\n");
 }
 
-var formatFile = function(file, formatter) {
+var formatFile = function (file, formatter) {
     var original = readFile(file)
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
@@ -418,9 +418,9 @@ var formatFile = function(file, formatter) {
     }
 }
 
-var formatFiles = function(files, formatter, markdownExtensions) {
+var formatFiles = function (files, formatter, markdownExtensions) {
     for (var i = 0; i < files.length; i++) {
-        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+        ctx.write("Formatting file " + (i + 1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
         if (isMarkdownFile(files[i], markdownExtensions)) {
             formatMarkdownFile(files[i], formatter);
@@ -431,7 +431,7 @@ var formatFiles = function(files, formatter, markdownExtensions) {
     }
 }
 
-var run = function(args) { 
+var run = function (args) {
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
@@ -451,7 +451,7 @@ var run = function(args) {
     }
 }
 
-var getArgs = function(cmdLine) {
+var getArgs = function (cmdLine) {
     var p = javaPattern.compile('("([^"]*)")|([^ ]+)');
     var m = p.matcher(cmdLine.trim());
     var args = [];
@@ -461,7 +461,7 @@ var getArgs = function(cmdLine) {
     return args;
 }
 
-var unregisterTvdFormat = function() {
+var unregisterTvdFormat = function () {
     var listeners = javaCommandRegistry.getListeners(ctx.getBaseConnection(), ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
     // remove all commands registered with javaCommandRegistry.addForAllStmtsListener
     javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
@@ -476,8 +476,8 @@ var unregisterTvdFormat = function() {
     }
 }
 
-var registerTvdFormat = function() {
-    var handleEvent = function(conn, ctx, cmd) {
+var registerTvdFormat = function () {
+    var handleEvent = function (conn, ctx, cmd) {
         var args = getArgs(cmd.getSql());
         if (args != null && typeof args[0] != "undefined" && args[0].equalsIgnoreCase("tvdformat")) {
             run(args);
@@ -485,9 +485,11 @@ var registerTvdFormat = function() {
         }
         return false;
     }
-    var beginEvent = function(conn, ctx, cmd) {}
-    var endEvent = function(conn, ctx, cmd) {}
-    var toString = function() {
+    var beginEvent = function (conn, ctx, cmd) {
+    }
+    var endEvent = function (conn, ctx, cmd) {
+    }
+    var toString = function () {
         // to identify this dynamically created class during unregisterTvdFormat()
         return "TvdFormat";
     }
