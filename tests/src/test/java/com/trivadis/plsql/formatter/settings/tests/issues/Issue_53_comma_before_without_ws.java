@@ -4,7 +4,7 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
 
-public class Issue_53 extends ConfiguredTestFormatter {
+public class Issue_53_comma_before_without_ws extends ConfiguredTestFormatter {
 
     @Test
     public void commas_before_no_ws() {

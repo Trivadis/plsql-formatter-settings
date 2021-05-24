@@ -4,7 +4,7 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
 
-public class Issue_78 extends ConfiguredTestFormatter {
+public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
 
     @Test
     public void subselect_with_commas_after() {

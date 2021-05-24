@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_19 extends ConfiguredTestFormatter {
+public class Issue_19_split_arguments extends ConfiguredTestFormatter {
 
     @Test
     public void arg_list_split_5_or_more_params() {

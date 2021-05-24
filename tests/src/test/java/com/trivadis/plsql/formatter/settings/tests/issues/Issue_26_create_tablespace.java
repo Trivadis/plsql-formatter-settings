@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_26 extends ConfiguredTestFormatter {
+public class Issue_26_create_tablespace extends ConfiguredTestFormatter {
 
     @Test
     public void create_smallfile_tablespace_one_datafile() {

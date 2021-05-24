@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_82 extends ConfiguredTestFormatter {
+public class Issue_82_outer_apply extends ConfiguredTestFormatter {
 
     @Test
     public void bulk_collect_outer_apply() {

@@ -4,7 +4,7 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
 
-public class Issue_33 extends ConfiguredTestFormatter {
+public class Issue_33_split_arguments extends ConfiguredTestFormatter {
 
     @Test
     public void split_nested_args_commas_after() {

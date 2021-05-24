@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_84 extends ConfiguredTestFormatter {
+public class Issue_84_long_assignments extends ConfiguredTestFormatter {
 
     @Test
     public void assignment_with_long_dotted_expression() {

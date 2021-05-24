@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_36 extends ConfiguredTestFormatter {
+public class Issue_36_conditional_compilation extends ConfiguredTestFormatter {
 
     @Test
     public void if_only() {

@@ -4,7 +4,7 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("all")
-public class Issue_54 extends ConfiguredTestFormatter {
+public class Issue_54_align_table_alias extends ConfiguredTestFormatter {
 
     @Test
     public void align_table_alias() {

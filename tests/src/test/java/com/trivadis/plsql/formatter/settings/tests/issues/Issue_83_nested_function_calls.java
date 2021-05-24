@@ -3,7 +3,7 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-public class Issue_83 extends ConfiguredTestFormatter {
+public class Issue_83_nested_function_calls extends ConfiguredTestFormatter {
 
     @Test
     public void select_single_column_with_hint() {

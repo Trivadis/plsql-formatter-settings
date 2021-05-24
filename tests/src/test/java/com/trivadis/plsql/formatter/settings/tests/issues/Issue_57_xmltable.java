@@ -4,7 +4,7 @@ import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
 
-public class Issue_57 extends ConfiguredTestFormatter {
+public class Issue_57_xmltable extends ConfiguredTestFormatter {
 
     @Test
     public void xmltable_commas_after() {
