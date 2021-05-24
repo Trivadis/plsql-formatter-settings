@@ -42,7 +42,7 @@
  *
  * Cat.  Meaning                 Description
  * ----  ----------------------  ------------------------------------------------------
- * I     Initialization Section  Identifies a section in a initialization phase.
+ * I     Initialization Section  Identifies a section in an initialization phase.
  * O     SQLDev Option           Implements a SQL Developer option (Advanced Format).
  * R     Trivadis Rule           Implements a Trivadis PL/SQL & SQL Guideline.
  * A     Add-on Section/Rule     Additional formatting rule, that is not based on
