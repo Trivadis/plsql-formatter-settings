@@ -56,6 +56,32 @@
  * -- -------------------------------------
  * -- <Category><SectionNumber>: <Comment>.
  * -- -------------------------------------
+ *
+ * The lightweight formatter honors most of the SQLDev options. However, the following options
+ * are ignored, have limitations or are considered only partially:
+ *
+ * - Indentation: indent with. Options: Tab; Spaces. (useTab).
+ *   The formatter supports only indentation with spaces. Spaces are used even if "Tab" is configured.
+ *   Using tab would lead to various issues in combination with other settings (e.g. leading commas).
+ *
+ * - Line Breaks: Commas per line in procedures. Options: Integer value. (breaksProcArgs).
+ *   The formatter ignores this configuration.
+ *   The idea of the lightweight formatter is to leave this decision to the developer.
+ *
+ * - Line Breaks: For compound_condition parenthesis. Options: true; false. (breakParenCondition).
+ *   The formatter ignores this configuration.
+ *   The idea of the lightweight formatter is to leave this decision to the developer.
+ *
+ * The following SQL options are honored, but not implemented by this Arbori program.
+ * They are implemented by SQLDev's oracle.dbtools.app.Format class. As a result the behavior cannot be overridden.
+ *
+ * - Format:
+ *   - Convert Case Only. Options: true, false. (adjustCaseOnly).
+ * - Advanced Format:
+ *   - General: Keywords case. Options: UPPER; lower; Init cap; Keep unchanged. (kwCase).
+ *   - General: Identifiers case. Options: UPPER; lower; Init cap; Keep unchanged. (idCase).
+ *   - General: 1-line long comments. Options: Keep unchanged; Wrap multiline; Wrap singleline. (singleLineComments).
+ *   - Line Breaks: Before line comments. Options: true; false. (forceLinebreaksBeforeComment).
  */
 
 -- ====================================================================================================================
