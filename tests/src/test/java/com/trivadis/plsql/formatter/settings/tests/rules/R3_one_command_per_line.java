@@ -26,7 +26,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
         }
 
         @Test
-        public void keep_multiline() throws IOException {
+        public void keep_multiline() {
             var sql = """
                     column empno format 999
                     column ename format a20
@@ -56,7 +56,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
         }
 
         @Test
-        public void keep_multiline() throws IOException {
+        public void keep_multiline() {
             var sql = """
                     select * from emp;
 
