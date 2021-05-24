@@ -1363,20 +1363,40 @@ o4_declarations:
     var assignments = new HashMap();
 }
 
-o4_find_assignments:
+o4_body:
       ([scope) if_stmt | [scope) case_stmt | [scope) seq_of_stmts)
     & [node) ':'
     & [node+1) '='
     & scope < node
+;
+
+o4_declare_section:
+      [scope) decl_list
+    & [node) default_expr_opt
+    & scope < node
+;
+
+o4_function:
+      [scope) fml_part
+    & [node) default_expr_opt
+    & scope < node
+;
+
+o4_find_assignments:
+      o4_body
+    | o4_declare_section
+    | o4_function
 -> {
     if (alignAssignments) {
         var scope = tuple.get("scope");
-        var list = assignments.get(scope);
-        if (list == null) {
-            list = new ArrayList();
+        if (containsLineBreak(scope)) {
+            var list = assignments.get(scope);
+            if (list == null) {
+                list = new ArrayList();
+            }
+            list.add(tuple);
+            assignments.put(scope, list);
         }
-        list.add(tuple);
-        assignments.put(scope, list);
     }
 }
 
