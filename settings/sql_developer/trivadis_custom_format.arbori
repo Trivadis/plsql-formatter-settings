@@ -738,7 +738,8 @@ a6_no_space_after:
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.to, "");
-    logger.fine(struct.getClass(), "a6_no_space_after: at " + node.to);
+    var content = target.getSrc().get(node.from).content;
+    logger.fine(struct.getClass(), "a6_no_space_after: <" + content + "> at " + node.to);
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -765,7 +766,8 @@ a7_one_space_before:
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.from, " ");
-    logger.fine(struct.getClass(), "a7_one_space_before: at " + node.from);
+    var content = target.getSrc().get(node.from).content;
+    logger.fine(struct.getClass(), "a7_one_space_before: <" + content + "> at " + node.from);
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -824,7 +826,8 @@ a8_one_space_after:
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.to, " ");
-    logger.fine(struct.getClass(), "a8_one_space_after: at " + node.to);
+    var content = target.getSrc().get(node.from).content;
+    logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
