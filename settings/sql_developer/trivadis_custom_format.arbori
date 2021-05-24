@@ -1324,75 +1324,6 @@ r7_right_align_keywords:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- R6: Call parameters aligned, operators aligned, values aligned.
--- --------------------------------------------------------------------------------------------------------------------
-
-r6_align_assoc_args:
-      [parent) paren_expr_list
-    & [node+1) assoc_arg
-    & parent < node+1
-    & [parent^) function_call
--> {
-    var parent = tuple.get("parent");
-    if (containsLineBreak(parent)) {
-        // comma or open parenthesis
-        var node = tuple.get("node");
-        var nodeContent = target.getSrc().get(node.from).content;
-        // assoc arg
-        var assocArg = tuple.get("node+1");
-        var indent = getIndent(assocArg.from);
-        var grandParent = tuple.get("parent^");
-        var grandParentCol = getColumn(grandParent.from);
-        if (struct.breaksAfterComma() || nodeContent == '(') {
-            struct.putNewline(node.from, "");
-            struct.putNewline(assocArg.from, System.lineSeparator() + getSpaces(grandParentCol + indentSpaces));
-        } else {
-            if (spaceAfterCommas) {
-                struct.putNewline(node.from, System.lineSeparator() + getSpaces(grandParentCol + indentSpaces - 2));
-                struct.putNewline(assocArg.from, " ");
-            } else {
-                struct.putNewline(node.from, System.lineSeparator() + getSpaces(grandParentCol + indentSpaces - 1));
-                struct.putNewline(assocArg.from, "");
-            }
-        }
-        // closing parenthesis
-        struct.putNewline(new Integer(parent.to-1), System.lineSeparator() + getSpaces(grandParentCol));
-        logger.fine(struct.getClass(), "r6_align_assoc_args: at " + assocArg.from);
-    }
-}
-
-r6_declarations:
-    [runOnce) sql_statements
--> {
-    var assocArgParents = new HashMap();
-}
-
-r6_find_assignment:
-      [parent) paren_expr_list
-    & [node^) assoc_arg
-    & [node) '='
-    & parent < node
--> {
-    if (alignNamedArgs) {
-        var parent = tuple.get("parent");
-        if (containsLineBreak(parent)) {
-            var list = assocArgParents.get(parent);
-            if (list == null) {
-               list = new ArrayList();
-            }
-            list.add(tuple);
-            assocArgParents.put(parent, list);
-        }
-    }
-}
-
-r6_align_assignments:
-    [runOnce) sql_statements
--> {
-    align(assocArgParents, "node", "r6_align_assignments");
-}
-
--- --------------------------------------------------------------------------------------------------------------------
 -- O4: Alignment: Assignment Operator :=. Options: true; false
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -1484,6 +1415,75 @@ o5_align_aliases:
     [runOnce) sql_statements
 -> {
     align(aliases, "node", "o5_align_aliases");
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- R6: Call parameters aligned, operators aligned, values aligned.
+-- --------------------------------------------------------------------------------------------------------------------
+
+r6_align_assoc_args:
+      [parent) paren_expr_list
+    & [node+1) assoc_arg
+    & parent < node+1
+    & [parent^) function_call
+-> {
+    var parent = tuple.get("parent");
+    if (containsLineBreak(parent)) {
+        // comma or open parenthesis
+        var node = tuple.get("node");
+        var nodeContent = target.getSrc().get(node.from).content;
+        // assoc arg
+        var assocArg = tuple.get("node+1");
+        var indent = getIndent(assocArg.from);
+        var grandParent = tuple.get("parent^");
+        var grandParentCol = getColumn(grandParent.from);
+        if (struct.breaksAfterComma() || nodeContent == '(') {
+            struct.putNewline(node.from, "");
+            struct.putNewline(assocArg.from, System.lineSeparator() + getSpaces(grandParentCol + indentSpaces));
+        } else {
+            if (spaceAfterCommas) {
+                struct.putNewline(node.from, System.lineSeparator() + getSpaces(grandParentCol + indentSpaces - 2));
+                struct.putNewline(assocArg.from, " ");
+            } else {
+                struct.putNewline(node.from, System.lineSeparator() + getSpaces(grandParentCol + indentSpaces - 1));
+                struct.putNewline(assocArg.from, "");
+            }
+        }
+        // closing parenthesis
+        struct.putNewline(new Integer(parent.to-1), System.lineSeparator() + getSpaces(grandParentCol));
+        logger.fine(struct.getClass(), "r6_align_assoc_args: at " + assocArg.from);
+    }
+}
+
+r6_declarations:
+    [runOnce) sql_statements
+-> {
+    var assocArgParents = new HashMap();
+}
+
+r6_find_assignment:
+      [parent) paren_expr_list
+    & [node^) assoc_arg
+    & [node) '='
+    & parent < node
+-> {
+    if (alignNamedArgs) {
+        var parent = tuple.get("parent");
+        if (containsLineBreak(parent)) {
+            var list = assocArgParents.get(parent);
+            if (list == null) {
+               list = new ArrayList();
+            }
+            list.add(tuple);
+            assocArgParents.put(parent, list);
+        }
+    }
+}
+
+r6_align_assignments:
+    [runOnce) sql_statements
+-> {
+    align(assocArgParents, "node", "r6_align_assignments");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
