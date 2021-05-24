@@ -76,7 +76,7 @@ dontFormatNode:
 -- This rule is never called, hence it does not matter what node is selected.
 -- However, I chose to use "identifier" to avoid an Arbori warning.
 dummy:
-  :indentConditions & [node) identifier
+    :indentConditions & [node) identifier
 ;
 
 -- "skipWhitespaceBeforeNode" must be defined, otherwise the Arbori program will be considered invalid and the default is used.
