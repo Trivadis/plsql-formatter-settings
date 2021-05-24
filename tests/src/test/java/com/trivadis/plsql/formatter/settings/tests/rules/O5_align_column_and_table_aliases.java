@@ -34,6 +34,15 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
         }
 
         @Test
+        public void column_alias_single_line() {
+            var sql = """
+                    select a123 as a, b as b
+                      from t;
+                    """;
+            formatAndAssert(sql);
+        }
+
+        @Test
         public void table_alias() throws IOException {
             var input = """
                     select *
@@ -47,6 +56,15 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
                      cross join t456 b;
                     """;
             assertEquals(expected, actual);
+        }
+
+        @Test
+        public void table_alias_single_line() throws IOException {
+            var sql = """
+                    select *
+                      from t123 a cross join t456 b;
+                    """;
+            formatAndAssert(sql);
         }
     }
 
