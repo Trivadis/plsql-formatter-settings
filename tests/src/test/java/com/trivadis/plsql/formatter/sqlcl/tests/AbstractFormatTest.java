@@ -46,11 +46,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                begin
                   <<integer_tokens>>
                   loop
-                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     l_int           := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
                      exit integer_tokens when l_int is null;
                      l_result.extend;
-                     l_result(l_pos)     := l_int;
-                     l_pos               := l_pos + 1;
+                     l_result(l_pos) := l_int;
+                     l_pos           := l_pos + 1;
                   end loop integer_tokens;
                   return l_result;
                end to_int_table;
@@ -107,11 +107,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                begin
                   <<integer_tokens>>
                   loop
-                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     l_int           := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
                      exit integer_tokens when l_int is null;
                      l_result.extend;
-                     l_result(l_pos)     := l_int;
-                     l_pos               := l_pos + 1;
+                     l_result(l_pos) := l_int;
+                     l_pos           := l_pos + 1;
                   end loop integer_tokens;
                   return l_result;
                end to_int_table;
@@ -263,11 +263,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                BEGIN
                   <<integer_tokens>>
                   LOOP
-                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     l_int           := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
                      EXIT integer_tokens WHEN l_int IS NULL;
                      l_result.extend;
-                     l_result(l_pos)     := l_int;
-                     l_pos               := l_pos + 1;
+                     l_result(l_pos) := l_int;
+                     l_pos           := l_pos + 1;
                   END LOOP integer_tokens;
                   RETURN l_result;
                END to_int_table;
@@ -457,11 +457,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                begin
                   <<integer_tokens>>
                   loop
-                     l_int               := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                     l_int           := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
                      exit integer_tokens when l_int is null;
                      l_result.extend;
-                     l_result(l_pos)     := l_int;
-                     l_pos               := l_pos + 1;
+                     l_result(l_pos) := l_int;
+                     l_pos           := l_pos + 1;
                   end loop integer_tokens;
                   return l_result;
                end to_int_table;
@@ -524,7 +524,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
             
             ## JavaScript code
             
-            Here's another code wich must not be formatted
+            Here's another code which must not be formatted
             
             ``` js
             var foo = function (bar) {
