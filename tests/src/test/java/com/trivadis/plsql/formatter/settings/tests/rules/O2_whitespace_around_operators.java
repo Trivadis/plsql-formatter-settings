@@ -72,7 +72,6 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested

@@ -1,13 +1,13 @@
 package com.trivadis.plsql.formatter.settings;
 
+import oracle.dbtools.app.Format;
+import oracle.dbtools.app.Persist2XML;
+import org.junit.jupiter.api.Assertions;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.LogManager;
-
-import oracle.dbtools.app.Format;
-import oracle.dbtools.app.Persist2XML;
-import org.junit.jupiter.api.Assertions;
 
 public abstract class ConfiguredTestFormatter {
     protected final Format formatter;
@@ -18,9 +18,9 @@ public abstract class ConfiguredTestFormatter {
         formatter = new Format();
         configureFormatter();
     }
-    
+
     private void loadLoggingConf() {
-        LogManager manager = LogManager.getLogManager();
+        var manager = LogManager.getLogManager();
         try {
             manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
         } catch (SecurityException | IOException e) {
@@ -39,15 +39,15 @@ public abstract class ConfiguredTestFormatter {
         }
         return map;
     }
-    
+
     private String getArboriFileName() {
-        URL customFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_custom_format.arbori"); // symbolic link
+        var customFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_custom_format.arbori"); // symbolic link
         assert customFormat != null;
         return customFormat.getFile();
     }
 
     private void configureFormatter() {
-        Map<String, Object> map = getOptions();
+        var map = getOptions();
         for (String key : map.keySet()) {
             formatter.options.put(key, map.get(key));
         }
@@ -61,15 +61,15 @@ public abstract class ConfiguredTestFormatter {
     public void resetOptions() {
         configureFormatter();
     }
-    
+
     public void formatAndAssert(CharSequence expected) {
         formatAndAssert(expected, false);
     }
-    
+
     public void formatAndAssert(CharSequence expected, boolean resetOptions) {
         try {
-            String expectedTrimmed = expected.toString().trim();
-            String actual = formatter.format(expectedTrimmed);
+            var expectedTrimmed = expected.toString().trim();
+            var actual = formatter.format(expectedTrimmed);
             Assertions.assertEquals(expectedTrimmed, actual);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -81,7 +81,6 @@ public abstract class ConfiguredTestFormatter {
     }
 
     public void assertEquals(CharSequence expected, CharSequence actual) {
-        Assertions.assertEquals(expected.toString().trim().replaceAll("\r",""), actual.toString().replaceAll("\r",""));
+        Assertions.assertEquals(expected.toString().trim().replaceAll("\r", ""), actual.toString().replaceAll("\r", ""));
     }
-
 }

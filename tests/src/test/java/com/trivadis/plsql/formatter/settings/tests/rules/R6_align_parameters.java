@@ -61,7 +61,6 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -189,7 +188,5 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
-
 }

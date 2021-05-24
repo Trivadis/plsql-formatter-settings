@@ -7,7 +7,6 @@ import oracle.dbtools.raptor.newscriptrunner.ScriptRunnerContext;
 import oracle.dbtools.raptor.newscriptrunner.WrapListenBufferOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 
-import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -19,11 +18,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -35,7 +32,7 @@ public abstract class AbstractSqlclTest {
     protected final ScriptExecutor sqlcl = new ScriptExecutor(null);
     protected final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     Path tempDir;
-    
+
     AbstractSqlclTest() {
         reset();
     }
@@ -49,16 +46,16 @@ public abstract class AbstractSqlclTest {
     @BeforeEach
     public void setup() {
         byteArrayOutputStream.reset();
-        final BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
-        final WrapListenBufferOutputStream wrapListenBufferOutputStream = new WrapListenBufferOutputStream(bufferedOutputStream);
-        final Bindings bindings = new SimpleBindings();
+        var bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
+        var wrapListenBufferOutputStream = new WrapListenBufferOutputStream(bufferedOutputStream);
+        var bindings = new SimpleBindings();
         bindings.put("polyglot.js.nashorn-compat", true);
         bindings.put("polyglot.js.allowHostAccess", Boolean.TRUE);
         bindings.put("polyglot.js.allowNativeAccess", Boolean.TRUE);
         bindings.put("polyglot.js.allowCreateThread", Boolean.TRUE);
         bindings.put("polyglot.js.allowIO", Boolean.TRUE);
         bindings.put("polyglot.js.allowHostClassLoading", Boolean.TRUE);
-        bindings.put("polyglot.js.allowHostClassLookup",  (Predicate<String>) s -> true);
+        bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
         bindings.put("polyglot.js.allowAllAccess", Boolean.TRUE);
         scriptContext.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
         sqlcl.setOut(bufferedOutputStream);
@@ -68,10 +65,10 @@ public abstract class AbstractSqlclTest {
         scriptContext.setAttribute("sqlcl", sqlcl, ScriptContext.ENGINE_SCOPE);
         try {
             tempDir = Files.createTempDirectory("plsql-formatter-test-");
-            final URL url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
+            var url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
             assert url != null;
-            final Path unformattedDir = Paths.get(url.getPath());
-            final List<Path> sources = Files.walk(unformattedDir).filter(Files::isRegularFile)
+            var unformattedDir = Paths.get(url.getPath());
+            var sources = Files.walk(unformattedDir).filter(Files::isRegularFile)
                     .collect(Collectors.toList());
             for (Path source : sources) {
                 Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
@@ -80,10 +77,10 @@ public abstract class AbstractSqlclTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        
+
     }
 
-    public String run(RunType runType, String...arguments) {
+    public String run(RunType runType, String... arguments) {
         if (runType == RunType.FormatJS) {
             return runScript(arguments);
         } else {
@@ -93,13 +90,13 @@ public abstract class AbstractSqlclTest {
                 sb.append(" ");
                 sb.append(argument);
             }
-            return runCommand (sb.toString());
+            return runCommand(sb.toString());
         }
     }
-    
+
     public String runScript(String... arguments) {
-        final URL script = Thread.currentThread().getContextClassLoader().getResource("format.js");
-        final String[] args = new String[arguments.length + 1];
+        var script = Thread.currentThread().getContextClassLoader().getResource("format.js");
+        var args = new String[arguments.length + 1];
         args[0] = "format.js";
         System.arraycopy(arguments, 0, args, 1, arguments.length);
         scriptContext.setAttribute("args", args, ScriptContext.ENGINE_SCOPE);
@@ -111,17 +108,17 @@ public abstract class AbstractSqlclTest {
         }
         return getConsoleOutput();
     }
-    
+
     @SuppressWarnings("CallToThreadRun")
     public String runCommand(String cmdLine) {
-        final ScriptExecutor executor = new ScriptExecutor(cmdLine, null);
+        var executor = new ScriptExecutor(cmdLine, null);
         executor.setScriptRunnerContext(ctx);
         // synchronous execution, that's what we want here
         executor.run();
         return getConsoleOutput();
     }
-    
-    private String getConsoleOutput(){
+
+    private String getConsoleOutput() {
         try {
             ctx.getOutputStream().flush();
         } catch (IOException e) {
@@ -129,14 +126,14 @@ public abstract class AbstractSqlclTest {
         }
         return byteArrayOutputStream.toString();
     }
-    
+
     public String getOriginalContent(String fileName) {
-        final URL url = Thread.currentThread().getContextClassLoader().getResource("unformatted/" + fileName);
+        var url = Thread.currentThread().getContextClassLoader().getResource("unformatted/" + fileName);
         assert url != null;
-        final Path file = Paths.get(url.getPath());
+        var file = Paths.get(url.getPath());
         return getFileContent(file);
     }
-    
+
     private String getFileContent(Path file) {
         try {
             return new String(Files.readAllBytes(file));
@@ -144,10 +141,9 @@ public abstract class AbstractSqlclTest {
             throw new RuntimeException(e);
         }
     }
-    
+
     public String getFormattedContent(String fileName) {
-        Path file = Paths.get(tempDir.toString() + File.separator + fileName);
+        var file = Paths.get(tempDir.toString() + File.separator + fileName);
         return getFileContent(file);
     }
-
 }

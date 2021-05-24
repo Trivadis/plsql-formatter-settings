@@ -8,7 +8,7 @@ public class Issue_54_align_table_alias extends ConfiguredTestFormatter {
     @Test
     public void align_table_alias() {
         getFormatter().options.put(getFormatter().alignTabColAliases, true);
-        final String sql = """
+        var sql = """
                 begin
                    for rec in (
                       select r.country_region   as region,
@@ -42,5 +42,4 @@ public class Issue_54_align_table_alias extends ConfiguredTestFormatter {
                 """;
         formatAndAssert(sql);
     }
-
 }

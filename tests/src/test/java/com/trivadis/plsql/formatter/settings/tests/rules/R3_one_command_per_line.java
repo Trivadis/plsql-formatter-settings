@@ -35,7 +35,6 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
                     """;
             formatAndAssert(sql);
         }
-
     }
 
     @Nested
@@ -139,7 +138,5 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
-
 }

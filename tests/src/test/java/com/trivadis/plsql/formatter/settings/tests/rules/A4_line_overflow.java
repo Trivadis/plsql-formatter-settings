@@ -79,8 +79,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
 
         @Test
         public void insert_select() throws IOException {
-            final String input =
-                    """
+            var input = """
                     begin
                        insert into t (
                           column1, column2, column3, column4, column5
@@ -91,8 +90,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     /
                     """;
             var actual = formatter.format(input);
-            final String expected =
-                    """
+            var expected = """
                     begin
                        insert into t (
                           column1, column2, column3,
@@ -105,8 +103,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     /
                     """;
             assertEquals(expected, actual);
-            final String expected2 =
-                    """
+            var expected2 = """
                     begin
                        insert into t (
                           column1, column2, column3
@@ -134,8 +131,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
 
         @Test
         public void insert_select() throws IOException {
-            final String input =
-                    """
+            var input = """
                     begin
                        insert into t (
                           column1, column2, column3, column4, column5
@@ -146,8 +142,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     /
                     """;
             var actual = formatter.format(input);
-            final String expected =
-                    """
+            var expected = """
                     begin
                        insert into t (
                           column1, column2, column3,
@@ -160,8 +155,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     /
                     """;
             assertEquals(expected, actual);
-            final String expected2 =
-                    """
+            var expected2 = """
                     begin
                        insert into t (
                           column1, column2, column3,

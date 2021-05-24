@@ -84,18 +84,17 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     /
                     """;
             var actual = formatter.format(input);
-            var expected =
-                    """
-                            begin
-                               begin
-                                  begin
-                                     null;
-                                  end;
-                                  delete from t;
-                               end;
-                            end;
-                            /
-                            """;
+            var expected = """
+                    begin
+                       begin
+                          begin
+                             null;
+                          end;
+                          delete from t;
+                       end;
+                    end;
+                    /
+                    """;
             assertEquals(expected, actual);
         }
 
@@ -134,7 +133,6 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -515,7 +513,6 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -576,7 +573,6 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -616,7 +612,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
         public void object_body() throws IOException {
             var input = """
                     create or replace type body obj_type as
-                    
+                                        
                     static function f (
                     p1 in varchar2
                     ,p2 in integer
@@ -625,7 +621,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     begin
                     return p1 || p2;
                     end;
-                    
+                                        
                     member function to_string return varchar2 is
                     begin
                     return null;
@@ -636,7 +632,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create or replace type body obj_type as
-                    
+                                        
                        static function f (
                           p1 in varchar2
                          ,p2 in integer
@@ -645,7 +641,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                        begin
                           return p1 || p2;
                        end;
-                    
+                                        
                        member function to_string return varchar2 is
                        begin
                           return null;
@@ -655,7 +651,6 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -666,12 +661,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var input = """
                     create or replace package abc as
                     g_pkgname constant varchar2(32) := 'ABC';
-        
+                            
                     procedure p (
                     p1 in integer
                     ,p2 in varchar2
                     );
-        
+                            
                     function f return varchar2;
                     end;
                     /
@@ -680,12 +675,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     create or replace package abc as
                        g_pkgname constant varchar2(32) := 'ABC';
-        
+                            
                        procedure p (
                           p1 in integer
                          ,p2 in varchar2
                        );
-        
+                            
                        function f return varchar2;
                     end;
                     /
@@ -698,7 +693,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var input = """
                     create or replace package body abc as
                     g_pkgname constant varchar2(32) := 'ABC';
-        
+                            
                     procedure p (
                     p1 in integer
                     ,p2 in varchar2
@@ -710,13 +705,13 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     when others then
                     null;
                     end;
-        
+                            
                     function f return varchar2 is
                     l_var integer;
                     begin
                     return '1';
                     end;
-        
+                            
                     begin
                     null;
                     end;
@@ -726,7 +721,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     create or replace package body abc as
                        g_pkgname constant varchar2(32) := 'ABC';
-        
+                            
                        procedure p (
                           p1 in integer
                          ,p2 in varchar2
@@ -738,13 +733,13 @@ public class R2_indentation extends ConfiguredTestFormatter {
                           when others then
                              null;
                        end;
-        
+                            
                        function f return varchar2 is
                           l_var integer;
                        begin
                           return '1';
                        end;
-        
+                            
                     begin
                        null;
                     end;
@@ -770,7 +765,6 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             formatAndAssert(sql);
         }
-
     }
 
     @Nested
@@ -831,7 +825,5 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
-
 }

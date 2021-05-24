@@ -9,27 +9,23 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
 
     @Test
     public void column_alias() throws IOException {
-        final String input =
-            """
-            select a    as   my_col from t;
-            """;
+        var input = """
+                select a    as   my_col from t;
+                """;
         var actual = formatter.format(input);
-        final String expected =
-            """
-            select a as my_col from t;
-            """;
+        var expected = """
+                select a as my_col from t;
+                """;
         assertEquals(expected, actual);
     }
 
     @Test
     public void table_alias() throws IOException {
-        final String input =
-                """
+        var input = """
                 select a my_col from t   my_alias;
                 """;
         var actual = formatter.format(input);
-        final String expected =
-                """
+        var expected = """
                 select a my_col from t my_alias;
                 """;
         assertEquals(expected, actual);
@@ -37,16 +33,14 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
 
     @Test
     public void function() throws IOException {
-        final String input =
-                """
+        var input = """
                 create package pkg is
                    function f    (    p1 in number   ) return integer;
                 end pkg;
                 /
                 """;
         var actual = formatter.format(input);
-        final String expected =
-                """
+        var expected = """
                 create package pkg is
                    function f (p1 in number) return integer;
                 end pkg;

@@ -185,7 +185,6 @@ public class R5_commas extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -347,7 +346,5 @@ public class R5_commas extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
-
     }
-
 }

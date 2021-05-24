@@ -50,7 +50,7 @@ public class FormatTest extends AbstractFormatTest {
     public void process_markdown_only() {
         process_markdown_only(RunType.FormatJS);
     }
-    
+
     @Test
     public void process_config_file_array() throws IOException {
         process_config_file_array(RunType.FormatJS);
@@ -65,5 +65,4 @@ public class FormatTest extends AbstractFormatTest {
     public void process_config_file_object_and_param() throws IOException {
         process_config_file_object_and_param(RunType.FormatJS);
     }
-
 }

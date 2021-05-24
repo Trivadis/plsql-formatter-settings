@@ -10,80 +10,75 @@ public class A3_formatter_off_on extends ConfiguredTestFormatter {
 
     @Test
     public void one_stmt_sl_comment_eclipse_style() {
-        final String sql =
-            """
-            select *
-              from dual;
-            -- @formatter:off
-            SELECT
-               *
-                  from
-                     dual
-            ; -- @formatter:on
-            select *
-              from dual;
-            """;
+        var sql = """
+                select *
+                  from dual;
+                -- @formatter:off
+                SELECT
+                   *
+                      from
+                         dual
+                ; -- @formatter:on
+                select *
+                  from dual;
+                """;
         formatAndAssert(sql);
     }
 
     @Test
     public void one_stmt_ml_comment_eclipse_style() {
-        final String sql =
-            """
-            select *
-              from dual;
-            /* @formatter:off */
-            SELECT
-               *
-                  from
-                     dual
-            ; /* @formatter:on */
-            select *
-              from dual;
-            """;
+        var sql = """
+                select *
+                  from dual;
+                /* @formatter:off */
+                SELECT
+                   *
+                      from
+                         dual
+                ; /* @formatter:on */
+                select *
+                  from dual;
+                """;
         formatAndAssert(sql);
     }
 
     @Test
     public void one_stmt_sl_comment_plsqldev_style() {
-        final String sql =
-            """
-            select *
-              from dual;
-            -- NoFormat Start
-            SELECT
-               *
-                  from
-                     dual
-            ; -- NoFormat End
-            select *
-              from dual;
-            """;
+        var sql = """
+                select *
+                  from dual;
+                -- NoFormat Start
+                SELECT
+                   *
+                      from
+                         dual
+                ; -- NoFormat End
+                select *
+                  from dual;
+                """;
         formatAndAssert(sql);
     }
 
     @Test
     public void one_stmt_ml_comment_plsqldev_style() {
-        final String sql = 
-            """
-            select *
-              from dual;
-            /* NoFormat Start */
-            SELECT
-               *
-                  from
-                     dual
-            ; /* NoFormat End */
-            select *
-              from dual;
-            """;
+        var sql = """
+                select *
+                  from dual;
+                /* NoFormat Start */
+                SELECT
+                   *
+                      from
+                         dual
+                ; /* NoFormat End */
+                select *
+                  from dual;
+                """;
         formatAndAssert(sql);
     }
 
     @Test
     public void two_stmt_mixed_style() {
-        final String sql =
-                """
+        var sql = """
                 select *
                   from dual;
                 /* noformat start, however in SQLDev 20.2 keyword is uppercase nonetheless, indent lost in 20.3 */
@@ -112,26 +107,23 @@ public class A3_formatter_off_on extends ConfiguredTestFormatter {
 
     @Test
     public void format_if_on_and_off_defined_in_same_comment() throws IOException {
-        final String unformatted =
-            """
-            select * from dual;
-            -- @formatter:on @formatter:off
-            SELECT *
-                  from
-                     dual
-            ; -- @formatter:on
-            select * from dual;
-            """.trim();
-        final String expected =
-            """
-            select * from dual;
-            -- @formatter:on @formatter:off
-            select *
-              from dual; -- @formatter:on
-            select * from dual;
-            """.trim();
-        final String actual = formatter.format(unformatted);
+        var unformatted = """
+                select * from dual;
+                -- @formatter:on @formatter:off
+                SELECT *
+                      from
+                         dual
+                ; -- @formatter:on
+                select * from dual;
+                """.trim();
+        var expected = """
+                select * from dual;
+                -- @formatter:on @formatter:off
+                select *
+                  from dual; -- @formatter:on
+                select * from dual;
+                """.trim();
+        var actual = formatter.format(unformatted);
         Assertions.assertEquals(expected, actual);
     }
-
 }

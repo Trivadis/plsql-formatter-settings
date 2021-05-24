@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class TvdFormatPathWithSpaceTest extends AbstractSqlclTest {
 
@@ -18,11 +17,9 @@ public class TvdFormatPathWithSpaceTest extends AbstractSqlclTest {
 
     @Test
     public void path_with_spaces() throws IOException {
-        final Path myFilesDir = Files.createTempDirectory("my files");
-        final String actual = runCommand("tvdformat \"" + myFilesDir.toAbsolutePath() + "\"");
+        var myFilesDir = Files.createTempDirectory("my files");
+        var actual = runCommand("tvdformat \"" + myFilesDir.toAbsolutePath() + "\"");
         // directory is empty, no files processed
         Assertions.assertTrue(actual.trim().isEmpty());
     }
-
 }
-

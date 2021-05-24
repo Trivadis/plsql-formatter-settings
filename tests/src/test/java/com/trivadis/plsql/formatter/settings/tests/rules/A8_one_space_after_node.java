@@ -9,8 +9,7 @@ public class A8_one_space_after_node extends ConfiguredTestFormatter {
 
     @Test
     public void create_or_replace() throws IOException {
-        final String input =
-                """
+        var input = """
                 create
                 or
                 replace
@@ -21,8 +20,7 @@ public class A8_one_space_after_node extends ConfiguredTestFormatter {
                 /
                 """;
         var actual = formatter.format(input);
-        final String expected =
-                """
+        var expected = """
                 create or replace package pkg is
                    g_variable integer;
                 end pkg;
@@ -33,13 +31,11 @@ public class A8_one_space_after_node extends ConfiguredTestFormatter {
 
     @Test
     public void from() throws IOException {
-        final String input =
-                """
+        var input = """
                 select * from     t;
                 """;
         var actual = formatter.format(input);
-        final String expected =
-                """
+        var expected = """
                 select * from t;
                 """;
         assertEquals(expected, actual);

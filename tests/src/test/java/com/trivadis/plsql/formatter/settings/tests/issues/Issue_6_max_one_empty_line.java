@@ -17,80 +17,77 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
     @Test
     public void pkg() throws IOException {
-        final String input =
-            """
-            /*
-             * comment before pkg
-             */
-            create or replace package pkg is
-               
-                 
+        var input = """
                 /*
-                 * pkg
+                 * comment before pkg
                  */
-                      
-                               
-                                              
-                /*
-                 * p1
-                 */
-                procedure p1;
-                procedure p2;
-                
-                
-                procedure p3;
-                
-                
-                    -- p4 (1)
+                create or replace package pkg is
+                   
+                     
+                    /*
+                     * pkg
+                     */
+                          
+                                   
+                                                  
+                    /*
+                     * p1
+                     */
+                    procedure p1;
+                    procedure p2;
                     
-                 
                     
-                  -- p4 (2)
-                
-                
-                
-                procedure p4;
-                
-                
-                -- p5
-                procedure p5;
-                
-            end pkg;
-            /
-            """;
-        final String expected = 
-            """
-            /*
-             * comment before pkg
-             */
-            create or replace package pkg is
-
+                    procedure p3;
+                    
+                    
+                        -- p4 (1)
+                        
+                     
+                        
+                      -- p4 (2)
+                    
+                    
+                    
+                    procedure p4;
+                    
+                    
+                    -- p5
+                    procedure p5;
+                    
+                end pkg;
+                /
+                """;
+        var expected = """
                 /*
-                 * pkg
+                 * comment before pkg
                  */
+                create or replace package pkg is
 
-                /*
-                 * p1
-                 */
-               procedure p1;
-               procedure p2;
+                    /*
+                     * pkg
+                     */
 
-               procedure p3;
+                    /*
+                     * p1
+                     */
+                   procedure p1;
+                   procedure p2;
 
-                    -- p4 (1)
+                   procedure p3;
 
-                  -- p4 (2)
+                        -- p4 (1)
 
-               procedure p4;
+                      -- p4 (2)
 
-                -- p5
-               procedure p5;
+                   procedure p4;
 
-            end pkg;
-            /
-            """.trim();
-        final String actual = getFormatter().format(input);
+                    -- p5
+                   procedure p5;
+
+                end pkg;
+                /
+                """.trim();
+        var actual = getFormatter().format(input);
         Assertions.assertEquals(expected, actual);
     }
-
 }

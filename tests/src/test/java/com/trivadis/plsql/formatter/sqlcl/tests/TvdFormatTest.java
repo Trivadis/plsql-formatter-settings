@@ -22,15 +22,14 @@ public class TvdFormatTest extends AbstractFormatTest {
     @Test
     public void duplicate_registration_using_mixed_case() {
         reset();
-        final List<CommandListener> originalListeners = CommandRegistry.getListeners(null, ctx).get(
+        var originalListeners = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        final String expected =
-            """
-            tvdformat registered as SQLcl command.
-            """;
+        var expected = """
+                tvdformat registered as SQLcl command.
+                """;
 
         // first registrations
-        final String actual1 = runScript("--RegisteR");
+        var actual1 = runScript("--RegisteR");
         Assertions.assertEquals(expected, actual1);
         final List<CommandListener> listeners1 = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
@@ -38,7 +37,7 @@ public class TvdFormatTest extends AbstractFormatTest {
 
         // second registration
         byteArrayOutputStream.reset();
-        final String actual2 = runScript("-R");
+        var actual2 = runScript("-R");
         Assertions.assertEquals(expected, actual2);
         final List<CommandListener> listeners2 = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
@@ -103,5 +102,4 @@ public class TvdFormatTest extends AbstractFormatTest {
     public void process_config_file_object_and_param() throws IOException {
         process_config_file_object_and_param(RunType.TvdFormatCommand);
     }
-
 }
