@@ -1,16 +1,14 @@
 package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class Issue_13 extends ConfiguredTestFormatter {
+public class Issue_13_do_not_right_align_set extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
         getFormatter().options.put(getFormatter().identSpaces, 4);
-        getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X2);
     }
 
     @Test
