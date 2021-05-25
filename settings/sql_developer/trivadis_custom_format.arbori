@@ -1120,32 +1120,33 @@ r5_commas:
 -- R2: 3 space indention.
 -- --------------------------------------------------------------------------------------------------------------------
 
--- Determine the level for each position managed in newlinePositions with a newline char ("\n") and then
--- ensure that the indentation is >= the level*indentSpaces, if not add missing spaces.
+-- Determine the left margin for each position managed in newlinePositions with a newline char ("\n") and then
+-- ensure that the indentation is >= the this left margin, by adding missing spaces.
 -- This code must be executed after missing line breaks have been added.
 
-r2_init_pos_level:
+r2_init_left_margin:
     [runOnce) sql_statements
 -> {
-    var posLevel = new HashMap();
+    /* left margin is expressed in number of spaces. */
+    var leftMargin = new HashMap();
     var it = newlinePositions.keySet().iterator();
     while (it.hasNext()) {
         var key = it.next();
         var value = newlinePositions.get(key);
         if (value.contains("\n")) {
-            posLevel.put(key, new Integer(0));
+            leftMargin.put(key, new Integer(0));
         }
     }
 
-    /* increase level by increaseBy for parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
-    var addLevel = function(parent, increaseBy) {
+    /* increase the left margin by increaseBy for parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
+    var addMargin = function(parent, increaseBy) {
         var descendants = parent.descendants();
         for (var i = 0, len = descendants.length; i < len; i++) {
             var node = descendants.get(i);
-            var level = posLevel.get(node.from);
-            if (level != null) {
+            var margin = leftMargin.get(node.from);
+            if (margin != null) {
                 if (node.children().size() == 0) {
-                    posLevel.put(node.from, new Integer(level+increaseBy));
+                    leftMargin.put(node.from, new Integer(margin+increaseBy));
                 }
             }
         }
@@ -1183,27 +1184,27 @@ r2_body_nodes:
     & parent < node
 ;
 
-r2_increment_pos_level:
+r2_increment_left_margin:
       r2_common_nodes
     | r2_body_nodes
 -> {
-    addLevel(tuple.get("node"), 1);
+    addMargin(tuple.get("node"), indentSpaces);
 }
 
-r2_decrement_pos_level:
+r2_decrement_left_margin:
       [node) '(' & ([node^) par_expr_list | [node^) loop_prm_spec)
     | [node) ')' & ([node^) par_expr_list | [node^) loop_prm_spec)
 -> {
-    addLevel(tuple.get("node"), -1);
+    addMargin(tuple.get("node"), -1 * indentSpaces);
 }
 
 r2_indent_nodes:
     [runOnce) sql_statements
 -> {
-    var it = posLevel.keySet().iterator();
+    var it = leftMargin.keySet().iterator();
     while (it.hasNext()) {
         var key = it.next();
-        var level = posLevel.get(key);
+        var margin = leftMargin.get(key);
         var value = newlinePositions.get(key);
         var spaces = value.length()-value.lastIndexOf("\n")-1; // 0 = first column
         var comma = 0;
@@ -1217,12 +1218,12 @@ r2_indent_nodes:
                }
             }
         }
-        if (level*indentSpaces-spaces-comma-spacesAfterComma > 0) {
-            for (var i=0; i<level*indentSpaces-spaces-comma-spacesAfterComma; i++) {
+        if (margin-spaces-comma-spacesAfterComma > 0) {
+            for (var i=0; i<margin-spaces-comma-spacesAfterComma; i++) {
                 value+=" ";
             }
             struct.putNewline(key, value);
-            logger.fine(struct.getClass(), "r2_indent_nodes: add " + (level*indentSpaces-spaces-comma-spacesAfterComma) + " spaces at " + key);
+            logger.fine(struct.getClass(), "r2_indent_nodes: add " + (margin-spaces-comma-spacesAfterComma) + " spaces at " + key);
         }
     }
 }
