@@ -1545,6 +1545,55 @@ r6_align_assignments:
     align(assocArgParents, "node", "r6_align_assignments");
 }
 
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A9: Align xmltable columns.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a9_declarations:
+    [runOnce) sql_statements
+-> {
+    var xmlTableColumns = new HashMap();
+}
+
+a9_find_columns:
+      [scope) XMLTABLE_options[19,37)
+    & [node) XML_table_column
+    & [comma) ','
+    & scope < node
+    & node = comma+1
+-> {
+    var scope = tuple.get("scope");
+    addTupleToMap(tuple, "scope", xmlTableColumns);
+}
+
+a9_align_xmltable_columns:
+    [runOnce) sql_statements
+-> {
+    var it = xmlTableColumns.keySet().iterator();
+    while (it.hasNext()) {
+        var scope = it.next();
+        struct.putNewline(new Integer(scope.from+1), " ");
+        var pos = getColumn(scope.from+1);
+        var list = xmlTableColumns.get(scope);
+        for (var i=0; i<list.length; i++) {
+            if (struct.breaksBeforeComma()) {
+                var comma = 1;
+                if (spaceAfterCommas) {
+                   comma += 1;
+                }
+                var commaNode = list.get(i).get("comma");
+                struct.putNewline(commaNode.from, System.lineSeparator() + getSpaces(pos - comma));
+                logger.fine(struct.getClass(), "a9_align_xmltable_columns: comma at " + commaNode.from);
+            } else {
+                var node = list.get(i).get("node");
+                struct.putNewline(node.from, System.lineSeparator() + getSpaces(pos));
+                logger.fine(struct.getClass(), "a9_align_xmltable_columns: column at " + node.from);
+            }
+        }
+    }
+}
+
 -- --------------------------------------------------------------------------------------------------------------------
 -- A4: Split long lines.
 -- --------------------------------------------------------------------------------------------------------------------
