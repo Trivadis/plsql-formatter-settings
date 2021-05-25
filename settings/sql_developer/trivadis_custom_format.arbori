@@ -293,6 +293,17 @@ define_global_functions:
         return maxCol;
     }
 
+    /* adds a tuple to a map indexed by scope */
+    var addTupleToMap = function (tuple, scopeNodeName, map) {
+        var scope = tuple.get(scopeNodeName);
+        var list = map.get(scope);
+        if (list == null) {
+            list = new ArrayList();
+        }
+        list.add(tuple);
+        map.put(scope, list);
+    }
+
     /* aligns all nodes per scope */
     var align = function(map, nodeName, logText) {
         var it = map.keySet().iterator();
@@ -1390,12 +1401,7 @@ o4_find_assignments:
     if (alignAssignments) {
         var scope = tuple.get("scope");
         if (containsLineBreak(scope)) {
-            var list = assignments.get(scope);
-            if (list == null) {
-                list = new ArrayList();
-            }
-            list.add(tuple);
-            assignments.put(scope, list);
+            addTupleToMap(tuple, "scope", assignments);
         }
     }
 }
@@ -1413,19 +1419,28 @@ o4_align_assignments:
 o5_declarations:
     [runOnce) sql_statements
 -> {
-    var nodeEndsOnNewline = function(node) {
+    var selectTermEndsOnNewline = function(node) {
         if (getIndent(node.to).contains("\n")) {
             return true;
         } else {
             var content = target.getSrc().get(node.to).content;
-            if (content == ";") {
-                return true;
-            } else if (content == ",") {
+            if (content == ",") {
                 if (getIndent(node.to+1).contains("\n")) {
                     return true;
                 }
             }
         }
+        return false;
+    }
+
+    var tableReferenceOnNewline = function (node) {
+        var n = target.getRoot().leafAtPos(node.from - 1);;
+        do {
+            n = target.getRoot().leafAtPos(n.from - 1);
+            if (getIndent(n.from).contains("\n")) {
+                return true;
+            }
+        } while (!n.contains("'FROM'") && !n.contains("query_table_expression"))
         return false;
     }
 
@@ -1436,29 +1451,25 @@ o5_column_alias:
       [scope) select_clause
     & [node) as_alias
     & scope < node
-;
+-> {
+    if (alignTabColAliases) {
+        var node = tuple.get("node");
+        if (selectTermEndsOnNewline(node)) {
+            addTupleToMap(tuple, "scope", aliases);
+        }
+    }
+}
 
 o5_table_alias:
       [scope) from_clause
     & [node) identifier
     & [node-1) query_table_expression
     & scope < node
-;
-
-o5_find_aliases:
-      o5_column_alias
-    | o5_table_alias
 -> {
     if (alignTabColAliases) {
         var node = tuple.get("node");
-        if (nodeEndsOnNewline(node)) {
-            var scope = tuple.get("scope");
-            var list = aliases.get(scope);
-            if (list == null) {
-                list = new ArrayList();
-            }
-            list.add(tuple);
-            aliases.put(scope, list);
+        if (tableReferenceOnNewline(node)) {
+            addTupleToMap(tuple, "scope", aliases);
         }
     }
 }
@@ -1522,12 +1533,7 @@ r6_find_assignment:
     if (alignNamedArgs) {
         var parent = tuple.get("parent");
         if (containsLineBreak(parent)) {
-            var list = assocArgParents.get(parent);
-            if (list == null) {
-               list = new ArrayList();
-            }
-            list.add(tuple);
-            assocArgParents.put(parent, list);
+            addTupleToMap(tuple, "parent", assocArgParents);
         }
     }
 }
