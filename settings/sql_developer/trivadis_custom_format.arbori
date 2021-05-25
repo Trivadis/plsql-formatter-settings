@@ -165,6 +165,9 @@ define_global_variables:
     // get option for "Line Breaks: Max char line width"
     var maxCharLineSize = struct.options.get("maxCharLineSize");
 
+    // get option for "Line Breaks: SELECT/FROM/WHERE"
+    var breaksAfterSelect = struct.options.get("breaksAfterSelect");
+
     // get option for "Alignment: Column and Table aliases"
     var alignTabColAliases = struct.options.get("alignTabColAliases");
 
@@ -854,6 +857,13 @@ a8_create_or_replace:
     | [node) 'TYPE' & ![node-1) '%'
 ;
 
+a8_select_clauses:
+      [node) 'CONNECT' & [node+1) 'BY'
+    | [node) 'START' & [node+1) 'WITH'
+    | [node) 'ORDER' & [node+1) 'BY'
+    | [node) 'GROUP' & [node+1) 'BY'
+;
+
 a8_one_space_after:
       a8_if
     | a8_for_identifier
@@ -862,6 +872,7 @@ a8_one_space_after:
     | a8_join
     | a8_from
     | a8_create_or_replace
+    | a8_select_clauses
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.to, " ");
@@ -1034,7 +1045,12 @@ r5_commas:
         if (spaceAfterCommas) {
            len = len - 1;
         }
-        return indent.substring(0, len);
+        var spaces = indent.length()-indent.lastIndexOf("\n")-1;
+        if (spaces > len) {
+            return indent.substring(0, len);
+        } else {
+            return indent;
+        }
     }
 
     var removeLeadingSpaces = function(nodeFrom) {
@@ -1151,51 +1167,193 @@ r2_init_left_margin:
             }
         }
     }
+
+    /* returns the first word within a string */
+    var getFirstWord = function(text) {
+        var i = text.indexOf(" ");
+        if (i == -1) {
+            return text;
+        } else {
+            return text.substr(0, i);
+        }
+    }
+
+    /* increase left margin by keyword and SQLDev settings */
+    var addMarginByName = function(parent, name) {
+        var spaces;
+        if (breaksAfterSelect) {
+            spaces = 3;
+        } else if (alignRight) {
+            var firstWord = getFirstWord(name);
+            if (firstWord.length > 6) {
+                spaces = firstWord.length;
+            } else {
+                spaces = 6;
+            }
+            spaces = spaces + name.length - firstWord.length + 1;
+        } else {
+            spaces = name.length + 1;
+        }
+        addMargin(parent, spaces);
+        return spaces;
+    }
+
+    /* Use the calculated left margin for this node? */
+    var useFullLeftMargin = function(nodeFrom) {
+        var supportedSymbols = ["select"/*, "insert", "update", "delete", "merge", "block_stmt"*/]
+        var node = target.getRoot().leafAtPos(nodeFrom);
+        while (node != null) {
+            for (var i=0; i < supportedSymbols.length; i++) {
+                if (node.contains(supportedSymbols[i])) {
+                    return true;
+                }
+            }
+            node = node.parent();
+        }
+        return false;
+    }
 }
 
-r2_common_nodes:
+r2_common:
       [node) basic_d
     | [node) full_cursor_body
     | [node) stmt
+    | [node) pls_expr & [node-2) ':' & [node-1) '='
     | [node) case_stmt_alt
     | [node) else_clause_opt & [node^) case_stmt
     | [node) select & [node^) full_cursor_body
     | [node) excptn_handler
-    | [node) prm_spec
-    | [node) ',' & [node+1) prm_spec
-    | [node) adt_field
-    | [node) ',' & [node+1) adt_field
-    | [node) body_adt_field
     | [node) subquery_factoring_clause
-    | [node) subquery & [node^) par_subquery
-    | [node) assoc_arg
-    | [node) ',' & [node+1) assoc_arg
-    | [node) arg
-    | [node) ',' & [node+1) arg
-    | [node) field
-    | [node) ',' & [node+1) field
-    | [node) par_expr_list
-    | [node) loop_prm_spec
+    | [node) subquery & ([node-1) '(' | [node-1) 'FOR')
+    | [node) ty_def
+    | [node) fml_part
+    | [node) paren_expr_list
+    | [node) "expr_list" & [node-1) '('
+    | [node) xmlquery
+    | [node) xmltable
 ;
 
-r2_body_nodes:
+r2_case_expression:
+      [node) simple_case_expression[4,27)#
+    | [node) searched_case_expression#
+    | [node) expr & [node^) simple_case_expression[4,27)#
+    | [node) else_clause & [node^) case_expression
+    | [node) expr & [node^) else_clause & [node^^) case_expression
+    | [node) expr & [node^) searched_case_expression#
+;
+
+r2_object_type:
+      [node) adt_field
+    | [node) ',' & [node+1) adt_field
+    | [node) body_adt_field
+;
+
+r2_body:
       [node) subprg_body
     & [parent) pkg_body
     & parent < node
 ;
 
 r2_increment_left_margin:
-      r2_common_nodes
-    | r2_body_nodes
+      r2_common
+    | r2_case_expression
+    | r2_object_type
+    | r2_body
 -> {
     addMargin(tuple.get("node"), indentSpaces);
 }
 
 r2_decrement_left_margin:
-      [node) '(' & ([node^) par_expr_list | [node^) loop_prm_spec)
-    | [node) ')' & ([node^) par_expr_list | [node^) loop_prm_spec)
+      ([node) '(' | [node) ')')
+          & (
+                  [node^) paren_expr_list
+                | [node^) fml_part
+                | [node^) ty_def
+                | [node^) xmlquery
+                | [node^) xmltable
+            )
+    | [node) 'RECORD' & [node^) ty_def
+    | [node) 'XMLQUERY' & [node^) xmlquery
+    | [node) 'XMLTABLE' & [node^) xmltable
 -> {
     addMargin(tuple.get("node"), -1 * indentSpaces);
+}
+
+r2_increment_left_margin_for_into_list:
+      [node) into_list
+    & [into) 'INTO'
+    & node = into^
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "INTO");
+    addMargin(tuple.get("into"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_select_list:
+      [node) select_list
+    & [node-1) 'SELECT'
+-> {
+    addMarginByName(tuple.get("node"), "SELECT");
+}
+
+r2_increment_left_margin_for_from:
+      [node) from_clause
+    & [from) 'FROM'
+    & from^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "FROM");
+    addMargin(tuple.get("from"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_where:
+      [node) where_clause
+    & [where) 'WHERE'
+    & where^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "WHERE");
+    addMargin(tuple.get("where"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_connect_by:
+      [node) condition
+    & [node-2) 'CONNECT'
+    & [node-1) 'BY'
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "CONNECT BY");
+}
+
+r2_increment_left_margin_for_start_with:
+      [node) condition
+    & [node-2) 'START'
+    & [node-1) 'WITH'
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "START WITH");
+}
+
+r2_increment_left_margin_for_group_by:
+      [node) group_by_clause
+    & [group) 'GROUP'
+    & group^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "GROUP BY");
+    addMargin(tuple.get("group"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_order_by:
+      [node) order_by_clause
+    & [order) 'ORDER'
+    & order^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "ORDER BY");
+    addMargin(tuple.get("order"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_update_set:
+      [node) update_set_clause
+    & [set) 'SET'
+    & set^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "SET");
+    addMargin(tuple.get("set"), -1 * spaces);
 }
 
 r2_indent_nodes:
@@ -1211,19 +1369,23 @@ r2_indent_nodes:
         var spacesAfterComma = 0;
         if (key < target.getSrc().size()) {
             if (target.getSrc().get(key).content == ",") {
-               comma = 1;
-               var indentAfterComma = getIndent(new Integer(key+1));
-               if (!indentAfterComma.contains("\n")) {
-                  spacesAfterComma = indentAfterComma.length();
-               }
+                comma = 1;
+                if (spaceAfterCommas) {
+                   comma += 1;
+                }
             }
         }
-        if (margin-spaces-comma-spacesAfterComma > 0) {
-            for (var i=0; i<margin-spaces-comma-spacesAfterComma; i++) {
-                value+=" ";
+        if (useFullLeftMargin(key)) {
+            struct.putNewline(key, value.substr(0, value.lastIndexOf("\n")+1) + getSpaces(margin-comma));
+            logger.fine(struct.getClass(), "r2_indent_nodes: set calculated margin of " + (margin-comma) + " spaces at " + key);
+        } else {
+            if (margin-spaces-comma > 0) {
+                for (var i=0; i<margin-spaces-comma; i++) {
+                    value+=" ";
+                }
+                struct.putNewline(key, value);
+                logger.fine(struct.getClass(), "r2_indent_nodes: add " + (margin-spaces-comma) + " spaces at " + key);
             }
-            struct.putNewline(key, value);
-            logger.fine(struct.getClass(), "r2_indent_nodes: add " + (margin-spaces-comma-spacesAfterComma) + " spaces at " + key);
         }
     }
 }
@@ -1238,13 +1400,7 @@ r7_select:
           [keyword) 'DISTINCT'
         | [keyword) 'UNIQUE'
         | [keyword) 'ALL'
-        | [keyword) ','
-            & (
-                    [keyword+1) select_term
-                  | [keyword+1) query_table_expression
-                  | [keyword+1) group_by_col
-                  | [keyword+1) "ord_by_1desc"
-              )
+        | [keyword) 'BULK'
         | [keyword) 'INTO'
         | [keyword) 'FROM'
         | [keyword) 'JOIN'
@@ -1256,8 +1412,6 @@ r7_select:
         | [keyword) 'OUTER'
         | [keyword) 'NATURAL'
         | [keyword) 'WHERE'
-        | [keyword) 'AND'
-        | [keyword) 'OR'
         | [keyword) 'CONNECT'
         | [keyword) 'START'
         | [keyword) 'GROUP'
@@ -1290,10 +1444,7 @@ r7_update:
       [parent) update
     & (
           [keyword) 'SET'
-        | [keyword) ',' & [keyword+1) update_set_clause_expr
         | [keyword) 'WHERE'
-        | [keyword) 'AND'
-        | [keyword) 'OR'
         | [keyword) 'RETURNING'
         | [keyword) 'INTO'
       )
@@ -1305,8 +1456,6 @@ r7_delete:
     & (
           [keyword) 'FROM'
         | [keyword) 'WHERE'
-        | [keyword) 'AND'
-        | [keyword) 'OR'
         | [keyword) 'RETURNING'
         | [keyword) 'INTO'
       )
@@ -1326,38 +1475,10 @@ r7_right_align_keywords:
     if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
         parentLength = 6;
     }
-    var content = target.getSrc().get(keyword.from).content;
-    if (struct.breaksAfterComma()) {
-        if (content == ",") {
-            if (getIndent(keyword.to).contains("\n")) {
-                /* indent node followed by a comma and a new line, independent of alignRight setting */
-                var addOn = 0;
-                var nextNode = keyword.next();
-                if (nextNode.contains("group_by_col") || nextNode.contains('"ord_by_1desc"')) {
-                    /* add 3 chars for the "by" in "order by" and "group by" */
-                    addOn = 3;
-                }
-                var keywordIndent = parentIndent + getSpaces(parentLength + 1 + addOn);
-                struct.putNewline(keyword.to, keywordIndent);
-                logger.fine(struct.getClass(), "r7_right_align_keywords: align after comma at " + keyword.from);
-            }
-        }
-    }
     if (getIndent(keyword.from).contains("\n")) {
-        if (content == "," || alignRight) {
-            /* right align keywords, treat comma as keyword, comma processing is independent of alignRight setting */
-            var comma = 0;
-            if (content == ",") {
-                if (!spaceAfterCommas) {
-                    comma = 1;
-                }
-                var nextNode = keyword.next();
-                if (nextNode.contains("group_by_col") || nextNode.contains('"ord_by_1desc"')) {
-                    /* add 3 chars for the "by" in "order by" and "group by" */
-                    comma += 3;
-                }
-            }
-            var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length() + comma;
+        if (alignRight) {
+            var content = target.getSrc().get(keyword.from).content;
+            var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
             var keywordIndent = parentIndent + getSpaces(missingSpaces);
             struct.putNewline(keyword.from, keywordIndent);
             logger.fine(struct.getClass(), "r7_right_align_keywords: align <" + content + "> at " + keyword.from);
@@ -1545,6 +1666,21 @@ r6_align_assignments:
     align(assocArgParents, "node", "r6_align_assignments");
 }
 
+r6_align_expr:
+      [parent-2) '='
+    & [parent-1) '>'
+    & [parent) expr
+    & [node) compound_expression[25,44)
+    & parent < node
+-> {
+    var node = tuple.get("node");
+    if (containsLineBreak(node)) {
+        var parent = tuple.get("parent");
+        var parentCol = getColumn(parent.from);
+        struct.putNewline(node.from, System.lineSeparator() + getSpaces(parentCol));
+        logger.fine(struct.getClass(), "r6_align_expr: at " + node.from);
+    }
+}
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- A9: Align xmltable columns.
