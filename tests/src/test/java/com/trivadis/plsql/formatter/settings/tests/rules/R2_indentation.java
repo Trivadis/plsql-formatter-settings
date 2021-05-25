@@ -193,9 +193,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                ,b => 2
                              );
                        l2 := f2 (
-                          1
-                         ,2
-                       );
+                             1
+                            ,2
+                          );
                     end;
                     /
                     """;
@@ -822,6 +822,152 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     minus
                     select *
                     from b;
+                    """;
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Nested
+    class special_left_margin {
+
+        @Test
+        public void select_list() throws IOException {
+            var input = """
+                    select a, sum(
+                    b
+                    ) as sum_of_a
+                    from t
+                    group by a;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a, sum(
+                              b
+                           ) as sum_of_a
+                    from t
+                    group by a;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void from() throws IOException {
+            var input = """
+                    select a
+                    from t, (
+                    select * from t
+                    ) t2;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a
+                    from t, (
+                            select * from t
+                         ) t2;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void where() throws IOException {
+            var input = """
+                    select a
+                    from t1
+                    where exists (
+                    select * from t2 where c1 is not null
+                    );
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a
+                    from t1
+                    where exists (
+                             select * from t2 where c1 is not null
+                          );
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void connect_by() throws IOException {
+            var input = """
+                    select level,
+                    ename
+                    from emp
+                    connect by
+                    prior empno = mgr;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select level
+                          ,ename
+                    from emp
+                    connect by
+                               prior empno = mgr;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void start_with() throws IOException {
+            var input = """
+                    select level
+                    ,ename
+                    from emp
+                    start with
+                    mgr is null
+                    connect by
+                    prior empno = mgr;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select level
+                          ,ename
+                    from emp
+                    start with
+                               mgr is null
+                    connect by
+                               prior empno = mgr;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void group_by() throws IOException {
+            var input = """
+                    select deptno, count(*)
+                    from emp
+                    group
+                    by
+                    deptno;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select deptno, count(*)
+                    from emp
+                    group by
+                             deptno;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void order_by() throws IOException {
+            var input = """
+                    select empno, ename
+                    from emp
+                    order
+                    by
+                    ename
+                    ,empno;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select empno, ename
+                    from emp
+                    order by
+                             ename
+                            ,empno;
                     """;
             assertEquals(expected, actual);
         }

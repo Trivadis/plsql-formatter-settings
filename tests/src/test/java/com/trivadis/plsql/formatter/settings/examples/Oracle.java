@@ -39,17 +39,17 @@ public class Oracle extends ConfiguredTestFormatter {
                             dbms_output.put_line('sal_raise := 0');
                       end case;
                       select case "1"
-                               when 1 then
-                                  'xx'
+                                when 1 then
+                                   'xx'
                              end
                         into new_empno
                         from emp,
                              dual d1,
                              dual d2
                        where (1 = 2
-                          or 3 = 4)
-                         and 0 = 1 + 2
-                         and exists (
+                             or 3 = 4)
+                             and 0 = 1 + 2
+                             and exists (
                                 select 1,
                                        2,
                                        3

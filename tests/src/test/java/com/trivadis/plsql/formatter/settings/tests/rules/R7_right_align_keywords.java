@@ -49,7 +49,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                          left join t3 on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
-                          and t4.c1 = 'hello'
+                              and t4.c1 = 'hello'
                         group by t1.c7
                        having count(*) > 0
                         order by 1;
@@ -93,7 +93,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                          left join t3 on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
-                          and t4.c1 = 'hello'
+                              and t4.c1 = 'hello'
                         group by t1.c7
                        having count(*) > 0
                         order by 1;
@@ -119,7 +119,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                          left join t3 on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
-                          and t4.c1 = 'hello'
+                              and t4.c1 = 'hello'
                         group by t1.c7
                        having count(*) > 0
                         order by 1;
@@ -292,7 +292,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            salary = salary + 1000,
                            department_id = 120
                      where first_name = 'Douglas'
-                       and last_name = 'Grant';
+                           and last_name = 'Grant';
                     """;
             assertEquals(expected, actual);
         }
@@ -320,7 +320,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     delete
                       from t
                      where c1 = 1
-                       and c2 = 2;
+                           and c2 = 2;
                     """;
             assertEquals(expected, actual);
         }

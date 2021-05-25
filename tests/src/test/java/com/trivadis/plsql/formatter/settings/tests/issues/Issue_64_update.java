@@ -15,8 +15,8 @@ public class Issue_64_update extends ConfiguredTestFormatter {
                        n03 = 3,
                        n04 = my_function(1, 2, 3)
                  where n01 = 1
-                   and n02 = 2
-                   and n03 = my_function(1, 2, 3);
+                       and n02 = 2
+                       and n03 = my_function(1, 2, 3);
                 """;
         formatAndAssert(sql);
     }
@@ -31,8 +31,8 @@ public class Issue_64_update extends ConfiguredTestFormatter {
                      , n03 = 3
                      , n04 = my_function(1, 2, 3)
                  where n01 = 1
-                   and n02 = 2
-                   and n03 = my_function(1, 2, 3);
+                       and n02 = 2
+                       and n03 = my_function(1, 2, 3);
                 """;
         formatAndAssert(sql);
     }
