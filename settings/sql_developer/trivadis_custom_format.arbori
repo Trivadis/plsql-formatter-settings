@@ -858,7 +858,8 @@ a8_create_or_replace:
 ;
 
 a8_select_clauses:
-      [node) 'FROM'
+      [node) 'SELECT'
+    | [node) 'FROM'
     | [node) 'WHERE'
     | [node) 'CONNECT'
     | [node) 'BY'
