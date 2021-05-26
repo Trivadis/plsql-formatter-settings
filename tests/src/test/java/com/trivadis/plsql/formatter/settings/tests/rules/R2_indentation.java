@@ -828,7 +828,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
     }
 
     @Nested
-    class special_left_margin {
+    class select {
 
         @Test
         public void select_list() throws IOException {
@@ -902,8 +902,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select level
                           ,ename
                     from emp
-                    connect by
-                               prior empno = mgr;
+                    connect by prior empno = mgr;
                     """;
             assertEquals(expected, actual);
         }
@@ -924,10 +923,8 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select level
                           ,ename
                     from emp
-                    start with
-                               mgr is null
-                    connect by
-                               prior empno = mgr;
+                    start with mgr is null
+                    connect by prior empno = mgr;
                     """;
             assertEquals(expected, actual);
         }
@@ -945,8 +942,28 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     select deptno, count(*)
                     from emp
-                    group by
-                             deptno;
+                    group by deptno;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void having() throws IOException {
+            var input = """
+                    select deptno, count(*)
+                    from emp
+                    group
+                    by
+                    deptno
+                    having
+                    count(*) > 4;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select deptno, count(*)
+                    from emp
+                    group by deptno
+                    having count(*) > 4;
                     """;
             assertEquals(expected, actual);
         }
@@ -965,8 +982,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     select empno, ename
                     from emp
-                    order by
-                             ename
+                    order by ename
                             ,empno;
                     """;
             assertEquals(expected, actual);
