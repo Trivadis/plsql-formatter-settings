@@ -1338,6 +1338,15 @@ r2_increment_left_margin_for_group_by:
     addMargin(tuple.get("group"), -1 * spaces);
 }
 
+r2_increment_left_margin_for_having:
+      [node) having_clause
+    & [having) 'HAVING'
+    & having^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "HAVING");
+    addMargin(tuple.get("having"), -1 * spaces);
+}
+
 r2_increment_left_margin_for_order_by:
       [node) order_by_clause
     & [order) 'ORDER'
