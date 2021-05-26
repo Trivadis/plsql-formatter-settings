@@ -1247,6 +1247,19 @@ r2_init_left_margin:
         }
     }
 
+    /* returns the left margin of a node */
+    var getMargin = function(node) {
+        var i = node.from;
+        while (i >= 0) {
+            var margin = leftMargin.get(new Integer(i));
+            if (margin != null) {
+                return margin;
+            }
+            i--;
+        }
+        return null;
+    }
+
     /* returns the first word within a string */
     var getFirstWord = function(text) {
         var i = text.indexOf(" ");
@@ -1442,6 +1455,19 @@ r2_increment_left_margin_for_update_set:
 -> {
     var spaces = addMarginByName(tuple.get("node"), "SET");
     addMargin(tuple.get("set"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_flexible_parts:
+    [parent) subquery
+-> {
+    var parent = tuple.get("parent");
+    var margin = getMargin(parent);
+    if (margin != null) {
+        var col = getColumn(parent.from);
+        if (margin < col) {
+            addMargin(parent, col-margin);
+        }
+    }
 }
 
 r2_indent_nodes:
