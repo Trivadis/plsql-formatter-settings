@@ -23,7 +23,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         public void select_into_statement() throws IOException {
             var input = """
                     begin
-                    select
+                    select -- comment
                     all count(*)
                     into x
                     from t1
@@ -41,7 +41,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       select
+                       select -- comment
                           all count(*)
                          into x
                          from t1
@@ -63,7 +63,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         public void select_into_statement_with_subquery_inline() throws IOException {
             var input = """
                     begin
-                    select
+                    select -- a comment
                     all count(*)
                     into x
                     from t1
@@ -83,7 +83,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       select
+                       select -- a comment
                           all count(*)
                          into x
                          from t1
@@ -107,7 +107,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         public void select_into_statement_with_subquery_keep_newline() {
             var sql = """
                     begin
-                       select
+                       select -- a comment
                           all count(*)
                          into x
                          from t1
