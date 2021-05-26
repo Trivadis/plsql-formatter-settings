@@ -857,6 +857,10 @@ a8_create_or_replace:
     | [node) 'TYPE' & ![node-1) '%'
 ;
 
+a8_case:
+    [node) 'CASE' & [node+1) simple_case_expression
+;
+
 a8_select_clauses:
       [node) 'SELECT'
     | [node) 'FROM'
@@ -878,6 +882,7 @@ a8_one_space_after:
     | a8_join
     | a8_from
     | a8_create_or_replace
+    | a8_case
     | a8_select_clauses
 -> {
     var node = tuple.get("node");
