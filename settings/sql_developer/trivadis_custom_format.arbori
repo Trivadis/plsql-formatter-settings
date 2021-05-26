@@ -886,9 +886,11 @@ a8_one_space_after:
     | a8_select_clauses
 -> {
     var node = tuple.get("node");
-    struct.putNewline(node.to, " ");
-    var content = target.getSrc().get(node.from).content;
-    logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
+    if (!hasCommentsBetweenPos(node.from, node.to)) {
+        struct.putNewline(node.to, " ");
+        var content = target.getSrc().get(node.from).content;
+        logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
