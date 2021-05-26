@@ -858,10 +858,15 @@ a8_create_or_replace:
 ;
 
 a8_select_clauses:
-      [node) 'CONNECT' & [node+1) 'BY'
+      [node) 'FROM'
+    | [node) 'WHERE'
+    | [node) 'CONNECT'
+    | [node) 'BY'
     | [node) 'START' & [node+1) 'WITH'
-    | [node) 'ORDER' & [node+1) 'BY'
-    | [node) 'GROUP' & [node+1) 'BY'
+    | [node) 'WITH' & [node-1) 'START'
+    | [node) 'GROUP'
+    | [node) 'HAVING'
+    | [node) 'ORDER'
 ;
 
 a8_one_space_after:
