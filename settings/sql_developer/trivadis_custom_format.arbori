@@ -865,6 +865,7 @@ a8_case:
 
 a8_select_clauses:
       [node) 'SELECT'
+    | [node) 'INTO'
     | [node) 'FROM'
     | [node) 'WHERE'
     | [node) 'CONNECT'
@@ -981,6 +982,69 @@ r3_commands:
             var newIndent = getLeadingNewLines(node.from);
             struct.putNewline(node.from, newIndent);
             logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from);
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Chosen keywords on separated lines. The keywords start an indented section (see R2).
+-- Not compatible with alignRight (breaksAfterSelect wins).
+
+o6_select_before:
+      [node) 'WITH'
+    | [node) 'SELECT'
+    | [node) 'INTO'
+    | [node) 'FROM'
+    | [node) 'WHERE'
+    | [node) 'CONNECT'
+    | [node) 'START' & [node+1) 'WITH'
+    | [node) 'GROUP'
+    | [node) 'HAVING'
+    | [node) 'ORDER'
+;
+
+o6_select_after:
+      [node) 'WITH'
+    | [node) 'SELECT'
+    | [node) 'INTO'
+    | [node) 'FROM'
+    | [node) 'WHERE'
+    | [node-1) 'CONNECT' & [node) 'BY'
+    | [node-1) 'START'   & [node) 'WITH'
+    | [node-1) 'GROUP'   & [node) 'BY'
+    | [node) 'HAVING'
+    | [node-1) 'ORDER'   & [node) 'BY'
+;
+
+o6_line_break_before:
+    o6_select_before
+-> {
+    if (breaksAfterSelect) {
+        var node = tuple.get("node");
+        if (!posInConditionalBranch.contains(node.from)) {
+            var indent = getIndent(node.from);
+            if (!indent.contains("\n")) {
+                struct.putNewline(node.from, System.lineSeparator());
+                logger.fine(struct.getClass(), "o6_line_break_before: at " + node.from);
+            }
+        }
+    }
+}
+
+o6_line_break_after:
+    o6_select_after
+-> {
+    if (breaksAfterSelect) {
+        var node = tuple.get("node");
+        if (!posInConditionalBranch.contains(node.to)) {
+            var indent = getIndent(node.to);
+            if (!indent.contains("\n")) {
+                struct.putNewline(node.to, System.lineSeparator());
+                logger.fine(struct.getClass(), "o6_line_break_after: at " + node.to);
+            }
         }
     }
 }
@@ -1492,20 +1556,22 @@ r7_right_align_keywords:
     | r7_update
     | r7_delete
 -> {
-    var keyword = tuple.get("keyword");
-    var parent = tuple.get("parent");
-    var parentIndent = System.lineSeparator() + getSpaces(getColumn(parent.from));
-    var parentLength = target.getSrc().get(parent.from).content.length();
-    if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
-        parentLength = 6;
-    }
-    if (getIndent(keyword.from).contains("\n")) {
-        if (alignRight) {
-            var content = target.getSrc().get(keyword.from).content;
-            var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
-            var keywordIndent = parentIndent + getSpaces(missingSpaces);
-            struct.putNewline(keyword.from, keywordIndent);
-            logger.fine(struct.getClass(), "r7_right_align_keywords: align <" + content + "> at " + keyword.from);
+    if (!breaksAfterSelect) {
+        var keyword = tuple.get("keyword");
+        var parent = tuple.get("parent");
+        var parentIndent = System.lineSeparator() + getSpaces(getColumn(parent.from));
+        var parentLength = target.getSrc().get(parent.from).content.length();
+        if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
+            parentLength = 6;
+        }
+        if (getIndent(keyword.from).contains("\n")) {
+            if (alignRight) {
+                var content = target.getSrc().get(keyword.from).content;
+                var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
+                var keywordIndent = parentIndent + getSpaces(missingSpaces);
+                struct.putNewline(keyword.from, keywordIndent);
+                logger.fine(struct.getClass(), "r7_right_align_keywords: align <" + content + "> at " + keyword.from);
+            }
         }
     }
 }
