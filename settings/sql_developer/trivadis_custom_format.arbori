@@ -807,9 +807,11 @@ a7_one_space_before:
     | a7_table_alias
 -> {
     var node = tuple.get("node");
-    struct.putNewline(node.from, " ");
-    var content = target.getSrc().get(node.from).content;
-    logger.fine(struct.getClass(), "a7_one_space_before: <" + content + "> at " + node.from);
+    if (!hasCommentsBetweenPos(node.from, node.to)) {
+        struct.putNewline(node.from, " ");
+        var content = target.getSrc().get(node.from).content;
+        logger.fine(struct.getClass(), "a7_one_space_before: <" + content + "> at " + node.from);
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
