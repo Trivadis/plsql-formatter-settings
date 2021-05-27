@@ -33,11 +33,9 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       pkg.add(
-                          in_key     => '1'
-                        , in_value   => 'yes'
-                        , in_comment => 'something'
-                       );
+                       pkg.add(in_key     => '1'
+                             , in_value   => 'yes'
+                             , in_comment => 'something');
                     end;
                     /
                     """;
@@ -86,11 +84,9 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       pkg.add(
-                          in_key     => '1',
-                          in_value   => 'yes',
-                          in_comment => 'something'
-                       );
+                       pkg.add(in_key     => '1',
+                               in_value   => 'yes',
+                               in_comment => 'something');
                     end;
                     /
                     """;
@@ -118,9 +114,11 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
         @Test
         public void align_closing_paren() throws IOException {
             var input = """
-                    select pkg.add(in_key => '1',
-                                   in_value => 'yes',
-                                   in_comment => 'something') as value
+                    select pkg.add(
+                           in_key => '1',
+                           in_value => 'yes',
+                           in_comment => 'something'
+                           ) as value
                       from t;
                     """;
             var actual = formatter.format(input);
@@ -183,11 +181,9 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       pkg.add(
-                          in_key => '1',
-                          in_value => 'yes',
-                          in_comment => 'something'
-                       );
+                       pkg.add(in_key => '1',
+                               in_value => 'yes',
+                               in_comment => 'something');
                     end;
                     /
                     """;

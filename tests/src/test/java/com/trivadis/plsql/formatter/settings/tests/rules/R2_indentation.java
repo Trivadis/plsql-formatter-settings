@@ -193,9 +193,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                ,b => 2
                              );
                        l2 := f2 (
-                             1
-                            ,2
-                          );
+                                1
+                               ,2
+                             );
                     end;
                     /
                     """;
