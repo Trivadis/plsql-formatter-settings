@@ -1379,6 +1379,20 @@ r2_init_left_margin:
     }
 }
 
+r2_remove_indentation_for_assignment:
+    [node-2) ':' & [node-1) '=' & [node) pls_expr
+-> {
+    var node = tuple.get("node");
+    for (var i=node.from; i<node.to; i++) {
+        var indent = getIndent(i);
+        var index = indent.lastIndexOf("\n") + 1;
+        if (index > 0) {
+            struct.putNewline(i, indent.substr(0, index));
+            logger.fine(struct.getClass(), "r2_remove_indentation_for_assignment: at " + i);
+        }
+    }
+}
+
 r2_common:
       [node) basic_d
     | [node) full_cursor_body
@@ -1530,11 +1544,11 @@ r2_increment_left_margin_for_update_set:
 }
 
 r2_increment_left_margin_for_subquery:
-    [node) subquery
+    [node) query_block & [node-1) '('
 -> {
     var node = tuple.get("node");
     var margin = getMargin(node);
-    if (margin != null) {
+    if (margin != null && !getIndent(node.from).contains("\n")) {
         var col = getColumn(node.from);
         if (margin < col) {
             addMargin(node, col-margin);
@@ -1570,6 +1584,8 @@ r2_increment_left_margin_for_assignment:
     var nodeCol = getColumn(node.from);
     if (!getIndent(node.from).contains("\n")) {
         addMargin(node, nodeCol-parentCol);
+    } else {
+        addMargin(node, indentSpaces);
     }
 }
 
