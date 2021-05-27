@@ -135,6 +135,29 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
             assertEquals(expected, actual);
         }
 
+        @Test
+        public void nested_multiline_function() throws IOException {
+            var input = """
+                    select f1(p1 => '1',
+                    p2222 => 'yes',
+                    p33 => f2(p1 => '1'
+                    || '2'
+                    || '3',
+                    p222222 => '2')) as value
+                    from t;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select f1(p1    => '1',
+                              p2222 => 'yes',
+                              p33   => f2(p1      => '1'
+                                                     || '2'
+                                                     || '3',
+                                          p222222 => '2')) as value
+                      from t;
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
