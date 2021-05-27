@@ -26,10 +26,35 @@
  * A phase consists of one ore more sections.
  * A section consists of one or more Arbori queries.
  *
- * The following two phases are defined:
+ * The following phases and sections are defined:
  *
  * - Phase 1 - Initialization and preprocessing.
+ *     - I1: Minimal Arbori program (expected by the formatter).
+ *     - I2: Globals.
+ *     - I3: Remove duplicate empty lines.
+ *     - I4: Keep existing whitespace.
+ *
  * - Phase 2 - Processing section by section. The processing order is important.
+ *     - A1: Do not use tabs.
+ *     - A2: Remove trailing spaces.
+ *     - A3: Do not format code between @formatter:off and @formatter:on comments.
+ *     - O2: White Space: Around operators. Options: true; false. (spaceAroundOperators).
+ *     - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
+ *     - A5: No space before node.
+ *     - A6: No space after node.
+ *     - A7: One space before node.
+ *     - A8: One space after node.
+ *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
+ *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
+ *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
+ *     - R5: Commas in front of separated elements.
+ *     - R2: 3 space indention.
+ *     - R7: SQL keywords are right aligned within a SQL command.
+ *     - O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
+ *     - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
+ *     - R6: Call parameters aligned, operators aligned, values aligned.
+ *     - A9: Align xmltable columns.
+ *     - A4: Split long lines.
  *
  * The start of a phase is visualized by a comment series like this
  *
