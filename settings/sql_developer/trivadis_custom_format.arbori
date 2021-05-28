@@ -1413,6 +1413,7 @@ r2_common:
     | [node) "expr_list" & [node-1) '('
     | [node) xmlquery
     | [node) xmltable
+    | [node) function_expression & [node-1) '('
 ;
 
 r2_case_expression:
