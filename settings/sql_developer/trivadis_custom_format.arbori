@@ -1874,7 +1874,6 @@ o7_declarations:
     var equalitySigns = new HashMap();
 }
 
-
 o7_condition:
       [scope) condition
     & ![scope^) condition
