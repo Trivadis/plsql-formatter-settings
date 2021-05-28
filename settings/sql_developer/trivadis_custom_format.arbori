@@ -1847,7 +1847,7 @@ o5_declarations:
     }
 
     var tableReferenceOnNewline = function (node) {
-        var n = target.getRoot().leafAtPos(node.from - 1);;
+        var n = target.getRoot().leafAtPos(node.from - 1);
         do {
             n = target.getRoot().leafAtPos(n.from - 1);
             if (getIndent(n.from).contains("\n")) {
