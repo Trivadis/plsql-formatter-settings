@@ -17,6 +17,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
         public void setup() {
             getFormatter().options.put(getFormatter().maxCharLineSize, 120);
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.None);
         }
 
         @Test
@@ -66,6 +67,16 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void new_lines_in_strings() {
+            var sql = """
+                    select 'aaaaaaaaaaa aaaaaaa aaaaa aaaaaaaaaaaaaaaaaaaaaaaa aaaaaa aaaaaa aaaaa
+                            bbbbbbbbbbbb bbbbbbbbb bbbbbbb bbbbbbbb bbbb bbb ' || 'ccc' || 'ddd' as value
+                      from dual;
+                    """;
+            formatAndAssert(sql);
+        }
     }
 
     @Nested
@@ -75,6 +86,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
         public void setup() {
             getFormatter().options.put(getFormatter().maxCharLineSize, 30);
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.Before);
         }
 
         @Test
@@ -127,6 +139,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
         public void setup() {
             getFormatter().options.put(getFormatter().maxCharLineSize, 30);
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.Before);
         }
 
         @Test
