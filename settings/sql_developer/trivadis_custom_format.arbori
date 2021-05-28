@@ -29,6 +29,7 @@
  * The following phases and sections are defined:
  *
  * - Phase 1 - Initialization and preprocessing.
+ *     - D1: Initialize timer.
  *     - I1: Minimal Arbori program (expected by the formatter).
  *     - I2: Globals.
  *     - I3: Remove duplicate empty lines.
@@ -56,6 +57,7 @@
  *     - R6: Call parameters aligned, operators aligned, values aligned.
  *     - A9: Align xmltable columns.
  *     - A4: Split long lines.
+ *     - D2: Log time spent in this program.
  *
  * The start of a phase is visualized by a comment series like this
  *
@@ -66,12 +68,13 @@
  * The sections have the following format <Category><SectionNumber>.
  * The next table explains the meaning of a category:
  *
- * Cat.  Meaning                 Description
- * ----  ----------------------  ------------------------------------------------------
- * I     Initialization Section  Identifies a section in an initialization phase.
- * O     SQLDev Option           Implements a SQL Developer option (Advanced Format).
- * R     Trivadis Rule           Implements a Trivadis PL/SQL & SQL Guideline.
- * A     Add-on Section/Rule     Additional formatting rule, that is not based on
+ * Cat.  Meaning                 Description                                             Phases
+ * ----  ----------------------  ------------------------------------------------------  ------
+ * D     Debug                   Initialize or produce debugging output.                 1, 2
+ * I     Initialization Section  Identifies a section in an initialization phase.        1
+ * O     SQLDev Option           Implements a SQL Developer option (Advanced Format).    2
+ * R     Trivadis Rule           Implements a Trivadis PL/SQL & SQL Guideline.           2
+ * A     Add-on Section/Rule     Additional formatting rule, that is not based on        2
  *                               the Trivadis PL/SQL & SQL Guidelines. Nonetheless it's
  *                               considered important to improve the formatting result.
  *
@@ -117,6 +120,16 @@
 -- ====================================================================================================================
 -- Phase 1 - Initialization and pre-processing.
 -- ====================================================================================================================
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- D1: Initialize timer.
+-- --------------------------------------------------------------------------------------------------------------------
+
+startCustomFormat:
+    [runOnce) sql_statements
+-> {
+    var startTime = (new Date()).getTime();
+}
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- I1: Minimal Arbori program (expected by the formatter).
@@ -2095,4 +2108,16 @@ a4_add_line_breaks_with_indent:
             pos += contentLength;
         }
     }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+--  D2: Log time spent in this program.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a0_log_time:
+    [runOnce) sql_statements
+-> {
+    var endTime = (new Date()).getTime();
+    logger.info(struct.getClass(), "a0_log_time: formatted " + tokens.length + " lexer tokens in "
+        + ((endTime - startTime) / 1000) + " seconds.");
 }
