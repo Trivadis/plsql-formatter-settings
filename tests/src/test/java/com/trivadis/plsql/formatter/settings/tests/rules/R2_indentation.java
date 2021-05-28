@@ -513,6 +513,78 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void searched_case_expr_plsql_assignment() throws IOException {
+            var input = """
+                    begin
+                    l_filter := case
+                    when l_value is null then
+                    'abc'
+                    when l_value is not null then
+                    'def'
+                    else
+                    'xyz'
+                    end
+                    || ' another value'
+                    || ' another value';
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       l_filter := case
+                                      when l_value is null then
+                                         'abc'
+                                      when l_value is not null then
+                                         'def'
+                                      else
+                                         'xyz'
+                                   end
+                                   || ' another value'
+                                   || ' another value';
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void simple_case_expr_plsql_assignment() throws IOException {
+            var input = """
+                    begin
+                    l_filter := case l_value
+                    when 1 then
+                    'abc'
+                    when 2 then
+                    'def'
+                    else
+                    'xyz'
+                    end
+                    || ' another value'
+                    || ' another value';
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       l_filter := case l_value
+                                      when 1 then
+                                         'abc'
+                                      when 2 then
+                                         'def'
+                                      else
+                                         'xyz'
+                                   end
+                                   || ' another value'
+                                   || ' another value';
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
