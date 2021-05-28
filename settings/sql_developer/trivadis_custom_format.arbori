@@ -1547,7 +1547,7 @@ r2_increment_left_margin_for_update_set:
 }
 
 r2_increment_left_margin_for_subquery:
-    [node) query_block & [node-1) '('
+    [node) subquery
 -> {
     var node = tuple.get("node");
     var margin = getMargin(node);
