@@ -51,6 +51,7 @@
  *     - R5: Commas in front of separated elements.
  *     - R2: 3 space indention.
  *     - R7: SQL keywords are right aligned within a SQL command.
+ *     - O8: Alignment: Type Declarations. Options: true; false. (alignTypeDecl).
  *     - O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
  *     - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
  *     - O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
@@ -1763,6 +1764,35 @@ r7_right_align_keywords:
             }
         }
     }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A10: Align parameter mode.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a10_declarations:
+    [runOnce) sql_statements
+-> {
+    var paramModes = new HashMap();
+}
+
+a10_find_param_modes:
+      [scope) fml_part
+    & [node) mode
+    & scope < node
+-> {
+    if (alignTypeDecl) {
+        var node = tuple.get("node");
+        if (firstParameterOnLine(node.from)) {
+            addTupleToMap(tuple, "scope", paramModes);
+        }
+    }
+}
+
+o10_align_param_modes:
+    [runOnce) sql_statements
+-> {
+    align(paramModes, "node", null, "o10_align_param_modes");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
