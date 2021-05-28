@@ -201,6 +201,9 @@ define_global_variables:
     // get option for "Alignment: Column and Table aliases"
     var alignTabColAliases = struct.options.get("alignTabColAliases");
 
+    // get option for "Alignment: Type Declarations"
+    var alignTypeDecl = struct.options.get("alignTypeDecl");
+
     // get option for "Alignment: Named Argument Separator =>"
     var alignNamedArgs = struct.options.get("alignNamedArgs");
 
