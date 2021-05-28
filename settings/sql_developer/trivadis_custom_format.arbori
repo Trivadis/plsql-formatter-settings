@@ -2086,7 +2086,13 @@ a4_add_line_breaks_with_indent:
             } else {
                 pos += getNumCharsAfterNewLine(value);
             }
-            pos += target.getSrc().get(key).content.length();
+            var content = target.getSrc().get(key).content;
+            var contentLength = content.length;
+            var nlpos = content.lastIndexOf("\n") + 1;
+            if (nlpos > 0) {
+                contentLength -= nlpos;
+            }
+            pos += contentLength;
         }
     }
 }
