@@ -1151,7 +1151,7 @@ o1_concatenation_option:
                 struct.putNewline(concat.from, indent);
                 logger.fine(struct.getClass(), "o1_concatenation_option: add line break before at " + concat.from);
             }
-        } else {
+        } else if (struct.breaksAfterConcat()) {
             struct.putNewline(concat.from, " "); // Before and After is not an option
             if (!getIndent(concat.to).contains("\n")) {
                 struct.putNewline(concat.to, indent);
