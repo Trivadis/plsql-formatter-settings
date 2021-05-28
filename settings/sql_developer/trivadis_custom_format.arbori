@@ -1421,6 +1421,7 @@ r2_case_expression:
     | [node) else_clause & [node^) case_expression
     | [node) expr & [node^) else_clause & [node^^) case_expression
     | [node) expr & [node^) searched_case_expression#
+    | [node) condition & [node-1) 'WHEN'
 ;
 
 r2_object_type:
