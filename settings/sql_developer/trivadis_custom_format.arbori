@@ -52,6 +52,7 @@
  *     - R7: SQL keywords are right aligned within a SQL command.
  *     - O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
  *     - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
+ *     - O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
  *     - R6: Call parameters aligned, operators aligned, values aligned.
  *     - A9: Align xmltable columns.
  *     - A4: Split long lines.
