@@ -987,5 +987,37 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        void table_function() throws IOException {
+            var input = """
+                    select value(p) as col
+                    from table(
+                    cast(
+                    lineage_util.get_dep_cols_from_query(
+                    in_parse_user => r_insert.owner,
+                    in_query => l_query,
+                    in_column_pos => l_column_id,
+                    in_recursive => in_recursive
+                    ) as xyz
+                    )
+                    ) p;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select value(p) as col
+                    from table(
+                            cast(
+                               lineage_util.get_dep_cols_from_query(
+                                  in_parse_user => r_insert.owner
+                                 ,in_query      => l_query
+                                 ,in_column_pos => l_column_id
+                                 ,in_recursive  => in_recursive
+                               ) as xyz
+                            )
+                         ) p;
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 }
