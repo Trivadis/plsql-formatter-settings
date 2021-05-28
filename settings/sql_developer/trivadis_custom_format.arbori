@@ -1426,6 +1426,16 @@ r2_case_expression:
     | [node) condition & [node-1) 'WHEN'
 ;
 
+r2_case_expression_plsql:
+      [parent) case_expr
+    & (
+          [node) case_expr_alt
+        | [node) ELSE_expr_opt
+        | [node) pls_expr & ([node-1) 'THEN' | [node-1) 'ELSE')
+      )
+    & parent < node
+;
+
 r2_object_type:
       [node) adt_field
     | [node) ',' & [node+1) adt_field
@@ -1441,6 +1451,7 @@ r2_body:
 r2_increment_left_margin:
       r2_common
     | r2_case_expression
+    | r2_case_expression_plsql
     | r2_object_type
     | r2_body
 -> {
