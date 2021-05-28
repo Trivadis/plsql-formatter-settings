@@ -366,12 +366,12 @@ define_global_functions:
                     indent = indent + getSpaces(maxCol - col);
                     struct.putNewline(alignNode.from, indent);
                     logger.fine(struct.getClass(), logText + ": at " + alignNode.from);
-                }
-                if (indentNodeName != null) {
-                    var indentNode = list.get(i).get(indentNodeName);
-                    if (indentNode != null) {
-                        addIndent(indentNode, maxCol - col);
-                        logger.fine(struct.getClass(), logText + ": add indent for [" + indentNode.from) + ")";
+                    if (indentNodeName != null) {
+                        var indentNode = list.get(i).get(indentNodeName);
+                        if (indentNode != null) {
+                            addIndent(indentNode, maxCol - col);
+                            logger.fine(struct.getClass(), logText + ": add indent for " + indentNode.from);
+                        }
                     }
                 }
             }
