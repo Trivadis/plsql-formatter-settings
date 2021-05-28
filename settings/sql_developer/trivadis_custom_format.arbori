@@ -1914,7 +1914,7 @@ o7_declarations:
     var equalitySigns = new HashMap();
 }
 
-o7_condition:
+o7_find_equality_predicates:
       [scope) condition
     & ![scope^) condition
     & [node) '='
@@ -1930,10 +1930,10 @@ o7_condition:
     }
 }
 
-o7_align_equality_predicate:
+o7_align_equality_predicates:
     [runOnce) sql_statements
 -> {
-    align(equalitySigns, "node", "value", "o7_align_equality_predicate");
+    align(equalitySigns, "node", "value", "o7_align_equality_predicates");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
