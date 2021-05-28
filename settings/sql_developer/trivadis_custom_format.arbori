@@ -184,6 +184,21 @@ define_global_variables:
     newlinePositionsField.setAccessible(true);
     var newlinePositions = newlinePositionsField.get(struct);
 
+    // get option for "Alignment: Column and Table aliases"
+    var alignTabColAliases = struct.options.get("alignTabColAliases");
+
+    // get option for "Alignment: Named Argument Separator =>"
+    var alignNamedArgs = struct.options.get("alignNamedArgs");
+
+    // get option for "Alignment: Assignment Operator :="
+    var alignAssignments = struct.options.get("alignAssignments");
+
+    // get option for "Alignment: Equality Predicate ="
+    var alignEquality = struct.options.get("alignEquality");
+
+    // get option for "Alignment: Right-align query keywords"
+    var alignRight = struct.options.get("alignRight");
+
     // get option for "Indentation: Indent spaces" (number of spaces for a single indentation)
     var indentSpaces = struct.options.get("identSpaces");
 
@@ -192,18 +207,6 @@ define_global_variables:
 
     // get option for "Line Breaks: SELECT/FROM/WHERE"
     var breaksAfterSelect = struct.options.get("breaksAfterSelect");
-
-    // get option for "Alignment: Column and Table aliases"
-    var alignTabColAliases = struct.options.get("alignTabColAliases");
-
-    // get option for "Alignment: Assignment Operator :="
-    var alignAssignments = struct.options.get("alignAssignments");
-
-    // get option for "Alignment: Named Argument Separator =>"
-    var alignNamedArgs = struct.options.get("alignNamedArgs");
-
-    // get option for "Alignment: Right-align query keywords"
-    var alignRight = struct.options.get("alignRight");
 
     // get option for "White Space: Around operators"
     var spaceAroundOperators = struct.options.get("spaceAroundOperators");
