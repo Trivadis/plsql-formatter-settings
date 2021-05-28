@@ -1854,6 +1854,50 @@ o5_align_aliases:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
+-- O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o7_declarations:
+    [runOnce) sql_statements
+-> {
+    /* returns true if there is no other equality sign on the line */
+    var firstEqualitySignOnLine = function(nodeFrom) {
+        for (var i=nodeFrom-1; i>=0 && !getIndent(i).contains("\n"); i=i-1) {
+            var content = target.getSrc().get(i).content;
+            if (content == "=") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var equalitySigns = new HashMap();
+}
+
+
+o7_condition:
+      [scope) condition
+    & ![scope^) condition
+    & [node) '='
+    & [value) expr
+    & scope < node
+    & value = node+1
+-> {
+    if (alignEquality) {
+        var node = tuple.get("node");
+        if (firstEqualitySignOnLine(node.from)) {
+            addTupleToMap(tuple, "scope", equalitySigns);
+        }
+    }
+}
+
+o7_align_equality_predicate:
+    [runOnce) sql_statements
+-> {
+    align(equalitySigns, "node", "value", "o7_align_equality_predicate");
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
 -- R6: Call parameters aligned, operators aligned, values aligned.
 -- --------------------------------------------------------------------------------------------------------------------
 
