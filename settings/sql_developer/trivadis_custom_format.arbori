@@ -415,6 +415,17 @@ define_global_functions:
         }
         return text;
     }
+
+    /* returns true if there is no other parameter defined on the same line */
+    var firstParameterOnLine = function(nodeFrom) {
+        for (var i=nodeFrom-1; i>=0 && !getIndent(i).contains("\n"); i=i-1) {
+            var prevNode = target.getRoot().leafAtPos(i);
+            if (prevNode.contains("decl_id")) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
