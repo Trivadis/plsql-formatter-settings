@@ -51,6 +51,7 @@
  *     - R5: Commas in front of separated elements.
  *     - R2: 3 space indention.
  *     - R7: SQL keywords are right aligned within a SQL command.
+ *     - A10: Align parameter mode.
  *     - O8: Alignment: Type Declarations. Options: true; false. (alignTypeDecl).
  *     - O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
  *     - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
@@ -1793,6 +1794,65 @@ o10_align_param_modes:
     [runOnce) sql_statements
 -> {
     align(paramModes, "node", null, "o10_align_param_modes");
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O8: Alignment: Type Declarations. Options: true; false. (alignTypeDecl).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o8_declarations:
+    [runOnce) sql_statements
+-> {
+    var datatypes = new HashMap();
+}
+
+o8_variables:
+      [scope) decl_list
+    & [name) identifier
+    & [parent) basic_d
+    & name = node-1
+    & scope < name^
+    & parent = name^
+    & [parent = [name
+;
+
+o8_records:
+      [scope) ty_def
+    & [node-1) identifier
+    & [node^) field
+    & scope < node^
+;
+
+o8_find_type_declarations:
+      o8_variables
+    | o8_records
+-> {
+    if (alignTypeDecl) {
+        var node = tuple.get("node");
+        addTupleToMap(tuple, "scope", datatypes);
+    }
+}
+
+o8_find_parameter_declarations:
+      [scope) fml_part
+    & [name) decl_id
+    & [node) unconstrained_type
+    & scope < node
+    & (name = node-1 | name = node-2)
+-> {
+    if (alignTypeDecl) {
+        var name = tuple.get("name")
+        if (firstParameterOnLine(node.from)) {
+            var node = tuple.get("node");
+            addTupleToMap(tuple, "scope", datatypes);
+        }
+    }
+}
+
+o8_align_type_declarations:
+    [runOnce) sql_statements
+-> {
+    align(datatypes, "node", null, "o8_align_type_declarations");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
