@@ -2135,6 +2135,7 @@ r6_find_names:
             } else {
                 tuple.put("aligner", arg);
             }
+            removeLeadingSpaces(tuple.get("aligner").from);
             addTupleToMap(tuple, "scope", assocNames);
         }
     }
@@ -2143,33 +2144,8 @@ r6_find_names:
 r6_align_names:
     [runOnce) sql_statements
 -> {
-    var fixIndentOfLeadingCommas = function() {
-        var comma = 1;
-        if (spaceAfterCommas) {
-            comma += 1;
-        }
-        var it = assocNames.keySet().iterator();
-        while (it.hasNext()) {
-            var scope = it.next();
-            var list = assocNames.get(scope);
-            for (var i=0; i<list.length; i++) {
-                var aligner = list.get(i).get("aligner");
-                var indent = getIndent(aligner.from);
-                if (indent.contains("\n")) {
-                    var content = target.getSrc().get(aligner.from).content;
-                    if (content == ",") {
-                        struct.putNewline(aligner.from, indent.substr(0, indent.length - comma));
-                        logger.fine(struct.getClass(), "r6_align_names: reduced intent at " + aligner.from);
-                    }
-                }
-            }
-        }
-    }
-
     align(assocNames, "aligner", null, "r6_align_names");
-    if (struct.breaksBeforeComma()) {
-        fixIndentOfLeadingCommas();
-    }
+    fixIndentOfLeadingCommas(assocNames, "aligner", "r6_align_names");
 }
 
 r6_find_values:
