@@ -40,7 +40,8 @@ public class A5_no_space_before_node extends ConfiguredTestFormatter {
         var actual = formatter.format(input);
         var expected = """
                 select t
-                       .column from t;
+                       .column
+                  from t;
                 """;
         assertEquals(expected, actual);
     }
