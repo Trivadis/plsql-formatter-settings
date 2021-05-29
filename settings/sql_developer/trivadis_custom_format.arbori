@@ -294,6 +294,21 @@ define_global_functions:
         return col;
     }
 
+    /* same as getColumn, but does not contain the very first indentation */
+    function getColumnWithoutFirstIndent(nodeFrom) {
+        var startPos=nodeFrom;
+        var col=getNumCharsAfterNewLine(getIndent(startPos));
+        var indent = getIndent(startPos);
+        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
+            col += target.getSrc().get(i).content.length();
+            var indent = getIndent(i);
+            if (!indent.contains("\n")) {
+                col += getNumCharsAfterNewLine(indent);
+            }
+        }
+        return col;
+    }
+
     /* returns true if a node or one of its children contains an indentation with a new line character */
     function containsLineBreak(node) {
         for (var i = node.from; i < node.to; i++) {
