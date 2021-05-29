@@ -434,6 +434,41 @@ define_global_functions:
         }
         return true;
     }
+
+    /* reduce indentation for nodes with leading commas */
+    var fixIndentOfLeadingCommas = function(map, nodeName, logText) {
+        if (struct.breaksBeforeComma()) {
+            var comma = 1;
+            if (spaceAfterCommas) {
+                comma += 1;
+            }
+            var it = map.keySet().iterator();
+            while (it.hasNext()) {
+                var scope = it.next();
+                var list = map.get(scope);
+                for (var i=0; i<list.length; i++) {
+                    var node = list.get(i).get(nodeName);
+                    var indent = getIndent(node.from);
+                    if (indent.contains("\n")) {
+                        var content = target.getSrc().get(node.from).content;
+                        if (content == ",") {
+                            struct.putNewline(node.from, indent.substr(0, indent.length - comma));
+                            logger.fine(struct.getClass(), logText + ": reduced intent at " + node.from);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* remove leading spaces after last newline character from indent */
+    var removeLeadingSpaces = function(nodeFrom) {
+        var indent = getIndent(nodeFrom);
+        var nlpos = indent.getLastIndexOf("\n") + 1;
+        if (nlpos > 0) {
+            struct.putNewline(node.from, indent.substr(0, nlpos));
+        }
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
