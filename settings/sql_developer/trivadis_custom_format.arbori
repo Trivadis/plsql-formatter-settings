@@ -2215,14 +2215,11 @@ a9_find_columns:
 -> {
     var scope = tuple.get("scope");
     if (struct.breaksBeforeComma()) {
-        var comma = tuple.get("comma");
-        struct.putNewline(comma.from, System.lineSeparator());
-        tuple.put("aligner", comma);
+        tuple.put("aligner", tuple.get("comma"));
     } else {
-        var node = tuple.get("node");
-        struct.putNewline(node.from, System.lineSeparator());
-        tuple.put("aligner", node);
+        tuple.put("aligner", tuple.get("node"));
     }
+    struct.putNewline(tuple.get("aligner").from, System.lineSeparator());
     addTupleToMap(tuple, "scope", xmlTableColumns);
 }
 
