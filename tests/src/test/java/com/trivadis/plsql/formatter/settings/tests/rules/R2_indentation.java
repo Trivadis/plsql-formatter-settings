@@ -1091,5 +1091,36 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        void select_with_oracle_join_and_nested_ansi_join() throws IOException {
+            var input = """
+                    select *
+                    from emp, dual d1, dual d2 where (1 = 2 or 3 = 4) and
+                    0  = 1 + 2 and exists(select 1, 2, 3
+                    from wsh_new_deliveries wnd
+                    join wsh_delivery_assignments wda
+                    on wnd.delivery_id = wda.delivery_id
+                    join hz_locations hl
+                    on hps.location_id = hl.location_id
+                    );
+                    """;
+            // whole from clause is indented, that's correct, right-align moves keywords to the left
+            var expected = """
+                    select *
+                    from emp, dual d1, dual d2 
+                    where (1 = 2 or 3 = 4) and
+                          0 = 1 + 2 and exists(select 1, 2, 3
+                                               from wsh_new_deliveries wnd
+                                                    join wsh_delivery_assignments wda
+                                                    on wnd.delivery_id = wda.delivery_id
+                                                    join hz_locations hl
+                                                    on hps.location_id = hl.location_id
+                          );
+                    """;
+            var actual = formatter.format(input);
+            actual = formatter.format(actual); // TODO: test case must run without this line! Left margin with nested structures....
+            assertEquals(expected, actual);
+        }
     }
 }
