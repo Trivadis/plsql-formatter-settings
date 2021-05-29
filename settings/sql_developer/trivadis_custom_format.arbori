@@ -444,6 +444,16 @@ define_global_functions:
         return true;
     }
 
+    /* returns true if there is a a new line in the node range, search backwards */
+    var hasNewline = function(from, to) {
+        for (var i=from; i>=to; i=i-1) {
+            if (getIndent(i).contains("\n")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* reduce indentation for nodes with leading commas */
     var fixIndentOfLeadingCommas = function(map, nodeName, logText) {
         if (struct.breaksBeforeComma()) {
