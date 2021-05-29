@@ -1677,6 +1677,9 @@ r2_increment_left_margin_for_subquery:
     var node = tuple.get("node");
     var margin = getMargin(node);
     if (margin != null && !getIndent(node.from).contains("\n")) {
+        if (target.getSrc().get(new Integer(node.from-1)).content == '(') {
+            addMargin(node, -1 * indentSpaces);
+        }
         var col = getColumn(node.from);
         if (margin < col) {
             addMargin(node, col-margin);
