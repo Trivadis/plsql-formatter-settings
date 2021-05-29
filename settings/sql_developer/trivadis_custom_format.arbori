@@ -1486,6 +1486,28 @@ r2_remove_indentation_for_assignment:
     }
 }
 
+-- if a select statement is written on several lines, then each clause should start on a new line
+r2_add_line_break:
+    [parent) subquery
+    & (
+            [node) 'FROM'
+          | [node) 'WHERE'
+          | [node) 'CONNECT'
+          | [node) 'START'
+          | [node) 'GROUP'
+          | [node) 'HAVING'
+          | [node) 'ORDER'
+      )
+    & parent < node
+-> {
+    var parent = tuple.get("parent");
+    var node = tuple.get("node");
+    if (hasNewline(node.from, parent.from+1)) {
+        struct.putNewline(node.from, System.lineSeparator());
+        logger.fine(struct.getClass(), "r2_add_line_break: at " + node.from);
+    }
+}
+
 r2_common:
       [node) basic_d
     | [node) full_cursor_body
