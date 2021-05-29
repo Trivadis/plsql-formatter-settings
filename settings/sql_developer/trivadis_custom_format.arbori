@@ -419,11 +419,16 @@ define_global_functions:
     }
 
     /* returns true if there is no other parameter defined on the same line */
-    var firstParameterOnLine = function(nodeFrom) {
-        for (var i=nodeFrom-1; i>=0 && !getIndent(i).contains("\n"); i=i-1) {
-            var prevNode = target.getRoot().leafAtPos(i);
-            if (prevNode.contains("decl_id")) {
-                return false;
+    var firstParameterOnLine = function(nodeFrom, scopeFrom) {
+        if (!getIndent(nodeFrom).contains("\n")) {
+            for (var i=nodeFrom-1; i>=scopeFrom; i=i-1) {
+                var prevNode = target.getRoot().leafAtPos(i);
+                if (prevNode.contains("decl_id")) {
+                    return false;
+                }
+                if (getIndent(prevNode.from).contains("\n")) {
+                    break;
+                }
             }
         }
         return true;
@@ -1779,12 +1784,16 @@ a10_declarations:
 
 a10_find_param_modes:
       [scope) fml_part
+    & [name) decl_id
     & [node) mode
     & scope < node
+    & name = node-1
 -> {
     if (alignTypeDecl) {
-        var node = tuple.get("node");
-        if (firstParameterOnLine(node.from)) {
+        var name = tuple.get("name");
+        var scope = tuple.get("scope");
+        if (firstParameterOnLine(name.from, scope.from)) {
+            var node = tuple.get("node");
             addTupleToMap(tuple, "scope", paramModes);
         }
     }
@@ -1808,7 +1817,7 @@ o8_declarations:
 
 o8_variables:
       [scope) decl_list
-    & [name) identifier
+    & [name) decl_id
     & [parent) basic_d
     & name = node-1
     & scope < name^
@@ -1841,8 +1850,9 @@ o8_find_parameter_declarations:
     & (name = node-1 | name = node-2)
 -> {
     if (alignTypeDecl) {
-        var name = tuple.get("name")
-        if (firstParameterOnLine(node.from)) {
+        var name = tuple.get("name");
+        var scope = tuple.get("scope");
+        if (firstParameterOnLine(name.from, scope.from)) {
             var node = tuple.get("node");
             addTupleToMap(tuple, "scope", datatypes);
         }
