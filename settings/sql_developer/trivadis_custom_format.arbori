@@ -378,20 +378,29 @@ define_global_functions:
             var scope = it.next();
             var list = map.get(scope);
             var maxCol = getMaxColumn(list, alignNodeName);
-            for (var i=0; i<list.length; i++) {
-                var alignNode = list.get(i).get(alignNodeName);
-                var indent = getIndent(alignNode.from);
-                var col = getColumn(alignNode.from);
-                if (maxCol > col) {
-                    indent = indent + getSpaces(maxCol - col);
-                    struct.putNewline(alignNode.from, indent);
-                    logger.fine(struct.getClass(), logText + ": at " + alignNode.from);
-                    if (indentNodeName != null) {
-                        var indentNode = list.get(i).get(indentNodeName);
-                        if (indentNode != null) {
-                            addIndent(indentNode, maxCol - col);
-                            logger.fine(struct.getClass(), logText + ": add indent for " + indentNode.from);
-                        }
+            alignAtPos(maxCol, list, alignNodeName, indentNodeName, logText);
+        }
+    }
+
+    /* aligns all nodes at a target position */
+    var alignAtPos = function(targetPos, list, alignNodeName, indentNodeName, logText) {
+        for (var i=0; i<list.length; i++) {
+            var alignNode = list.get(i).get(alignNodeName);
+            var indent = getIndent(alignNode.from);
+            var col = getColumn(alignNode.from);
+            if (targetPos != col) {
+                if (targetPos > col) {
+                    indent += getSpaces(targetPos - col);
+                } else {
+                    indent = indent.substr(0, targetPos + 1);
+                }
+                struct.putNewline(alignNode.from, indent);
+                logger.fine(struct.getClass(), logText + ": at " + alignNode.from);
+                if (indentNodeName != null) {
+                    var indentNode = list.get(i).get(indentNodeName);
+                    if (indentNode != null) {
+                        addIndent(indentNode, targetPos - col);
+                        logger.fine(struct.getClass(), logText + ": add indent for " + indentNode.from);
                     }
                 }
             }
@@ -1827,7 +1836,6 @@ a11_find_param_names:
 -> {
     var node = tuple.get("node");
     var scope = tuple.get("scope");
-    print("node: " + node);
     if (firstParameterOnLine(node.from, scope.from)) {
         if (struct.breaksBeforeComma()) {
             var parenOrComma = tuple.get("parenOrComma");
@@ -2206,6 +2214,15 @@ a9_find_columns:
     & node = comma+1
 -> {
     var scope = tuple.get("scope");
+    if (struct.breaksBeforeComma()) {
+        var comma = tuple.get("comma");
+        struct.putNewline(comma.from, System.lineSeparator());
+        tuple.put("aligner", comma);
+    } else {
+        var node = tuple.get("node");
+        struct.putNewline(node.from, System.lineSeparator());
+        tuple.put("aligner", node);
+    }
     addTupleToMap(tuple, "scope", xmlTableColumns);
 }
 
@@ -2218,21 +2235,8 @@ a9_align_xmltable_columns:
         struct.putNewline(new Integer(scope.from+1), " ");
         var pos = getColumn(scope.from+1);
         var list = xmlTableColumns.get(scope);
-        for (var i=0; i<list.length; i++) {
-            if (struct.breaksBeforeComma()) {
-                var comma = 1;
-                if (spaceAfterCommas) {
-                   comma += 1;
-                }
-                var commaNode = list.get(i).get("comma");
-                struct.putNewline(commaNode.from, System.lineSeparator() + getSpaces(pos - comma));
-                logger.fine(struct.getClass(), "a9_align_xmltable_columns: comma at " + commaNode.from);
-            } else {
-                var node = list.get(i).get("node");
-                struct.putNewline(node.from, System.lineSeparator() + getSpaces(pos));
-                logger.fine(struct.getClass(), "a9_align_xmltable_columns: column at " + node.from);
-            }
-        }
+        alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
+        fixIndentOfLeadingCommas(xmlTableColumns, "aligner", "a9_align_xmltable_columns");
     }
 }
 
