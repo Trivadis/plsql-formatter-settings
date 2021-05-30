@@ -10,6 +10,11 @@ import java.io.IOException;
 
 public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
+    @BeforeEach
+    public void setup() {
+        getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
+    }
+
     @Nested
     class Default {
 

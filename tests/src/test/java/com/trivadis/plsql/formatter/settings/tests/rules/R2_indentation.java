@@ -15,6 +15,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         getFormatter().options.put(getFormatter().spaceAfterCommas, false);
         getFormatter().options.put(getFormatter().alignRight, false);
+        getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
     }
 
     @Nested
@@ -1108,7 +1109,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             // whole from clause is indented, that's correct, right-align moves keywords to the left
             var expected = """
                     select *
-                    from emp, dual d1, dual d2 
+                    from emp, dual d1, dual d2
                     where (1 = 2 or 3 = 4) and
                           0 = 1 + 2 and exists(select 1, 2, 3
                                                from wsh_new_deliveries wnd
