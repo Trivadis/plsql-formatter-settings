@@ -50,6 +50,7 @@
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
  *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks. (breaksAroundLogicalConjunctions).
  *     - O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
+ *     - O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
  *     - R5: Commas in front of separated elements.
  *     - R2: 3 space indention.
  *     - R7: SQL keywords are right aligned within a SQL command.
@@ -229,6 +230,9 @@ define_global_variables:
 
     // get option for "Line Breaks: On ANSI joins"
     var breakAnsiiJoin = struct.options.get("breakAnsiiJoin");
+
+    // get option for "Line Breaks: On subqueries"
+    var breakOnSubqueries = struct.options.get("breakOnSubqueries");
 
     // get option for "Line Breaks: Max char line width"
     var maxCharLineSize = struct.options.get("maxCharLineSize");
@@ -1387,6 +1391,33 @@ o10_break_on_join_keywords:
         if (!getIndent(keyword.from).contains("\n")) {
             struct.putNewline(keyword.from, System.lineSeparator());
             logger.fine(struct.getClass(), "o10_break_on_join_keywords: add line break at " + keyword.from);
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o11_break_on_subqueries:
+      [lparen) '('
+    & [node) subquery
+    & [rparen) ')'
+    & lparen = node-1
+    & rparen = node+1
+-> {
+    if (breakOnSubqueries) {
+        var node = tuple.get("node");
+        if (hasNewline(node.to-1, node.from+1)) {
+            var rparen = tuple.get("rparen");
+            if (!getIndent(node.from).contains("\n")) {
+                struct.putNewline(node.from, System.lineSeparator());
+                logger.fine(struct.getClass(), "o11_break_on_subqueries: before subquery at " + node.from);
+            }
+            if (!getIndent(rparen.from).contains("\n")) {
+                struct.putNewline(rparen.from, System.lineSeparator());
+                logger.fine(struct.getClass(), "o11_break_on_subqueries: before ')' at " + rparen.from);
+            }
         }
     }
 }
