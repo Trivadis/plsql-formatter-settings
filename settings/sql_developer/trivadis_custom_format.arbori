@@ -49,6 +49,7 @@
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
  *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks. (breaksAroundLogicalConjunctions).
+ *     - O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
  *     - R5: Commas in front of separated elements.
  *     - R2: 3 space indention.
  *     - R7: SQL keywords are right aligned within a SQL command.
@@ -225,6 +226,9 @@ define_global_variables:
 
     // get option for "Line Breaks: On Boolean connectors"
     var breaksAroundLogicalConjunctions = struct.options.get("breaksAroundLogicalConjunctions");
+
+    // get option for "Line Breaks: On ANSI joins"
+    var breakAnsiiJoin = struct.options.get("breakAnsiiJoin");
 
     // get option for "Line Breaks: Max char line width"
     var maxCharLineSize = struct.options.get("maxCharLineSize");
@@ -1306,6 +1310,83 @@ o9_boolean_option:
             }
             struct.putNewline(node.to, indent);
             logger.fine(struct.getClass(), "o9_boolean_option: add line break after at " + node.from);
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o10_join_clause_keywords:
+      [parent) from_clause
+    & (
+            [keyword) 'INNER'
+          | [keyword) 'CROSS'
+          | [keyword) 'NATURAL'
+          | [keyword) 'FULL'
+          | [keyword) 'LEFT'
+          | [keyword) 'RIGHT'
+          | [keyword) 'JOIN'
+          | [keyword) 'PARTITION'
+          | [keyword) 'BY'
+          | [keyword) 'ON'
+          | [keyword) 'USING'
+          | [keyword) 'OUTER'
+          | [keyword) 'APPLY'
+
+      )
+    &  parent < keyword
+;
+
+-- no break on 'PARTITION', even if it is part of the outer join clause, looks better with default settings
+o10_join_clause_break_keywords:
+      [parent) from_clause
+    & (
+            [keyword) 'INNER'   & ![keyword-1) 'NATURAL'
+          | [keyword) 'CROSS'
+          | [keyword) 'NATURAL'
+          | [keyword) 'FULL'    & ![keyword-1) 'NATURAL'
+          | [keyword) 'LEFT'    & ![keyword-1) 'NATURAL'
+          | [keyword) 'RIGHT'   & ![keyword-1) 'NATURAL'
+          | [keyword) 'JOIN'
+              & ![keyword-1) 'INNER'
+              & ![keyword-1) 'CROSS'
+              & ![keyword-1) 'NATURAL'
+              & ![keyword-1) outer_join_type
+              & ![keyword-1) "inner_cross_join_clause"[26,55)
+          --| [keyword) 'PARTITION'
+          | [keyword) 'ON'
+          | [keyword) 'USING'
+          | [keyword) 'OUTER' & [keyword+1) 'APPLY'
+      )
+    &  parent < keyword
+;
+
+o10_space_around_join_keywords:
+    o10_join_clause_keywords - o10_join_clause_break_keywords
+-> {
+    if (breakAnsiiJoin) {
+        var keyword = tuple.get("keyword");
+        if (!getIndent(keyword.from) != " ") {
+            struct.putNewline(keyword.from, " ");
+            logger.fine(struct.getClass(), "o10_space_around_join_keywords at " + keyword.from);
+        }
+        if (!getIndent(keyword.to) != " ") {
+            struct.putNewline(keyword.to, " ");
+            logger.fine(struct.getClass(), "o10_space_around_join_keywords at " + keyword.to);
+        }
+    }
+}
+
+o10_break_on_join_keywords:
+    o10_join_clause_break_keywords
+-> {
+    if (breakAnsiiJoin) {
+        var keyword = tuple.get("keyword");
+        if (!getIndent(keyword.from).contains("\n")) {
+            struct.putNewline(keyword.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "o10_break_on_join_keywords: add line break at " + keyword.from);
         }
     }
 }
