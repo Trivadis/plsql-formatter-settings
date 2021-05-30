@@ -48,6 +48,7 @@
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
+ *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks. (breaksAroundLogicalConjunctions).
  *     - R5: Commas in front of separated elements.
  *     - R2: 3 space indention.
  *     - R7: SQL keywords are right aligned within a SQL command.
@@ -221,6 +222,9 @@ define_global_variables:
 
     // get option for "Indentation: Indent spaces" (number of spaces for a single indentation)
     var indentSpaces = struct.options.get("identSpaces");
+
+    // get option for "Line Breaks: On Boolean connectors"
+    var breaksAroundLogicalConjunctions = struct.options.get("breaksAroundLogicalConjunctions");
 
     // get option for "Line Breaks: Max char line width"
     var maxCharLineSize = struct.options.get("maxCharLineSize");
@@ -1261,6 +1265,47 @@ o1_concatenation_option:
                 struct.putNewline(concat.to, indent);
                 logger.fine(struct.getClass(), "o1_concatenation_option: add line break after at " + concat.to);
             }
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks. (breaksAroundLogicalConjunctions).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o9_boolean_in_paren:
+      [node) AND_OR
+    & [parent) compound_condition
+    &  parent < node
+    & [parent-1) '('
+;
+
+o9_boolean:
+    [node) AND_OR
+;
+
+o9_boolean_option:
+      (:breaksBeforeLogicalConjunction | :breaksAfterLogicalConjunction)
+    & (o9_boolean - o9_boolean_in_paren)
+-> {
+    var node = tuple.get("node")
+    var indent = System.lineSeparator() + getSpaces(getColumn(node.from));
+    if (struct.breaksBeforeLogicalConjunction()) {
+        if (!getIndent(node.from).contains("\n")) {
+            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
+               struct.putNewline(node.to, " ");
+            }
+            struct.putNewline(node.from, indent);
+            logger.fine(struct.getClass(), "o9_boolean_option: add line break before at " + node.from);
+        }
+    }
+    if (struct.breaksAfterLogicalConjunction()) {
+        if (!getIndent(node.to).contains("\n")) {
+            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
+               struct.putNewline(node.from, " ");
+            }
+            struct.putNewline(node.to, indent);
+            logger.fine(struct.getClass(), "o9_boolean_option: add line break after at " + node.from);
         }
     }
 }
