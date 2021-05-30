@@ -1563,7 +1563,7 @@ r2_add_line_break:
 -> {
     var parent = tuple.get("parent");
     var node = tuple.get("node");
-    if (hasNewline(node.from, parent.from+1)) {
+    if (hasNewline(parent.to-1, parent.from+1)) {
         struct.putNewline(node.from, System.lineSeparator());
         logger.fine(struct.getClass(), "r2_add_line_break: at " + node.from);
     }
