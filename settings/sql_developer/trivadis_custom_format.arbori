@@ -2402,6 +2402,7 @@ d2_log_time:
     [runOnce) sql_statements
 -> {
     var endTime = (new Date()).getTime();
-    logger.info(struct.getClass(), "d2_log_time: formatted " + tokens.length + " lexer tokens in "
+    logger.info(struct.getClass(), "d2_log_time: formatted " + tokens.length + " tokens and "
+        + target.getRoot().to + " nodes in "
         + ((endTime - startTime) / 1000) + " seconds.");
 }
