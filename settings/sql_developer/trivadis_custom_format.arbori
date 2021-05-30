@@ -1451,7 +1451,7 @@ r2_init_left_margin:
     var addMarginByName = function(parent, name) {
         var spaces;
         if (breaksAfterSelect) {
-            spaces = 3;
+            spaces = indentSpaces;
         } else if (alignRight) {
             var firstWord = getFirstWord(name);
             if (firstWord.length > 6) {
