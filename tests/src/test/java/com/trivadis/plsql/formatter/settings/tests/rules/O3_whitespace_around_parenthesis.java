@@ -38,12 +38,14 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_single_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (1, 2, 3, 4, 5)  and 1 = 2;
                     """;
             assertEquals(expected, actual);
@@ -52,14 +54,16 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_multi_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
@@ -91,12 +95,14 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_single_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in( 1, 2, 3, 4, 5 )and 1 = 2;
                     """;
             assertEquals(expected, actual);
@@ -105,14 +111,16 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_multi_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in(
                               1, 2, 3, 4, 5
                            )and 1 = 2;
@@ -144,12 +152,14 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_single_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in (1, 2, 3, 4, 5) and 1 = 2;
                     """;
             assertEquals(expected, actual);
@@ -158,14 +168,16 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_multi_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in (
                               1, 2, 3, 4, 5
                            ) and 1 = 2;
@@ -197,12 +209,14 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_single_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in(1, 2, 3, 4, 5)and 1 = 2;
                     """;
             assertEquals(expected, actual);
@@ -211,14 +225,16 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
         @Test
         public void in_multi_line() throws IOException {
             var input = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in  (
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select * from t
+                    select *
+                      from t
                      where c1 in(
                               1, 2, 3, 4, 5
                            )and 1 = 2;
