@@ -2353,10 +2353,10 @@ a4_add_line_breaks_with_indent:
 --  D2: Log time spent in this program.
 -- --------------------------------------------------------------------------------------------------------------------
 
-a0_log_time:
+d2_log_time:
     [runOnce) sql_statements
 -> {
     var endTime = (new Date()).getTime();
-    logger.info(struct.getClass(), "a0_log_time: formatted " + tokens.length + " lexer tokens in "
+    logger.info(struct.getClass(), "d2_log_time: formatted " + tokens.length + " lexer tokens in "
         + ((endTime - startTime) / 1000) + " seconds.");
 }
