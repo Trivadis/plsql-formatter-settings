@@ -45,8 +45,10 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                           all count(*)
                          into x
                          from t1
-                         join t2 on t1.c1 = t2.c1
-                         left join t3 on t3.c2 = t2.c2
+                         join t2
+                           on t1.c1 = t2.c1
+                         left join t3
+                           on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
                               and t4.c1 = 'hello'
@@ -90,7 +92,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                          join (select c1, c2, c3, c4
                                  from t2) t2
                            on t1.c1 = t2.c1
-                         left join t3 on t3.c2 = t2.c2
+                         left join t3
+                           on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
                               and t4.c1 = 'hello'
@@ -116,7 +119,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                                    from t2
                               ) t2
                            on t1.c1 = t2.c1
-                         left join t3 on t3.c2 = t2.c2
+                         left join t3
+                           on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
                               and t4.c1 = 'hello'

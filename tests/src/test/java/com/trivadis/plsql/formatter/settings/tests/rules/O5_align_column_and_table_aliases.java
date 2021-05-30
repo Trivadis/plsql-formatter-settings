@@ -62,7 +62,8 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
         public void table_alias_single_line() {
             var sql = """
                     select *
-                      from t123 a cross join t456 b;
+                      from t123      a
+                     cross join t456 b;
                     """;
             formatAndAssert(sql);
         }
