@@ -1533,7 +1533,7 @@ r2_common:
     | [node) select & [node^) full_cursor_body
     | [node) excptn_handler
     | [node) subquery_factoring_clause
-    | [node) subquery & ([node-1) '(' | [node-1) 'FOR')
+    | [node) subquery & ([node-1) '(' | [node-1) 'FOR') -- "(subquery)" or "open cursor for select"
     | [node) ty_def
     | [node) fml_part
     | [node) paren_expr_list
