@@ -1687,16 +1687,22 @@ r2_increment_left_margin_for_update_set:
     addMargin(tuple.get("set"), -1 * spaces);
 }
 
-r2_increment_left_margin_for_subquery:
-    [node) subquery
+r2_subquery:
+      [node) subquery
+    & [from) from_clause
+    & node < from
+;
+
+r2_decrement_left_margin_for_subquery:
+    r2_subquery
 -> {
     var node = tuple.get("node");
-    var margin = getMargin(node);
-    if (margin != null && !getIndent(node.from).contains("\n")) {
-        if (target.getSrc().get(new Integer(node.from-1)).content == '(') {
-           addMargin(node, -1 * indentSpaces);
-        }
-        addMargin(node, getColumnWithoutFirstIndent(node.from));
+    var from = tuple.get("from")
+    if (!getIndent(node.from).contains("\n")
+        && getIndent(from.from).contains("\n")
+        && target.getSrc().get(new Integer(node.from-1)).content == '(')
+    {
+        addMargin(node, -1 * indentSpaces);
     }
 }
 
@@ -1764,6 +1770,20 @@ r2_indent_nodes:
                 logger.fine(struct.getClass(), "r2_indent_nodes: add " + (margin-spaces-comma) + " spaces at " + key);
             }
         }
+    }
+}
+
+r2_fix_indent_for_subquery:
+   r2_subquery
+-> {
+    var node = tuple.get("node");
+    var from = tuple.get("from")
+    if (!getIndent(node.from).contains("\n")
+        && getIndent(from.from).contains("\n")
+        && target.getSrc().get(new Integer(node.from-1)).content == '(')
+    {
+        addIndent(node, getColumn(node.from) - getColumn(from.from));
+        logger.fine(struct.getClass(), "r2_fix_indent_for_subquery: at " + node.from);
     }
 }
 
