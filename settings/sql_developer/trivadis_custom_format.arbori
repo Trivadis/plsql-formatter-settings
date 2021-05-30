@@ -2005,10 +2005,10 @@ a10_find_param_modes:
     }
 }
 
-o10_align_param_modes:
+a10_align_param_modes:
     [runOnce) sql_statements
 -> {
-    align(paramModes, "node", null, "o10_align_param_modes");
+    align(paramModes, "node", null, "a10_align_param_modes");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
