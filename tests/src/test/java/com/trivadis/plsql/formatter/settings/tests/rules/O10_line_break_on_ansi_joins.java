@@ -9,6 +9,11 @@ import java.io.IOException;
 
 public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
 
+    @BeforeEach
+    public void setup() {
+        getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+    }
+
     @Nested
     class True {
 

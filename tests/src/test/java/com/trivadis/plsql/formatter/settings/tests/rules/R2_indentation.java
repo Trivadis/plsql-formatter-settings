@@ -16,6 +16,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().spaceAfterCommas, false);
         getFormatter().options.put(getFormatter().alignRight, false);
         getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
+        getFormatter().options.put(getFormatter().breakOnSubqueries, false);
     }
 
     @Nested

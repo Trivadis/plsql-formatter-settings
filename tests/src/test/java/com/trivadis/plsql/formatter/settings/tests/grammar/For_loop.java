@@ -1,6 +1,7 @@
 package com.trivadis.plsql.formatter.settings.tests.grammar;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,11 @@ public class For_loop extends ConfiguredTestFormatter {
 
     @Nested
     class Select {
+
+        @BeforeEach
+        public void setup() {
+            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+        }
 
         @Test
         public void no_break_after_left_paren() {

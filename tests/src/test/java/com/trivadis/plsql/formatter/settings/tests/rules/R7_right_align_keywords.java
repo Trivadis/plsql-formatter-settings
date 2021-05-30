@@ -17,6 +17,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         public void setup() {
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
             getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
         }
 
         @Test
