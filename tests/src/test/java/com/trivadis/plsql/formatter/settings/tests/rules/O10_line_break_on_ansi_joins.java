@@ -294,39 +294,39 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
 
     }
 
-        @Nested
-        class False {
+    @Nested
+    class False {
 
-            @BeforeEach
-            public void setup() {
-                getFormatter().options.put(getFormatter().breakAnsiiJoin, false);
-            }
+        @BeforeEach
+        public void setup() {
+            getFormatter().options.put(getFormatter().breakAnsiiJoin, false);
+        }
 
-            @Test
-            public void join() {
-                var sql = """
-                        select d.dname, e.ename
-                          from emp e join dept d on d.deptno = e.deptno;
-                        """;
-                formatAndAssert(sql);
-            }
+        @Test
+        public void join() {
+            var sql = """
+                    select d.dname, e.ename
+                      from emp e join dept d on d.deptno = e.deptno;
+                    """;
+            formatAndAssert(sql);
+        }
 
-            @Test
-            public void left_join() {
-                var sql = """
-                        select d.dname, e.ename
-                          from emp e left join dept d on d.deptno = e.deptno;
-                        """;
-                formatAndAssert(sql);
-            }
+        @Test
+        public void left_join() {
+            var sql = """
+                    select d.dname, e.ename
+                      from emp e left join dept d on d.deptno = e.deptno;
+                    """;
+            formatAndAssert(sql);
+        }
 
-            @Test
-            public void right_join() {
-                var sql = """
-                        select d.dname, e.ename
-                          from emp e right join dept d on d.deptno = e.deptno;
-                        """;
-                formatAndAssert(sql);
-            }
+        @Test
+        public void right_join() {
+            var sql = """
+                    select d.dname, e.ename
+                      from emp e right join dept d on d.deptno = e.deptno;
+                    """;
+            formatAndAssert(sql);
         }
     }
+}
