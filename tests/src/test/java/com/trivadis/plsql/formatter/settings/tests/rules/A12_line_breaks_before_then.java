@@ -46,4 +46,35 @@ public class A12_line_breaks_before_then extends ConfiguredTestFormatter {
         var actual = formatter.format(input);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void searched_case_expression() throws IOException {
+        var input = """
+                select case
+                          when a = 1 and c = 124 then
+                             b
+                          when a = 2 then
+                             c
+                          else
+                             d
+                       end, dummy
+                  from dual;
+                """;
+        var expected = """
+                select case
+                          when a = 1
+                             and c = 124
+                          then
+                             b
+                          when a = 2 then
+                             c
+                          else
+                             d
+                       end, dummy
+                  from dual;
+                """;
+        var actual = formatter.format(input);
+        assertEquals(expected, actual);
+    }
+
 }
