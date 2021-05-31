@@ -47,13 +47,13 @@
  *     - A8: One space after node.
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
+ *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
+ *           (breaksAroundLogicalConjunctions).
  *     - A12: Line breaks before THEN after multiline conditions.
  *     - O12: Line Breaks: IF/CASE/WHILE. Options: Indented Actions, Inlined Conditions;
  *            Terse (line breaks only after actions); Line breaks after Conditions and Actions;
  *            Indented Conditions and Actions. (flowControl).
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
- *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
- *           (breaksAroundLogicalConjunctions).
  *     - O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
  *     - O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
  *     - R5: Commas in front of separated elements.
@@ -1245,6 +1245,47 @@ o6_line_break_after:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
+-- O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
+--     (breaksAroundLogicalConjunctions).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o9_boolean_in_paren:
+      [node) AND_OR
+    & [parent) compound_condition
+    &  parent < node
+    & [parent-1) '('
+;
+
+o9_boolean:
+    [node) AND_OR
+;
+
+o9_boolean_option:
+      (:breaksBeforeLogicalConjunction | :breaksAfterLogicalConjunction)
+    & (o9_boolean - o9_boolean_in_paren)
+-> {
+    var node = tuple.get("node")
+    if (struct.breaksBeforeLogicalConjunction()) {
+        if (!getIndent(node.from).contains("\n")) {
+            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
+               struct.putNewline(node.to, " ");
+            }
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "o9_boolean_option: add line break before at " + node.from);
+        }
+    }
+    if (struct.breaksAfterLogicalConjunction()) {
+        if (!getIndent(node.to).contains("\n")) {
+            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
+               struct.putNewline(node.from, " ");
+            }
+            struct.putNewline(node.to, System.lineSeparator());
+            logger.fine(struct.getClass(), "o9_boolean_option: add line break after at " + node.from);
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
 -- A12: Line breaks before THEN after multiline conditions.
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -1374,47 +1415,6 @@ o1_concatenation_option:
                 struct.putNewline(concat.to, System.lineSeparator());
                 logger.fine(struct.getClass(), "o1_concatenation_option: add line break after at " + concat.to);
             }
-        }
-    }
-}
-
--- --------------------------------------------------------------------------------------------------------------------
--- O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
---     (breaksAroundLogicalConjunctions).
--- --------------------------------------------------------------------------------------------------------------------
-
-o9_boolean_in_paren:
-      [node) AND_OR
-    & [parent) compound_condition
-    &  parent < node
-    & [parent-1) '('
-;
-
-o9_boolean:
-    [node) AND_OR
-;
-
-o9_boolean_option:
-      (:breaksBeforeLogicalConjunction | :breaksAfterLogicalConjunction)
-    & (o9_boolean - o9_boolean_in_paren)
--> {
-    var node = tuple.get("node")
-    if (struct.breaksBeforeLogicalConjunction()) {
-        if (!getIndent(node.from).contains("\n")) {
-            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
-               struct.putNewline(node.to, " ");
-            }
-            struct.putNewline(node.from, System.lineSeparator());
-            logger.fine(struct.getClass(), "o9_boolean_option: add line break before at " + node.from);
-        }
-    }
-    if (struct.breaksAfterLogicalConjunction()) {
-        if (!getIndent(node.to).contains("\n")) {
-            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
-               struct.putNewline(node.from, " ");
-            }
-            struct.putNewline(node.to, System.lineSeparator());
-            logger.fine(struct.getClass(), "o9_boolean_option: add line break after at " + node.from);
         }
     }
 }
