@@ -48,7 +48,8 @@
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
- *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks. (breaksAroundLogicalConjunctions).
+ *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
+ *           (breaksAroundLogicalConjunctions).
  *     - O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
  *     - O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
  *     - R5: Commas in front of separated elements.
@@ -1278,7 +1279,8 @@ o1_concatenation_option:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks. (breaksAroundLogicalConjunctions).
+-- O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
+--     (breaksAroundLogicalConjunctions).
 -- --------------------------------------------------------------------------------------------------------------------
 
 o9_boolean_in_paren:
