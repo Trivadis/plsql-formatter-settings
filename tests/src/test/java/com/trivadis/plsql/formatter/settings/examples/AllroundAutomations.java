@@ -26,8 +26,8 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                         from emp e,
                              emp m
                        where e.empno = p_empno
-                             and m.empno = e.mgr
-                             and d.deptno in (
+                         and m.empno = e.mgr
+                         and d.deptno in (
                                 10, 20, 30, 40
                              );
                    end if;
@@ -73,7 +73,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                      from dept,
                           emp
                     where emp.empno = p_empno
-                          and dept.deptno = emp.deptno;
+                      and dept.deptno = emp.deptno;
                    -- Insert
                    insert into dept (
                       deptno,

@@ -15,12 +15,12 @@ public class Issue_29_not_in extends ConfiguredTestFormatter {
                           select queue_table
                             from dba_queue_tables
                        )
-                       and (owner, table_name) not in (
+                   and (owner, table_name) not in (
                           select owner,
                                  name
                             from dba_snapshots
                        )
-                       and temporary = 'N'
+                   and temporary = 'N'
                  order by blocks desc;
                 """;
         formatAndAssert(sql);
@@ -36,12 +36,12 @@ public class Issue_29_not_in extends ConfiguredTestFormatter {
                           select queue_table
                             from dba_queue_tables
                        )
-                       and (owner, table_name) not in (
+                   and (owner, table_name) not in (
                           select owner
                                , name
                             from dba_snapshots
                        )
-                       and temporary = 'N'
+                   and temporary = 'N'
                  order by blocks desc;
                 """;
         formatAndAssert(sql);

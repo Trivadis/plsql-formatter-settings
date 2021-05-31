@@ -30,9 +30,9 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                           and
+                       and
                            b = 2
-                           and
+                       and
                            (c = 3 or d = 4);
                     """;
             assertEquals(expected, actual);
@@ -52,9 +52,9 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                           and
+                       and
                            b = 2
-                           and
+                       and
                            (c = 3 or d = 4);
                     """;
             assertEquals(expected, actual);
@@ -81,8 +81,8 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                           and b = 2
-                           and (c = 3 or d = 4);
+                       and b = 2
+                       and (c = 3 or d = 4);
                     """;
             assertEquals(expected, actual);
         }
@@ -101,8 +101,8 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                           and b = 2
-                           and (c = 3 or d = 4);
+                       and b = 2
+                       and (c = 3 or d = 4);
                     """;
             assertEquals(expected, actual);
         }
@@ -179,9 +179,9 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                           and
+                       and
                            b = 2
-                           and
+                       and
                            (c = 3 or d = 4);
                     """;
             formatAndAssert(sql);
@@ -193,8 +193,8 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                           and b = 2
-                           and (c = 3 or d = 4);
+                       and b = 2
+                       and (c = 3 or d = 4);
                     """;
             formatAndAssert(sql);
         }

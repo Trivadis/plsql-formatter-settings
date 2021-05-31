@@ -23,14 +23,14 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
                     select *
                       from emp
                      where job = 'CLERK'
-                           and deptno = 10;
+                       and deptno = 10;
                     """;
             var actual = formatter.format(input);
             var expected = """
                     select *
                       from emp
-                     where job        = 'CLERK'
-                           and deptno = 10;
+                     where job    = 'CLERK'
+                       and deptno = 10;
                     """;
             assertEquals(expected, actual);
         }
@@ -81,7 +81,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
                     select *
                       from emp
                      where job = 'CLERK'
-                           and deptno = 10;
+                       and deptno = 10;
                     """;
             formatAndAssert(sql);
         }
