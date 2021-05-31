@@ -1162,7 +1162,8 @@ r3_commands:
       r3_sqlplus_commands
     | r3_sql_commands
     | r3_plsql_commands
-    | (r3_plsql_keywords - r3_case_expressions)
+    | r3_plsql_keywords
+    | r3_case_expressions
 -> {
     var node = tuple.get("node");
     if (!posInConditionalBranch.contains(node.from)) {
@@ -1255,6 +1256,7 @@ o6_line_break_after:
 o12_line_break_around_conditions:
       (
           [node) condition
+        | [node) expr
         | [node) pls_expr
       )
     & (
