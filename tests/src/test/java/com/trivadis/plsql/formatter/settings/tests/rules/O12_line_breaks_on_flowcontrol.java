@@ -91,6 +91,48 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void simple_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case a when 1 then b when 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case a
+                              when 1 then
+                                 b
+                              when 2 then
+                                 c
+                              else
+                                 d
+                           end, dummy
+                      from dual;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void searched_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case when a = 1 then b when a = 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case
+                              when a = 1 then
+                                 b
+                              when a = 2 then
+                                 c
+                              else
+                                 d
+                           end, dummy
+                      from dual;
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
@@ -162,6 +204,42 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                   end;
                     end;
                     /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void simple_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case a when 1 then b when 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case a
+                              when 1 then b
+                              when 2 then c
+                              else d
+                           end, dummy
+                      from dual;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void searched_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case when a = 1 then b when a = 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case
+                              when a = 1 then b
+                              when a = 2 then c
+                              else d
+                           end, dummy
+                      from dual;
                     """;
             assertEquals(expected, actual);
         }
@@ -242,6 +320,46 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                   end;
                     end;
                     /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void simple_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case a when 1 then b when 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case a
+                              when 1
+                              then b
+                              when 2
+                              then c
+                              else d
+                           end, dummy
+                      from dual;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void searched_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case when a = 1 then b when a = 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case
+                              when a = 1
+                              then b
+                              when a = 2
+                              then c
+                              else d
+                           end, dummy
+                      from dual;
                     """;
             assertEquals(expected, actual);
         }
@@ -337,6 +455,56 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                   end;
                     end;
                     /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void simple_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case a when 1 then b when 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case a
+                              when
+                                 1
+                              then
+                                 b
+                              when
+                                 2
+                              then
+                                 c
+                              else
+                                 d
+                           end, dummy
+                      from dual;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void searched_case_expression_in_sql() throws IOException {
+            var input = """
+                    select case when a = 1 then b when a = 2 then c else d end, dummy
+                    from dual;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select case
+                              when
+                                 a = 1
+                              then
+                                 b
+                              when
+                                 a = 2
+                              then
+                                 c
+                              else
+                                 d
+                           end, dummy
+                      from dual;
                     """;
             assertEquals(expected, actual);
         }
