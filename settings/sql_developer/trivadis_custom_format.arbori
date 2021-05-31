@@ -47,6 +47,9 @@
  *     - A8: One space after node.
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
+ *     - O12: Line Breaks: IF/CASE/WHILE. Options: Indented Actions, Inlined Conditions;
+ *            Terse (line breaks only after actions); Line breaks after Conditions and Actions;
+ *            Indented Conditions and Actions. (flowControl).
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
  *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
  *           (breaksAroundLogicalConjunctions).
@@ -1240,6 +1243,79 @@ o6_line_break_after:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
+-- O12: Line Breaks: IF/CASE/WHILE. Options: Indented Actions, Inlined Conditions;
+--      Terse (line breaks only after actions); Line breaks after Conditions and Actions;
+--      Indented Conditions and Actions. (flowControl).
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Indentation is handled in R2.
+-- Line breaks are handled here.
+-- WHILE condition is kept "as is", it is also not handled in SQLDev 20.4.1 / SQLcl 21.1.1.
+
+o12_line_break_around_conditions:
+      (
+          [node) condition
+        | [node) pls_expr
+      )
+    & (
+          [keyword) 'WHEN'
+        | [keyword) 'IF'
+        | [keyword) 'ELSIF'
+      )
+    & node = keyword+1
+-> {
+    var node = tuple.get("node");
+    if (struct.indentConditions()) {
+        if (!getIndent(node.from).contains("\n")) {
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "o12_line_break_around_conditions: before at " + node.from);
+        }
+    } else {
+        if (getIndent(node.from) != " ") {
+            struct.putNewline(node.from, " ");
+            logger.fine(struct.getClass(), "o12_line_break_around_conditions: add space before at " + node.from);
+        }
+    }
+    if (struct.indentConditions() || struct.breakAfterConditions()) {
+        if (!getIndent(node.to).contains("\n")) {
+            struct.putNewline(node.to, System.lineSeparator());
+            logger.fine(struct.getClass(), "o12_line_break_around_conditions: after at " + node.to);
+        }
+    } else {
+        if (getIndent(node.to) != " ") {
+            struct.putNewline(node.from, " ");
+            logger.fine(struct.getClass(), "o12_line_break_around_conditions: add space after at " + node.from);
+        }
+    }
+}
+
+o12_line_break_before_actions:
+      (
+          [node) stmt
+        | [node) expr
+        | [node) pls_expr
+      )
+    & (
+          [keyword) 'THEN'
+        | [keyword) 'ELSE'
+      )
+    & node = keyword+1
+-> {
+    var node = tuple.get("node");
+    if (struct.indentActions()) {
+        if (!getIndent(node.from).contains("\n")) {
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "o12_line_break_before_actions: at " + node.from);
+        }
+    } else {
+        if (getIndent(node.from) != " ") {
+            struct.putNewline(node.from, " ");
+            logger.fine(struct.getClass(), "o12_line_break_before_actions: add space at " + node.from);
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
 -- O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -1702,6 +1778,19 @@ r2_common:
     | [node) function_expression & [node-1) '('
 ;
 
+r2_flowcontrol_condition:
+      (
+          [node) condition
+        | [node) pls_expr
+      )
+    & (
+          [keyword) 'WHEN'
+        | [keyword) 'IF'
+        | [keyword) 'ELSIF'
+      )
+    & node = keyword+1
+;
+
 r2_case_expression:
       [node) simple_case_expression[4,27)#
     | [node) searched_case_expression#
@@ -1736,6 +1825,7 @@ r2_body:
 
 r2_increment_left_margin:
       r2_common
+    | r2_flowcontrol_condition
     | r2_case_expression
     | r2_case_expression_plsql
     | r2_object_type
