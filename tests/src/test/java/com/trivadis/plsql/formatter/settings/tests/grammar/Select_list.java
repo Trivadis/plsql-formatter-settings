@@ -10,9 +10,9 @@ public class Select_list extends ConfiguredTestFormatter {
     public void select_list_comma_after() {
         var sql = """
                 select case a
-                          when 1  then
+                          when 1 then
                              'one'
-                          when 2  then
+                          when 2 then
                              'two'
                           else
                              'else'
@@ -21,9 +21,9 @@ public class Select_list extends ConfiguredTestFormatter {
                        c,
                        to_char(d, 'yyyy-mm') as d2,
                        case
-                          when a = 1  then
+                          when a = 1 then
                              'one'
-                          when a = 2  then
+                          when a = 2 then
                              'two'
                           else
                              'else'
@@ -38,9 +38,9 @@ public class Select_list extends ConfiguredTestFormatter {
         formatter.options.put(formatter.breaksComma, Format.Breaks.Before);
         var sql = """
                 select case a
-                          when 1  then
+                          when 1 then
                              'one'
-                          when 2  then
+                          when 2 then
                              'two'
                           else
                              'else'
@@ -49,9 +49,9 @@ public class Select_list extends ConfiguredTestFormatter {
                      , c
                      , to_char(d, 'yyyy-mm') as d2
                      , case
-                          when a = 1  then
+                          when a = 1 then
                              'one'
-                          when a = 2  then
+                          when a = 2 then
                              'two'
                           else
                              'else'
