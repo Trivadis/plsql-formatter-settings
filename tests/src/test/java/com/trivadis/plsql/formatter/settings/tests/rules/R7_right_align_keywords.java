@@ -52,7 +52,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
-                              and t4.c1 = 'hello'
+                          and t4.c1 = 'hello'
                         group by t1.c7
                        having count(*) > 0
                         order by 1;
@@ -97,7 +97,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
-                              and t4.c1 = 'hello'
+                          and t4.c1 = 'hello'
                         group by t1.c7
                        having count(*) > 0
                         order by 1;
@@ -124,7 +124,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            on t3.c2 = t2.c2
                         cross join t4
                         where t1.c5 = t3.c5
-                              and t4.c1 = 'hello'
+                          and t4.c1 = 'hello'
                         group by t1.c7
                        having count(*) > 0
                         order by 1;
@@ -182,6 +182,72 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            b,
                            c
                       from t;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void select_with_boolean() throws IOException {
+            var input = """
+                    select a,
+                    b,
+                    c
+                    from t where a = 2 and b = 3 or c = 4;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a,
+                           b,
+                           c
+                      from t
+                     where a = 2
+                       and b = 3
+                        or c = 4;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void select_with_case_in_boolean() throws IOException {
+            var input = """
+                    select a,
+                    b,
+                    c
+                    from t where case when a = 2 and b = 3 or c = 4 then 1 end = 1;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a,
+                           b,
+                           c
+                      from t
+                     where case
+                              when a = 2
+                                 and b = 3
+                                 or c = 4
+                              then
+                                 1
+                           end = 1;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void select_with_boolean_in_parenthesis() throws IOException {
+            var input = """
+                    select a,
+                    b,
+                    c
+                    from t where a = 2 and (b = 3 or c = 4);
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a,
+                           b,
+                           c
+                      from t
+                     where a = 2
+                       and (b = 3 or c = 4);
                     """;
             assertEquals(expected, actual);
         }
