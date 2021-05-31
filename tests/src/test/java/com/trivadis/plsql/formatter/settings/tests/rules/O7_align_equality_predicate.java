@@ -54,8 +54,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
             var expected = """
                     select ename,
                            case
-                              when
-                                 job        = 'CLERK'
+                              when job      = 'CLERK'
                                  and deptno = 10
                               then
                                  'yes'
@@ -92,8 +91,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
             var sql = """
                     select ename,
                            case
-                              when
-                                 job = 'CLERK'
+                              when job = 'CLERK'
                                  and deptno = 10
                               then
                                  'yes'
