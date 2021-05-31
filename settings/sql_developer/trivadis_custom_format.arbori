@@ -2063,6 +2063,31 @@ r2_fix_indent_for_subquery:
 -- R7: SQL keywords are right aligned within a SQL command.
 -- --------------------------------------------------------------------------------------------------------------------
 
+r7_declaration:
+    [runOnce) sql_statements
+-> {
+    var rightAlign = function(tuple, logText) {
+        if (!breaksAfterSelect) {
+            var keyword = tuple.get("keyword");
+            var parent = tuple.get("parent");
+            var parentIndent = System.lineSeparator() + getSpaces(getColumn(parent.from));
+            var parentLength = target.getSrc().get(parent.from).content.length();
+            if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
+                parentLength = 6;
+            }
+            if (getIndent(keyword.from).contains("\n")) {
+                if (alignRight) {
+                    var content = target.getSrc().get(keyword.from).content;
+                    var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
+                    var keywordIndent = parentIndent + getSpaces(missingSpaces);
+                    struct.putNewline(keyword.from, keywordIndent);
+                    logger.fine(struct.getClass(), logText + ": align <" + content + "> at " + keyword.from);
+                }
+            }
+        }
+    }
+}
+
 r7_select:
       ([parent) select | [parent) subquery | [parent) query_block)
     & (
@@ -2142,24 +2167,35 @@ r7_right_align_keywords:
     | r7_update
     | r7_delete
 -> {
-    if (!breaksAfterSelect) {
-        var keyword = tuple.get("keyword");
-        var parent = tuple.get("parent");
-        var parentIndent = System.lineSeparator() + getSpaces(getColumn(parent.from));
-        var parentLength = target.getSrc().get(parent.from).content.length();
-        if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
-            parentLength = 6;
-        }
-        if (getIndent(keyword.from).contains("\n")) {
-            if (alignRight) {
-                var content = target.getSrc().get(keyword.from).content;
-                var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
-                var keywordIndent = parentIndent + getSpaces(missingSpaces);
-                struct.putNewline(keyword.from, keywordIndent);
-                logger.fine(struct.getClass(), "r7_right_align_keywords: align <" + content + "> at " + keyword.from);
-            }
-        }
-    }
+    rightAlign(tuple, "r7_right_align_keywords");
+}
+
+r7_and_or_in_case_expression:
+      (
+          [parent) select
+        | [parent) subquery
+        | [parent) query_block
+      )
+    & [keyword) AND_OR
+    & parent < keyword
+    & [case) case_expression
+    & case < keyword
+;
+
+r7_and_or:
+      (
+          [parent) select
+        | [parent) subquery
+        | [parent) query_block
+      )
+    & [keyword) AND_OR
+    & parent < keyword
+;
+
+r7_right_align_and_or:
+    r7_and_or - r7_and_or_in_case_expression
+-> {
+    rightAlign(tuple, "r7_right_align_and_or");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
