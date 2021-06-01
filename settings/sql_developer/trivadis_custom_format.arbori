@@ -512,15 +512,6 @@ define_global_functions:
             }
         }
     }
-
-    /* remove leading spaces after last newline character from indent */
-    var removeLeadingSpaces = function(nodeFrom) {
-        var indent = getIndent(nodeFrom);
-        var nlpos = indent.getLastIndexOf("\n") + 1;
-        if (nlpos > 0) {
-            struct.putNewline(node.from, indent.substr(0, nlpos));
-        }
-    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -2269,7 +2260,6 @@ a11_find_param_names:
         } else {
             tuple.put("aligner", node);
         }
-        removeLeadingSpaces(tuple.get("aligner").from);
         addTupleToMap(tuple, "scope", paramNames);
     }
 }
@@ -2579,7 +2569,6 @@ r6_find_names:
             } else {
                 tuple.put("aligner", arg);
             }
-            removeLeadingSpaces(tuple.get("aligner").from);
             addTupleToMap(tuple, "scope", assocNames);
         }
     }
