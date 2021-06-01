@@ -10,9 +10,12 @@ public class Paren_expr_list extends ConfiguredTestFormatter {
         var sql = """
                 select func(a, b, c, 100),
                        func(
-                          a,
-                          b,
-                          c,
+                          a123456789,
+                          b123456789,
+                          c123456789,
+                          d123456789,
+                          e123456789,
+                          f123456789,
                           100,
                           200,
                           300,

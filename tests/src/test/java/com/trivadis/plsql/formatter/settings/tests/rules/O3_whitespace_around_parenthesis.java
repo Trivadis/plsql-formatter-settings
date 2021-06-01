@@ -30,7 +30,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select count  (*)  from dual;
+                    select count (*)  from dual;
                     """;
             assertEquals(expected, actual);
         }

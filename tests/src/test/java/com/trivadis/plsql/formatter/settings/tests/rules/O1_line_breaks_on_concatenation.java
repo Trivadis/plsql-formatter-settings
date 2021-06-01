@@ -23,7 +23,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var input = """
                     begin
                        dbms_output.put_line(
-                          '1' || '2' || '3'
+                          '12345689.12345689.' || '12345689.12345689.' || '12345689.12345689.'
                        );
                     end;
                     """;
@@ -31,9 +31,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        dbms_output.put_line(
-                          '1'
-                          || '2'
-                          || '3'
+                          '12345689.12345689.'
+                          || '12345689.12345689.'
+                          || '12345689.12345689.'
                        );
                     end;
                     """;
@@ -45,9 +45,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var input = """
                     begin
                        dbms_output.put_line(
-                          '1' ||
-                          '2' ||
-                          '3'
+                          '12345689.12345689.' ||
+                          '12345689.12345689.' ||
+                          '12345689.12345689.'
                        );
                     end;
                     """;
@@ -55,9 +55,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        dbms_output.put_line(
-                          '1'
-                          || '2'
-                          || '3'
+                          '12345689.12345689.'
+                          || '12345689.12345689.'
+                          || '12345689.12345689.'
                        );
                     end;
                     """;
@@ -78,7 +78,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var input = """
                     begin
                        dbms_output.put_line(
-                          '1' || '2' || '3'
+                          '12345689.12345689.' || '12345689.12345689.' || '12345689.12345689.'
                        );
                     end;
                     """;
@@ -86,9 +86,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        dbms_output.put_line(
-                          '1' ||
-                          '2' ||
-                          '3'
+                          '12345689.12345689.' ||
+                          '12345689.12345689.' ||
+                          '12345689.12345689.'
                        );
                     end;
                     """;
@@ -100,9 +100,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var input = """
                     begin
                        dbms_output.put_line(
-                          '1'
-                          || '2'
-                          || '3'
+                          '12345689.12345689.'
+                          || '12345689.12345689.'
+                          || '12345689.12345689.'
                        );
                     end;
                     """;
@@ -110,9 +110,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        dbms_output.put_line(
-                          '1' ||
-                          '2' ||
-                          '3'
+                          '12345689.12345689.' ||
+                          '12345689.12345689.' ||
+                          '12345689.12345689.'
                        );
                     end;
                     """;
@@ -133,7 +133,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var sql = """
                     begin
                        dbms_output.put_line(
-                          '1' || '2' || '3'
+                          '12345689.12345689.' || '12345689.12345689.' || '12345689.12345689.'
                        );
                     end;
                     """;
@@ -145,9 +145,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var sql = """
                     begin
                        dbms_output.put_line(
-                          '1' ||
-                          '2' ||
-                          '3'
+                          '12345689.12345689.' ||
+                          '12345689.12345689.' ||
+                          '12345689.12345689.'
                        );
                     end;
                     """;
@@ -159,9 +159,9 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
             var sql = """
                     begin
                        dbms_output.put_line(
-                          '1'
-                          || '2'
-                          || '3'
+                          '12345689.12345689.'
+                          || '12345689.12345689.'
+                          || '12345689.12345689.'
                        );
                     end;
                     """;

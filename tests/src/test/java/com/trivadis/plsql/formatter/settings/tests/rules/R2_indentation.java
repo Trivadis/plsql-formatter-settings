@@ -145,12 +145,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var input = """
                     begin
                     p1(
-                    a => 1
-                    ,b => 2
+                    a => a123456789 * b12345789 * c1234567
+                    ,b => a123456789 * b12345789 * c1234567
                     );
                     p2 (
-                    1
-                    , 2
+                    a123456789 * b12345789 * c1234567
+                    , a123456789 * b12345789 * c1234567
                     );
                     end;
                     /
@@ -159,12 +159,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        p1(
-                          a => 1
-                         ,b => 2
+                          a => a123456789 * b12345789 * c1234567
+                         ,b => a123456789 * b12345789 * c1234567
                        );
                        p2 (
-                          1
-                         ,2
+                          a123456789 * b12345789 * c1234567
+                         ,a123456789 * b12345789 * c1234567
                        );
                     end;
                     /
@@ -177,12 +177,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var input = """
                     begin
                     l1 := f1(
-                    a => 1
-                    ,b => 2
+                    a => a123456789 * b12345789 * c1234567
+                    ,b => a123456789 * b12345789 * c1234567
                     );
                     l2 := f2 (
-                    1
-                    ,2
+                    a123456789 * b12345789 * c1234567
+                    ,a123456789 * b12345789 * c1234567
                     );
                     end;
                     /
@@ -191,12 +191,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        l1 := f1(
-                                a => 1
-                               ,b => 2
+                                a => a123456789 * b12345789 * c1234567
+                               ,b => a123456789 * b12345789 * c1234567
                              );
                        l2 := f2 (
-                                1
-                               ,2
+                                a123456789 * b12345789 * c1234567
+                               ,a123456789 * b12345789 * c1234567
                              );
                     end;
                     /
@@ -908,7 +908,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
         public void select_list() throws IOException {
             var input = """
                     select a, sum(
-                    b
+                    a123456789 * b12345789 * c123456789 * d123456789 * e123456789
                     ) as sum_of_a
                     from t
                     group by a;
@@ -916,7 +916,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     select a, sum(
-                              b
+                              a123456789 * b12345789 * c123456789 * d123456789 * e123456789
                            ) as sum_of_a
                     from t
                     group by a;
@@ -1111,12 +1111,13 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     select *
                     from emp, dual d1, dual d2
-                    where (1 = 2 or 3 = 4) and 0 = 1 + 2 and exists(select 1, 2, 3
-                                                                    from wsh_new_deliveries wnd
-                                                                         join wsh_delivery_assignments wda
-                                                                         on wnd.delivery_id = wda.delivery_id
-                                                                         join hz_locations hl
-                                                                         on hps.location_id = hl.location_id
+                    where (1 = 2 or 3 = 4) and 
+                          0 = 1 + 2 and exists(select 1, 2, 3
+                                               from wsh_new_deliveries wnd
+                                                    join wsh_delivery_assignments wda
+                                                    on wnd.delivery_id = wda.delivery_id
+                                                    join hz_locations hl
+                                                    on hps.location_id = hl.location_id
                           );
                     """;
             var actual = formatter.format(input);
