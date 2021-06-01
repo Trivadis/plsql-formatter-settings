@@ -168,7 +168,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
             var sql = """
                     select *
                       from t
-                     where a = 1 and b = 2 and (c = 3 or d = 4);
+                     where a = 1 and (b = 2 or b = 2.5) and (c = 3 or d = 4);
                     """;
             formatAndAssert(sql);
         }
@@ -180,7 +180,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                       from t
                      where a = 1
                        and
-                           b = 2
+                           (b = 2 or b = 2.5)
                        and
                            (c = 3 or d = 4);
                     """;
@@ -193,7 +193,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1
-                       and b = 2
+                       and (b = 2 or b = 2.5)
                        and (c = 3 or d = 4);
                     """;
             formatAndAssert(sql);
@@ -205,7 +205,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                     select *
                       from t
                      where a = 1 and
-                           b = 2 and
+                           (b = 2 or b = 2.5) and
                            (c = 3 or d = 4);
                     """;
             formatAndAssert(sql);

@@ -1111,13 +1111,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     select *
                     from emp, dual d1, dual d2
-                    where (1 = 2 or 3 = 4) and
-                          0 = 1 + 2 and exists(select 1, 2, 3
-                                               from wsh_new_deliveries wnd
-                                                    join wsh_delivery_assignments wda
-                                                    on wnd.delivery_id = wda.delivery_id
-                                                    join hz_locations hl
-                                                    on hps.location_id = hl.location_id
+                    where (1 = 2 or 3 = 4) and 0 = 1 + 2 and exists(select 1, 2, 3
+                                                                    from wsh_new_deliveries wnd
+                                                                         join wsh_delivery_assignments wda
+                                                                         on wnd.delivery_id = wda.delivery_id
+                                                                         join hz_locations hl
+                                                                         on hps.location_id = hl.location_id
                           );
                     """;
             var actual = formatter.format(input);
