@@ -40,11 +40,12 @@
  *     - A2: Remove trailing spaces.
  *     - A3: Do not format code between @formatter:off and @formatter:on comments.
  *     - O2: White Space: Around operators. Options: true; false. (spaceAroundOperators).
- *     - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
  *     - A5: No space before node.
  *     - A6: No space after node.
  *     - A7: One space before node.
  *     - A8: One space after node.
+ *     - A13: Keep short comparison conditions on the same line.
+ *     - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
  *     - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
@@ -802,66 +803,6 @@ o2_whitespace_around_operators:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
--- --------------------------------------------------------------------------------------------------------------------
-
-o3_whitespace_around_open_paren:
-     [node) '('
--> {
-    var node = tuple.get("node");
-    if (spaceAroundBrackets != Format.Space.Default) {
-        if (!getIndent(node.from).contains("\n")) {
-            var spaceBefore;
-            if (spaceAroundBrackets == Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
-                spaceBefore = "";
-            } else {
-                spaceBefore = " ";
-            }
-            struct.putNewline(node.from, spaceBefore);
-            logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: <" + spaceBefore + "> before at " + node.from);
-        }
-    }
-    if (!getIndent(node.to).contains("\n")) {
-        var spaceAfter;
-        if (spaceAroundBrackets ==  Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
-            spaceAfter = "";
-        } else {
-            spaceAfter = " ";
-        }
-        struct.putNewline(node.to, spaceAfter);
-        logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: <" + spaceAfter + "> after at " + node.to);
-    }
-}
-
-o3_whitespace_around_close_paren:
-   [node) ')'
--> {
-    var node = tuple.get("node");
-    if (!getIndent(node.from).contains("\n")) {
-        var spaceBefore;
-        if (spaceAroundBrackets == Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
-            spaceBefore = "";
-        } else {
-            spaceBefore = " ";
-        }
-        struct.putNewline(node.from, spaceBefore);
-        logger.fine(struct.getClass(), "o3_whitespace_around_close_paren: <" + spaceBefore + "> before at " + node.from);
-    }
-    if (spaceAroundBrackets != Format.Space.Default) {
-        if (!getIndent(node.to).contains("\n")) {
-            var spaceAfter;
-            if (spaceAroundBrackets ==  Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
-                spaceAfter = "";
-            } else {
-                spaceAfter = " ";
-            }
-            struct.putNewline(node.to, spaceAfter);
-            logger.fine(struct.getClass(), "o3_whitespace_around_close_paren: <" + spaceAfter + "> after at " + node.to);
-        }
-    }
-}
-
--- --------------------------------------------------------------------------------------------------------------------
 -- A5: No space before node.
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -1087,6 +1028,105 @@ a8_one_space_after:
         struct.putNewline(node.to, " ");
         var content = target.getSrc().get(node.from).content;
         logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A13: Keep short comparison conditions on the same line.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Short is defined as "maxCharLineSize / 2" or less. By default this is 60 characters.
+
+a13_comparison_conditions:
+    [node) comparison_condition
+-> {
+    var getConditionLength = function(node) {
+        var len = 0;
+        for (var i=node.from; i < node.to; i++) {
+            var indent = getIndent(i);
+            if (indent.length > 1) {
+                len += 1;
+            } else {
+                len += indent.length;
+            }
+            len += target.getSrc().get(i).content.length;
+        }
+        return len;
+    }
+    var reduceConditionIndents = function(node) {
+        for (var i=node.from; i< node.to; i++) {
+            var indent = getIndent(i);
+            if (indent.contains("\n") || indent.length > 1) {
+                struct.putNewline(new Integer(i), " ");
+                logger.fine(struct.getClass(), "a13_comparison_conditions: one space indent at " + i);
+            }
+        }
+    }
+
+    var maxLen = maxCharLineSize / 2;
+    var node = tuple.get("node");
+    if (getConditionLength(node) <= maxLen) {
+        reduceConditionIndents(node);
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o3_whitespace_around_open_paren:
+     [node) '('
+-> {
+    var node = tuple.get("node");
+    if (spaceAroundBrackets != Format.Space.Default) {
+        if (!getIndent(node.from).contains("\n")) {
+            var spaceBefore;
+            if (spaceAroundBrackets == Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
+                spaceBefore = "";
+            } else {
+                spaceBefore = " ";
+            }
+            struct.putNewline(node.from, spaceBefore);
+            logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: <" + spaceBefore + "> before at " + node.from);
+        }
+    }
+    if (!getIndent(node.to).contains("\n")) {
+        var spaceAfter;
+        if (spaceAroundBrackets ==  Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
+            spaceAfter = "";
+        } else {
+            spaceAfter = " ";
+        }
+        struct.putNewline(node.to, spaceAfter);
+        logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: <" + spaceAfter + "> after at " + node.to);
+    }
+}
+
+o3_whitespace_around_close_paren:
+   [node) ')'
+-> {
+    var node = tuple.get("node");
+    if (!getIndent(node.from).contains("\n")) {
+        var spaceBefore;
+        if (spaceAroundBrackets == Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
+            spaceBefore = "";
+        } else {
+            spaceBefore = " ";
+        }
+        struct.putNewline(node.from, spaceBefore);
+        logger.fine(struct.getClass(), "o3_whitespace_around_close_paren: <" + spaceBefore + "> before at " + node.from);
+    }
+    if (spaceAroundBrackets != Format.Space.Default) {
+        if (!getIndent(node.to).contains("\n")) {
+            var spaceAfter;
+            if (spaceAroundBrackets ==  Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
+                spaceAfter = "";
+            } else {
+                spaceAfter = " ";
+            }
+            struct.putNewline(node.to, spaceAfter);
+            logger.fine(struct.getClass(), "o3_whitespace_around_close_paren: <" + spaceAfter + "> after at " + node.to);
+        }
     }
 }
 
