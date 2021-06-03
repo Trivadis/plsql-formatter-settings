@@ -1518,11 +1518,11 @@ o10_space_around_join_keywords:
 -> {
     if (breakAnsiiJoin) {
         var keyword = tuple.get("keyword");
-        if (!getIndent(keyword.from) != " ") {
+        if (getIndent(keyword.from) != " ") {
             struct.putNewline(keyword.from, " ");
             logger.fine(struct.getClass(), "o10_space_around_join_keywords at " + keyword.from);
         }
-        if (!getIndent(keyword.to) != " ") {
+        if (getIndent(keyword.to) != " ") {
             struct.putNewline(keyword.to, " ");
             logger.fine(struct.getClass(), "o10_space_around_join_keywords at " + keyword.to);
         }
