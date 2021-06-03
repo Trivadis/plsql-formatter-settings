@@ -1793,7 +1793,12 @@ r2_init_left_margin:
 
     /* Use the calculated left margin for this node? */
     var useFullLeftMargin = function(nodeFrom) {
-        return hasParentOfType(nodeFrom, ["select", "create_view"/*, "insert", "update", "delete", "merge"/*, "block_stmt"*/]);
+        return hasParentOfType(nodeFrom, [
+           "select",
+           "create_view",
+           "insert"
+           /*, "update", "delete", "merge", "block_stmt"*/
+        ]);
     }
 
     /* returns true if a the node or an ancestors has one of the provided symbols */
@@ -1858,6 +1863,7 @@ r2_common:
     | [node) excptn_handler
     | [node) subquery_factoring_clause
     | [node) subquery & ([node-1) '(' | [node-1) 'FOR') -- "(subquery)" or "open cursor for select"
+    | [node) query_block & [node-1) '(' & [node^) subquery
     | [node) ty_def
     | [node) fml_part
     | [node) paren_expr_list
@@ -1917,6 +1923,11 @@ r2_body:
     & parent < node
 ;
 
+r2_insert:
+      [node) insert_into_clause[13,25)
+    | [node) par_expr_list
+;
+
 r2_increment_left_margin:
       r2_common
     | r2_flowcontrol_condition
@@ -1925,6 +1936,7 @@ r2_increment_left_margin:
     | r2_view
     | r2_object_type
     | r2_body
+    | r2_insert
 -> {
     addMargin(tuple.get("node"), indentSpaces);
 }
@@ -1938,6 +1950,8 @@ r2_decrement_left_margin:
                 | [node^) xmlquery
                 | [node^) xmltable
                 | [node^) create_view#[114,130)
+                | [node^) insert_into_clause[13,25)
+                | [node^) par_expr_list
             )
     | [node) 'RECORD' & [node^) ty_def
     | [node) 'XMLQUERY' & [node^) xmlquery
@@ -2030,6 +2044,26 @@ r2_increment_left_margin_for_update_set:
 -> {
     var spaces = addMarginByName(tuple.get("node"), "SET");
     addMargin(tuple.get("set"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_insert:
+      [node) single_table_insert
+    & [insert) 'INSERT'
+    & insert+1 = node
+-> {
+    addMarginByName(tuple.get("node"), "INSERT");
+}
+
+r2_decrement_left_margin_for_subquery_in_insert:
+      [node) subquery
+    & [node^) single_table_insert
+-> {
+    var node = tuple.get("node");
+    var content = target.getSrc().get(node.from).content;
+    if (content != "(") {
+        var spaces = addMarginByName(node, "INSERT");
+        addMargin(node, -2 * spaces);
+    }
 }
 
 r2_subquery:
