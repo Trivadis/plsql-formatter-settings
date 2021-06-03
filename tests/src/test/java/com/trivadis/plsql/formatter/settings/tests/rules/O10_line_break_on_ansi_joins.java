@@ -185,7 +185,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
         public void natural_inner_join() throws IOException {
             var input = """
                     select d.dname, e.ename
-                      from emp e natural inner join dept d;
+                      from emp e   natural   inner   join   dept d;
                     """;
             var actual = formatter.format(input);
             var expected = """
