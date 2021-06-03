@@ -251,6 +251,28 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void select_with_boolean_in_parenthesis_and_line_break() throws IOException {
+            var input = """
+                    select a,
+                    b,
+                    c
+                    from t where a = 2 and (b = 3
+                    or c = 4);
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select a,
+                           b,
+                           c
+                      from t
+                     where a = 2
+                       and (b = 3 
+                           or c = 4);
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
