@@ -899,6 +899,32 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void with_column_aliases() throws IOException {
+            var input = """
+                    create view emp_sal (
+                    emp_id
+                    ,last_name
+                    ,email unique rely disable novalidate
+                    ,constraint id_pk primary key (emp_id) rely disable novalidate
+                    )
+                    as select employee_id, last_name, email 
+                    from employees
+                    with read only;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    create view emp_sal (
+                       emp_id
+                      ,last_name
+                      ,email unique rely disable novalidate
+                      ,constraint id_pk primary key (emp_id) rely disable novalidate
+                    )
+                    as
+                       select employee_id, last_name, email
+                       from employees
+                    with read only;
                     """;
             assertEquals(expected, actual);
         }
