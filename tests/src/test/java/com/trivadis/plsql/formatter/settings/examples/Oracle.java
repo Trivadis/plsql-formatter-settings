@@ -47,7 +47,7 @@ public class Oracle extends ConfiguredTestFormatter {
                              dual d1,
                              dual d2
                        where (1 = 2
-                          or 3 = 4)
+                             or 3 = 4)
                          and 0 = 1 + 2
                          and exists (
                                 select 1,
