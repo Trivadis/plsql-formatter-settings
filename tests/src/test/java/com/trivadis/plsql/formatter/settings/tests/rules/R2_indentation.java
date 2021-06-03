@@ -854,8 +854,8 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create or replace view v as
-                    select a, b, c
-                    from t;
+                       select a, b, c
+                       from t;
                     """;
             assertEquals(expected, actual);
         }
@@ -882,20 +882,23 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create or replace view v as
-                    with
-                       a as (
-                          select a, b, c
-                          from t1
-                       )
-                      ,b as (
-                          select a, b, c
-                          from t2
-                       )
-                    select *
-                    from a
-                    minus
-                    select *
-                    from b;
+                       with
+                          a as (
+                             select a, b, c
+                             from t1
+                          )
+                         ,b as (
+                             select a, b, c
+                             from t2
+                          )
+                       select *
+                       from a
+                       minus
+                       select *
+                       from b;
+                    """;
+            assertEquals(expected, actual);
+        }
                     """;
             assertEquals(expected, actual);
         }
