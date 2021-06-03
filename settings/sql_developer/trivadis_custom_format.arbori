@@ -2215,7 +2215,7 @@ r7_right_align_keywords:
     rightAlign(tuple, "r7_right_align_keywords");
 }
 
-r7_and_or_in_case_expression:
+r7_and_or_exceptions:
       (
           [parent) select
         | [parent) subquery
@@ -2223,8 +2223,11 @@ r7_and_or_in_case_expression:
       )
     & [keyword) AND_OR
     & parent < keyword
-    & [case) case_expression
-    & case < keyword
+    & (
+          [exception) case_expression
+        | [exception) compound_condition & [exception-1) '('
+      )
+    & exception < keyword
 ;
 
 r7_and_or:
@@ -2238,7 +2241,7 @@ r7_and_or:
 ;
 
 r7_right_align_and_or:
-    r7_and_or - r7_and_or_in_case_expression
+    r7_and_or - r7_and_or_exceptions
 -> {
     rightAlign(tuple, "r7_right_align_and_or");
 }
