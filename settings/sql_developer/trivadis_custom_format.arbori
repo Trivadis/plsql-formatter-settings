@@ -45,6 +45,7 @@
  *     - A6: No space after node.
  *     - A7: One space before node.
  *     - A8: One space after node.
+ *     - A14: Line break after node.
  *     - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
  *     - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
@@ -1072,6 +1073,26 @@ a8_one_space_after:
         struct.putNewline(node.to, " ");
         var content = target.getSrc().get(node.from).content;
         logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A14: Line break after node.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a14_as_create_view:
+      [node) 'AS'
+    & [node^) create_view#
+;
+
+a14_line_break_after:
+    a14_as_create_view
+-> {
+    var node = tuple.get("node");
+    if (!getIndent(node.to).contains("\n")) {
+        struct.putNewline(node.to, System.lineSeparator());
+        var content = target.getSrc().get(node.from).content;
+        logger.fine(struct.getClass(), "a14_line_break_after: <" + content + "> at " + node.to);
     }
 }
 
