@@ -1793,7 +1793,7 @@ r2_init_left_margin:
 
     /* Use the calculated left margin for this node? */
     var useFullLeftMargin = function(nodeFrom) {
-        return hasParentOfType(nodeFrom, ["select"/*, "insert", "update", "delete", "merge"/*, "block_stmt"*/]);
+        return hasParentOfType(nodeFrom, ["select", "create_view"/*, "insert", "update", "delete", "merge"/*, "block_stmt"*/]);
     }
 
     /* returns true if a the node or an ancestors has one of the provided symbols */
@@ -1900,6 +1900,11 @@ r2_case_expression_plsql:
     & parent < node
 ;
 
+r2_view:
+      [node) create_view#[114,130)
+    | [node) subquery & [node^) create_view#
+;
+
 r2_object_type:
       [node) adt_field
     | [node) ',' & [node+1) adt_field
@@ -1917,6 +1922,7 @@ r2_increment_left_margin:
     | r2_flowcontrol_condition
     | r2_case_expression
     | r2_case_expression_plsql
+    | r2_view
     | r2_object_type
     | r2_body
 -> {
@@ -1931,6 +1937,7 @@ r2_decrement_left_margin:
                 | [node^) ty_def
                 | [node^) xmlquery
                 | [node^) xmltable
+                | [node^) create_view#[114,130)
             )
     | [node) 'RECORD' & [node^) ty_def
     | [node) 'XMLQUERY' & [node^) xmlquery
