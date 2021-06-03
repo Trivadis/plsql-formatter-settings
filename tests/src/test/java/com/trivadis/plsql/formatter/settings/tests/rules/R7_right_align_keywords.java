@@ -273,6 +273,55 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void select_distinct_with_enough_space() throws IOException {
+            var input = """
+                    begin
+                    for r in (
+                    select -- force line break
+                    distinct deptno
+                    from emp
+                    )
+                    loop
+                    null;
+                    end loop;
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       for r in (
+                          select -- force line break
+                        distinct deptno
+                            from emp
+                       )
+                       loop
+                          null;
+                       end loop;
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void select_distinct_with_insufficient_space() throws IOException {
+            var input = """
+                    select -- force line break
+                    distinct deptno
+                    from emp;
+                    """;
+            var actual = formatter.format(input);
+            // do move right-margin!
+            var expected = """
+                    select -- force line break
+                    distinct deptno
+                      from emp;
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
