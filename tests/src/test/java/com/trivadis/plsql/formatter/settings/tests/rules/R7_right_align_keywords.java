@@ -354,6 +354,60 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         }
 
         @Test
+        public void single_table_column_list() throws IOException {
+            var input = """
+                    begin
+                    insert
+                    into mytable t (
+                    a, b, c, d
+                    )
+                    values (
+                    'a',
+                    'b',
+                    'c',
+                    'd'
+                    )
+                    returning a,
+                    b,
+                    c,
+                    d
+                    into l_a,
+                    l_b,
+                    l_c,
+                    l_d
+                    log errors into mytable_errors ('bad') reject limit 10;
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       insert
+                         into mytable t (
+                                 a, b, c, d
+                              )
+                       values (
+                                 'a',
+                                 'b',
+                                 'c',
+                                 'd'
+                              )
+                    returning a,
+                              b,
+                              c,
+                              d
+                         into l_a,
+                              l_b,
+                              l_c,
+                              l_d
+                          log errors into mytable_errors ('bad') reject limit 10;
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
         public void multi_table() throws IOException {
             var input = """
                     insert
