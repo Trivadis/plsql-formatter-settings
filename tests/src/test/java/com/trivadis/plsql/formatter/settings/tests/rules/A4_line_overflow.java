@@ -105,9 +105,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        insert into t (
-                          column1, column2, column3,
-                          column4, column5
-                       )
+                                 column1, column2, column3,
+                                 column4, column5
+                              )
                        select column1, column2, column3,
                        column4, column5
                          from dual;
@@ -118,9 +118,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
             var expected2 = """
                     begin
                        insert into t (
-                          column1, column2, column3
-                        , column4, column5
-                       )
+                                 column1, column2, column3
+                               , column4, column5
+                              )
                        select column1, column2, column3
                             , column4, column5
                          from dual;
@@ -158,9 +158,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        insert into t (
-                          column1, column2, column3,
-                          column4, column5
-                       )
+                                 column1, column2, column3,
+                                 column4, column5
+                              )
                        select column1, column2, column3,
                        column4, column5
                          from dual;
@@ -171,9 +171,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
             var expected2 = """
                     begin
                        insert into t (
-                          column1, column2, column3,
-                          column4, column5
-                       )
+                                 column1, column2, column3,
+                                 column4, column5
+                              )
                        select column1, column2, column3,
                               column4, column5
                          from dual;

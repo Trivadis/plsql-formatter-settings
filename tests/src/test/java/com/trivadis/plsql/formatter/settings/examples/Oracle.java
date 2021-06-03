@@ -60,26 +60,26 @@ public class Oracle extends ConfiguredTestFormatter {
                                     on hps.location_id = hl.location_id
                              );
                       insert into employees (
-                         employee_id,
-                         full_name,
-                         phone_number,
-                         hire_date,
-                         job_name,
-                         value1,
-                         value2,
-                         value3
-                      ) values (
-                         new_empno,
-                         'First'
-                         || 'Middle'
-                         || 'Last',
-                         '(415)555-0100',
-                         to_date('18-jun-2002', 'DD-MON-YYYY'),
-                         'IT_PROG',
-                         90,
-                         100,
-                         110
-                      );
+                                employee_id,
+                                full_name,
+                                phone_number,
+                                hire_date,
+                                job_name,
+                                value1,
+                                value2,
+                                value3
+                             ) values (
+                                new_empno,
+                                'First'
+                                || 'Middle'
+                                || 'Last',
+                                '(415)555-0100',
+                                to_date('18-jun-2002', 'DD-MON-YYYY'),
+                                'IT_PROG',
+                                90,
+                                100,
+                                110
+                             );
                       tot_emps             := tot_emps + 1;  -- := alignment
                       out_rec.var_char1    := in_rec1.first_name;
                       out_rec.var_char2222 := in_rec1.last_name;

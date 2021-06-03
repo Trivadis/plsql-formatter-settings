@@ -76,14 +76,14 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                       and dept.deptno = emp.deptno;
                    -- Insert
                    insert into dept (
-                      deptno,
-                      dname,
-                      loc
-                   ) values (
-                      10,
-                      'accounting',
-                      'new york'
-                   );
+                             deptno,
+                             dname,
+                             loc
+                          ) values (
+                             10,
+                             'accounting',
+                             'new york'
+                          );
                    -- Update
                    update dept
                       set dname = 'accounting',
@@ -112,14 +112,14 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                    end if;
                    -- Insert the new record
                    insert into dept (
-                      deptno,
-                      dname,
-                      loc
-                   ) values (
-                      p_deptno,
-                      p_dname,
-                      p_loc
-                   );
+                             deptno,
+                             dname,
+                             loc
+                          ) values (
+                             p_deptno,
+                             p_dname,
+                             p_loc
+                          );
                 end;
                 /
                 """;
