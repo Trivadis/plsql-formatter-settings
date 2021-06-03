@@ -20,6 +20,7 @@
     <option name="FROM_INDENT_JOIN" value="false" />
     <option name="FROM_ONLY_JOIN_INDENT" value="2" />
     <option name="FROM_PLACE_ON" value="10" />
+    <option name="VIEW_INDENT_QUERY" value="true" />
     <option name="ROUTINE_ARG_COMMA" value="2" />
     <option name="ROUTINE_ARG_ALIGN_TYPES" value="true" />
     <option name="IMP_COMMON_WRAP_EVERY_STATEMENT" value="true" />
