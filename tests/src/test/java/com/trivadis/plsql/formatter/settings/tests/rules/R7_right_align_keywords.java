@@ -146,15 +146,13 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create view v as
-                    select a
-                         , b
-                         , c
-                      from t;
+                       select a
+                            , b
+                            , c
+                         from t;
                     """;
             assertEquals(expected, actual);
         }
-
-
     }
 
     @Nested
@@ -178,10 +176,10 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create view v as
-                    select a,
-                           b,
-                           c
-                      from t;
+                       select a,
+                              b,
+                              c
+                         from t;
                     """;
             assertEquals(expected, actual);
         }
@@ -268,7 +266,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            c
                       from t
                      where a = 2
-                       and (b = 3 
+                       and (b = 3
                            or c = 4);
                     """;
             assertEquals(expected, actual);
