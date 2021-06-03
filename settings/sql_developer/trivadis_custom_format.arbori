@@ -2108,6 +2108,13 @@ r2_fix_indent_for_subquery:
 -- R7: SQL keywords are right aligned within a SQL command.
 -- --------------------------------------------------------------------------------------------------------------------
 
+-- Right align keywords with primary keyword of a SQL command.
+-- For the select statement the primary keyword is "select", even if it starts with the "with" keyword.
+-- Only one keyword is right aligned. E.g. "group" without the "by".
+-- The right margin is reduced if the keyword is longer than the primary keyword (e.g. "distinct" in for select statement).
+-- This behavior is consistent with the reduction of the right margin for leading commas.
+-- Right alignment for longer keywords requires a the left margin that is large enough.
+
 r7_declaration:
     [runOnce) sql_statements
 -> {
@@ -2115,7 +2122,6 @@ r7_declaration:
         if (!breaksAfterSelect) {
             var keyword = tuple.get("keyword");
             var parent = tuple.get("parent");
-            var parentIndent = System.lineSeparator() + getSpaces(getColumn(parent.from));
             var parentLength = target.getSrc().get(parent.from).content.length();
             if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
                 parentLength = 6;
@@ -2124,7 +2130,8 @@ r7_declaration:
                 if (alignRight) {
                     var content = target.getSrc().get(keyword.from).content;
                     var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
-                    var keywordIndent = parentIndent + getSpaces(missingSpaces);
+                    var keywordIndent = System.lineSeparator()
+                        + getSpaces(getColumn(parent.from) + missingSpaces)
                     struct.putNewline(keyword.from, keywordIndent);
                     logger.fine(struct.getClass(), logText + ": align <" + content + "> at " + keyword.from);
                 }
