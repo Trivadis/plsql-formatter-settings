@@ -982,10 +982,22 @@ a7_table_alias:
     & [node-1) query_table_expression
 ;
 
+a7_insert_all:
+      [node) 'ALL'
+    & [node^^) multi_table_insert
+;
+
+a7_insert_into:
+      [node) 'INTO'
+    & [node^^) single_table_insert
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
     | a7_table_alias
+    | a7_insert_all
+    | a7_insert_into
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
@@ -1267,29 +1279,37 @@ r3_commands:
 -- Not compatible with alignRight (breaksAfterSelect wins).
 
 o6_select_before:
-      [node) 'WITH'
-    | [node) 'SELECT'
-    | [node) 'INTO'
-    | [node) 'FROM'
-    | [node) 'WHERE'
-    | [node) 'CONNECT'
-    | [node) 'START' & [node+1) 'WITH'
-    | [node) 'GROUP'
-    | [node) 'HAVING'
-    | [node) 'ORDER'
+      [parent) subquery
+    & (
+          [node) 'WITH'
+        | [node) 'SELECT'
+        | [node) 'INTO'
+        | [node) 'FROM'
+        | [node) 'WHERE'
+        | [node) 'CONNECT'
+        | [node) 'START' & [node+1) 'WITH'
+        | [node) 'GROUP'
+        | [node) 'HAVING'
+        | [node) 'ORDER'
+      )
+    & parent < node
 ;
 
 o6_select_after:
-      [node) 'WITH'
-    | [node) 'SELECT'
-    | [node) 'INTO'
-    | [node) 'FROM'
-    | [node) 'WHERE'
-    | [node-1) 'CONNECT' & [node) 'BY'
-    | [node-1) 'START'   & [node) 'WITH'
-    | [node-1) 'GROUP'   & [node) 'BY'
-    | [node) 'HAVING'
-    | [node-1) 'ORDER'   & [node) 'BY'
+      [parent) subquery
+    & (
+          [node) 'WITH'
+        | [node) 'SELECT'
+        | [node) 'INTO'
+        | [node) 'FROM'
+        | [node) 'WHERE'
+        | [node-1) 'CONNECT' & [node) 'BY'
+        | [node-1) 'START'   & [node) 'WITH'
+        | [node-1) 'GROUP'   & [node) 'BY'
+        | [node) 'HAVING'
+        | [node-1) 'ORDER'   & [node) 'BY'
+      )
+    & parent < node
 ;
 
 o6_line_break_before:
@@ -1790,12 +1810,7 @@ r2_init_left_margin:
             spaces = indentSpaces;
         } else if (alignRight) {
             var firstWord = getFirstWord(name);
-            if (firstWord.length > 6) {
-                spaces = firstWord.length;
-            } else {
-                spaces = 6;
-            }
-            spaces = spaces + name.length - firstWord.length + 1;
+            spaces = 6 + name.length - firstWord.length + 1;
         } else {
             spaces = name.length + 1;
         }
@@ -1823,6 +1838,30 @@ r2_init_left_margin:
                 }
             }
             node = node.parent();
+        }
+        return false;
+    }
+
+    /* returns true, if the node is in parenthesis */
+    var isInParen = function(node) {
+        if (target.getSrc().get(node.from).content == '(') {
+            return true;
+        } else if (node.from == 0) {
+            return false;
+        } else if (target.getSrc().get(node.from-1).content == '(') {
+            return true;
+        }
+        return false;
+    }
+
+    /* returns true if the node starts with a open parenthesis and a new line (designed for subquery node) */
+    var hasNewLineAfterParen = function(node) {
+        if (target.getSrc().get(node.from).content == '(') {
+            return getIndent(node.from+1).contains("\n");
+        } else if (node.from == 0) {
+            return false;
+        } else if (target.getSrc().get(node.from-1).content == '(') {
+            return getIndent(node.from).contains("\n");
         }
         return false;
     }
@@ -2058,24 +2097,54 @@ r2_increment_left_margin_for_update_set:
     addMargin(tuple.get("set"), -1 * spaces);
 }
 
-r2_increment_left_margin_for_insert:
-      [node) single_table_insert
-    & [insert) 'INSERT'
-    & insert+1 = node
+r2_increment_left_margin_for_single_table_insert_into:
+      [node) insert_into_clause
+    & [node^) single_table_insert
+    & [into) 'INTO'
+    & into^ = node
 -> {
-    addMarginByName(tuple.get("node"), "INSERT");
+    var spaces = addMarginByName(tuple.get("node"), "INSERT");
+    addMargin(tuple.get("into"), -1 * spaces);
 }
 
-r2_decrement_left_margin_for_subquery_in_insert:
-      [node) subquery
-    & [node^) single_table_insert
+r2_increment_left_margin_for_multi_table_insert_into:
+      [node) insert_into_clause
+    & [into) 'INTO'
+    & into^ = node
+    & [parent) multi_table_insert
+    & parent < node
 -> {
-    var node = tuple.get("node");
-    var content = target.getSrc().get(node.from).content;
-    if (content != "(") {
-        var spaces = addMarginByName(node, "INSERT");
-        addMargin(node, -2 * spaces);
-    }
+    var spaces = addMarginByName(tuple.get("node"), "INTO");
+    addMargin(tuple.get("into"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_insert_values:
+      [node) values_clause
+    & [values) 'VALUES'
+    & values^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "VALUES");
+    addMargin(tuple.get("values"), -1 * spaces);
+}
+
+r2_increment_left_margin_for_insert_returning:
+      [node) returning_clause
+    & ([keyword) 'RETURNING' | [keyword) 'RETURN')
+    & keyword^ = node
+-> {
+    var keyword = tuple.get("keyword");
+    var content = target.getSrc().get(keyword.from).content;
+    var spaces = addMarginByName(tuple.get("node"), content);
+    addMargin(keyword, -1 * spaces);
+}
+
+r2_increment_left_margin_for_error_logging:
+      [node) error_logging_clause
+    & [log) 'LOG'
+    & log^ = node
+-> {
+    var spaces = addMarginByName(tuple.get("node"), "LOG");
+    addMargin(tuple.get("log"), -1 * spaces);
 }
 
 r2_subquery:
@@ -2089,10 +2158,7 @@ r2_decrement_left_margin_for_subquery:
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
-    if (!getIndent(node.from).contains("\n")
-        && getIndent(from.from).contains("\n")
-        && target.getSrc().get(new Integer(node.from-1)).content == '(')
-    {
+    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
         addMargin(node, -1 * indentSpaces);
     }
 }
@@ -2169,12 +2235,15 @@ r2_fix_indent_for_subquery:
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
-    if (!getIndent(node.from).contains("\n")
-        && getIndent(from.from).contains("\n")
-        && target.getSrc().get(new Integer(node.from-1)).content == '(')
-    {
-        addIndent(node, getColumn(node.from) - getColumn(from.from));
-        logger.fine(struct.getClass(), "r2_fix_indent_for_subquery: at " + node.from);
+    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
+        var spaces = getColumn(node.from) - getColumn(from.from);
+        var targetNode = node;
+        if (target.getSrc().get(node.from).content == '(') {
+            spaces = spaces + 1;
+            targetNode = node.descendants().get(2);
+        }
+        addIndent(targetNode, spaces);
+        logger.fine(struct.getClass(), "r2_fix_indent_for_subquery: at " + targetNode.from);
     }
 }
 
