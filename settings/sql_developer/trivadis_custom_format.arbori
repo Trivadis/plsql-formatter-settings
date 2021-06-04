@@ -1080,13 +1080,9 @@ a8_one_space_after:
 -- A14: Line break after node.
 -- --------------------------------------------------------------------------------------------------------------------
 
-a14_as_create_view:
-      [node) 'AS'
-    & [node^) create_view#
-;
 
 a14_line_break_after:
-    a14_as_create_view
+    [node) 'AS' & [node^) create_view#
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.to).contains("\n")) {
