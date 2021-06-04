@@ -307,7 +307,7 @@ define_global_functions:
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
         for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
-            col += target.getSrc().get(i).content.length();
+            col += target.src.get(i).content.length();
             var indent = getIndent(i);
             col += getNumCharsAfterNewLine(indent);
         }
@@ -320,7 +320,7 @@ define_global_functions:
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
         for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
-            col += target.getSrc().get(i).content.length();
+            col += target.src.get(i).content.length();
             var indent = getIndent(i);
             if (!indent.contains("\n")) {
                 col += getNumCharsAfterNewLine(indent);
@@ -446,7 +446,7 @@ define_global_functions:
     var getContent = function(fromPos, toPos) {
         var content = "";
         for (var i=fromPos; i<toPos; i++) {
-            content += target.getSrc().get(i).content;
+            content += target.src.get(i).content;
             content += getIndent(i+1);
         }
         return content;
@@ -504,7 +504,7 @@ define_global_functions:
                     var node = list.get(i).get(nodeName);
                     var indent = getIndent(node.from);
                     if (indent.contains("\n")) {
-                        var content = target.getSrc().get(node.from).content;
+                        var content = target.src.get(node.from).content;
                         if (content == ",") {
                             struct.putNewline(node.from, indent.substr(0, indent.length - comma));
                             logger.fine(struct.getClass(), logText + ": reduced intent at " + node.from);
@@ -827,7 +827,7 @@ a13_short_nodes:
             } else {
                 len += indent.length;
             }
-            len += target.getSrc().get(i).content.length;
+            len += target.src.get(i).content.length;
         }
         return len;
     }
@@ -931,7 +931,7 @@ a5_no_space_before:
     | a5_slash
 -> {
     var node = tuple.get("node");
-    var content = target.getSrc().get(node.from).content;
+    var content = target.src.get(node.from).content;
     if (content == '/') {
         struct.putNewline(node.from, System.lineSeparator());
         logger.fine(struct.getClass(), "a5_no_space_before: <" + content + ">, add line break at " + node.from);
@@ -961,7 +961,7 @@ a6_no_space_after:
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.to, "");
-    var content = target.getSrc().get(node.from).content;
+    var content = target.src.get(node.from).content;
     logger.fine(struct.getClass(), "a6_no_space_after: <" + content + "> at " + node.to);
 }
 
@@ -1002,7 +1002,7 @@ a7_one_space_before:
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
         struct.putNewline(node.from, " ");
-        var content = target.getSrc().get(node.from).content;
+        var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a7_one_space_before: <" + content + "> at " + node.from);
     }
 }
@@ -1084,7 +1084,7 @@ a8_one_space_after:
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
         struct.putNewline(node.to, " ");
-        var content = target.getSrc().get(node.from).content;
+        var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
     }
 }
@@ -1100,7 +1100,7 @@ a15_line_break_before:
     var node = tuple.get("node");
     if (!getIndent(node.from).contains("\n")) {
         struct.putNewline(node.from, System.lineSeparator());
-        var content = target.getSrc().get(node.from).content;
+        var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a15_line_break_before: <" + content + "> at " + node.from);
     }
 }
@@ -1115,7 +1115,7 @@ a14_line_break_after:
     var node = tuple.get("node");
     if (!getIndent(node.to).contains("\n")) {
         struct.putNewline(node.to, System.lineSeparator());
-        var content = target.getSrc().get(node.from).content;
+        var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a14_line_break_after: <" + content + "> at " + node.to);
     }
 }
@@ -1494,7 +1494,7 @@ o1_concatenation_option:
     var parent = tuple.get("parent");
     var countConcat = 0;
     for (var i=parent.from; i<parent.to && countConcat < 4; i++) {
-        if (target.getSrc().get(new Integer(i)).content == '|') {
+        if (target.src.get(new Integer(i)).content == '|') {
             countConcat++;
         }
     }
@@ -1844,11 +1844,11 @@ r2_init_left_margin:
 
     /* returns true, if the node is in parenthesis */
     var isInParen = function(node) {
-        if (target.getSrc().get(node.from).content == '(') {
+        if (target.src.get(node.from).content == '(') {
             return true;
         } else if (node.from == 0) {
             return false;
-        } else if (target.getSrc().get(node.from-1).content == '(') {
+        } else if (target.src.get(node.from-1).content == '(') {
             return true;
         }
         return false;
@@ -1856,11 +1856,11 @@ r2_init_left_margin:
 
     /* returns true if the node starts with a open parenthesis and a new line (designed for subquery node) */
     var hasNewLineAfterParen = function(node) {
-        if (target.getSrc().get(node.from).content == '(') {
+        if (target.src.get(node.from).content == '(') {
             return getIndent(node.from+1).contains("\n");
         } else if (node.from == 0) {
             return false;
-        } else if (target.getSrc().get(node.from-1).content == '(') {
+        } else if (target.src.get(node.from-1).content == '(') {
             return getIndent(node.from).contains("\n");
         }
         return false;
@@ -2133,7 +2133,7 @@ r2_increment_left_margin_for_insert_returning:
     & keyword^ = node
 -> {
     var keyword = tuple.get("keyword");
-    var content = target.getSrc().get(keyword.from).content;
+    var content = target.src.get(keyword.from).content;
     var spaces = addMarginByName(tuple.get("node"), content);
     addMargin(keyword, -1 * spaces);
 }
@@ -2207,8 +2207,8 @@ r2_indent_nodes:
         var spaces = value.length()-value.lastIndexOf("\n")-1; // 0 = first column
         var comma = 0;
         var spacesAfterComma = 0;
-        if (key < target.getSrc().size()) {
-            if (target.getSrc().get(key).content == ",") {
+        if (key < target.src.size()) {
+            if (target.src.get(key).content == ",") {
                 comma = 1;
                 if (spaceAfterCommas) {
                    comma += 1;
@@ -2238,7 +2238,7 @@ r2_fix_indent_for_subquery:
     if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
         var spaces = getColumn(node.from) - getColumn(from.from);
         var targetNode = node;
-        if (target.getSrc().get(node.from).content == '(') {
+        if (target.src.get(node.from).content == '(') {
             spaces = spaces + 1;
             targetNode = node.descendants().get(2);
         }
@@ -2265,14 +2265,14 @@ r7_declaration:
         if (!breaksAfterSelect) {
             var keyword = tuple.get("keyword");
             var parent = tuple.get("parent");
-            var parentLength = target.getSrc().get(parent.from).content.length();
-            if (target.getSrc().get(parent.from).content.toLowerCase() == "with") {
+            var parentLength = target.src.get(parent.from).content.length();
+            if (target.src.get(parent.from).content.toLowerCase() == "with") {
                 parentLength = 6;
             }
             if (getIndent(keyword.from).contains("\n")) {
                 if (alignRight) {
-                    var content = target.getSrc().get(keyword.from).content;
-                    var missingSpaces = parentLength - target.getSrc().get(keyword.from).content.length();
+                    var content = target.src.get(keyword.from).content;
+                    var missingSpaces = parentLength - target.src.get(keyword.from).content.length();
                     var keywordIndent = System.lineSeparator()
                         + getSpaces(getColumn(parent.from) + missingSpaces)
                     struct.putNewline(keyword.from, keywordIndent);
@@ -2418,7 +2418,7 @@ a11_find_param_names:
     if (firstParameterOnLine(node.from, scope.from)) {
         if (struct.breaksBeforeComma()) {
             var parenOrComma = tuple.get("parenOrComma");
-            var parenOrCommaContent = target.getSrc().get(parenOrComma.from).content;
+            var parenOrCommaContent = target.src.get(parenOrComma.from).content;
             if (parenOrCommaContent == ',') {
                 tuple.put("aligner", parenOrComma);
             } else {
@@ -2602,7 +2602,7 @@ o5_declarations:
         if (getIndent(node.to).contains("\n")) {
             return true;
         } else {
-            var content = target.getSrc().get(node.to).content;
+            var content = target.src.get(node.to).content;
             if (content == ",") {
                 if (getIndent(node.to+1).contains("\n")) {
                     return true;
@@ -2669,7 +2669,7 @@ o7_declarations:
     /* returns true if there is no other equality sign on the line */
     var firstEqualitySignOnLine = function(nodeFrom) {
         for (var i=nodeFrom-1; i>=0 && !getIndent(i).contains("\n"); i=i-1) {
-            var content = target.getSrc().get(i).content;
+            var content = target.src.get(i).content;
             if (content == "=") {
                 return false;
             }
@@ -2722,7 +2722,7 @@ r6_find_names:
     if (containsLineBreak(scope)) {
         var parenOrComma = tuple.get("node");
         var arg = tuple.get("node+1")
-        var parenOrCommaContent = target.getSrc().get(parenOrComma.from).content;
+        var parenOrCommaContent = target.src.get(parenOrComma.from).content;
         if (parenOrCommaContent == '('
                 || getIndent(parenOrComma.from).contains("\n")
                 || getIndent(arg.from).contains("\n"))
@@ -2834,10 +2834,10 @@ a4_add_line_breaks_with_indent:
 -> {
     var pos = 0;
     var indent = System.lineSeparator(); /* handle first line */
-    for (var key=0; key<target.getSrc().size(); key++) {
-        if (pos > maxCharLineSize && target.getSrc().get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
+    for (var key=0; key<target.src.size(); key++) {
+        if (pos > maxCharLineSize && target.src.get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
             struct.putNewline(key, indent);
-            pos = indent.length() + target.getSrc().get(key).content.length();
+            pos = indent.length() + target.src.get(key).content.length();
             logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: at " + key);
         } else {
             var value = getIndent(key);
@@ -2847,7 +2847,7 @@ a4_add_line_breaks_with_indent:
             } else {
                 pos += getNumCharsAfterNewLine(value);
             }
-            var content = target.getSrc().get(key).content;
+            var content = target.src.get(key).content;
             var contentLength = content.length;
             var nlpos = content.lastIndexOf("\n") + 1;
             if (nlpos > 0) {
