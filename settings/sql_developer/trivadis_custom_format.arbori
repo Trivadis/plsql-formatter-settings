@@ -276,7 +276,8 @@ define_global_functions:
 
     /* return the indentation at a node position, converts the default null to a single space */
     function getIndent(nodeFrom) {
-        var indent = newlinePositions.get(new Integer(nodeFrom));
+        /* map is based on Integer, therefore nodeFrom must be converted to an Integer */
+        var indent = newlinePositions.get(Integer.valueOf(nodeFrom));
         if (indent == null) {
             return " ";
         }
@@ -341,8 +342,9 @@ define_global_functions:
 
     /* returns true if single-line or multi-line comments exists between two node positions */
     function hasCommentsBetweenPos(startPos, endPos) {
-        tokenStartPos = mapParserPosToLexerPos.get(new Integer(startPos));
-        tokenEndPos = mapParserPosToLexerPos.get(new Integer(endPos));
+        /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
+        tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
+        tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
         for (var i = tokenStartPos; i < tokenEndPos; i++) {
             var type = tokens[i].type;
             if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
@@ -355,8 +357,9 @@ define_global_functions:
     /* returns the the last comment (sl or ml) between two node positions */
     function getLastCommentBetweenPos(startPos, endPos) {
         var comment = "";
-        tokenStartPos = mapParserPosToLexerPos.get(new Integer(startPos));
-        tokenEndPos = mapParserPosToLexerPos.get(new Integer(endPos));
+        /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
+        tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
+        tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
         for (var i = tokenStartPos; i < tokenEndPos; i++) {
             var type = tokens[i].type;
             if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
@@ -669,7 +672,8 @@ keep_significant_whitespace_before_leaf_nodes:
                 wsBefore = "";
             }
         } else {
-            mapParserPosToLexerPos.put(new Integer(i-hiddenTokenCount), i);
+            /* enforce uniform datatype in map, therefore convert values to Integer */
+            mapParserPosToLexerPos.put(Integer.valueOf(i-hiddenTokenCount), i);
             if (wsBefore != " ") {
                 // add collected whitespace before leaf node (actually at the position of the leaf node)
                 // add also empty strings to ensure that not a space is added between tokens
@@ -752,7 +756,8 @@ a3_dont_format_off_on_ranges:
         } else {
             /* expected types: QUOTED_STRING, DQUOTED_STRING, BQUOTED_STRING, DIGITS, OPERATION, IDENTIFIER, AUXILIARY, INCOMPLETE */
             if (!format) {
-                var pos = new Integer(i-hiddenTokenCount);
+                /* map expects Integers, therefore convert values to Integer */
+                var pos = Integer.valueOf(i-hiddenTokenCount);
                 struct.unformattedPositions.add(pos);
                 logger.fine(struct.getClass(), "a3_dont_format_off_on_ranges: at " + pos);
             }
@@ -835,7 +840,7 @@ a13_short_nodes:
         for (var i=node.from+1; i< node.to; i++) {
             var indent = getIndent(i);
             if (indent.contains("\n") || indent.length > 1) {
-                struct.putNewline(new Integer(i), " ");
+                struct.putNewline(i, " ");
                 logger.fine(struct.getClass(), "a13_comparison_conditions: one space indent at " + i);
             }
         }
@@ -1204,7 +1209,8 @@ r3_stmt_in_first_conditional_compilation_branch:
         }
         if (type != Token.WS && type != Token.MACRO_SKIP && type != Token.COMMENT && type != Token.LINE_COMMENT) {
             if (withinFirstBranch) {
-                posInConditionalBranch.add(new Integer(pos));
+                /* enforce uniform datatype in map, therefore convert values to Integer */
+                posInConditionalBranch.add(Integer.valueOf(pos));
                 logger.fine(struct.getClass(), "r3_stmt_in_first_conditional_compilation_branch: ignore node at " + pos);
             }
             pos++;
@@ -1494,7 +1500,7 @@ o1_concatenation_option:
     var parent = tuple.get("parent");
     var countConcat = 0;
     for (var i=parent.from; i<parent.to && countConcat < 4; i++) {
-        if (target.src.get(new Integer(i)).content == '|') {
+        if (target.src.get(i).content == '|') {
             countConcat++;
         }
     }
@@ -1762,7 +1768,8 @@ r2_init_left_margin:
         var key = it.next();
         var value = newlinePositions.get(key);
         if (value.contains("\n")) {
-            leftMargin.put(key, new Integer(0));
+            /* enforce uniform datatype in map, therefore convert values to Integer */
+            leftMargin.put(key, Integer.valueOf(0));
         }
     }
 
@@ -1774,7 +1781,8 @@ r2_init_left_margin:
             var margin = leftMargin.get(node.from);
             if (margin != null) {
                 if (node.children().size() == 0) {
-                    leftMargin.put(node.from, new Integer(margin+increaseBy));
+                    /* enforce uniform datatype in map, therefore convert values to Integer */
+                    leftMargin.put(node.from, Integer.valueOf(margin+increaseBy));
                 }
             }
         }
@@ -1784,7 +1792,8 @@ r2_init_left_margin:
     var getMargin = function(node) {
         var i = node.from;
         while (i >= 0) {
-            var margin = leftMargin.get(new Integer(i));
+            /* map expects Integers, therefore convert values to Integer */
+            var margin = leftMargin.get(Integer.valueOf(i));
             if (margin != null) {
                 return margin;
             }
@@ -2806,7 +2815,7 @@ a9_align_xmltable_columns:
     var it = xmlTableColumns.keySet().iterator();
     while (it.hasNext()) {
         var scope = it.next();
-        struct.putNewline(new Integer(scope.from+1), " ");
+        struct.putNewline(scope.from+1, " ");
         var pos = getColumn(scope.from+1);
         var list = xmlTableColumns.get(scope);
         alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
