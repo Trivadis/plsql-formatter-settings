@@ -344,8 +344,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       insert
-                         into t
+                       insert into t
                        values ('a', 'b');
                     end;
                     /
@@ -382,8 +381,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       insert
-                         into mytable t (
+                       insert into mytable t (
                                  a, b, c, d
                               )
                        values (
@@ -420,8 +418,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    insert
-                       all
+                    insert all
                       into t1 (c1, c2) values (c1, c2)
                       into t2 (c1, c2) values (c1, c2)
                       into t3 (c1, c2) values (c1, c2)
@@ -447,12 +444,11 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       insert
-                         into phs1 (c1)
-                              (
-                                 select 1 as c1
-                                   from dual
-                              );
+                       insert into phs1 (c1)
+                       (
+                          select 1 as c1
+                            from dual
+                       );
                     end;
                     /
                     """;
