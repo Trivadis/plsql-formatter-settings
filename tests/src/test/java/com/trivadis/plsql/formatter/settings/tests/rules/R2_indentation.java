@@ -1189,4 +1189,67 @@ public class R2_indentation extends ConfiguredTestFormatter {
             assertEquals(expected, actual);
         }
     }
+
+    @Nested
+    class insert {
+
+        @Test
+        public void singletable_column_list_values() throws IOException {
+            var input = """
+                    insert into t (
+                    c1
+                    ,c2
+                    ,c3
+                    ) 
+                    values (
+                    '1'
+                    ,'2'
+                    ,'3'
+                    );
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    insert into t (
+                              c1
+                             ,c2
+                             ,c3
+                           ) 
+                    values (
+                              '1'
+                             ,'2'
+                             ,'3'
+                           );
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void multitable_insert() throws IOException {
+            var input = """
+                    insert all
+                    into t1 (
+                    c1
+                    ,c2
+                    ,c3
+                    )
+                    into t2 (c1, c2, c3) (select 1 as c1, 2 as c2, 3 as c3
+                    from dual
+                    where dummy = 'X');
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    insert all
+                    into t1 (
+                            c1
+                           ,c2
+                           ,c3
+                         )
+                    into t2 (c1, c2, c3)
+                    (select 1 as c1, 2 as c2, 3 as c3
+                     from dual
+                     where dummy = 'X');
+                    """;
+            assertEquals(expected, actual);
+        }
+    }
 }
