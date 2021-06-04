@@ -45,6 +45,7 @@
  *     - A6: No space after node.
  *     - A7: One space before node.
  *     - A8: One space after node.
+ *     - A15: Line break before node.
  *     - A14: Line break after node.
  *     - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
  *     - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
@@ -1077,9 +1078,24 @@ a8_one_space_after:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- A14: Line break after node.
+-- A15: Line break before node.
 -- --------------------------------------------------------------------------------------------------------------------
 
+a15_line_break_before:
+      [node) insert_into_clause & [node^^) multi_table_insert
+    | [node) subquery & [node^) multi_table_insert
+-> {
+    var node = tuple.get("node");
+    if (!getIndent(node.from).contains("\n")) {
+        struct.putNewline(node.from, System.lineSeparator());
+        var content = target.getSrc().get(node.from).content;
+        logger.fine(struct.getClass(), "a15_line_break_before: <" + content + "> at " + node.from);
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A14: Line break after node.
+-- --------------------------------------------------------------------------------------------------------------------
 
 a14_line_break_after:
     [node) 'AS' & [node^) create_view#
