@@ -470,7 +470,7 @@ define_global_functions:
     var firstParameterOnLine = function(nodeFrom, scopeFrom) {
         if (!getIndent(nodeFrom).contains("\n")) {
             for (var i=nodeFrom-1; i>=scopeFrom; i=i-1) {
-                var prevNode = target.getRoot().leafAtPos(i);
+                var prevNode = target.root.leafAtPos(i);
                 if (prevNode.contains("decl_id")) {
                     return false;
                 }
@@ -1839,7 +1839,7 @@ r2_init_left_margin:
 
     /* returns true if a the node or an ancestors has one of the provided symbols */
     var hasParentOfType = function(nodeFrom, symbols) {
-        var node = target.getRoot().leafAtPos(nodeFrom);
+        var node = target.root.leafAtPos(nodeFrom);
         while (node != null) {
             for (var i=0; i < symbols.length; i++) {
                 if (node.contains(symbols[i])) {
@@ -2622,9 +2622,9 @@ o5_declarations:
     }
 
     var tableReferenceOnNewline = function (node) {
-        var n = target.getRoot().leafAtPos(node.from - 1);
+        var n = target.root.leafAtPos(node.from - 1);
         do {
-            n = target.getRoot().leafAtPos(n.from - 1);
+            n = target.root.leafAtPos(n.from - 1);
             if (getIndent(n.from).contains("\n")) {
                 return true;
             }
@@ -2876,6 +2876,6 @@ d2_log_time:
 -> {
     var endTime = (new Date()).getTime();
     logger.info(struct.getClass(), "d2_log_time: formatted " + tokens.length + " tokens and "
-        + target.getRoot().to + " nodes in "
+        + target.root.to + " nodes in "
         + ((endTime - startTime) / 1000) + " seconds.");
 }
