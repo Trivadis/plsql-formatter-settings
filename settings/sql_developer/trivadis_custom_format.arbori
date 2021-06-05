@@ -2048,12 +2048,11 @@ r2_decrement_left_margin:
 
 r2_increment_left_margin_by_keyword_outside_node:
     -- select statement
-      [node) select_list & [keyword) 'SELECT' & keyword = node-1
+      [node) select_list & [keyword) 'SELECT' & (keyword = node-1 | keyword = node-2)
     | [node) condition & [keyword) 'CONNECT' & [keyword+1) 'BY' & keyword = node-2
     | [node) condition & [keyword) 'START' & [keyword+1) 'WITH' & keyword = node-2
     -- insert statement
     | [node) insert_into_clause & [keyword) 'INSERT' & keyword = node^-1 & [node^) single_table_insert
-
 -> {
     addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content);
 }
