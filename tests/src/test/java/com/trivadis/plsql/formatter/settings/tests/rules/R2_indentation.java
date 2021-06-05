@@ -1086,7 +1086,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select empno, ename
                     from emp
                     order by ename
-                            ,empno;
+                         ,empno;
                     """;
             assertEquals(expected, actual);
         }

@@ -25,9 +25,9 @@ public class Issue_54_align_table_alias extends ConfiguredTestFormatter {
                           on r.country_id = cust.country_id
                        where calendar_year = 2000
                        group by r.country_region,
-                                p.prod_category
+                             p.prod_category
                        order by r.country_region,
-                                p.prod_category
+                             p.prod_category
                    )
                    loop
                       if rec.region = 'Asia' then
