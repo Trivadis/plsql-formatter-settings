@@ -1955,6 +1955,8 @@ r2_common:
     | [node) xmlquery
     | [node) xmltable
     | [node) function_expression & [node-1) '('
+    | [node) expr & [node-1) '(' & ![node^) par_expr_list
+    | [node) analytic_clause
 ;
 
 r2_flowcontrol_condition:
@@ -2256,6 +2258,8 @@ r7_select:
         | [keyword) 'ORDER'
       )
     & parent < keyword
+    & ![keyword^^) analytic_clause
+    & ![keyword^) analytic_clause
 ;
 
 r7_insert:
