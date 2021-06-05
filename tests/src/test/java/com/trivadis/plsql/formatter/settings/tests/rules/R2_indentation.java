@@ -909,7 +909,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     ,email unique rely disable novalidate
                     ,constraint id_pk primary key (emp_id) rely disable novalidate
                     )
-                    as select employee_id, last_name, email 
+                    as select employee_id, last_name, email
                     from employees
                     with read only;
                     """;
@@ -1140,7 +1140,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     select *
                     from emp, dual d1, dual d2
-                    where (1 = 2 or 3 = 4) and 
+                    where (1 = 2 or 3 = 4) and
                           0 = 1 + 2 and exists(select 1, 2, 3
                                                from wsh_new_deliveries wnd
                                                     join wsh_delivery_assignments wda
@@ -1228,7 +1228,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     c1
                     ,c2
                     ,c3
-                    ) 
+                    )
                     values (
                     '1'
                     ,'2'
@@ -1241,7 +1241,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                               c1
                              ,c2
                              ,c3
-                           ) 
+                           )
                     values (
                               '1'
                              ,'2'
