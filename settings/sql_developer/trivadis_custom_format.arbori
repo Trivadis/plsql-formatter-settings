@@ -1758,6 +1758,26 @@ r5_commas:
 -- ensure that the indentation is >= the this left margin, by adding missing spaces.
 -- This code must be executed after missing line breaks have been added.
 
+-- For chosen statements such as select, insert, update, delete merge, PL/SQL blocks etc. the left margin
+-- is enforced, this means unneeded leading spaces are removed. For other statements such as create table,
+-- alter table, create index, alter index, etc. the indentation is left "as is" if the existing left margin
+-- is larger than the calculated one.
+
+-- The calculation of the left margin depends primarily on
+--   - breaksAfterSelect
+--   - alignRight
+-- In case of "breaksAfterSelect = true" a simple indentation is used.
+-- In case of "breaksAfterSelect = false" the left margin for select, insert, update and delete statements
+-- depends on the length of the first keyword. For example, for an order_by_clause just the keyword "order"
+-- is relevant. This means that the expressions on subsequent lines of an order_by_clause start under the
+-- "by" keyword.
+-- In case of "alignRight = true" the margin is is based on the primary keyword of a statement.
+-- "select", "insert", "update" or "delete". In all these cases the length of the keyword is 6 characters.
+-- The left margin is therefore increased by 7 characters, even for keywords that are longer than 6 characters.
+-- For example "returning". In R6 the keyword will be right aligned to the primary keyword by reducing the
+-- the indentation. This is consistent with the alignment of commas in R5. Right-aligning in these cases
+-- is only possible if the indentation is large enough.
+
 r2_init_left_margin:
     [runOnce) sql_statements
 -> {
@@ -1812,8 +1832,13 @@ r2_init_left_margin:
         }
     }
 
+    /* increase left margin by first keyword in node */
+    var addMarginByFirstKeyword = function(node) {
+        return addMarginByName(node, getFirstWord(target.src.get(node.from).content));
+    }
+
     /* increase left margin by keyword and SQLDev settings */
-    var addMarginByName = function(parent, name) {
+    var addMarginByName = function(node, name) {
         var spaces;
         if (breaksAfterSelect) {
             spaces = indentSpaces;
@@ -1823,7 +1848,7 @@ r2_init_left_margin:
         } else {
             spaces = name.length + 1;
         }
-        addMargin(parent, spaces);
+        addMargin(node, spaces);
         return spaces;
     }
 
@@ -1922,8 +1947,7 @@ r2_common:
     | [node) select & [node^) full_cursor_body
     | [node) excptn_handler
     | [node) subquery_factoring_clause
-    | [node) subquery & ([node-1) '(' | [node-1) 'FOR') -- "(subquery)" or "open cursor for select"
-    | [node) query_block & [node-1) '(' & [node^) subquery
+    | [node) cursor_open_statement
     | [node) ty_def
     | [node) fml_part
     | [node) paren_expr_list
@@ -2020,140 +2044,36 @@ r2_decrement_left_margin:
     addMargin(tuple.get("node"), -1 * indentSpaces);
 }
 
-r2_increment_left_margin_for_into_list:
-      [node) into_list
-    & [into) 'INTO'
-    & node = into^
+r2_increment_left_margin_by_keyword_outside_node:
+    -- select statement
+      [node) select_list & [keyword) 'SELECT' & keyword = node-1
+    | [node) condition & [keyword) 'CONNECT' & [keyword+1) 'BY' & keyword = node-2
+    | [node) condition & [keyword) 'START' & [keyword+1) 'WITH' & keyword = node-2
+    -- insert statement
+    | [node) insert_into_clause & [keyword) 'INSERT' & keyword = node^-1 & [node^) single_table_insert
+
 -> {
-    var spaces = addMarginByName(tuple.get("node"), "INTO");
-    addMargin(tuple.get("into"), -1 * spaces);
+    addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content);
 }
 
-r2_increment_left_margin_for_select_list:
-      [node) select_list
-    & [node-1) 'SELECT'
+r2_increment_left_margin_by_keyword_inside_node:
+    -- select statement
+      [node) into_list & [keyword) 'INTO' & keyword^ = node
+    | [node) from_clause & [keyword) 'FROM' & keyword^ = node
+    | [node) where_clause & [keyword) 'WHERE' & keyword^ = node
+    | [node) group_by_clause & [keyword) 'GROUP' & keyword^ = node
+    | [node) having_clause & [keyword) 'HAVING' & keyword^ = node
+    | [node) order_by_clause & [keyword) 'ORDER' & keyword^ = node
+    -- insert statement
+    | [node) insert_into_clause & [keyword) 'INTO' & keyword^ = node & ![node^) single_table_insert
+    | [node) values_clause & [keyword) 'VALUES' & keyword^ = node
+    | [node) returning_clause & ([keyword) 'RETURNING' | [keyword) 'RETURN') & keyword^ = node
+    | [node) error_logging_clause & [keyword) 'LOG' & keyword^ = node
+    -- update statement
+    | [node) update_set_clause & [keyword) 'SET' & keyword^ = node
 -> {
-    addMarginByName(tuple.get("node"), "SELECT");
-}
-
-r2_increment_left_margin_for_from:
-      [node) from_clause
-    & [from) 'FROM'
-    & from^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "FROM");
-    addMargin(tuple.get("from"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_where:
-      [node) where_clause
-    & [where) 'WHERE'
-    & where^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "WHERE");
-    addMargin(tuple.get("where"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_connect_by:
-      [node) condition
-    & [node-2) 'CONNECT'
-    & [node-1) 'BY'
--> {
-    var spaces = addMarginByName(tuple.get("node"), "CONNECT BY");
-}
-
-r2_increment_left_margin_for_start_with:
-      [node) condition
-    & [node-2) 'START'
-    & [node-1) 'WITH'
--> {
-    var spaces = addMarginByName(tuple.get("node"), "START WITH");
-}
-
-r2_increment_left_margin_for_group_by:
-      [node) group_by_clause
-    & [group) 'GROUP'
-    & group^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "GROUP BY");
-    addMargin(tuple.get("group"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_having:
-      [node) having_clause
-    & [having) 'HAVING'
-    & having^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "HAVING");
-    addMargin(tuple.get("having"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_order_by:
-      [node) order_by_clause
-    & [order) 'ORDER'
-    & order^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "ORDER BY");
-    addMargin(tuple.get("order"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_update_set:
-      [node) update_set_clause
-    & [set) 'SET'
-    & set^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "SET");
-    addMargin(tuple.get("set"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_single_table_insert_into:
-      [node) insert_into_clause
-    & [node^) single_table_insert
-    & [into) 'INTO'
-    & into^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "INSERT");
-    addMargin(tuple.get("into"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_multi_table_insert_into:
-      [node) insert_into_clause
-    & [into) 'INTO'
-    & into^ = node
-    & [parent) multi_table_insert
-    & parent < node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "INTO");
-    addMargin(tuple.get("into"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_insert_values:
-      [node) values_clause
-    & [values) 'VALUES'
-    & values^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "VALUES");
-    addMargin(tuple.get("values"), -1 * spaces);
-}
-
-r2_increment_left_margin_for_insert_returning:
-      [node) returning_clause
-    & ([keyword) 'RETURNING' | [keyword) 'RETURN')
-    & keyword^ = node
--> {
-    var keyword = tuple.get("keyword");
-    var content = target.src.get(keyword.from).content;
-    var spaces = addMarginByName(tuple.get("node"), content);
-    addMargin(keyword, -1 * spaces);
-}
-
-r2_increment_left_margin_for_error_logging:
-      [node) error_logging_clause
-    & [log) 'LOG'
-    & log^ = node
--> {
-    var spaces = addMarginByName(tuple.get("node"), "LOG");
-    addMargin(tuple.get("log"), -1 * spaces);
+    var spaces = addMarginByFirstKeyword(tuple.get("node"));
+    addMargin(tuple.get("keyword"), -1 * spaces);
 }
 
 r2_subquery:
@@ -2162,13 +2082,24 @@ r2_subquery:
     & node < from
 ;
 
-r2_decrement_left_margin_for_subquery:
+r2_increment_left_margin_for_subquery_in_paren:
     r2_subquery
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
-    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
-        addMargin(node, -1 * indentSpaces);
+    if (isInParen(node)) {
+        if (!hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
+            /* Left margin needs to be calculated based on the position of the left parenthesis.
+             * This cannot be done here because we cannot calculate the position for nested
+             * subqueries. We do that in r2_fix_indent_for_subquery_in_paren once the indentation per node
+             * is available. */
+        } else {
+            var targetNode = node;
+            if (target.src.get(node.from).content == '(') {
+                targetNode = node.descendants().get(2);
+            }
+            addMargin(targetNode, indentSpaces);
+        }
     }
 }
 
@@ -2239,12 +2170,15 @@ r2_indent_nodes:
     }
 }
 
-r2_fix_indent_for_subquery:
+r2_fix_indent_for_subquery_in_paren:
    r2_subquery
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
     if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
+        /* The r2_subquery results are ordered.
+         * This means the outermost subquery is processed first and the innermost subquery last.
+         * As a result getColumn() returns correct results, even for nested subqueries. */
         var spaces = getColumn(node.from) - getColumn(from.from);
         var targetNode = node;
         if (target.src.get(node.from).content == '(') {
@@ -2252,7 +2186,7 @@ r2_fix_indent_for_subquery:
             targetNode = node.descendants().get(2);
         }
         addIndent(targetNode, spaces);
-        logger.fine(struct.getClass(), "r2_fix_indent_for_subquery: at " + targetNode.from);
+        logger.fine(struct.getClass(), "r2_fix_indent_for_subquery_in_paren: at " + targetNode.from);
     }
 }
 
