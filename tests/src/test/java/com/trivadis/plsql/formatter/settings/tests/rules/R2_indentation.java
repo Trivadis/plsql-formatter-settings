@@ -1216,6 +1216,27 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             assertEquals(expected, actual);
         }
+
+        @Test
+        void distinct() throws IOException {
+            var input = """
+                    select distinct
+                    owner
+                    ,object_type
+                    ,object_name
+                    from t;
+                    """;
+            var expected = """
+                    select distinct
+                           owner
+                          ,object_type
+                          ,object_name
+                    from t;
+                    """;
+            var actual = formatter.format(input);
+            assertEquals(expected, actual);
+        }
+
     }
 
     @Nested
