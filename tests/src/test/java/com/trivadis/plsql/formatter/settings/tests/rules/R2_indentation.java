@@ -1188,6 +1188,34 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             assertEquals(expected, actual);
         }
+
+        @Test
+        void analytic_function() throws IOException {
+            var input = """
+                    select last_name
+                    ,salary
+                    ,count(
+                    employees.salary
+                    ) over (
+                    order by salary
+                    range between 50 preceding and 150 following
+                    ) as mov_count
+                    from employees;
+                    """;
+            var expected = """
+                    select last_name
+                          ,salary
+                          ,count(
+                              employees.salary
+                           ) over (
+                              order by salary
+                              range between 50 preceding and 150 following
+                           ) as mov_count
+                    from employees;
+                    """;
+            var actual = formatter.format(input);
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
