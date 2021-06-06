@@ -1140,6 +1140,7 @@ a8_one_space_after:
 a15_line_break_before:
       [node) insert_into_clause & [node^^) multi_table_insert
     | [node) subquery & [node^) multi_table_insert
+    | [node) prm_spec & [node-1) ','
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.from).contains("\n")) {
