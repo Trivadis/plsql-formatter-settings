@@ -2738,6 +2738,7 @@ a9_declarations:
     [runOnce) sql_statements
 -> {
     var xmlTableColumns = new HashMap();
+    var xmlTableDatatypes = new HashMap();
 }
 
 a9_find_columns:
@@ -2769,6 +2770,24 @@ a9_align_xmltable_columns:
         alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
         fixIndentOfLeadingCommas(xmlTableColumns, "aligner", "a9_align_xmltable_columns");
     }
+}
+
+a9_find_datatypes:
+     [scope) XMLTABLE_options[19,37)
+   & [node) XML_table_column[5,72)
+   & [path) 'PATH'
+   & scope < node
+   & node < path
+-> {
+    var scope = tuple.get("scope");
+    addTupleToMap(tuple, "scope", xmlTableDatatypes);
+}
+
+a9_align_xmltable_datatypes:
+    [runOnce) sql_statements
+-> {
+    align(xmlTableDatatypes, "node", null, "a9_align_xmltable_datatypes");
+    align(xmlTableDatatypes, "path", null, "a9_align_xmltable_datatypes");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
