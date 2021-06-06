@@ -11,7 +11,7 @@ public class Oracle extends ConfiguredTestFormatter {
                 create or replace package body emp_mgmt as
                    tot_emps   number;
                    tot_depts  number;
-                   function hire (
+                   function hire(
                       last_name      in  varchar2,
                       job_id         in  varchar2,
                       manager_id     in  number,

@@ -16,7 +16,7 @@ public class Issue_5_type_members extends ConfiguredTestFormatter {
     public void object_type_spec_overriding_member_function() {
         var sql = """
                 create or replace type ut_xunit_reporter under ut_junit_reporter (
-                   constructor function ut_xunit_reporter (
+                   constructor function ut_xunit_reporter(
                       self in out nocopy ut_xunit_reporter
                    ) return self as result,
                    overriding member function get_description return varchar2
@@ -30,7 +30,7 @@ public class Issue_5_type_members extends ConfiguredTestFormatter {
     public void object_type_spec_final_member_function() {
         var sql = """
                 create or replace type ut_xunit_reporter under ut_junit_reporter (
-                   constructor function ut_xunit_reporter (
+                   constructor function ut_xunit_reporter(
                       self in out nocopy ut_xunit_reporter
                    ) return self as result,
                    final member function get_description return varchar2
@@ -44,7 +44,7 @@ public class Issue_5_type_members extends ConfiguredTestFormatter {
     public void object_type_body_overriding_member_function() {
         var sql = """
                 create or replace type body ut_xunit_reporter is
-                   constructor function ut_xunit_reporter (
+                   constructor function ut_xunit_reporter(
                       self in out nocopy ut_xunit_reporter
                    ) return self as result is
                    begin
@@ -66,7 +66,7 @@ public class Issue_5_type_members extends ConfiguredTestFormatter {
     public void object_type_body_final_member_function() {
         var sql = """
                 create or replace type body ut_xunit_reporter is
-                   constructor function ut_xunit_reporter (
+                   constructor function ut_xunit_reporter(
                       self in out nocopy ut_xunit_reporter
                    ) return self as result is
                    begin

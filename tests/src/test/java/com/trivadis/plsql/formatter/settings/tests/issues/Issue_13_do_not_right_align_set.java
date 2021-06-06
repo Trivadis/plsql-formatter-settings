@@ -18,7 +18,7 @@ public class Issue_13_do_not_right_align_set extends ConfiguredTestFormatter {
                             
                 create or replace package body emp_mgmt as
                             
-                    function hire (
+                    function hire(
                         last_name      in  varchar2,
                         job_id         in  varchar2,
                         manager_id     in  number,

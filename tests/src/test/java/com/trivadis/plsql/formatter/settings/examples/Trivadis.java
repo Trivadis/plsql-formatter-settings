@@ -8,10 +8,10 @@ public class Trivadis extends ConfiguredTestFormatter {
     @Test
     public void set_salary() {
         var sql = """
-                create or replace procedure set_salary (
+                create or replace procedure set_salary(
                    in_employee_id in employees.employee_id%type
                 ) is
-                   cursor c_employees (
+                   cursor c_employees(
                       p_employee_id in employees.employee_id%type
                    ) is
                       select last_name,

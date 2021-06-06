@@ -8,7 +8,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     @Test
     public void mgrname() {
         var sql = """
-                create or replace function mgrname (
+                create or replace function mgrname(
                    p_empno in emp.empno%type
                 ) return emp.ename%type is
                    result  emp.ename%type;
@@ -98,7 +98,7 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     @Test
     public void insertdept() {
         var sql = """
-                create or replace procedure insertdept (
+                create or replace procedure insertdept(
                    p_deptno  in out  dept.deptno%type,
                    p_dname   in      dept.dname%type,
                    p_loc     in      dept.loc%type

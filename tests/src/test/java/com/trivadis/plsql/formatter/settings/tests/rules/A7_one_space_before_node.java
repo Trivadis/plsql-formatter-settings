@@ -42,7 +42,7 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
         var actual = formatter.format(input);
         var expected = """
                 create package pkg is
-                   function f (p1 in number) return integer;
+                   function f(p1 in number) return integer;
                 end pkg;
                 /
                 """;

@@ -162,7 +162,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                           a => a123456789 * b12345789 * c1234567
                          ,b => a123456789 * b12345789 * c1234567
                        );
-                       p2 (
+                       p2(
                           a123456789 * b12345789 * c1234567
                          ,a123456789 * b12345789 * c1234567
                        );
@@ -194,7 +194,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                 a => a123456789 * b12345789 * c1234567
                                ,b => a123456789 * b12345789 * c1234567
                              );
-                       l2 := f2 (
+                       l2 := f2(
                                 a123456789 * b12345789 * c1234567
                                ,a123456789 * b12345789 * c1234567
                              );
@@ -607,7 +607,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    create procedure p (
+                    create procedure p(
                        p1 in varchar2
                       ,p2 in date
                     ) is
@@ -635,7 +635,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    create function f (
+                    create function f(
                        p1 in varchar2
                       ,p2 in date
                     ) return boolean is
@@ -671,7 +671,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     create or replace type obj_type as object (
                        a integer
                       ,b varchar2(20)
-                      ,static function f (
+                      ,static function f(
                           p1 in varchar2
                          ,p2 in integer
                        ) return varchar2
@@ -707,7 +707,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     create or replace type body obj_type as
                                         
-                       static function f (
+                       static function f(
                           p1 in varchar2
                          ,p2 in integer
                        ) return varchar2 is
@@ -750,7 +750,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     create or replace package abc as
                        g_pkgname constant varchar2(32) := 'ABC';
                             
-                       procedure p (
+                       procedure p(
                           p1 in integer
                          ,p2 in varchar2
                        );
@@ -796,7 +796,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     create or replace package body abc as
                        g_pkgname constant varchar2(32) := 'ABC';
                             
-                       procedure p (
+                       procedure p(
                           p1 in integer
                          ,p2 in varchar2
                        ) is
