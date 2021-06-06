@@ -1185,6 +1185,22 @@ o3_whitespace_around_close_paren:
     }
 }
 
+-- based on issue #99, applied only with Format.Space.Default
+o3_no_space_before_open_paren:
+      [node) '('
+    & (
+          [node^) fml_part
+        | [node^) "(x,y,z)" & [node^^) function_expression
+        | [node^) paren_expr_list & [node^^) function_call
+      )
+-> {
+    if (spaceAroundBrackets == Format.Space.Default) {
+        var node = tuple.get("node");
+        struct.putNewline(node.from, "");
+        logger.fine(struct.getClass(), "o3_no_space_before_open_paren: at " + node.from);
+    }
+}
+
 -- --------------------------------------------------------------------------------------------------------------------
 -- R3: One command per line.
 -- R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
