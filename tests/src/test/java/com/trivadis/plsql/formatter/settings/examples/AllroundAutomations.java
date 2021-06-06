@@ -99,9 +99,9 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void insertdept() {
         var sql = """
                 create or replace procedure insertdept(
-                   p_deptno  in out  dept.deptno%type,
-                   p_dname   in      dept.dname%type,
-                   p_loc     in      dept.loc%type
+                   p_deptno in out dept.deptno%type,
+                   p_dname  in     dept.dname%type,
+                   p_loc    in     dept.loc%type
                 ) is
                 begin
                    -- Determine the maximum department number if necessary

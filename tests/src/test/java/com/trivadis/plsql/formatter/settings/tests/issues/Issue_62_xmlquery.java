@@ -10,8 +10,8 @@ public class Issue_62_xmlquery extends ConfiguredTestFormatter {
     public void xquery_commas_after() {
         var sql = """
                 create or replace function get_dep_cols(
-                   in_parse_tree  in  xmltype,
-                   in_column_pos  in  integer
+                   in_parse_tree in xmltype,
+                   in_column_pos in integer
                 ) return xmltype is
                    l_result xmltype;
                 begin
@@ -35,8 +35,8 @@ public class Issue_62_xmlquery extends ConfiguredTestFormatter {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 create or replace function get_dep_cols(
-                   in_parse_tree  in  xmltype
-                 , in_column_pos  in  integer
+                   in_parse_tree in xmltype
+                 , in_column_pos in integer
                 ) return xmltype is
                    l_result xmltype;
                 begin

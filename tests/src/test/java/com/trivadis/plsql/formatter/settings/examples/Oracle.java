@@ -12,11 +12,11 @@ public class Oracle extends ConfiguredTestFormatter {
                    tot_emps   number;
                    tot_depts  number;
                    function hire(
-                      last_name      in  varchar2,
-                      job_id         in  varchar2,
-                      manager_id     in  number,
-                      salary         in  number,
-                      department_id  in  number
+                      last_name     in varchar2,
+                      job_id        in varchar2,
+                      manager_id    in number,
+                      salary        in number,
+                      department_id in number
                    ) return number is
                       new_empno number(16, 0);
                    begin

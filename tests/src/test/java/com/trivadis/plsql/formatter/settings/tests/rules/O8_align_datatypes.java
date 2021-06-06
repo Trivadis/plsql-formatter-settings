@@ -271,7 +271,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                        function f(
                           p1111 in boolean,
                           p2 in out pls_integer,
-                          p333  date
+                          p333 date
                        ) return varchar2 is
                           l_1 integer default 3;
                           l_2222222 integer default 4;
