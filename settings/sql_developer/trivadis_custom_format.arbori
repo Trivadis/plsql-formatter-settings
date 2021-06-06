@@ -1037,12 +1037,18 @@ a7_insert_into:
     & [node^^) single_table_insert
 ;
 
+a7_parameter_parts:
+      [node) mode & [node^) prm_spec
+    | [node) prm_spec_unconstrained_type & [node^) prm_spec
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
     | a7_table_alias
     | a7_insert_all
     | a7_insert_into
+    | a7_parameter_parts
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
