@@ -251,6 +251,9 @@ define_global_variables:
     // get option for "White Space: Around operators"
     var spaceAroundOperators = struct.options.get("spaceAroundOperators");
 
+    // get option for "White Space: After commas"
+    var spaceAfterCommas = struct.options.get("spaceAfterCommas");
+
     // get option for "Whitespace: Around parenthesis"
     var spaceAroundBrackets = struct.options.get("spaceAroundBrackets");
 
@@ -1656,13 +1659,6 @@ o11_break_on_subqueries:
 --     "checked" enforces exactly one space after the comma
 --     "unchecked" enforces no space after a comma
 
-r5_get_prefs:
-    [runOnce) sql_statements
--> {
-    /* boolean true=space, false=no space */
-    var spaceAfterCommas = struct.options.get("spaceAfterCommas");
-}
-
 r5_commas:
     [node) ','
 -> {
@@ -1679,8 +1675,7 @@ r5_commas:
         if (spaceAfterCommas) {
            len = len - 1;
         }
-        var spaces = indent.length()-indent.lastIndexOf("\n")-1;
-        if (spaces > len) {
+        if (len > 0) {
             return indent.substring(0, len);
         } else {
             return indent;
