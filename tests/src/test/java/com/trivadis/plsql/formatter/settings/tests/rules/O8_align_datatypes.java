@@ -100,7 +100,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                        co_pkg_name constant varchar2(32) := 'ABC';
                        g_xyz integer;
                     
-                       procedure p (
+                       procedure p(
                           p1 in integer,
                           p222 in varchar2
                        ) is
@@ -141,13 +141,13 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                        co_pkg_name constant varchar2(32) := 'ABC';
                        g_xyz       integer;
                     
-                       procedure p (
+                       procedure p(
                           p1   in integer,
                           p222 in varchar2
                        ) is
                           l_var1234 integer;
                           l_var2    integer;
-                          procedure p2 (
+                          procedure p2(
                              p3333 in varchar2,
                              p44   in date
                           ) is
@@ -163,7 +163,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                              null;
                        end;
                     
-                       function f (
+                       function f(
                           p1111 in     boolean,
                           p2    in out pls_integer,
                           p333         date
@@ -246,13 +246,13 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                        co_pkg_name constant varchar2(32) := 'ABC';
                        g_xyz integer;
                     
-                       procedure p (
+                       procedure p(
                           p1 in integer,
                           p222 in varchar2
                        ) is
                           l_var1234 integer;
                           l_var2 integer;
-                          procedure p2 (
+                          procedure p2(
                              p3333 in varchar2,
                              p44 in date
                           ) is
@@ -268,7 +268,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                              null;
                        end;
                        
-                       function f (
+                       function f(
                           p1111 in boolean,
                           p2 in out pls_integer,
                           p333  date
