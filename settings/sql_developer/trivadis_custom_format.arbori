@@ -34,6 +34,7 @@
  *     - I2: Globals.
  *     - I3: Remove duplicate empty lines.
  *     - I4: Keep existing whitespace.
+ *     - I5: Remove duplicate spaces in scope.
  *
  * - Phase 2 - Processing section by section. The processing order is important.
  *     - A1: Do not use tabs.
@@ -685,6 +686,41 @@ keep_significant_whitespace_before_leaf_nodes:
                     + wsBefore.length() + " whitespace at " + (i-hiddenTokenCount));
             }
             wsBefore = "";
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I5: Remove duplicate spaces in scope.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- In scope are statements for which the left margin is calculated fully (see useFullLeftMargin in R2 section).
+-- Only spaces after the last new line character are considered. So, all line breaks are kept.
+
+remove_duplicate_spaces_in_scope:
+      [node) select
+    | [node) create_view
+    | [node) insert
+--    | [node) update
+--    | [node) delete
+--    | [node) merge
+--    | [node) block_stmt
+-> {
+    var node = tuple.get("node")
+    for (var i=node.from; i < node.to; i++) {
+        var indent = getIndent(i);
+        var nlpos = indent.lastIndexOf("\n");
+        if (nlpos == -1) {
+            if (indent.length > 1) {
+                struct.putNewline(i, " ");
+                logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: at " + i);
+            }
+        } else {
+            var spaces = indent.length - nlpos - 1;
+            if (spaces > 0) {
+                struct.putNewline(i, indent.substr(0, nlpos+1));
+                logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + i);
+            }
         }
     }
 }
