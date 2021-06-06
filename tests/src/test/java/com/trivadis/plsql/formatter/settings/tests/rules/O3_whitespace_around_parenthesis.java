@@ -30,7 +30,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select count (*)  from dual;
+                    select count (*) from dual;
                     """;
             assertEquals(expected, actual);
         }
@@ -46,7 +46,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
             var expected = """
                     select *
                       from t
-                     where c1 in  (1, 2, 3, 4, 5)  and 1 = 2;
+                     where c1 in (1, 2, 3, 4, 5) and 1 = 2;
                     """;
             assertEquals(expected, actual);
         }
@@ -64,9 +64,9 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
             var expected = """
                     select *
                       from t
-                     where c1 in  (
+                     where c1 in (
                               1, 2, 3, 4, 5
-                           )  and 1 = 2;
+                           ) and 1 = 2;
                     """;
             assertEquals(expected, actual);
         }
