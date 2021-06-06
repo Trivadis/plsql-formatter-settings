@@ -32,20 +32,20 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
         @Test
         public void with_newlines_before() throws IOException {
             var input = """
-                    select a
-                           +b
-                           -c
-                           *d
-                           /e
+                    select a1234567890
+                           +b1234567890
+                           -c1234567890
+                           *d1234567890
+                           /e1234567890
                       from dual;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select a
-                           + b
-                           - c
-                           * d
-                           / e
+                    select a1234567890
+                           + b1234567890
+                           - c1234567890
+                           * d1234567890
+                           / e1234567890
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -54,20 +54,20 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
         @Test
         public void with_newlines_after() throws IOException {
             var input = """
-                    select a+
-                           b-
-                           c*
-                           d/
-                           e
+                    select a1234567890+
+                           b1234567890-
+                           c1234567890*
+                           d1234567890/
+                           e1234567890
                       from dual;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select a +
-                           b -
-                           c *
-                           d /
-                           e
+                    select a1234567890 +
+                           b1234567890 -
+                           c1234567890 *
+                           d1234567890 /
+                           e1234567890
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -97,20 +97,20 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
         @Test
         public void with_newlines_before() throws IOException {
             var input = """
-                    select a
-                           + b
-                           - c
-                           * d
-                           / e
+                    select a1234567890
+                           + b1234567890
+                           - c1234567890
+                           * d1234567890
+                           / e1234567890
                       from dual;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select a
-                           +b
-                           -c
-                           *d
-                           /e
+                    select a1234567890
+                           +b1234567890
+                           -c1234567890
+                           *d1234567890
+                           /e1234567890
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -119,20 +119,20 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
         @Test
         public void with_newlines_after() throws IOException {
             var input = """
-                    select a +
-                           b -
-                           c *
-                           d /
-                           e
+                    select a1234567890 +
+                           b1234567890 -
+                           c1234567890 *
+                           d1234567890 /
+                           e1234567890
                       from dual;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select a+
-                           b-
-                           c*
-                           d/
-                           e
+                    select a1234567890+
+                           b1234567890-
+                           c1234567890*
+                           d1234567890/
+                           e1234567890
                       from dual;
                     """;
             assertEquals(expected, actual);
