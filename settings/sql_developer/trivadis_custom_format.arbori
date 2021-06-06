@@ -851,6 +851,7 @@ a13_calls:
     | [node) function_call & ![node^) dotted_expr
     | [node) function_expression
     | [node) dotted_name
+    | [node) column[4,12)
 ;
 
 a13_calls_with_assoc_args:
