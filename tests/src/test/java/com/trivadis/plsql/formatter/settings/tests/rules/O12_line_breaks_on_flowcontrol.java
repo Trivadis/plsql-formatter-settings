@@ -107,7 +107,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                  c
                               else
                                  d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -128,7 +129,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                  c
                               else
                                  d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -220,7 +222,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                               when 1 then b
                               when 2 then c
                               else d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -238,7 +241,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                               when a = 1 then b
                               when a = 2 then c
                               else d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -338,7 +342,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                               when 2
                               then c
                               else d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -358,7 +363,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                               when a = 2
                               then c
                               else d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -478,7 +484,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                  c
                               else
                                  d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);
@@ -503,7 +510,8 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                                  c
                               else
                                  d
-                           end, dummy
+                           end,
+                           dummy
                       from dual;
                     """;
             assertEquals(expected, actual);

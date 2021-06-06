@@ -33,13 +33,18 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
             // a subsequent formatter call will fix the missing indentations
             var expected = """
                     create or replace package pkg as
-                       procedure very_long_line(p_a_12345678901234567890 in integer, p_b_12345678901234567890 in integer, p_c_12345678901234567890
-                       in integer, p_d_12345678901234567890 in integer, p_e_12345678901234567890 in integer, p_f_12345678901234567890 in integer,
-                       p_g_12345678901234567890 in integer);
+                       procedure very_long_line(p_a_12345678901234567890 in integer,
+                                                p_b_12345678901234567890 in integer,
+                                                p_c_12345678901234567890 in integer,
+                                                p_d_12345678901234567890 in integer,
+                                                p_e_12345678901234567890 in integer,
+                                                p_f_12345678901234567890 in integer,
+                                                p_g_12345678901234567890 in integer);
                        procedure short_line(p_a in integer);
                     end;
                     /
                     """;
+            assertEquals(expected, actual);
         }
 
         @Test
@@ -120,8 +125,11 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                                  column1, column2, column3
                                , column4, column5
                               )
-                       select column1, column2, column3
-                            , column4, column5
+                       select column1
+                            , column2
+                            , column3
+                            , column4
+                            , column5
                          from dual;
                     end;
                     /
@@ -173,8 +181,11 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                                  column1, column2, column3,
                                  column4, column5
                               )
-                       select column1, column2, column3,
-                              column4, column5
+                       select column1,
+                              column2,
+                              column3,
+                              column4,
+                              column5
                          from dual;
                     end;
                     /

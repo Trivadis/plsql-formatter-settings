@@ -944,7 +944,8 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select a, sum(
+                    select a
+                          ,sum(
                               a123456789 * b12345789 * c123456789 * d123456789 * e123456789
                            ) as sum_of_a
                     from t

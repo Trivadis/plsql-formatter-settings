@@ -57,7 +57,8 @@ public class A12_line_breaks_before_then extends ConfiguredTestFormatter {
                              c
                           else
                              d
-                       end, dummy
+                       end,
+                       dummy
                   from dual;
                 """;
         var expected = """
@@ -70,7 +71,8 @@ public class A12_line_breaks_before_then extends ConfiguredTestFormatter {
                              c
                           else
                              d
-                       end, dummy
+                       end,
+                       dummy
                   from dual;
                 """;
         var actual = formatter.format(input);
