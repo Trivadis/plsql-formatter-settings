@@ -60,6 +60,7 @@
  *     - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
  *     - O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
  *     - O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
+ *     - A16: Line break if the parent element uses multiple lines.
  *     - R5: Commas in front of separated elements.
  *     - R2: 3 space indention.
  *     - R7: SQL keywords are right aligned within a SQL command.
@@ -1692,6 +1693,57 @@ o11_break_on_subqueries:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
+-- A16: Line break if the parent element uses multiple lines.
+-- --------------------------------------------------------------------------------------------------------------------
+
+r16_add_line_breaks_before_subquery_clause:
+      [parent) subquery
+    & (
+          [node) 'FROM'
+        | [node) 'WHERE'
+        | [node) 'CONNECT'
+        | [node) 'START'
+        | [node) 'GROUP'
+        | [node) 'HAVING'
+        | [node) 'ORDER'
+      )
+    & parent < node
+-> {
+    var parent = tuple.get("parent");
+    var node = tuple.get("node");
+    if (hasNewline(parent.to-1, parent.from+1)) {
+        if (!getIndent(node.from).contains("\n")) {
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "r16_add_line_breaks_before_subquery_clause: at " + node.from);
+        }
+    }
+}
+
+r16_add_line_breaks_before_select_term:
+      [parent) select_list
+    & [parent^) select_clause
+    & [node) select_term
+    & [comma) ','
+    & comma = node-1
+    & parent < node
+-> {
+    var parent = tuple.get("parent");
+    var node = tuple.get("node");
+    var comma = tuple.get("comma")
+    if (hasNewline(parent.to-1, parent.from+1)) {
+        if (!getIndent(node.from).contains("\n") && !getIndent(comma.from).contains("\n")) {
+            if (struct.breaksBeforeComma()) {
+                struct.putNewline(comma.from, System.lineSeparator());
+                logger.fine(struct.getClass(), "r16_add_line_breaks_before_select_term: at " + comma.from);
+            } else {
+                struct.putNewline(node.from, System.lineSeparator());
+                logger.fine(struct.getClass(), "r16_add_line_breaks_before_select_term: at " + node.from);
+            }
+        }
+    }
+ }
+
+-- --------------------------------------------------------------------------------------------------------------------
 -- R5: Commas in front of separated elements.
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -1967,28 +2019,6 @@ r2_remove_indentation_for_assignment:
             struct.putNewline(i, indent.substr(0, index));
             logger.fine(struct.getClass(), "r2_remove_indentation_for_assignment: at " + i);
         }
-    }
-}
-
--- if a select statement is written on several lines, then each clause should start on a new line
-r2_add_line_break:
-    [parent) subquery
-    & (
-            [node) 'FROM'
-          | [node) 'WHERE'
-          | [node) 'CONNECT'
-          | [node) 'START'
-          | [node) 'GROUP'
-          | [node) 'HAVING'
-          | [node) 'ORDER'
-      )
-    & parent < node
--> {
-    var parent = tuple.get("parent");
-    var node = tuple.get("node");
-    if (hasNewline(parent.to-1, parent.from+1)) {
-        struct.putNewline(node.from, System.lineSeparator());
-        logger.fine(struct.getClass(), "r2_add_line_break: at " + node.from);
     }
 }
 
