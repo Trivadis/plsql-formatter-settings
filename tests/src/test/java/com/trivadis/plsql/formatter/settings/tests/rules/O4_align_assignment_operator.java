@@ -134,7 +134,9 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create package pkg is
-                       function f(p1 in varchar2 := '1', p2 in date default sysdate, p3 in integer := 3) return integer;
+                       function f(p1 in varchar2 := '1',
+                                  p2 in date     default sysdate,
+                                  p3 in integer  := 3) return integer;
                     end;
                     /
                     """;
