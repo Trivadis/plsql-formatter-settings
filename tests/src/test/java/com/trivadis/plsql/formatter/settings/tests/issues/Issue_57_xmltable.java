@@ -15,10 +15,10 @@ public class Issue_57_xmltable extends ConfiguredTestFormatter {
                        xmltable(
                           '/XML/Header'
                           passing xmltype.createxml(stg.xml_payload)
-                          columns source        varchar2(50)     path 'Source',
-                                  action_type   varchar2(50)     path 'Action_Type',
-                                  message_type  varchar2(40)     path 'Message_Type',
-                                  company_id    number           path 'Company_ID'
+                          columns source       varchar2(50) path 'Source',
+                                  action_type  varchar2(50) path 'Action_Type',
+                                  message_type varchar2(40) path 'Message_Type',
+                                  company_id   number       path 'Company_ID'
                        ) hdr;
                 """;
         formatAndAssert(sql);
@@ -34,10 +34,10 @@ public class Issue_57_xmltable extends ConfiguredTestFormatter {
                      , xmltable(
                           '/XML/Header'
                           passing xmltype.createxml(stg.xml_payload)
-                          columns source        varchar2(50)     path 'Source'
-                                , action_type   varchar2(50)     path 'Action_Type'
-                                , message_type  varchar2(40)     path 'Message_Type'
-                                , company_id    number           path 'Company_ID'
+                          columns source       varchar2(50) path 'Source'
+                                , action_type  varchar2(50) path 'Action_Type'
+                                , message_type varchar2(40) path 'Message_Type'
+                                , company_id   number       path 'Company_ID'
                        ) hdr;
                 """;
         formatAndAssert(sql);

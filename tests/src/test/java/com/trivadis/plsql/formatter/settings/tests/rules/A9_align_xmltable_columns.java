@@ -32,10 +32,10 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                      , xmltable(
                           '/XML/Header'
                           passing xmltype.createxml(stg.xml_payload)
-                          columns source        varchar2(50)     path 'Source'
-                                , action_type   varchar2(50)     path 'Action_Type'
-                                , message_type  varchar2(40)     path 'Message_Type'
-                                , company_id    number           path 'Company_ID'
+                          columns source       varchar2(50) path 'Source'
+                                , action_type  varchar2(50) path 'Action_Type'
+                                , message_type varchar2(40) path 'Message_Type'
+                                , company_id   number       path 'Company_ID'
                        ) hdr;
                 """;
         assertEquals(expected, actual);
@@ -65,10 +65,10 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                        xmltable(
                           '/XML/Header'
                           passing xmltype.createxml(stg.xml_payload)
-                          columns source        varchar2(50)     path 'Source',
-                                  action_type   varchar2(50)     path 'Action_Type',
-                                  message_type  varchar2(40)     path 'Message_Type',
-                                  company_id    number           path 'Company_ID'
+                          columns source       varchar2(50) path 'Source',
+                                  action_type  varchar2(50) path 'Action_Type',
+                                  message_type varchar2(40) path 'Message_Type',
+                                  company_id   number       path 'Company_ID'
                        ) hdr;
                 """;
         assertEquals(expected, actual);
@@ -92,10 +92,10 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                   from stg, xmltable(
                           '/XML/Header'
                           passing xmltype.createxml(stg.xml_payload)
-                          columns source        varchar2(50)     path 'Source',
-                                  action_type   varchar2(50)     path 'Action_Type',
-                                  message_type  varchar2(40)     path 'Message_Type',
-                                  company_id    number           path 'Company_ID'
+                          columns source       varchar2(50) path 'Source',
+                                  action_type  varchar2(50) path 'Action_Type',
+                                  message_type varchar2(40) path 'Message_Type',
+                                  company_id   number       path 'Company_ID'
                        ) hdr;
                 """;
         assertEquals(expected, actual);
