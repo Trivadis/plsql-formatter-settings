@@ -2318,6 +2318,7 @@ r7_select:
         | [keyword) 'UNIQUE'
         | [keyword) 'ALL'
         | [keyword) 'BULK'
+        | [keyword) 'COLLECT'
         | [keyword) 'INTO'
         | [keyword) 'FROM'
         | [keyword) 'INNER'
