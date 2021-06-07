@@ -1719,13 +1719,45 @@ r16_add_line_breaks_before_subquery_clause:
     }
 }
 
-r16_add_line_breaks_before_select_term:
+r16_select_term:
       [parent) select_list
     & [parent^) select_clause
     & [node) select_term
     & [comma) ','
     & comma = node-1
     & parent < node
+;
+
+r16_name_list:
+      [parent) name_list
+    & [parent^) into_list
+    & [node) name
+    & [comma) ','
+    & comma = node-1
+    & parent < node
+;
+
+r16_group_by_col:
+      [parent) group_by_list
+    & [node) group_by_col
+    & [comma) ','
+    & comma = node-1
+    & parent < node
+;
+
+r16_order_by_1desc:
+      [parent) order_by_clause
+    & [node) "ord_by_1desc"
+    & [comma) ','
+    & comma = node-1
+    & parent < node
+;
+
+r16_add_line_breaks_before:
+      r16_select_term
+    | r16_name_list
+    | r16_group_by_col
+    | r16_order_by_1desc
 -> {
     var parent = tuple.get("parent");
     var node = tuple.get("node");
@@ -1734,14 +1766,14 @@ r16_add_line_breaks_before_select_term:
         if (!getIndent(node.from).contains("\n") && !getIndent(comma.from).contains("\n")) {
             if (struct.breaksBeforeComma()) {
                 struct.putNewline(comma.from, System.lineSeparator());
-                logger.fine(struct.getClass(), "r16_add_line_breaks_before_select_term: at " + comma.from);
+                logger.fine(struct.getClass(), "r16_add_line_breaks_before: comma at " + comma.from);
             } else {
                 struct.putNewline(node.from, System.lineSeparator());
-                logger.fine(struct.getClass(), "r16_add_line_breaks_before_select_term: at " + node.from);
+                logger.fine(struct.getClass(), "r16_add_line_breaks_before: node at " + node.from);
             }
         }
     }
- }
+}
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- R5: Commas in front of separated elements.
