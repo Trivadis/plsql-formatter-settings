@@ -56,21 +56,23 @@ var configure = function (formatter, xmlPath, arboriPath) {
             formatter.options.put(keySet[j], options.get(keySet[j]));
         }
     } else if ("embedded".equals(xmlPath)) {
-        // General
-        formatter.options.put(formatter.kwCase, javaFormat.Case.UPPER);                                     // default: javaFormat.Case.UPPER
+        // Code Editor: Format
+        formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
+        // Advanced Format: General
+        formatter.options.put(formatter.kwCase, javaFormat.Case.lower);                                     // default: javaFormat.Case.UPPER
         formatter.options.put(formatter.idCase, javaFormat.Case.NoCaseChange);                              // default: javaFormat.Case.lower
         formatter.options.put(formatter.singleLineComments, javaFormat.InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
-        // Alignment
+        // Advanced Format: Alignment
         formatter.options.put(formatter.alignTabColAliases, false);                                         // default: true
         formatter.options.put(formatter.alignTypeDecl, true);                                               // default: true
         formatter.options.put(formatter.alignNamedArgs, true);                                              // default: true
         formatter.options.put(formatter.alignAssignments, true);                                            // default: false
         formatter.options.put(formatter.alignEquality, false);                                              // default: false
         formatter.options.put(formatter.alignRight, true);                                                  // default: false
-        // Indentation
+        // Advanced Format: Indentation
         formatter.options.put(formatter.identSpaces, 3);                                                    // default: 3
         formatter.options.put(formatter.useTab, false);                                                     // default: false
-        // Line Breaks
+        // Advanced Format: Line Breaks
         formatter.options.put(formatter.breaksComma, javaFormat.Breaks.After);                              // default: javaFormat.Breaks.After
         formatter.options.put("commasPerLine", 1);                                                          // default: 5
         formatter.options.put(formatter.breaksConcat, javaFormat.Breaks.Before);                            // default: javaFormat.Breaks.Before
@@ -83,13 +85,12 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat.BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
         formatter.options.put(formatter.breaksAfterSelect, false);                                          // default: true
         formatter.options.put(formatter.flowControl, javaFormat.FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
-        // White Space
+        // Advanced Format: White Space
         formatter.options.put(formatter.spaceAroundOperators, true);                                        // default: true
         formatter.options.put(formatter.spaceAfterCommas, true);                                            // default: true
         formatter.options.put(formatter.spaceAroundBrackets, javaFormat.Space.Default);                     // default: javaFormat.Space.Default
-        // Hidden, not configurable in the GUI preferences dialog of SQLDev 20.2
+        // Advanced Format: Hidden, not configurable in the GUI preferences dialog of SQLDev 20.4.1
         formatter.options.put(formatter.breaksProcArgs, false);                                             // default: false (overridden in Arbori program based on other settings)
-        formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
         formatter.options.put(formatter.formatThreshold, 1);                                                // default: 1 (disables deprecated post-processing logic)
     }
     var arboriFileName = arboriPath;
