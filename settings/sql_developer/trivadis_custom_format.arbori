@@ -736,13 +736,13 @@ remove_duplicate_spaces_in_scope:
             if (nlpos == -1) {
                 if (indent.length > 1) {
                     struct.putNewline(pos, " ");
-                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + i);
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + pos);
                 }
             } else {
                 var spaces = indent.length - nlpos - 1;
                 if (spaces > 0) {
                     struct.putNewline(pos, indent.substr(0, nlpos+1));
-                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + i);
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + pos);
                 }
             }
         }
