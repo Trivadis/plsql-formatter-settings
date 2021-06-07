@@ -4,11 +4,10 @@
 
 This repository provides formatter settings for the [coding style rules](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.0/3-coding-style/coding-style/#rules) of the Trivadis PL/SQL & SQL Coding Guidelines.
 
-Settings are provided for
+Settings are primarily provided for
 
 - [Oracle SQLcl, Version 21.1.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
 - [Oracle SQL Developer, Version 20.4.1](https://www.oracle.com/database/technologies/appdev/sql-developer.html)
-- [Allround Automations PL/SQL Developer, Version 14.0.5](https://www.allroundautomations.com/products/pl-sql-developer/)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
@@ -46,22 +45,6 @@ See [sqlcl/README.md](sqlcl/README.md).
 10. Press `Open`
 11. Press `OK` to save the settings
 
-### PL/SQL Developer
-
-1. Start PL/SQL Developer
-2. Open `Preferences`
-3. Select `User interface` -> `PL/SQL Beautifier`
-4. Press `Edit...`
-5. Press `Open...`
-   ![PL/SQL Beautifier](images/plsql_beautifier.png)
-6. Select [`trivadis_beautifier.br`](settings/plsql_developer/trivadis_beautifier.br)
-7. Press `Open`
-8. Press `Save as...`
-9. Select a permanent location for these settings and press `Save` 
-10. Press `Close`
-11. Select the rule file you've saved previoulsy.
-12. Press `OK`
-
 ## Arbori
 
 SQL Developer uses its own parse tree query language called Arbori for its advanced formatter configuration. Here is some additional information that might be useful if you plan to tweak the behavior of the formatter yourself.
@@ -91,6 +74,18 @@ Variable | Type                                             | JAR File
 `target` | oracle.dbtools.parser.Parsed                     | dbtools-common.jar 
 `tuple`  | HashMap<String, oracle.dbtools.parser.ParseNode> | dbtools-common.jar
 `logger` | oracle.dbtools.util.Logger                       | dbtools-common.jar
+
+## Settings for other Products
+
+Formatter settings are also provided for the following products:
+
+Product | Version | Directory
+------- | ------- | ---------
+[Allround Automations PL/SQL Developer](https://www.allroundautomations.com/products/pl-sql-developer/) | 14.0.6 | [settings/plsql_developer](settings/plsql_developer)
+[JetBrains DataGrip](https://www.jetbrains.com/datagrip/) | 2021.1 | [settings/datagrip](settings/datagrip)
+[Quest Toad for Oracle](https://www.quest.com/products/toad-for-oracle/) | 14.1 | [settings/toad](settings/toad)
+
+Please refer to the vendor's documentation for instructions on how to import these settings.
 
 ## Issues
 Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).
