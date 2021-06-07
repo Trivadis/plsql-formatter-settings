@@ -522,6 +522,32 @@ define_global_functions:
             }
         }
     }
+
+    /* returns true if the node is part of a statement that should be fully formatted */
+    /* subquery could be added to handle select statements that do not end on semicolon.
+     * However, this will have an impact on other statements with subqueries. */
+    var overrideIndents = function(nodeFrom) {
+        return hasParentOfType(nodeFrom, [
+           "select",
+           "create_view",
+           "insert"
+           /*, "update", "delete", "merge", "block_stmt"*/
+        ]);
+    }
+
+    /* returns true if a the node or an ancestors has one of the provided symbols */
+    var hasParentOfType = function(nodeFrom, symbols) {
+        var node = target.root.leafAtPos(nodeFrom);
+        while (node != null) {
+            for (var i=0; i < symbols.length; i++) {
+                if (node.contains(symbols[i])) {
+                    return true;
+                }
+            }
+            node = node.parent();
+        }
+        return false;
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -695,32 +721,29 @@ keep_significant_whitespace_before_leaf_nodes:
 -- I5: Remove duplicate spaces in scope.
 -- --------------------------------------------------------------------------------------------------------------------
 
--- In scope are statements for which the left margin is calculated fully (see useFullLeftMargin in R2 section).
+-- In scope are statements for that are formatted fully (see overrideIndents).
 -- Only spaces after the last new line character are considered. So, all line breaks are kept.
 
 remove_duplicate_spaces_in_scope:
-      [node) select
-    | [node) create_view
-    | [node) insert
---    | [node) update
---    | [node) delete
---    | [node) merge
---    | [node) block_stmt
+    [runOnce) sql_statements
 -> {
-    var node = tuple.get("node")
-    for (var i=node.from; i < node.to; i++) {
-        var indent = getIndent(i);
-        var nlpos = indent.lastIndexOf("\n");
-        if (nlpos == -1) {
-            if (indent.length > 1) {
-                struct.putNewline(i, " ");
-                logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: at " + i);
-            }
-        } else {
-            var spaces = indent.length - nlpos - 1;
-            if (spaces > 0) {
-                struct.putNewline(i, indent.substr(0, nlpos+1));
-                logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + i);
+    var it = newlinePositions.keySet().iterator();
+    while (it.hasNext()) {
+        var pos = it.next();
+        if (overrideIndents(pos)) {
+            var indent = getIndent(pos);
+            var nlpos = indent.lastIndexOf("\n");
+            if (nlpos == -1) {
+                if (indent.length > 1) {
+                    struct.putNewline(pos, " ");
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + i);
+                }
+            } else {
+                var spaces = indent.length - nlpos - 1;
+                if (spaces > 0) {
+                    struct.putNewline(pos, indent.substr(0, nlpos+1));
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + i);
+                }
             }
         }
     }
@@ -1990,30 +2013,6 @@ r2_init_left_margin:
         return spaces;
     }
 
-    /* Use the calculated left margin for this node? */
-    var useFullLeftMargin = function(nodeFrom) {
-        return hasParentOfType(nodeFrom, [
-           "select",
-           "create_view",
-           "insert"
-           /*, "update", "delete", "merge", "block_stmt"*/
-        ]);
-    }
-
-    /* returns true if a the node or an ancestors has one of the provided symbols */
-    var hasParentOfType = function(nodeFrom, symbols) {
-        var node = target.root.leafAtPos(nodeFrom);
-        while (node != null) {
-            for (var i=0; i < symbols.length; i++) {
-                if (node.contains(symbols[i])) {
-                    return true;
-                }
-            }
-            node = node.parent();
-        }
-        return false;
-    }
-
     /* returns true, if the node is in parenthesis */
     var isInParen = function(node) {
         if (target.src.get(node.from).content == '(') {
@@ -2272,7 +2271,7 @@ r2_indent_nodes:
                 }
             }
         }
-        if (useFullLeftMargin(key)) {
+        if (overrideIndents(key)) {
             struct.putNewline(key, value.substr(0, value.lastIndexOf("\n")+1) + getSpaces(margin-comma));
             logger.fine(struct.getClass(), "r2_indent_nodes: set calculated margin of " + (margin-comma) + " spaces at " + key);
         } else {
