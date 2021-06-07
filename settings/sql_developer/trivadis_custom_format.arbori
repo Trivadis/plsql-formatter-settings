@@ -46,6 +46,7 @@
  *     - A6: No space after node.
  *     - A7: One space before node.
  *     - A8: One space after node.
+ *     - A17: Whitespace around node.
  *     - A15: Line break before node.
  *     - A14: Line break after node.
  *     - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
@@ -1171,6 +1172,28 @@ a8_one_space_after:
         struct.putNewline(node.to, " ");
         var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to);
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A17: Whitespace around node.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Ensures that a node is surrounded with at least one whitespace.
+-- This is different To A7 and A8 because it keeps existing new lines.
+
+a17_whitespace_around_node:
+      [node) 'AND'
+    | [node) 'OR'
+-> {
+    var node = tuple.get("node");
+    if (getIndent(node.from).length == 0) {
+        struct.putNewline(node.from, " ");
+        logger.fine(struct.getClass(), "a17_whitespace_around_node: before at " + node.from);
+    }
+    if (getIndent(node.to).length == 0) {
+        struct.putNewline(node.to, " ");
+        logger.fine(struct.getClass(), "a17_whitespace_around_node: after at " + node.to);
     }
 }
 
