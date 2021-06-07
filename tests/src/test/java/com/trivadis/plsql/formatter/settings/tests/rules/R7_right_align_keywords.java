@@ -267,7 +267,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                       from t
                      where a = 2
                        and (b = 3
-                           or c = 4);
+                              or c = 4);
                     """;
             assertEquals(expected, actual);
         }
