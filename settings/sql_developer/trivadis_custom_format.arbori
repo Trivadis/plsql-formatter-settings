@@ -985,6 +985,14 @@ a5_slash:
    & [node) '/'
 ;
 
+a5_open_paren_before_datatype:
+      [node) '('
+    & (
+          [node^) datatype
+        | [node^^) datatype
+      )
+;
+
 a5_no_space_before:
       a5_semicolon
     | a5_dot
@@ -999,6 +1007,7 @@ a5_no_space_before:
     | a5_percent
     | a5_at
     | a5_slash
+    | a5_open_paren_before_datatype
 -> {
     var node = tuple.get("node");
     var content = target.src.get(node.from).content;
