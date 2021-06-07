@@ -20,11 +20,6 @@ public class FormatTest extends AbstractFormatTest {
     }
 
     @Test
-    public void process_with_original_arbori() {
-        process_with_original_arbori(RunType.FormatJS);
-    }
-
-    @Test
     public void process_with_default_arbori() {
         process_with_default_arbori(RunType.FormatJS);
     }

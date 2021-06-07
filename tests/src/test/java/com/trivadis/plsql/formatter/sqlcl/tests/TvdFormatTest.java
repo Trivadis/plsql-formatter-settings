@@ -57,11 +57,6 @@ public class TvdFormatTest extends AbstractFormatTest {
     }
 
     @Test
-    public void process_with_original_arbori() {
-        process_with_original_arbori(RunType.TvdFormatCommand);
-    }
-
-    @Test
     public void process_with_default_arbori() {
         process_with_default_arbori(RunType.TvdFormatCommand);
     }

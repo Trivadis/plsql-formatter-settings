@@ -118,63 +118,6 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
     }
 
-    public void process_with_original_arbori(final RunType runType) {
-        // run
-        var actual = run(runType, tempDir.toString(), "arbori=" +
-                Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("original/20.3.0/custom_format.arbori")).getPath());
-        Assertions.assertTrue(actual.contains("package_body.pkb"));
-        Assertions.assertTrue(actual.contains("query.sql"));
-
-        // package_body.pkb
-        var expectedPackageBody = """
-                create or replace package body the_api.math as function to_int_table (
-                      in_integers  in  varchar2,
-                      in_pattern   in  varchar2 default '[0-9]+'
-                   ) return sys.ora_mining_number_nt
-                      deterministic
-                      accessible by ( package the_api.math, package the_api.test_math )
-                   is l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     integer := 1;
-                      l_int     integer;
-                   begin
-                      << integer_tokens >> loop
-                         l_int               := to_number(regexp_substr(
-                                                         in_integers,
-                                                         in_pattern,
-                                                         1,
-                                                         l_pos
-                                            ));
-                         exit integer_tokens when l_int is null;
-                         l_result.extend;
-                         l_result(l_pos)     := l_int;
-                         l_pos               := l_pos + 1;
-                      end loop integer_tokens;return l_result;
-                   end to_int_table;end math;
-                /
-                """.trim();
-        var actualPackageBody = getFormattedContent("package_body.pkb");
-        Assertions.assertEquals(expectedPackageBody, actualPackageBody);
-
-        // query.sql
-        var expectedQuery = """
-                select d.department_name,
-                       v.employee_id,
-                       v.last_name
-                  from departments d cross apply (
-                   select *
-                     from employees e
-                    where e.department_id = d.department_id
-                ) v
-                 where d.department_name in ( 'Marketing',
-                                              'Operations',
-                                              'Public Relations' )
-                 order by d.department_name,
-                          v.employee_id;
-                """.trim();
-        var actualQuery = getFormattedContent("query.sql");
-        Assertions.assertEquals(expectedQuery, actualQuery);
-    }
-
     public void process_with_default_arbori(final RunType runType) {
         // run
         var actual = run(runType, tempDir.toString(), "arbori=default");
