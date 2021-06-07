@@ -271,7 +271,7 @@ define_global_functions:
     [runOnce) sql_statements
 -> {
     /* return a string with the requested number of spaces */
-    function getSpaces(numberOfSpaces) {
+    var getSpaces = function(numberOfSpaces) {
         var result = "";
         for (var i=0; i<numberOfSpaces; i++) {
             result += " ";
@@ -280,7 +280,7 @@ define_global_functions:
     }
 
     /* return the indentation at a node position, converts the default null to a single space */
-    function getIndent(nodeFrom) {
+    var getIndent = function(nodeFrom) {
         /* map is based on Integer, therefore nodeFrom must be converted to an Integer */
         var indent = newlinePositions.get(Integer.valueOf(nodeFrom));
         if (indent == null) {
@@ -290,7 +290,7 @@ define_global_functions:
     }
 
     /* returns the indentation without leading new lines from a string */
-    function getNumCharsAfterNewLine(indent) {
+    var getNumCharsAfterNewLine = function(indent) {
         if (indent.contains("\n")) {
             return indent.length() - indent.lastIndexOf("\n") - 1;
         }
@@ -298,7 +298,7 @@ define_global_functions:
     }
 
     /* returns the leading new lines from a node position (without trailing spaces) */
-    function getLeadingNewLines(nodeFrom) {
+    var getLeadingNewLines = function(nodeFrom) {
         var startPos=nodeFrom;
         var indent = getIndent(startPos);
         if (indent.contains("\n")) {
@@ -308,7 +308,7 @@ define_global_functions:
     }
 
     /* returns the column of a node position, considers all preceding nodes */
-    function getColumn(nodeFrom) {
+    var getColumn = function(nodeFrom) {
         var startPos=nodeFrom;
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
@@ -321,7 +321,7 @@ define_global_functions:
     }
 
     /* same as getColumn, but does not contain the very first indentation */
-    function getColumnWithoutFirstIndent(nodeFrom) {
+    var getColumnWithoutFirstIndent = function(nodeFrom) {
         var startPos=nodeFrom;
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
@@ -336,7 +336,7 @@ define_global_functions:
     }
 
     /* returns true if a node or one of its children contains an indentation with a new line character */
-    function containsLineBreak(node) {
+    var containsLineBreak = function(node) {
         for (var i = node.from; i < node.to; i++) {
             var value = getIndent(i);
             if (value.contains("\n")) {
@@ -346,7 +346,7 @@ define_global_functions:
     }
 
     /* returns true if single-line or multi-line comments exists between two node positions */
-    function hasCommentsBetweenPos(startPos, endPos) {
+    var hasCommentsBetweenPos = function(startPos, endPos) {
         /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
         tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
         tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
@@ -360,7 +360,7 @@ define_global_functions:
     }
 
     /* returns the the last comment (sl or ml) between two node positions */
-    function getLastCommentBetweenPos(startPos, endPos) {
+    var getLastCommentBetweenPos = function(startPos, endPos) {
         var comment = "";
         /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
         tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
@@ -388,7 +388,7 @@ define_global_functions:
     }
 
     /* adds a tuple to a map indexed by scope */
-    var addTupleToMap = function (tuple, scopeNodeName, map) {
+    var addTupleToMap = function(tuple, scopeNodeName, map) {
         var scope = tuple.get(scopeNodeName);
         var list = map.get(scope);
         if (list == null) {
@@ -2674,7 +2674,7 @@ o5_declarations:
         return false;
     }
 
-    var tableReferenceOnNewline = function (node) {
+    var tableReferenceOnNewline = function(node) {
         var n = target.root.leafAtPos(node.from - 1);
         do {
             n = target.root.leafAtPos(n.from - 1);
