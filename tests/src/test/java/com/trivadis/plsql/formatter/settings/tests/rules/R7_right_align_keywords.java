@@ -466,7 +466,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         }
 
         @Test
-        public void update() throws IOException {
+        public void update_table() throws IOException {
             var input = """
                     update employees
                     set job_id = 'SA_MAN'
@@ -486,6 +486,35 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void update_table_return() throws IOException {
+            var input = """
+                    update t
+                    set c1 = 1,
+                    c2 = 2,
+                    c3 = 3
+                    where 1=1
+                    return c1, c2
+                    into l1, l2
+                    log errors into error_table
+                    reject limit 10;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    update t
+                       set c1 = 1,
+                           c2 = 2,
+                           c3 = 3
+                     where 1 = 1
+                    return c1, c2
+                      into l1, l2
+                       log errors into error_table
+                    reject limit 10;
+                    """;
+            assertEquals(expected, actual);
+        }
+
     }
 
     @Nested
