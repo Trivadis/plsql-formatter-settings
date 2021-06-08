@@ -18,6 +18,46 @@
 -- Phase 2 - Processing section by section. (trivadis_custom_format_phase2.arbori).
 -- ====================================================================================================================
 
+-- Sections:
+-- - A1: Do not use tabs.
+-- - A2: Remove trailing spaces.
+-- - A3: Do not format code between @formatter:off and @formatter:on comments.
+-- - O2: White Space: Around operators. Options: true; false. (spaceAroundOperators).
+-- - A13: Keep short nodes on the same line.
+-- - A5: No space before node.
+-- - A6: No space after node.
+-- - A7: One space before node.
+-- - A8: One space after node.
+-- - A17: Whitespace around node.
+-- - A15: Line break before node.
+-- - A14: Line break after node.
+-- - O3: White Space: Around parenthesis. Options: Default; Inside; Outside; No space. (spaceAroundBrackets).
+-- - R3: One command per line & R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
+-- - O6: Line Breaks: SELECT/FROM/WHERE. Options: true; false. (breaksAfterSelect).
+-- - O9: Line Breaks: On Boolean connectors. Options: Before&After; Before; After; No Breaks.
+--       (breaksAroundLogicalConjunctions).
+-- - A12: Line breaks before THEN after multiline conditions.
+-- - O12: Line Breaks: IF/CASE/WHILE. Options: Indented Actions, Inlined Conditions;
+--        Terse (line breaks only after actions); Line breaks after Conditions and Actions;
+--        Indented Conditions and Actions. (flowControl).
+-- - O1: Line Breaks: On concatenation. Options: Before; After; No Breaks. (breaksConcat).
+-- - O10: Line Breaks: On ANSI joins. Options: true; false. (breakAnsiiJoin).
+-- - O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
+-- - A16: Line break if the parent element uses multiple lines.
+-- - R5: Commas in front of separated elements.
+-- - R2: 3 space indention.
+-- - R7: SQL keywords are right aligned within a SQL command.
+-- - A11: Align parameter names.
+-- - A10: Align parameter modes.
+-- - O8: Alignment: Type Declarations. Options: true; false. (alignTypeDecl).
+-- - O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
+-- - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
+-- - O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
+-- - R6: Call parameters aligned, operators aligned, values aligned.
+-- - A9: Align xmltable columns.
+-- - A4: Split long lines.
+-- - D2: Log time spent in this program.
+
 -- --------------------------------------------------------------------------------------------------------------------
 -- A1: Do not use tabs.
 -- --------------------------------------------------------------------------------------------------------------------

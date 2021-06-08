@@ -18,6 +18,13 @@
 -- Phase 1 - Initialization and pre-processing. (trivadis_custom_format_phase1.arbori).
 -- ====================================================================================================================
 
+-- Sections:
+-- - D1: Initialize timer.
+-- - I2: Globals.
+-- - I3: Remove duplicate empty lines.
+-- - I4: Keep existing whitespace.
+-- - I5: Remove duplicate spaces in scope.
+
 -- --------------------------------------------------------------------------------------------------------------------
 -- D1: Initialize timer.
 -- --------------------------------------------------------------------------------------------------------------------
