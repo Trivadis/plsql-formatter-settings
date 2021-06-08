@@ -17,7 +17,7 @@
 include "std.arbori"
 
 -- ====================================================================================================================
--- Phase 2 - Processing section by section. (trivadis_custom_format_phase2.arbori).
+-- Phase 2 - Apply rules. (trivadis_custom_format_phase2.arbori).
 -- ====================================================================================================================
 
 -- Sections:

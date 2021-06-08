@@ -22,10 +22,12 @@ include "std.arbori"
 
 -- Sections:
 -- - D1: Initialize timer.
--- - I2: Globals.
--- - I3: Remove duplicate empty lines.
--- - I4: Keep existing whitespace.
--- - I5: Remove duplicate spaces in scope.
+-- - I3: Don't format nodes.
+-- - I4: Identifiers.
+-- - I5: Globals.
+-- - I6: Remove duplicate empty lines.
+-- - I7: Keep existing whitespace.
+-- - I8: Remove duplicate spaces in scope.
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- D1: Initialize timer.
@@ -38,7 +40,40 @@ startCustomFormat:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I2: Globals.
+-- I3: Don't format node
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
+dontFormatNode:
+    [node) numeric_literal
+->
+;
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I4: Identifiers
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- analytic functions, to be treated as keywords
+"analytics":
+      [identifier) identifier
+    & [call) analytic_function
+    & [call = [identifier
+;
+
+-- all identifiers
+"ids":
+    [identifier) identifier
+;
+
+-- Callback function to reduce the list of keywords by the identifiers provided here
+-- This is relevant for general options "Keyword case" and "Indentifier case".
+identifiers:
+    "ids" - "analytics"
+->
+;
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I5: Globals.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- Global variables, which are likely to be used in more than one Arbori query/action
@@ -400,7 +435,7 @@ define_global_functions:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I3: Remove duplicate empty lines.
+-- I6: Remove duplicate empty lines.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- Replace multiple, consecutive empty lines with one empty line.
@@ -527,7 +562,7 @@ max_one_empty_line:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I4: Keep existing whitespace.
+-- I7: Keep existing whitespace.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- add explicit whitespace before each leaf node, if the whitespace before is not a single space (default)
@@ -567,7 +602,7 @@ keep_significant_whitespace_before_leaf_nodes:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I5: Remove duplicate spaces in scope.
+-- I8: Remove duplicate spaces in scope.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- In scope are statements for that are formatted fully (see overrideIndents).

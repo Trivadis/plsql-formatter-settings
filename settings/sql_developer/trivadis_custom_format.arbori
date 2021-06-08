@@ -30,9 +30,9 @@ include "std.arbori"
  *
  * The following phases and sections are defined:
  *
- * - Phase 0 - Main Configuration. (trivadis_custom_format.arbori).
+ * - Phase 0 - Main program with minimal configuration. (trivadis_custom_format.arbori).
  * - Phase 1 - Initialization and preprocessing. (trivadis_custom_format_phase1.arbori).
- * - Phase 2 - Processing section by section. The processing order is important. (trivadis_custom_format_phase2.arbori).
+ * - Phase 2 - Apply rules. (trivadis_custom_format_phase2.arbori).
  *
  * The start of a phase is visualized by a comment series like this
  *
@@ -97,58 +97,18 @@ include "std.arbori"
 -- ====================================================================================================================
 
 -- Sections:
--- - I1: Minimal Arbori program (expected by the formatter).
--- - I7: Include Arbori programs.
+-- - I1: Include custom Arbori programs.
+-- - I2: Minimal Arbori program (expected by the formatter).
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I1: Minimal Arbori program (expected by the formatter).
+-- I1: Include custom Arbori programs.
 -- --------------------------------------------------------------------------------------------------------------------
 
--- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
-dontFormatNode:
-    [node) numeric_literal
-->
-;
-
--- ":indentCondtions" must be used, otherwise the Arbori program will be considered invalid and the default is used.
--- This rule is never called, hence it does not matter what node is selected.
--- However, I chose to use "identifier" to avoid an Arbori warning.
-dummy:
-    :indentConditions & [node) identifier
-;
-
--- "skipWhitespaceBeforeNode" must be defined, otherwise the Arbori program will be considered invalid and the default is used.
-skipWhiteSpaceBeforeNode:
-  runOnce
--> {
-    var doNotCallCallbackFunction;
-}
-
--- analytic functions, to be treated as keywords
-"analytics":
-      [identifier) identifier
-    & [call) analytic_function
-    & [call = [identifier
-;
-
--- all identifiers
-"ids":
-    [identifier) identifier
-;
-
--- Callback function to reduce the list of keywords by the identifiers provided here
-identifiers:
-    "ids" - "analytics"
-->
-;
-
--- --------------------------------------------------------------------------------------------------------------------
--- I6: Include Arbori programs.
--- --------------------------------------------------------------------------------------------------------------------
-
--- Arbori program is too large for a single file.
--- Using include file is mandatory for SQLDev 20.4.1.
+-- The Arbori program is too large for a single file in SQLDev 20.4.1.
+-- With include files an unlimited number of Arbori queries can be processed.
 -- Include files are executed first, regardless of the position of the include directive in the Arbori program.
+-- However, the order of the include files is relevant.
+-- "std.arbori" is provided by SQLDev/SQLcl and is included in every file, mainly to reuse the runOnce query.
 
 -- The system property dbtools.arbori.home determines the root directory for relative path names.
 -- This property is set in the test environment and in format.js.
@@ -156,3 +116,23 @@ identifiers:
 
 include "trivadis_custom_format_phase1.arbori"
 include "trivadis_custom_format_phase2.arbori"
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I2: Minimal Arbori program (expected by the formatter).
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- ":indentCondtions" must be used,
+-- otherwise the Arbori program will be considered invalid and the default is used.
+-- The Arbori query "dummy" never called, hence it does not matter what node is selected.
+-- However, I chose to use "identifier" to avoid an Arbori warning.
+dummy:
+    :indentConditions & [node) identifier
+;
+
+-- "skipWhitespaceBeforeNode" must be defined,
+-- otherwise the Arbori program will be considered invalid and the default is used.
+skipWhiteSpaceBeforeNode:
+  runOnce
+-> {
+    var doNotCallCallbackFunction;
+}
