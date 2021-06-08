@@ -29,6 +29,7 @@ var javaFormat = Java.type("oracle.dbtools.app.Format");
 var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
+var javaSystem = Java.type("java.lang.System");
 var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
 var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
 
@@ -101,6 +102,11 @@ var configure = function (formatter, xmlPath, arboriPath) {
 }
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
+    // set relative path for include directive in Arbori program to the directory of the main Arbori program
+    if (arboriPath != "default") {
+        javaSystem.setProperty("dbtools.arbori.home", new javaFile(arboriPath).getParentFile().getAbsolutePath());
+    }
+    // now instantiate and configure the formatter
     var formatter = new javaFormat();
     configure(formatter, xmlPath, arboriPath);
     return formatter;
