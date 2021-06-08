@@ -1,0 +1,590 @@
+/*
+ * Copyright 2021 Philipp Salvisberg <philipp.salvisberg@trivadis.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+-- ====================================================================================================================
+-- Phase 1 - Initialization and pre-processing. (trivadis_custom_format_phase1.arbori).
+-- ====================================================================================================================
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- D1: Initialize timer.
+-- --------------------------------------------------------------------------------------------------------------------
+
+startCustomFormat:
+    [runOnce) sql_statements
+-> {
+    var startTime = (new Date()).getTime();
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I2: Globals.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Global variables, which are likely to be used in more than one Arbori query/action
+define_global_variables:
+    [runOnce) sql_statements
+-> {
+    // Java classes
+    var ArrayList = Java.type('java.util.ArrayList');
+    var Format = Java.type('oracle.dbtools.app.Format');
+    var HashMap = Java.type('java.util.HashMap');
+    var HashSet = Java.type('java.util.HashSet');
+    var Integer = Java.type('java.lang.Integer');
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
+    var logger = Java.type('oracle.dbtools.util.Logger');
+    var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
+    var System = Java.type('java.lang.System');
+    var Token = Java.type('oracle.dbtools.parser.Token');
+
+    // use reflection to access hidden field newlinePositions
+    var newlinePositionsField = Format.class.getDeclaredField("newlinePositions");
+    newlinePositionsField.setAccessible(true);
+    var newlinePositions = newlinePositionsField.get(struct);
+
+    // get option for "Alignment: Column and Table aliases"
+    var alignTabColAliases = struct.options.get("alignTabColAliases");
+
+    // get option for "Alignment: Type Declarations"
+    var alignTypeDecl = struct.options.get("alignTypeDecl");
+
+    // get option for "Alignment: Named Argument Separator =>"
+    var alignNamedArgs = struct.options.get("alignNamedArgs");
+
+    // get option for "Alignment: Assignment Operator :="
+    var alignAssignments = struct.options.get("alignAssignments");
+
+    // get option for "Alignment: Equality Predicate ="
+    var alignEquality = struct.options.get("alignEquality");
+
+    // get option for "Alignment: Right-align query keywords"
+    var alignRight = struct.options.get("alignRight");
+
+    // get option for "Indentation: Indent spaces" (number of spaces for a single indentation)
+    var indentSpaces = struct.options.get("identSpaces");
+
+    // get option for "Line Breaks: On Boolean connectors"
+    var breaksAroundLogicalConjunctions = struct.options.get("breaksAroundLogicalConjunctions");
+
+    // get option for "Line Breaks: On ANSI joins"
+    var breakAnsiiJoin = struct.options.get("breakAnsiiJoin");
+
+    // get option for "Line Breaks: On subqueries"
+    var breakOnSubqueries = struct.options.get("breakOnSubqueries");
+
+    // get option for "Line Breaks: Max char line width"
+    var maxCharLineSize = struct.options.get("maxCharLineSize");
+
+    // get option for "Line Breaks: SELECT/FROM/WHERE"
+    var breaksAfterSelect = struct.options.get("breaksAfterSelect");
+
+    // get option for "White Space: Around operators"
+    var spaceAroundOperators = struct.options.get("spaceAroundOperators");
+
+    // get option for "White Space: After commas"
+    var spaceAfterCommas = struct.options.get("spaceAfterCommas");
+
+    // get option for "Whitespace: Around parenthesis"
+    var spaceAroundBrackets = struct.options.get("spaceAroundBrackets");
+
+    // lexer tokens including hidden tokens (LINE_COMMENT, COMMENT, WS, MACRO_SKIP, SQLPLUSLINECONTINUE_SKIP)
+    // are relevant to find comments between tokens. These variables are populated in
+    // keepSignificantWhitespaceBeforeLeafNodes
+    var tokens = null;
+    var mapParserPosToLexerPos = new HashMap();
+}
+
+-- Global functions, which are likely to be used in more than one Arbory action
+define_global_functions:
+    [runOnce) sql_statements
+-> {
+    /* return a string with the requested number of spaces */
+    var getSpaces = function(numberOfSpaces) {
+        var result = "";
+        for (var i=0; i<numberOfSpaces; i++) {
+            result += " ";
+        }
+        return result;
+    }
+
+    /* return the indentation at a node position, converts the default null to a single space */
+    var getIndent = function(nodeFrom) {
+        /* map is based on Integer, therefore nodeFrom must be converted to an Integer */
+        var indent = newlinePositions.get(Integer.valueOf(nodeFrom));
+        if (indent == null) {
+            return " ";
+        }
+        return indent;
+    }
+
+    /* returns the indentation without leading new lines from a string */
+    var getNumCharsAfterNewLine = function(indent) {
+        if (indent.contains("\n")) {
+            return indent.length() - indent.lastIndexOf("\n") - 1;
+        }
+        return indent.length();
+    }
+
+    /* returns the leading new lines from a node position (without trailing spaces) */
+    var getLeadingNewLines = function(nodeFrom) {
+        var startPos=nodeFrom;
+        var indent = getIndent(startPos);
+        if (indent.contains("\n")) {
+            return indent.substring(0, indent.lastIndexOf("\n") + 1);
+        }
+        return "";
+    }
+
+    /* returns the column of a node position, considers all preceding nodes */
+    var getColumn = function(nodeFrom) {
+        var startPos=nodeFrom;
+        var col=getNumCharsAfterNewLine(getIndent(startPos));
+        var indent = getIndent(startPos);
+        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
+            col += target.src.get(i).content.length();
+            var indent = getIndent(i);
+            col += getNumCharsAfterNewLine(indent);
+        }
+        return col;
+    }
+
+    /* same as getColumn, but does not contain the very first indentation */
+    var getColumnWithoutFirstIndent = function(nodeFrom) {
+        var startPos=nodeFrom;
+        var col=getNumCharsAfterNewLine(getIndent(startPos));
+        var indent = getIndent(startPos);
+        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
+            col += target.src.get(i).content.length();
+            var indent = getIndent(i);
+            if (!indent.contains("\n")) {
+                col += getNumCharsAfterNewLine(indent);
+            }
+        }
+        return col;
+    }
+
+    /* returns true if a node or one of its children contains an indentation with a new line character */
+    var containsLineBreak = function(node) {
+        for (var i = node.from; i < node.to; i++) {
+            var value = getIndent(i);
+            if (value.contains("\n")) {
+                return true;
+            }
+        }
+    }
+
+    /* returns true if single-line or multi-line comments exists between two node positions */
+    var hasCommentsBetweenPos = function(startPos, endPos) {
+        /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
+        tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
+        tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
+        for (var i = tokenStartPos; i < tokenEndPos; i++) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* returns the the last comment (sl or ml) between two node positions */
+    var getLastCommentBetweenPos = function(startPos, endPos) {
+        var comment = "";
+        /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
+        tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
+        tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
+        for (var i = tokenStartPos; i < tokenEndPos; i++) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
+                comment = tokens[i].content;
+            }
+        }
+        return comment;
+    }
+
+    /* returns the maximum column of nodes in an array list of tuples */
+    var getMaxColumn = function(list, nodeName) {
+        var maxCol = 0;
+        for (var i=0; i < list.length; i++) {
+            var node = list.get(i).get(nodeName)
+            var col = getColumn(node.from);
+            if (col > maxCol) {
+                maxCol = col;
+            }
+        }
+        return maxCol;
+    }
+
+    /* adds a tuple to a map indexed by scope */
+    var addTupleToMap = function(tuple, scopeNodeName, map) {
+        var scope = tuple.get(scopeNodeName);
+        var list = map.get(scope);
+        if (list == null) {
+            list = new ArrayList();
+        }
+        list.add(tuple);
+        map.put(scope, list);
+    }
+
+    /* increase the indent for a parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
+    var addIndent = function(parent, increaseBy) {
+        if (parent != null) {
+            var descendants = parent.descendants();
+            for (var i = 0, len = descendants.length; i < len; i++) {
+                var node = descendants.get(i);
+                var indent = getIndent(node.from);
+                if (indent.contains("\n")) {
+                    if (node.children().size() == 0) {
+                        struct.putNewline(node.from, indent + getSpaces(increaseBy));
+                    }
+                }
+            }
+        }
+    }
+
+    /* aligns all nodes per scope */
+    var align = function(map, alignNodeName, indentNodeName, logText) {
+        var it = map.keySet().iterator();
+        while (it.hasNext()) {
+            var scope = it.next();
+            var list = map.get(scope);
+            var maxCol = getMaxColumn(list, alignNodeName);
+            alignAtPos(maxCol, list, alignNodeName, indentNodeName, logText);
+        }
+    }
+
+    /* aligns all nodes at a target position */
+    var alignAtPos = function(targetPos, list, alignNodeName, indentNodeName, logText) {
+        for (var i=0; i<list.length; i++) {
+            var alignNode = list.get(i).get(alignNodeName);
+            var indent = getIndent(alignNode.from);
+            var col = getColumn(alignNode.from);
+            if (targetPos != col) {
+                if (targetPos > col) {
+                    indent += getSpaces(targetPos - col);
+                } else {
+                    indent = indent.substr(0, targetPos + 1);
+                }
+                struct.putNewline(alignNode.from, indent);
+                logger.fine(struct.getClass(), logText + ": at " + alignNode.from);
+                if (indentNodeName != null) {
+                    var indentNode = list.get(i).get(indentNodeName);
+                    if (indentNode != null) {
+                        addIndent(indentNode, targetPos - col);
+                        logger.fine(struct.getClass(), logText + ": add indent for " + indentNode.from);
+                    }
+                }
+            }
+        }
+    }
+
+    /* returns the content of the token position range */
+    var getContent = function(fromPos, toPos) {
+        var content = "";
+        for (var i=fromPos; i<toPos; i++) {
+            content += target.src.get(i).content;
+            content += getIndent(i+1);
+        }
+        return content;
+    }
+
+    /* returns the content of the last line in a text */
+    var getLastLine = function(text) {
+        if (text != null) {
+            var index = text.lastIndexOf("\n");
+            if (index > 0) {
+                return text.substr(text, index);
+            }
+        }
+        return text;
+    }
+
+    /* returns true if there is no other parameter defined on the same line */
+    var firstParameterOnLine = function(nodeFrom, scopeFrom) {
+        if (!getIndent(nodeFrom).contains("\n")) {
+            for (var i=nodeFrom-1; i>=scopeFrom; i=i-1) {
+                var prevNode = target.root.leafAtPos(i);
+                if (prevNode.contains("decl_id")) {
+                    return false;
+                }
+                if (getIndent(prevNode.from).contains("\n")) {
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
+    /* returns true if there is a a new line in the node range, search backwards */
+    var hasNewline = function(from, to) {
+        for (var i=from; i>=to; i=i-1) {
+            if (getIndent(i).contains("\n")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* reduce indentation for nodes with leading commas */
+    var fixIndentOfLeadingCommas = function(map, nodeName, logText) {
+        if (struct.breaksBeforeComma()) {
+            var comma = 1;
+            if (spaceAfterCommas) {
+                comma += 1;
+            }
+            var it = map.keySet().iterator();
+            while (it.hasNext()) {
+                var scope = it.next();
+                var list = map.get(scope);
+                for (var i=0; i<list.length; i++) {
+                    var node = list.get(i).get(nodeName);
+                    var indent = getIndent(node.from);
+                    if (indent.contains("\n")) {
+                        var content = target.src.get(node.from).content;
+                        if (content == ",") {
+                            struct.putNewline(node.from, indent.substr(0, indent.length - comma));
+                            logger.fine(struct.getClass(), logText + ": reduced intent at " + node.from);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* returns true if the node is part of a statement that should be fully formatted */
+    /* subquery could be added to handle select statements that do not end on semicolon.
+     * However, this will have an impact on other statements with subqueries. */
+    var overrideIndents = function(nodeFrom) {
+        return hasParentOfType(nodeFrom, [
+           "select",
+           "create_view",
+           "insert",
+           "update"
+           /*, "delete", "merge", "block_stmt"*/
+        ]);
+    }
+
+    /* returns true if a the node or an ancestors has one of the provided symbols */
+    var hasParentOfType = function(nodeFrom, symbols) {
+        var node = target.root.leafAtPos(nodeFrom);
+        while (node != null) {
+            for (var i=0; i < symbols.length; i++) {
+                if (node.contains(symbols[i])) {
+                    return true;
+                }
+            }
+            node = node.parent();
+        }
+        return false;
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I3: Remove duplicate empty lines.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Replace multiple, consecutive empty lines with one empty line.
+-- This code changes the input (target.input) and the lexer tokens (target.src).
+-- Therefore this code must run at the beginning of the Arbori program.
+max_one_empty_line:
+    [runOnce) sql_statements
+-> {
+    var offOnRanges = [];
+
+    var populateOffOnRanges = function(tokens) {
+        var off = -1;
+        offOnRanges = [];
+        for (var i in tokens) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
+                if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
+                    off = tokens[i].begin;
+                }
+                if (off != -1) {
+                    if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
+                        offOnRanges.push([off, tokens[i].end]);
+                        off = -1;
+                    }
+                }
+            }
+        }
+    }
+
+    var inOffOnRange = function(pos) {
+        for (var x in offOnRanges) {
+            if (pos >= offOnRanges[x][0] && pos < offOnRanges[x][1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var removeDuplicateEmptyLines = function() {
+        var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+        populateOffOnRanges(tokens);
+        var substitutions = new Substitutions(target.input);
+        var firstEOLToken = 0;
+        var secondEOLToken = 0;
+        var lastEOLToken = 0;
+        for (i = 0; i < tokens.length; i++) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT && firstEOLToken == 0) {
+                firstEOLToken = tokens[i];
+                continue;
+            }
+            if (tokens[i].content == "\n") {
+                if (firstEOLToken == 0) {
+                    firstEOLToken = tokens[i];
+                } else if (secondEOLToken == 0) {
+                    secondEOLToken = tokens[i];
+                } else {
+                    lastEOLToken = tokens[i];
+                }
+                continue;
+            }
+            if (type != Token.WS) {
+                if (lastEOLToken != 0) {
+                    if (!inOffOnRange(secondEOLToken.begin)) {
+                        substitutions.put(secondEOLToken.begin,lastEOLToken.begin,"");
+                    }
+                }
+                firstEOLToken = 0;
+                secondEOLToken = 0;
+                lastEOLToken = 0;
+            }
+        }
+        // update source code
+        target.input = substitutions.transformInput();
+    }
+
+    var removeWSOnEmptyLines = function() {
+        var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+        populateOffOnRanges(tokens);
+        var substitutions = new Substitutions(target.input);
+        var eolToken = 0
+        for (i = 0; i < tokens.length; i++) {
+            var type = tokens[i].type;
+            if (type != Token.WS) {
+                eolToken = 0;
+                continue;
+            }
+            if (eolToken == 0 && (type == Token.LINE_COMMENT || tokens[i].content == "\n")) {
+                eolToken = tokens[i];
+                continue;
+            }
+            if (tokens[i].content == "\n") {
+                if (eolToken != 0) {
+                    if (!inOffOnRange(eolToken.end)) {
+                        substitutions.put(eolToken.end,tokens[i].begin,"");
+                    }
+                }
+                eolToken = tokens[i];
+            }
+        }
+        // update source code
+        target.input = substitutions.transformInput();
+    }
+
+    // replacements
+    removeDuplicateEmptyLines();
+    removeWSOnEmptyLines();
+
+    // tokens without WS and comments (mimicking default behaviour)
+    var Lexer = Java.type('oracle.dbtools.parser.Lexer');
+    var defaultTokens = Lexer.parse(target.input);
+
+    // produce a new parse tree based on the updated lexer tokens
+    var Parsed = Java.type('oracle.dbtools.parser.Parsed');
+    var SqlEarley = Java.type('oracle.dbtools.parser.plsql.SqlEarley')
+    var newTarget = new Parsed(target.input, defaultTokens, SqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+
+    // update token list based on fixed source code (without WS tokens)
+    target.src.clear();
+    target.src.addAll(newTarget.src);
+
+    // enable next line to print all node names on the console (e.g. when SQLDev UI shows unnamed nodes)
+    // target.root.printTree();
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I4: Keep existing whitespace.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- add explicit whitespace before each leaf node, if the whitespace before is not a single space (default)
+keep_significant_whitespace_before_leaf_nodes:
+    [runOnce) sql_statements
+-> {
+    tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
+    var hiddenTokenCount = 0;
+    var wsBefore = "";
+    for (var i in tokens) {
+        var type = tokens[i].type;
+        // count hidden tokens
+        if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS ||
+            type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
+        {
+            hiddenTokenCount++;
+            // concatenate whitespace before a node
+            if (type == Token.WS) {
+                wsBefore += tokens[i].content;
+            } else {
+                // ensure that other hidden token are not counted as whitespace
+                wsBefore = "";
+            }
+        } else {
+            /* enforce uniform datatype in map, therefore convert values to Integer */
+            mapParserPosToLexerPos.put(Integer.valueOf(i-hiddenTokenCount), i);
+            if (wsBefore != " ") {
+                // add collected whitespace before leaf node (actually at the position of the leaf node)
+                // add also empty strings to ensure that not a space is added between tokens
+                struct.putNewline(i-hiddenTokenCount, wsBefore);
+                logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: add "
+                    + wsBefore.length() + " whitespace at " + (i-hiddenTokenCount));
+            }
+            wsBefore = "";
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I5: Remove duplicate spaces in scope.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- In scope are statements for that are formatted fully (see overrideIndents).
+-- Only spaces after the last new line character are considered. So, all line breaks are kept.
+
+remove_duplicate_spaces_in_scope:
+    [runOnce) sql_statements
+-> {
+    var it = newlinePositions.keySet().iterator();
+    while (it.hasNext()) {
+        var pos = it.next();
+        if (overrideIndents(pos)) {
+            var indent = getIndent(pos);
+            var nlpos = indent.lastIndexOf("\n");
+            if (nlpos == -1) {
+                if (indent.length > 1) {
+                    struct.putNewline(pos, " ");
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + pos);
+                }
+            } else {
+                var spaces = indent.length - nlpos - 1;
+                if (spaces > 0) {
+                    struct.putNewline(pos, indent.substr(0, nlpos+1));
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + pos);
+                }
+            }
+        }
+    }
+}
