@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+include "std.arbori"
+
 /**
  * Lightweight Formatter for SQL Developer and SQLcl
  * The idea is to keep the code formatted "as is" and apply chosen formatting rules only.
@@ -117,7 +119,7 @@ dummy:
 
 -- "skipWhitespaceBeforeNode" must be defined, otherwise the Arbori program will be considered invalid and the default is used.
 skipWhiteSpaceBeforeNode:
-  [runOnce) sql_statements
+  runOnce
 -> {
     var doNotCallCallbackFunction;
 }

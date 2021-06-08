@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+include "std.arbori"
+
 -- ====================================================================================================================
 -- Phase 2 - Processing section by section. (trivadis_custom_format_phase2.arbori).
 -- ====================================================================================================================
@@ -64,7 +66,7 @@
 
 -- replace tabs with the configured indentation (default is 3)
 a1_replace_tabs_with_spaces:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var indent = getSpaces(indentSpaces);
     var it = newlinePositions.keySet().iterator();
@@ -83,7 +85,7 @@ a1_replace_tabs_with_spaces:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a2_remove_trailing_spaces:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var indent = getSpaces(indentSpaces);
     var it = newlinePositions.keySet().iterator();
@@ -104,7 +106,7 @@ a2_remove_trailing_spaces:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a3_dont_format_off_on_ranges:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var hiddenTokenCount = 0;
     var format = true;
@@ -615,7 +617,7 @@ o3_no_space_before_open_paren:
 -- --------------------------------------------------------------------------------------------------------------------
 
 r3_stmt_in_first_conditional_compilation_branch:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var posInConditionalBranch = new HashSet();
     var pos = 0;
@@ -1276,7 +1278,7 @@ r5_commas:
 -- is only possible if the indentation is large enough.
 
 r2_init_left_margin:
-    [runOnce) sql_statements
+    runOnce
 -> {
     /* left margin is expressed in number of spaces. */
     var leftMargin = new HashMap();
@@ -1591,7 +1593,7 @@ r2_increment_left_margin_for_assignment:
 }
 
 r2_indent_nodes:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var it = leftMargin.keySet().iterator();
     while (it.hasNext()) {
@@ -1656,7 +1658,7 @@ r2_fix_indent_for_subquery_in_paren:
 -- Right alignment for longer keywords requires a the left margin that is large enough.
 
 r7_declaration:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var rightAlign = function(tuple, logText) {
         if (!breaksAfterSelect) {
@@ -1804,7 +1806,7 @@ r7_right_align_and_or:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a11_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var paramNames = new HashMap();
 }
@@ -1835,7 +1837,7 @@ a11_find_param_names:
 }
 
 o11_align_param_names:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(paramNames, "aligner", null, "a11_find_param_names");
     fixIndentOfLeadingCommas(paramNames, "aligner", "a11_find_param_names");
@@ -1846,7 +1848,7 @@ o11_align_param_names:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a10_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var paramModes = new HashMap();
 }
@@ -1869,7 +1871,7 @@ a10_find_param_modes:
 }
 
 a10_align_param_modes:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(paramModes, "node", null, "a10_align_param_modes");
 }
@@ -1879,7 +1881,7 @@ a10_align_param_modes:
 -- --------------------------------------------------------------------------------------------------------------------
 
 o8_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var datatypes = new HashMap();
 }
@@ -1929,7 +1931,7 @@ o8_find_parameter_declarations:
 }
 
 o8_align_type_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(datatypes, "node", null, "o8_align_type_declarations");
 }
@@ -1939,7 +1941,7 @@ o8_align_type_declarations:
 -- --------------------------------------------------------------------------------------------------------------------
 
 o4_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var assignments = new HashMap();
     var assignmentsWithValue = new HashMap();
@@ -1988,7 +1990,7 @@ o4_find_body_assignments:
 }
 
 o4_align_assignments:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(assignments, "node", null, "o4_align_assignments");
     align(assignmentsWithValue, "node", "value", "o4_align_assignments");
@@ -1999,7 +2001,7 @@ o4_align_assignments:
 -- --------------------------------------------------------------------------------------------------------------------
 
 o5_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var selectTermEndsOnNewline = function(node) {
         if (getIndent(node.to).contains("\n")) {
@@ -2057,7 +2059,7 @@ o5_table_alias:
 }
 
 o5_align_aliases:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(aliases, "node", null, "o5_align_aliases");
 }
@@ -2067,7 +2069,7 @@ o5_align_aliases:
 -- --------------------------------------------------------------------------------------------------------------------
 
 o7_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     /* returns true if there is no other equality sign on the line */
     var firstEqualitySignOnLine = function(nodeFrom) {
@@ -2100,7 +2102,7 @@ o7_find_equality_predicates:
 }
 
 o7_align_equality_predicates:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(equalitySigns, "node", "value", "o7_align_equality_predicates");
 }
@@ -2110,7 +2112,7 @@ o7_align_equality_predicates:
 -- --------------------------------------------------------------------------------------------------------------------
 
 r6_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var assocNames = new HashMap();
     var assocValues = new HashMap();
@@ -2145,7 +2147,7 @@ r6_find_names:
 }
 
 r6_align_names:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(assocNames, "aligner", null, "r6_align_names");
     fixIndentOfLeadingCommas(assocNames, "aligner", "r6_align_names");
@@ -2171,7 +2173,7 @@ r6_find_values:
 }
 
 r6_align_values:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(assocValues, "node", "value", "r6_align_values");
 }
@@ -2181,7 +2183,7 @@ r6_align_values:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a9_declarations:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var xmlTableColumns = new HashMap();
     var xmlTableDatatypes = new HashMap();
@@ -2205,7 +2207,7 @@ a9_find_columns:
 }
 
 a9_align_xmltable_columns:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var it = xmlTableColumns.keySet().iterator();
     while (it.hasNext()) {
@@ -2230,7 +2232,7 @@ a9_find_datatypes:
 }
 
 a9_align_xmltable_datatypes:
-    [runOnce) sql_statements
+    runOnce
 -> {
     align(xmlTableDatatypes, "node", null, "a9_align_xmltable_datatypes");
     align(xmlTableDatatypes, "path", null, "a9_align_xmltable_datatypes");
@@ -2252,7 +2254,7 @@ a9_align_xmltable_datatypes:
 -- Due to this simple algorithm, it is expected that a subsequent formatter call will produce a different result.
 
 a4_add_line_breaks_with_indent:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var pos = 0;
     var indent = System.lineSeparator(); /* handle first line */
@@ -2285,7 +2287,7 @@ a4_add_line_breaks_with_indent:
 -- --------------------------------------------------------------------------------------------------------------------
 
 d2_log_time:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var endTime = (new Date()).getTime();
     logger.info(struct.getClass(), "d2_log_time: formatted " + tokens.length + " tokens and "

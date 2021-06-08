@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+include "std.arbori"
+
 -- ====================================================================================================================
 -- Phase 1 - Initialization and pre-processing. (trivadis_custom_format_phase1.arbori).
 -- ====================================================================================================================
@@ -30,7 +32,7 @@
 -- --------------------------------------------------------------------------------------------------------------------
 
 startCustomFormat:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var startTime = (new Date()).getTime();
 }
@@ -41,7 +43,7 @@ startCustomFormat:
 
 -- Global variables, which are likely to be used in more than one Arbori query/action
 define_global_variables:
-    [runOnce) sql_statements
+    runOnce
 -> {
     // Java classes
     var ArrayList = Java.type('java.util.ArrayList');
@@ -114,7 +116,7 @@ define_global_variables:
 
 -- Global functions, which are likely to be used in more than one Arbory action
 define_global_functions:
-    [runOnce) sql_statements
+    runOnce
 -> {
     /* return a string with the requested number of spaces */
     var getSpaces = function(numberOfSpaces) {
@@ -405,7 +407,7 @@ define_global_functions:
 -- This code changes the input (target.input) and the lexer tokens (target.src).
 -- Therefore this code must run at the beginning of the Arbori program.
 max_one_empty_line:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var offOnRanges = [];
 
@@ -530,7 +532,7 @@ max_one_empty_line:
 
 -- add explicit whitespace before each leaf node, if the whitespace before is not a single space (default)
 keep_significant_whitespace_before_leaf_nodes:
-    [runOnce) sql_statements
+    runOnce
 -> {
     tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
     var hiddenTokenCount = 0;
@@ -572,7 +574,7 @@ keep_significant_whitespace_before_leaf_nodes:
 -- Only spaces after the last new line character are considered. So, all line breaks are kept.
 
 remove_duplicate_spaces_in_scope:
-    [runOnce) sql_statements
+    runOnce
 -> {
     var it = newlinePositions.keySet().iterator();
     while (it.hasNext()) {
