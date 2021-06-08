@@ -4,6 +4,7 @@ import oracle.dbtools.app.Format;
 import oracle.dbtools.app.Persist2XML;
 import org.junit.jupiter.api.Assertions;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -14,9 +15,15 @@ public abstract class ConfiguredTestFormatter {
 
     public ConfiguredTestFormatter() {
         super();
+        setArboriHome();
         loadLoggingConf();
         formatter = new Format();
         configureFormatter();
+    }
+
+    private void setArboriHome() {
+        var arboriDir = new File(getArboriFileName()).getParentFile().getAbsolutePath();
+        System.setProperty("dbtools.arbori.home", arboriDir);
     }
 
     private void loadLoggingConf() {
