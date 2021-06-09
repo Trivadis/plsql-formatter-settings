@@ -1113,7 +1113,7 @@ o11_break_on_subqueries:
 -- A16: Line break if the parent element uses multiple lines.
 -- --------------------------------------------------------------------------------------------------------------------
 
-r16_add_line_breaks_before_subquery_clause:
+r16_select:
       [parent) subquery
     & (
           [node) 'FROM'
@@ -1125,6 +1125,41 @@ r16_add_line_breaks_before_subquery_clause:
         | [node) 'ORDER'
       )
     & parent < node
+;
+
+r16_single_table_insert:
+      [parent) single_table_insert
+    & (
+          [node) returning_clause
+        | [node) error_logging_clause
+      )
+    & parent < node
+;
+
+r16_multi_table_insert:
+      [parent) multi_table_insert
+    & (
+          [node) insert_into_clause
+        | [node) error_logging_clause
+      )
+    & parent < node
+;
+
+r16_delete:
+      [parent) delete
+    & (
+          [node) where_clause
+        | [node) returning_clause
+        | [node) error_logging_clause
+      )
+    & node^ = parent
+;
+
+r16_add_line_breaks_before_dml_clause:
+      r16_select
+    | r16_single_table_insert
+    | r16_multi_table_insert
+    | r16_delete
 -> {
     var parent = tuple.get("parent");
     var node = tuple.get("node");
