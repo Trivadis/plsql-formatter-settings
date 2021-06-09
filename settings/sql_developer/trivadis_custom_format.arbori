@@ -275,11 +275,6 @@ addLongDotted:
     addToLongSet('parent');
   }
 
-allArgList:
-  [parent) paren_expr_list
-;
-
-
 splittableArgList1:
   [parent) paren_expr_list 
     & [arg1) arg_list 
@@ -302,11 +297,6 @@ splittableArgList:
   | splittableArgList2 
 ;
  
-
-allExprList:
-  [parent) "(x,y,z)"
-;
-
 splittableExprList1:
   [parent) "(x,y,z)" 
     & [arg1) "expr_list" 
@@ -345,14 +335,15 @@ indentArgListParent:
 
 splitArg:
   .breaksProcArgs
-    & [node) arg 
-    & allArgList.parent < node
+    & [node) arg
+    & allArgListParent < node
+    & [allArgListParent) paren_expr_list
     & splittableArgList.parent < node
   -> {
     // filter via JavaScript
-    var all = tuple.get("allArgList.parent");
-    var splittable = tuple.get("splittableArgList.parent");
-    logger.fine(struct.getClass(), "splitArg (found): " + tuple.get('node'));
+    var all = tuple.get("allArgListParent");
+    var splittable = tuple.get("parent");
+    logger.fine(struct.getClass(), "splitArg (found) node: " + tuple.get('node'));
     if (all == splittable) {
       logger.fine(struct.getClass(), "splitArg (splitted): " + tuple.get('node'));
       splittedNodeSet.add(tuple.get('node').interval());
@@ -364,12 +355,13 @@ splitExpr:
     & [node) expr 
     & ![node^) assoc_arg 
     & ![node^) compound_expression
-    & allExprList.parent < node
+    & allExprListParent < node
+    & [allExprListParent) "(x,y,z)"
     & splittableExprList.parent < node
   -> {
     // filter via JavaScript
-    var all = tuple.get("allExprList.parent");
-    var splittable = tuple.get("splittableExprList.parent");
+    var all = tuple.get("allExprListParent");
+    var splittable = tuple.get("parent");
     logger.fine(struct.getClass(), "splitExpr (found): " + tuple.get('node'));
     if (all == splittable) {
       logger.fine(struct.getClass(), "splitExpr (splitted): " + tuple.get('node'));
