@@ -1555,9 +1555,21 @@ r2_body:
     & parent < node
 ;
 
-r2_insert:
+r2_single_table_insert:
       [node) insert_into_clause[13,25)
     | [node) par_expr_list
+;
+
+r2_multi_table_insert:
+      [parent) conditional_insert_clause
+    & (
+          [node) conditional_insert_clause
+        | [node) condition & [node-1) 'WHEN' & [node+2) insert_into_clause
+        | [node) insert_into_clause
+        | [node) values_clause
+        | [node) error_logging_clause
+      )
+    & parent <= node
 ;
 
 r2_increment_left_margin:
@@ -1568,7 +1580,8 @@ r2_increment_left_margin:
     | r2_view
     | r2_object_type
     | r2_body
-    | r2_insert
+    | r2_single_table_insert
+    | r2_multi_table_insert
 -> {
     addMargin(tuple.get("node"), indentSpaces);
 }
@@ -1601,6 +1614,8 @@ r2_increment_left_margin_by_keyword_outside_node:
     | [node) insert_into_clause & [keyword) 'INSERT' & keyword = node^-1 & [node^) single_table_insert
     -- update statement
     | [node) aliased_dml_table_expression_clause & keyword = node^
+    -- delete statement
+    | [node) 'FROM' & [keyword) 'DELETE' & [node^) delete & keyword+1 = node
 -> {
     addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content);
 }
