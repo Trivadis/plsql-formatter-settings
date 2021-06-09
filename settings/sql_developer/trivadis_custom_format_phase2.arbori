@@ -1113,7 +1113,7 @@ o11_break_on_subqueries:
 -- A16: Line break if the parent element uses multiple lines.
 -- --------------------------------------------------------------------------------------------------------------------
 
-r16_select:
+a16_select:
       [parent) subquery
     & (
           [node) 'FROM'
@@ -1127,7 +1127,7 @@ r16_select:
     & parent < node
 ;
 
-r16_single_table_insert:
+a16_single_table_insert:
       [parent) single_table_insert
     & (
           [node) returning_clause
@@ -1136,7 +1136,7 @@ r16_single_table_insert:
     & parent < node
 ;
 
-r16_multi_table_insert:
+a16_multi_table_insert:
       [parent) multi_table_insert
     & (
           [node) insert_into_clause
@@ -1145,7 +1145,7 @@ r16_multi_table_insert:
     & parent < node
 ;
 
-r16_delete:
+a16_delete:
       [parent) delete
     & (
           [node) where_clause
@@ -1155,23 +1155,23 @@ r16_delete:
     & node^ = parent
 ;
 
-r16_add_line_breaks_before_dml_clause:
-      r16_select
-    | r16_single_table_insert
-    | r16_multi_table_insert
-    | r16_delete
+a16_add_line_breaks_before_dml_clause:
+      a16_select
+    | a16_single_table_insert
+    | a16_multi_table_insert
+    | a16_delete
 -> {
     var parent = tuple.get("parent");
     var node = tuple.get("node");
     if (hasNewline(parent.to-1, parent.from+1)) {
         if (!getIndent(node.from).contains("\n")) {
             struct.putNewline(node.from, System.lineSeparator());
-            logger.fine(struct.getClass(), "r16_add_line_breaks_before_subquery_clause: at " + node.from);
+            logger.fine(struct.getClass(), "a16_add_line_breaks_before_subquery_clause: at " + node.from);
         }
     }
 }
 
-r16_select_term:
+a16_select_term:
       [parent) select_list
     & [parent^) select_clause
     & [node) select_term
@@ -1180,7 +1180,7 @@ r16_select_term:
     & parent < node
 ;
 
-r16_name_list:
+a16_name_list:
       [parent) name_list
     & [parent^) into_list
     & [node) name
@@ -1189,7 +1189,7 @@ r16_name_list:
     & parent < node
 ;
 
-r16_group_by_col:
+a16_group_by_col:
       [parent) group_by_list
     & [node) group_by_col
     & [comma) ','
@@ -1197,7 +1197,7 @@ r16_group_by_col:
     & parent < node
 ;
 
-r16_order_by_1desc:
+a16_order_by_1desc:
       [parent) order_by_clause
     & [node) "ord_by_1desc"
     & [comma) ','
@@ -1205,11 +1205,11 @@ r16_order_by_1desc:
     & parent < node
 ;
 
-r16_add_line_breaks_before:
-      r16_select_term
-    | r16_name_list
-    | r16_group_by_col
-    | r16_order_by_1desc
+a16_add_line_breaks_before:
+      a16_select_term
+    | a16_name_list
+    | a16_group_by_col
+    | a16_order_by_1desc
 -> {
     var parent = tuple.get("parent");
     var node = tuple.get("node");
@@ -1218,10 +1218,10 @@ r16_add_line_breaks_before:
         if (!getIndent(node.from).contains("\n") && !getIndent(comma.from).contains("\n")) {
             if (struct.breaksBeforeComma()) {
                 struct.putNewline(comma.from, System.lineSeparator());
-                logger.fine(struct.getClass(), "r16_add_line_breaks_before: comma at " + comma.from);
+                logger.fine(struct.getClass(), "a16_add_line_breaks_before: comma at " + comma.from);
             } else {
                 struct.putNewline(node.from, System.lineSeparator());
-                logger.fine(struct.getClass(), "r16_add_line_breaks_before: node at " + node.from);
+                logger.fine(struct.getClass(), "a16_add_line_breaks_before: node at " + node.from);
             }
         }
     }
