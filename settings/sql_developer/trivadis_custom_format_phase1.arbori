@@ -52,13 +52,21 @@ startCustomFormat:
 -- This has no effect to currently executed program instance.
 -- However, future instantiations of the formatter are slower, if the formatter itself is not cached.
 -- SQLDev caches the formatter, but format.js (SQLcl) does not.
--- For production use it is safe to enable caching (cacheArboriProgram = true).
+-- So we remove the Arbori program from the cache if the formatter is running within SQLDev.
+-- This setup works for development and production use.
 
 resetFormatter:
     runOnce
 -> {
-    var cacheArboriProgram = false;
-    if (!cacheArboriProgram) {
+    var runningInSQLDev = function() {
+        if (struct.getClass().getSimpleName() == "CustomFormat") {
+            logger.fine(struct.getClass(), "resetFormatter: running within SQLDev.");
+            return true;
+        }
+        logger.fine(struct.getClass(), "resetFormatter: running outside of SQLDev.");
+        return false;
+    }
+    if (runningInSQLDev()) {
         var Program = Java.type('oracle.dbtools.arbori.Program');
         var compiledProgramsField = Program.class.getDeclaredField("compiledPrograms");
         compiledProgramsField.setAccessible(true);
