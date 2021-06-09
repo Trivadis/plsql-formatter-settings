@@ -770,9 +770,36 @@ o6_update_after:
     & parent < node
 ;
 
+o6_delete_before:
+      [parent) delete
+    & (
+          [node) 'UPDATE'
+        | [node) 'FROM'
+        | [node) 'WHERE'
+        | [node) 'RETURN'
+        | [node) 'RETURNING'
+        | [node) 'LOG' & [node+1) 'ERRORS'
+      )
+    & parent < node
+;
+
+o6_delete_after:
+      [parent) delete
+    & (
+          [node) 'UPDATE'
+        | [node) 'WHERE'
+        | [node) 'RETURN'
+        | [node) 'RETURNING'
+        | [node-1) 'LOG' & [node) 'ERRORS'
+      )
+    & parent < node
+;
+
+
 o6_line_break_before:
       o6_select_before
     | o6_update_before
+    | o6_delete_before
 -> {
     if (breaksAfterSelect) {
         var node = tuple.get("node");
@@ -789,6 +816,7 @@ o6_line_break_before:
 o6_line_break_after:
       o6_select_after
     | o6_update_after
+    | o6_delete_after
 -> {
     if (breaksAfterSelect) {
         var node = tuple.get("node");
