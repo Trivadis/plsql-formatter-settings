@@ -744,8 +744,35 @@ o6_select_after:
     & parent < node
 ;
 
+o6_update_before:
+      [parent) update
+    & (
+          [node) 'UPDATE'
+        | [node) 'SET'
+        | [node) 'WHERE'
+        | [node) 'RETURN'
+        | [node) 'RETURNING'
+        | [node) 'LOG' & [node+1) 'ERRORS'
+      )
+    & parent < node
+;
+
+o6_update_after:
+      [parent) update
+    & (
+          [node) 'UPDATE'
+        | [node) 'SET'
+        | [node) 'WHERE'
+        | [node) 'RETURN'
+        | [node) 'RETURNING'
+        | [node-1) 'LOG' & [node) 'ERRORS'
+      )
+    & parent < node
+;
+
 o6_line_break_before:
-    o6_select_before
+      o6_select_before
+    | o6_update_before
 -> {
     if (breaksAfterSelect) {
         var node = tuple.get("node");
@@ -760,7 +787,8 @@ o6_line_break_before:
 }
 
 o6_line_break_after:
-    o6_select_after
+      o6_select_after
+    | o6_update_after
 -> {
     if (breaksAfterSelect) {
         var node = tuple.get("node");
@@ -1508,6 +1536,8 @@ r2_increment_left_margin_by_keyword_outside_node:
     | [node) condition & [keyword) 'START' & [keyword+1) 'WITH' & keyword = node-2
     -- insert statement
     | [node) insert_into_clause & [keyword) 'INSERT' & keyword = node^-1 & [node^) single_table_insert
+    -- update statement
+    | [node) aliased_dml_table_expression_clause & keyword = node^
 -> {
     addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content);
 }
