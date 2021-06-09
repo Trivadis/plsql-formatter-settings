@@ -23,7 +23,7 @@ include "std.arbori"
 -- Sections:
 -- - D1: Initialize timer.
 -- - D3: Reset formatter.
--- - I3: Don't format nodes.
+-- - I3: Do not format nodes.
 -- - I4: Identifiers.
 -- - I5: Globals.
 -- - I6: Remove duplicate empty lines.
@@ -77,7 +77,7 @@ resetFormatter:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I3: Don't format node
+-- I3: Do not format node
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
