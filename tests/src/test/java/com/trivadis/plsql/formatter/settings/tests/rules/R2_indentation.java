@@ -1333,5 +1333,33 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void update_table_newline() throws IOException {
+            var input = """
+                    update
+                    t
+                    set
+                    c1 = 1
+                    , c2 = 2
+                    , c3 = 3
+                    where -- force new line
+                    1=1;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    update
+                           t
+                    set
+                        c1 = 1
+                       ,c2 = 2
+                       ,c3 = 3
+                    where -- force new line
+                          1 = 1;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+
     }
 }
