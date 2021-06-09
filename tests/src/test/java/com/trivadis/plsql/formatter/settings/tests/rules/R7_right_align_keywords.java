@@ -490,6 +490,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         @Test
         public void update_table_return() throws IOException {
             var input = """
+                    begin
                     update t
                     set c1 = 1,
                     c2 = 2,
@@ -499,22 +500,26 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     into l1, l2
                     log errors into error_table
                     reject limit 10;
+                    end;
+                    /
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    update t
-                       set c1 = 1,
-                           c2 = 2,
-                           c3 = 3
-                     where 1 = 1
-                    return c1, c2
-                      into l1, l2
-                       log errors into error_table
-                    reject limit 10;
+                    begin
+                       update t
+                          set c1 = 1,
+                              c2 = 2,
+                              c3 = 3
+                        where 1 = 1
+                       return c1, c2
+                         into l1, l2
+                          log errors into error_table
+                       reject limit 10;
+                    end;
+                    /
                     """;
             assertEquals(expected, actual);
         }
-
     }
 
     @Nested
@@ -527,10 +532,11 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
         }
 
         @Test
-        public void delete() throws IOException {
+        public void delete_from_where() throws IOException {
             var input = """
                     delete
-                    from t
+                    from
+                    t
                     where c1 = 1
                     and c2 = 2;
                     """;
@@ -543,5 +549,36 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void delete_without_from_return_into_log_errors() throws IOException {
+            var input = """
+                    begin
+                    delete
+                    t
+                    where 1 = 1
+                    return c1, c2
+                    into l1, l2
+                    log errors into error_table
+                    reject limit 10;
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       delete
+                              t
+                        where 1 = 1
+                       return c1, c2
+                         into l1, l2
+                          log errors into error_table
+                       reject limit 10;
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
     }
 }

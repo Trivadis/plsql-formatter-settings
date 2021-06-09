@@ -1360,6 +1360,59 @@ public class R2_indentation extends ConfiguredTestFormatter {
             assertEquals(expected, actual);
         }
 
+        @Nested
+        class delete {
 
+            @Test
+            public void delete_from_where() throws IOException {
+                var input = """
+                    delete
+                    from
+                    t
+                    where c1 = 1
+                    and c2 = 2;
+                    """;
+                var actual = formatter.format(input);
+                var expected = """
+                    delete
+                           from t
+                    where c1 = 1
+                          and c2 = 2;
+                    """;
+                assertEquals(expected, actual);
+            }
+
+            @Test
+            public void delete_table_returning() throws IOException {
+                var input = """
+                    begin
+                    delete
+                    t
+                    where 1 = 1
+                    and 2 = 2
+                    return c1, c2
+                    into l1, l2
+                    log errors into error_table
+                    reject limit 10;
+                    end;
+                    /
+                    """;
+                var actual = formatter.format(input);
+                var expected = """
+                    begin
+                       delete
+                              t
+                       where 1 = 1
+                             and 2 = 2
+                       return c1, c2
+                              into l1, l2
+                       log errors into error_table
+                           reject limit 10;
+                    end;
+                    /
+                    """;
+                assertEquals(expected, actual);
+            }
+        }
     }
 }
