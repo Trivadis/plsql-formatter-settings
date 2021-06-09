@@ -80,6 +80,9 @@ resetFormatter:
 -- I3: Do not format node
 -- --------------------------------------------------------------------------------------------------------------------
 
+-- This is considered pre-processing because the provided callback function is used
+-- and we do not write tests for this.
+
 -- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
 dontFormatNode:
     [node) numeric_literal
