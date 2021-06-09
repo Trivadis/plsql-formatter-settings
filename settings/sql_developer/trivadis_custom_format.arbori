@@ -43,13 +43,13 @@ include "std.arbori"
  * The sections have the following format <Category><SectionNumber>.
  * The next table explains the meaning of a category:
  *
- * Cat.  Meaning                 Description                                             Phases
- * ----  ----------------------  ------------------------------------------------------  ------
- * D     Debug                   Initialize or produce debugging output.                 1, 2
- * I     Initialization Section  Identifies a section in an initialization phase.        1
- * O     SQLDev Option           Implements a SQL Developer option (Advanced Format).    2
- * R     Trivadis Rule           Implements a Trivadis PL/SQL & SQL Guideline.           2
- * A     Add-on Section/Rule     Additional formatting rule, that is not based on        2
+ * Cat.  Meaning                 Description                                             Phases  Tests?
+ * ----  ----------------------  ------------------------------------------------------  ------  ------
+ * D     Debug                   Initialize or produce debugging output.                 1, 2    No
+ * I     Initialization Section  Identifies a section in an initialization phase.        1       No
+ * O     SQLDev Option           Implements a SQL Developer option (Advanced Format).    2       Yes
+ * R     Trivadis Rule           Implements a Trivadis PL/SQL & SQL Guideline.           2       Yes
+ * A     Add-on Section/Rule     Additional formatting rule, that is not based on        2       Yes
  *                               the Trivadis PL/SQL & SQL Guidelines. Nonetheless it's
  *                               considered important to improve the formatting result.
  *
