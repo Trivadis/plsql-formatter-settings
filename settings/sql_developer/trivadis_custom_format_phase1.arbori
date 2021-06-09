@@ -22,6 +22,7 @@ include "std.arbori"
 
 -- Sections:
 -- - D1: Initialize timer.
+-- - D3: Reset formatter.
 -- - I3: Don't format nodes.
 -- - I4: Identifiers.
 -- - I5: Globals.
@@ -37,6 +38,34 @@ startCustomFormat:
     runOnce
 -> {
     var startTime = (new Date()).getTime();
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- D3: Reset formatter
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- All Arbori programs are cached by default.
+-- The main Arbori program (trivadis_custom_format.arbori) is relatively small and stable.
+-- Due to the cache, the main Arbori program is not compiled and changes in the include files are not considered.
+-- To avoid restarts of SQLDev or pseudo changes of the main Arbori program during development,
+-- the main program (trivadis_custom_format.arbori) is removed from the cache.
+-- This has no effect to currently executed program instance.
+-- However, future instantiations of the formatter are slower, if the formatter itself is not cached.
+-- SQLDev caches the formatter, but format.js (SQLcl) does not.
+-- For production use it is safe to enable caching (cacheArboriProgram = true).
+
+resetFormatter:
+    runOnce
+-> {
+    var cacheArboriProgram = false;
+    if (!cacheArboriProgram) {
+        var Program = Java.type('oracle.dbtools.arbori.Program');
+        var compiledProgramsField = Program.class.getDeclaredField("compiledPrograms");
+        compiledProgramsField.setAccessible(true);
+        var compiledPrograms= compiledProgramsField.get(Program);
+        compiledPrograms.remove(struct.getActiveFormatProgram());
+        logger.fine(struct.getClass(), "resetFormatter: removed main Arbori program from cache.");
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
