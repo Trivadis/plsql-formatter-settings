@@ -1810,15 +1810,11 @@ r7_select:
     & ![keyword^) analytic_clause
 ;
 
-r7_insert:
+r7_single_table_insert:
       [parent) insert
+    & [insert) single_table_insert
     & (
-          [keyword) 'ALL'
-        | [keyword) 'FIRST'
-        | [keyword) 'WHEN'
-        | [keyword) 'THEN'
-        | [keyword) 'ELSE'
-        | [keyword) 'INTO'
+          [keyword) 'INTO'
         | [keyword) 'VALUES'
         | [keyword) 'RETURN'
         | [keyword) 'RETURNING'
@@ -1826,7 +1822,40 @@ r7_insert:
         | [keyword) 'REJECT'
         | [keyword) 'SELECT' & ![keyword^^-1) '('
       )
-    & parent < keyword
+    & insert < keyword
+    & parent < insert
+;
+
+r7_multi_table_insert_uncond:
+      [parent) insert
+    & [insert) multi_table_insert
+    & [uncond) multi_table_insert[12,24)
+    & (
+          [keyword) 'ALL'
+        | [keyword) 'FIRST'
+        | [keyword) 'INTO'
+        | [keyword) 'VALUES'
+        | [keyword) 'LOG'
+        | [keyword) 'REJECT'
+        | [keyword) 'SELECT' & ![keyword^^-1) '('
+      )
+    & (uncond < keyword | insert < keyword)
+    & insert < uncond
+    & parent < insert
+;
+
+r7_multi_table_insert_cond:
+      [parent) insert
+    & [insert) multi_table_insert
+    & [cond) conditional_insert_clause
+    & (
+          [keyword) 'ALL'
+        | [keyword) 'FIRST'
+        | [keyword) 'SELECT' & ![keyword^^-1) '('
+      )
+    & cond < keyword
+    & insert < cond
+    & parent < insert
 ;
 
 r7_update:
@@ -1848,15 +1877,20 @@ r7_delete:
     & (
           [keyword) 'FROM'
         | [keyword) 'WHERE'
+        | [keyword) 'RETURN'
         | [keyword) 'RETURNING'
         | [keyword) 'INTO'
+        | [keyword) 'LOG'
+        | [keyword) 'REJECT'
       )
     & parent < keyword
 ;
 
 r7_right_align_keywords:
       r7_select
-    | r7_insert
+    | r7_single_table_insert
+    | r7_multi_table_insert_uncond
+    | r7_multi_table_insert_cond
     | r7_update
     | r7_delete
 -> {
