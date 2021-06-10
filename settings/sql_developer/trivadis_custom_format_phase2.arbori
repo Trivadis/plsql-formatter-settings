@@ -552,7 +552,7 @@ o3_whitespace_around_open_paren:
                 spaceBefore = " ";
             }
             struct.putNewline(node.from, spaceBefore);
-            logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: <" + spaceBefore + "> before at " + node.from);
+            logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: " + spaceBefore.length + " space before at " + node.from);
         }
     }
     if (!getIndent(node.to).contains("\n")) {
@@ -563,7 +563,7 @@ o3_whitespace_around_open_paren:
             spaceAfter = " ";
         }
         struct.putNewline(node.to, spaceAfter);
-        logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: <" + spaceAfter + "> after at " + node.to);
+        logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: " + spaceAfter.length + " space after at " + node.to);
     }
 }
 
@@ -1386,7 +1386,7 @@ r2_init_left_margin:
     }
 
     /* increase the left margin for the parent's descendants, but only for leaf nodes to avoid duplicate indentation */
-    var addMargin = function(parent, increaseBy) {
+    var addMargin = function(parent, increaseBy, logText) {
         var descendants = parent.descendants();
         for (var i = 0, len = descendants.length; i < len; i++) {
             var node = descendants.get(i);
@@ -1395,6 +1395,8 @@ r2_init_left_margin:
                 if (node.children().size() == 0) {
                     /* enforce uniform datatype in map, therefore convert values to Integer */
                     leftMargin.put(node.from, Integer.valueOf(margin+increaseBy));
+                    logger.finer(struct.getClass(), logText + ": set margin to "
+                        + (margin+increaseBy) + " spaces at " + node.from);
                 }
             }
         }
@@ -1425,12 +1427,12 @@ r2_init_left_margin:
     }
 
     /* increase left margin by first keyword in node */
-    var addMarginByFirstKeyword = function(node) {
-        return addMarginByName(node, getFirstWord(target.src.get(node.from).content));
+    var addMarginByFirstKeyword = function(node, logText) {
+        return addMarginByName(node, getFirstWord(target.src.get(node.from).content), logText);
     }
 
     /* increase left margin by keyword and SQLDev settings */
-    var addMarginByName = function(node, name) {
+    var addMarginByName = function(node, name, logText) {
         var spaces;
         if (breaksAfterSelect) {
             spaces = indentSpaces;
@@ -1440,7 +1442,7 @@ r2_init_left_margin:
         } else {
             spaces = name.length + 1;
         }
-        addMargin(node, spaces);
+        addMargin(node, spaces, logText);
         return spaces;
     }
 
@@ -1585,7 +1587,7 @@ r2_increment_left_margin:
     | r2_single_table_insert
     | r2_multi_table_insert
 -> {
-    addMargin(tuple.get("node"), indentSpaces);
+    addMargin(tuple.get("node"), indentSpaces, "r2_increment_left_margin");
 }
 
 r2_decrement_left_margin:
@@ -1604,7 +1606,7 @@ r2_decrement_left_margin:
     | [node) 'XMLQUERY' & [node^) xmlquery
     | [node) 'XMLTABLE' & [node^) xmltable
 -> {
-    addMargin(tuple.get("node"), -1 * indentSpaces);
+    addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin");
 }
 
 r2_increment_left_margin_by_keyword_outside_node:
@@ -1617,7 +1619,8 @@ r2_increment_left_margin_by_keyword_outside_node:
     -- delete statement
     | [node) 'FROM' & [keyword) 'DELETE' & [node^) delete & keyword+1 = node
 -> {
-    addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content);
+    addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content,
+        "r2_increment_left_margin_by_keyword_outside_node");
 }
 
 r2_increment_left_margin_by_keyword_inside_node:
@@ -1634,8 +1637,8 @@ r2_increment_left_margin_by_keyword_inside_node:
     -- update statement
     | [node) update_set_clause & [keyword) 'SET' & keyword^ = node
 -> {
-    var spaces = addMarginByFirstKeyword(tuple.get("node"));
-    addMargin(tuple.get("keyword"), -1 * spaces);
+    var spaces = addMarginByFirstKeyword(tuple.get("node"), "r2_increment_left_margin_by_keyword_inside_node (node)");
+    addMargin(tuple.get("keyword"), -1 * spaces, "r2_increment_left_margin_by_keyword_inside_node (keyword)");
 }
 
 r2_subquery:
@@ -1660,7 +1663,7 @@ r2_increment_left_margin_for_subquery_in_paren:
             if (target.src.get(node.from).content == '(') {
                 targetNode = node.descendants().get(2);
             }
-            addMargin(targetNode, indentSpaces);
+            addMargin(targetNode, indentSpaces, "r2_increment_left_margin_for_subquery_in_paren");
         }
     }
 }
@@ -1677,7 +1680,7 @@ r2_increment_left_margin_for_assoc_arg_value:
     var value = tuple.get("value");
     var nameContent = getLastLine(getContent(name.from, value.from));
     var increment = nameContent.length;
-    addMargin(value, increment);
+    addMargin(value, increment, "r2_increment_left_margin_for_assoc_arg_value");
 }
 
 r2_increment_left_margin_for_assignment:
@@ -1692,9 +1695,9 @@ r2_increment_left_margin_for_assignment:
     var parentCol = getColumnWithoutFirstIndent(parent.from);
     var nodeCol = getColumnWithoutFirstIndent(node.from);
     if (!getIndent(node.from).contains("\n")) {
-        addMargin(node, nodeCol-parentCol);
+        addMargin(node, nodeCol-parentCol, "r2_increment_left_margin_for_assignment");
     } else {
-        addMargin(node, indentSpaces);
+        addMargin(node, indentSpaces, "r2_increment_left_margin_for_assignment");
     }
 }
 
@@ -2288,8 +2291,8 @@ r6_find_names:
 r6_align_names:
     runOnce
 -> {
-    align(assocNames, "aligner", null, "r6_align_names");
-    fixIndentOfLeadingCommas(assocNames, "aligner", "r6_align_names");
+    align(assocNames, "aligner", null, "r6_align_names (align)");
+    fixIndentOfLeadingCommas(assocNames, "aligner", "r6_align_names (fix)");
 }
 
 r6_find_values:
