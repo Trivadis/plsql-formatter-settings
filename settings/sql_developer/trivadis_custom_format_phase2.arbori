@@ -1612,8 +1612,6 @@ r2_increment_left_margin_by_keyword_outside_node:
       [node) select_list & [keyword) 'SELECT' & (keyword = node-1 | keyword = node-2)
     | [node) condition & [keyword) 'CONNECT' & [keyword+1) 'BY' & keyword = node-2
     | [node) condition & [keyword) 'START' & [keyword+1) 'WITH' & keyword = node-2
-    -- insert statement
-    | [node) insert_into_clause & [keyword) 'INSERT' & keyword = node^-1 & [node^) single_table_insert
     -- update statement
     | [node) aliased_dml_table_expression_clause & keyword = node^
     -- delete statement
@@ -1631,8 +1629,6 @@ r2_increment_left_margin_by_keyword_inside_node:
     | [node) having_clause & [keyword) 'HAVING' & keyword^ = node
     | [node) order_by_clause & [keyword) 'ORDER' & keyword^ = node
     -- insert statement
-    | [node) insert_into_clause & [keyword) 'INTO' & keyword^ = node & ![node^) single_table_insert
-    | [node) values_clause & [keyword) 'VALUES' & keyword^ = node
     | [node) returning_clause & ([keyword) 'RETURNING' | [keyword) 'RETURN') & keyword^ = node
     | [node) error_logging_clause & [keyword) 'LOG' & keyword^ = node
     -- update statement
