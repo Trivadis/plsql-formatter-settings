@@ -1131,6 +1131,7 @@ a16_single_table_insert:
       [parent) single_table_insert
     & (
           [node) returning_clause
+        | [node) values_clause
         | [node) error_logging_clause
       )
     & parent < node
@@ -1140,6 +1141,7 @@ a16_multi_table_insert:
       [parent) multi_table_insert
     & (
           [node) insert_into_clause
+        | [node) values_clause
         | [node) error_logging_clause
       )
     & parent < node
