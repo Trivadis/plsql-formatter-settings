@@ -382,14 +382,14 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var expected = """
                     begin
                        insert into mytable t (
-                                 a, b, c, d
-                              )
+                          a, b, c, d
+                       )
                        values (
-                                 'a',
-                                 'b',
-                                 'c',
-                                 'd'
-                              )
+                          'a',
+                          'b',
+                          'c',
+                          'd'
+                       )
                     returning a,
                               b,
                               c,
