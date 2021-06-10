@@ -488,7 +488,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                            salary = salary + 1000,
                            department_id = 120
                      where first_name = 'Douglas'
-                           and last_name = 'Grant';
+                       and last_name = 'Grant';
                     """;
             assertEquals(expected, actual);
         }
@@ -551,7 +551,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     delete
                       from t
                      where c1 = 1
-                           and c2 = 2;
+                       and c2 = 2;
                     """;
             assertEquals(expected, actual);
         }
@@ -585,6 +585,139 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+    }
 
+    @Nested
+    class Merge {
+
+        @BeforeEach
+        public void setup() {
+            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+        }
+
+        @Test
+        public void merge_update() throws IOException {
+            var input = """
+                    merge into t
+                    using s
+                    on (
+                    s.id = t.id
+                    and s.id2 = t.id2
+                    )
+                    when matched then
+                    update
+                    set t.c1 = s.c1
+                    ,t.c2 = s.c2
+                    where 1 = 1
+                    and 2 = 2;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    merge into t
+                    using s
+                       on (
+                             s.id = t.id
+                             and s.id2 = t.id2
+                          )
+                     when matched then
+                          update
+                             set t.c1 = s.c1,
+                                 t.c2 = s.c2
+                           where 1 = 1
+                             and 2 = 2;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void merge_update_delete() throws IOException {
+            var input = """
+                    merge into t
+                    using s on (s.id = t.id)
+                    when matched then
+                    update
+                    set t.c1 = s.c1,
+                    t.c2 = s.c2
+                    where 1 = 1
+                    and 2 = 2
+                    delete
+                    where 1 = 2
+                    and 2 = 1;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    merge into t
+                    using s
+                       on (s.id = t.id)
+                     when matched then
+                          update
+                             set t.c1 = s.c1,
+                                 t.c2 = s.c2
+                           where 1 = 1
+                             and 2 = 2
+                          delete
+                           where 1 = 2
+                             and 2 = 1;
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void merge_update_delete_insert() throws IOException {
+            var input = """
+                    merge into t
+                    using s on (s.id = t.id)
+                    when matched then
+                    update
+                    set t.c1 = s.c1,
+                    t.c2 = s.c2
+                    where 1 = 1
+                    and 2 = 2
+                    delete
+                    where 1 = 2
+                    and 2 = 1
+                    when not matched then
+                    insert (
+                    t.id,
+                    t.c1,
+                    t.c2
+                    )
+                    values (
+                    s.id,
+                    s.c1,
+                    s.c2
+                    )
+                    where s.c3 = 3;
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    merge into t
+                    using s
+                       on (s.id = t.id)
+                     when matched then
+                          update
+                             set t.c1 = s.c1,
+                                 t.c2 = s.c2
+                           where 1 = 1
+                             and 2 = 2
+                          delete
+                           where 1 = 2
+                             and 2 = 1
+                     when not matched then
+                          insert (
+                             t.id,
+                             t.c1,
+                             t.c2
+                          )
+                          values (
+                             s.id,
+                             s.c1,
+                             s.c2
+                          )
+                           where s.c3 = 3;
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 }
