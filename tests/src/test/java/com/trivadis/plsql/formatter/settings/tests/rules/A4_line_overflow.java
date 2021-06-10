@@ -81,6 +81,73 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     """;
             formatAndAssert(sql);
         }
+
+        @Test
+        public void recommendend_way_to_split_list() throws IOException {
+            // indent of the first line of the list is the same as for all subsequent list lines
+            var input = """
+                    select *
+                    from table(
+                    mdsys.stringlist(
+                    'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values'));
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select *
+                      from table(
+                              mdsys.stringlist(
+                                 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some',
+                                 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list',
+                                 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a',
+                                 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this',
+                                 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some',
+                                 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list',
+                                 'with', 'some', 'values'));
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void not_recommendend_way_to_split_list() throws IOException {
+            // indent of the first line of the list is different to the indents of the subsequent lines
+            var input = """
+                    select *
+                    from table(
+                    mdsys.stringlist('this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values'));
+                    """;
+            var actual = formatter.format(input);
+            // the first formatter results produces wrong indents for subsequent lines
+            // and A4 might split the lines at the wrong position for subsequent formatter calls
+            var expected = """
+                    select *
+                      from table(
+                              mdsys.stringlist('this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list',
+                              'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string',
+                              'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is',
+                              'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values',
+                              'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some',
+                              'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with',
+                              'some', 'values'));
+                    """;
+            assertEquals(expected, actual);
+            // a second formatter call fixes the indent, but adds unwanted line breaks.
+            // this is an expected result.
+            // fixing that would require a correct indent calculation in A4, which would requires a lot of code duplication.
+            var actual2 = formatter.format(actual);
+            var expected2 = """
+                    select *
+                      from table(
+                              mdsys.stringlist('this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list',
+                                 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string',
+                                 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is',
+                                 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values',
+                                 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some',
+                                 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list',
+                                 'with',
+                                 'some', 'values'));
+                    """;
+            assertEquals(expected2, actual2);
+        }
     }
 
     @Nested
