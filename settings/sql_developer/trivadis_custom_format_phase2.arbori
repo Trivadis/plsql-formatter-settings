@@ -1708,7 +1708,6 @@ r2_indent_nodes:
         var value = newlinePositions.get(key);
         var spaces = value.length()-value.lastIndexOf("\n")-1; // 0 = first column
         var comma = 0;
-        var spacesAfterComma = 0;
         if (key < target.src.size()) {
             if (target.src.get(key).content == ",") {
                 comma = 1;
