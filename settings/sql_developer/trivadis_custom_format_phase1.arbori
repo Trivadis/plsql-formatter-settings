@@ -361,12 +361,12 @@ define_global_functions:
                     indent = indent.substr(0, targetPos + 1);
                 }
                 struct.putNewline(alignNode.from, indent);
-                logger.fine(struct.getClass(), logText + ": at " + alignNode.from);
+                logger.fine(struct.getClass(), logText + ": at " + alignNode.from + ".");
                 if (indentNodeName != null) {
                     var indentNode = list.get(i).get(indentNodeName);
                     if (indentNode != null) {
                         addIndent(indentNode, targetPos - col);
-                        logger.fine(struct.getClass(), logText + ": add indent for " + indentNode.from);
+                        logger.fine(struct.getClass(), logText + ": add indent for " + indentNode.from + ".");
                     }
                 }
             }
@@ -438,7 +438,7 @@ define_global_functions:
                         var content = target.src.get(node.from).content;
                         if (content == ",") {
                             struct.putNewline(node.from, indent.substr(0, indent.length - comma));
-                            logger.fine(struct.getClass(), logText + ": reduced intent at " + node.from);
+                            logger.fine(struct.getClass(), logText + ": reduced intent at " + node.from + ".");
                         }
                     }
                 }
@@ -635,7 +635,7 @@ keep_significant_whitespace_before_leaf_nodes:
                 // add also empty strings to ensure that not a space is added between tokens
                 struct.putNewline(i-hiddenTokenCount, wsBefore);
                 logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: add "
-                    + wsBefore.length() + " whitespace at " + (i-hiddenTokenCount));
+                    + wsBefore.length() + " whitespace at " + (i-hiddenTokenCount) + ".");
             }
             wsBefore = "";
         }
@@ -661,13 +661,14 @@ remove_duplicate_spaces_in_scope:
             if (nlpos == -1) {
                 if (indent.length > 1) {
                     struct.putNewline(pos, " ");
-                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + pos);
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + pos + ".");
                 }
             } else {
                 var spaces = indent.length - nlpos - 1;
                 if (spaces > 0) {
                     struct.putNewline(pos, indent.substr(0, nlpos+1));
-                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at " + pos);
+                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at "
+                        + pos + ".");
                 }
             }
         }
