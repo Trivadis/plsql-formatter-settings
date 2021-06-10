@@ -13,25 +13,26 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                 using people_source ps
                    on (pt.person_id = ps.person_id)
                  when matched then
-                   update
-                      set pt.first_name = ps.first_name,
-                          pt.last_name = ps.last_name,
-                          pt.title = ps.title
-                   delete
-                    where pt.title = 'Mrs.'
+                      update
+                         set pt.first_name = ps.first_name,
+                             pt.last_name = ps.last_name,
+                             pt.title = ps.title
+                      delete
+                       where pt.title = 'Mrs.'
                  when not matched then
-                   insert (
-                      pt.person_id,
-                      pt.first_name,
-                      pt.last_name,
-                      pt.title
-                   ) values (
-                      ps.person_id,
-                      ps.first_name,
-                      ps.last_name,
-                      ps.title
-                   )
-                    where ps.title = 'Mr';
+                      insert (
+                         pt.person_id,
+                         pt.first_name,
+                         pt.last_name,
+                         pt.title
+                      )
+                      values (
+                         ps.person_id,
+                         ps.first_name,
+                         ps.last_name,
+                         ps.title
+                      )
+                       where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
     }
@@ -44,25 +45,26 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                 using people_source ps
                    on (pt.person_id = ps.person_id)
                  when matched then
-                   update
-                      set pt.first_name = ps.first_name
-                        , pt.last_name = ps.last_name
-                        , pt.title = ps.title
-                   delete
-                    where pt.title = 'Mrs.'
+                      update
+                         set pt.first_name = ps.first_name
+                           , pt.last_name = ps.last_name
+                           , pt.title = ps.title
+                      delete
+                       where pt.title = 'Mrs.'
                  when not matched then
-                   insert (
-                      pt.person_id
-                    , pt.first_name
-                    , pt.last_name
-                    , pt.title
-                   ) values (
-                      ps.person_id
-                    , ps.first_name
-                    , ps.last_name
-                    , ps.title
-                   )
-                    where ps.title = 'Mr';
+                      insert (
+                         pt.person_id
+                       , pt.first_name
+                       , pt.last_name
+                       , pt.title
+                      )
+                      values (
+                         ps.person_id
+                       , ps.first_name
+                       , ps.last_name
+                       , ps.title
+                      )
+                       where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
     }
@@ -80,25 +82,26 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                       ) ps
                    on (pt.person_id = ps.person_id)
                  when matched then
-                   update
-                      set pt.first_name = ps.first_name,
-                          pt.last_name = ps.last_name,
-                          pt.title = ps.title
-                   delete
-                    where pt.title = 'Mrs.'
+                      update
+                         set pt.first_name = ps.first_name,
+                             pt.last_name = ps.last_name,
+                             pt.title = ps.title
+                      delete
+                       where pt.title = 'Mrs.'
                  when not matched then
-                   insert (
-                      pt.person_id,
-                      pt.first_name,
-                      pt.last_name,
-                      pt.title
-                   ) values (
-                      ps.person_id,
-                      ps.first_name,
-                      ps.last_name,
-                      ps.title
-                   )
-                    where ps.title = 'Mr';
+                      insert (
+                         pt.person_id,
+                         pt.first_name,
+                         pt.last_name,
+                         pt.title
+                      )
+                      values (
+                         ps.person_id,
+                         ps.first_name,
+                         ps.last_name,
+                         ps.title
+                      )
+                       where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
     }
@@ -117,25 +120,26 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                       ) ps
                    on (pt.person_id = ps.person_id)
                  when matched then
-                   update
-                      set pt.first_name = ps.first_name  -- first_name
-                        , pt.last_name = ps.last_name    -- last_name
-                        , pt.title = ps.title            -- title
-                   delete
-                    where pt.title = 'Mrs.'
+                      update
+                         set pt.first_name = ps.first_name  -- first_name
+                           , pt.last_name = ps.last_name    -- last_name
+                           , pt.title = ps.title            -- title
+                      delete
+                       where pt.title = 'Mrs.'
                  when not matched then
-                   insert (
-                      pt.person_id                       -- person identifier
-                    , pt.first_name                      -- first_name
-                    , pt.last_name                       -- last_name
-                    , pt.title                           -- title
-                   ) values (
-                      ps.person_id                       -- person identifier
-                    , ps.first_name                      -- first_name
-                    , ps.last_name                       -- last_name
-                    , ps.title                           -- title
-                   )
-                    where ps.title = 'Mr';
+                      insert (
+                         pt.person_id                       -- person identifier
+                       , pt.first_name                      -- first_name
+                       , pt.last_name                       -- last_name
+                       , pt.title                           -- title
+                      )
+                      values (
+                         ps.person_id                       -- person identifier
+                       , ps.first_name                      -- first_name
+                       , ps.last_name                       -- last_name
+                       , ps.title                           -- title
+                      )
+                       where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
     }
