@@ -1881,6 +1881,8 @@ r7_select:
     & parent < keyword
     & ![keyword^^) analytic_clause
     & ![keyword^) analytic_clause
+    & ![keyword^) function
+    & ![keyword^) collect[33,45)
 ;
 
 r7_single_table_insert:
