@@ -456,8 +456,8 @@ define_global_functions:
            "insert",
            "update",
            "delete",
-           "merge"
-           /*, "block_stmt"*/
+           "merge",
+           "block_stmt"
         ]);
     }
 
