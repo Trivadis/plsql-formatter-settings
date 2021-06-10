@@ -79,7 +79,8 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                              deptno,
                              dname,
                              loc
-                          ) values (
+                          )
+                   values (
                              10,
                              'accounting',
                              'new york'
@@ -115,7 +116,8 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                              deptno,
                              dname,
                              loc
-                          ) values (
+                          )
+                   values (
                              p_deptno,
                              p_dname,
                              p_loc

@@ -68,7 +68,8 @@ public class Oracle extends ConfiguredTestFormatter {
                                 value1,
                                 value2,
                                 value3
-                             ) values (
+                             )
+                      values (
                                 new_empno,
                                 'First'
                                 || 'Middle'

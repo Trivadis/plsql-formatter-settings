@@ -410,18 +410,24 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var input = """
                     insert
                     all
-                    into t1 (c1, c2) values (c1, c2)
-                    into t2 (c1, c2) values (c1, c2)
-                    into t3 (c1, c2) values (c1, c2)
+                    into t1 (c1, c2)
+                    values (c1, c2)
+                    into t2 (c1, c2)
+                    values (c1, c2)
+                    into t3 (c1, c2)
+                    values (c1, c2)
                     select c1, c2
                     from t4;
                     """;
             var actual = formatter.format(input);
             var expected = """
                     insert all
-                      into t1 (c1, c2) values (c1, c2)
-                      into t2 (c1, c2) values (c1, c2)
-                      into t3 (c1, c2) values (c1, c2)
+                      into t1 (c1, c2)
+                    values (c1, c2)
+                      into t2 (c1, c2)
+                    values (c1, c2)
+                      into t3 (c1, c2)
+                    values (c1, c2)
                     select c1, c2
                       from t4;
                     """;
