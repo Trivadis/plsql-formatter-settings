@@ -444,6 +444,14 @@ a8_create_or_replace:
     | [node) 'TYPE' & ![node-1) '%'
 ;
 
+a8_merge:
+      [node) 'MERGE' & [node^) merge
+    | [node) 'INTO' & [node^) merge
+    | [node) 'WHEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
+    | [node) 'NOT' & [node^) merge_insert_clause
+    | [node) 'MATCHED' & ([node^) merge_update_clause | [node^) merge_insert_clause)
+;
+
 a8_case:
     [node) 'CASE' & [node+1) simple_case_expression
 ;
@@ -470,6 +478,7 @@ a8_one_space_after:
     | a8_join
     | a8_from
     | a8_create_or_replace
+    | a8_merge
     | a8_case
     | a8_select_clauses
 -> {
@@ -511,6 +520,10 @@ a15_line_break_before:
       [node) insert_into_clause & [node^^) multi_table_insert
     | [node) subquery & [node^) multi_table_insert
     | [node) prm_spec & [node-1) ','
+    | [node) 'USING' & [node^) merge
+    | [node) 'ON' & [node^) merge
+    | [node) 'WHEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
+
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.from).contains("\n")) {
@@ -525,7 +538,10 @@ a15_line_break_before:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a14_line_break_after:
-    [node) 'AS' & [node^) create_view#
+      [node) 'AS' & [node^) create_view#
+    | [node) 'THEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
+    | [node) 'UPDATE' & [node^) merge_update_clause
+    | [node) 'DELETE' & [node^) merge_update_clause
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.to).contains("\n")) {
@@ -1429,18 +1445,19 @@ r2_init_left_margin:
     }
 
     /* increase left margin by first keyword in node */
-    var addMarginByFirstKeyword = function(node, logText) {
-        return addMarginByName(node, getFirstWord(target.src.get(node.from).content), logText);
+    var addMarginByFirstKeyword = function(node, mainKeywordLength, logText) {
+        return addMarginByName(node, mainKeywordLength,
+            getFirstWord(target.src.get(node.from).content), logText);
     }
 
     /* increase left margin by keyword and SQLDev settings */
-    var addMarginByName = function(node, name, logText) {
+    var addMarginByName = function(node, mainKeywordLength, name, logText) {
         var spaces;
         if (breaksAfterSelect) {
             spaces = indentSpaces;
         } else if (alignRight) {
             var firstWord = getFirstWord(name);
-            spaces = 6 + name.length - firstWord.length + 1;
+            spaces = mainKeywordLength + name.length - firstWord.length + 1;
         } else {
             spaces = name.length + 1;
         }
@@ -1578,6 +1595,15 @@ r2_multi_table_insert:
     & parent <= node
 ;
 
+r2_merge_insert_clause:
+      [parent) merge_insert_clause
+    & (
+          [node) merge_insert_clause[23,35) & [node-1) 'INSERT'
+        | [node) merge_insert_clause[43,50) & [node-1) 'VALUES'
+    )
+    & parent < node
+;
+
 r2_increment_left_margin:
       r2_common
     | r2_flowcontrol_condition
@@ -1588,6 +1614,7 @@ r2_increment_left_margin:
     | r2_body
     | r2_single_table_insert
     | r2_multi_table_insert
+    | r2_merge_insert_clause
 -> {
     addMargin(tuple.get("node"), indentSpaces, "r2_increment_left_margin");
 }
@@ -1603,6 +1630,8 @@ r2_decrement_left_margin:
                 | [node^) create_view#[114,130)
                 | [node^) insert_into_clause[13,25)
                 | [node^) par_expr_list
+                | [node^) merge_insert_clause[23,35)
+                | [node^) merge_insert_clause[43,50)
             )
     | [node) 'RECORD' & [node^) ty_def
     | [node) 'XMLQUERY' & [node^) xmlquery
@@ -1620,9 +1649,21 @@ r2_increment_left_margin_by_keyword_outside_node:
     | [node) aliased_dml_table_expression_clause & keyword = node^
     -- delete statement
     | [node) 'FROM' & [keyword) 'DELETE' & [node^) delete & keyword+1 = node
+    -- merge statement
+    | [node) merge_update_clause[36,56) & [keyword) 'SET' & [node^) merge_update_clause & keyword^ = node^
 -> {
-    addMarginByName(tuple.get("node"), target.src.get(tuple.get("keyword").from).content,
+    addMarginByName(tuple.get("node"), 6, target.src.get(tuple.get("keyword").from).content,
         "r2_increment_left_margin_by_keyword_outside_node");
+}
+
+-- use merge keyword for right alignment (5 chars)
+r2_increment_left_margin_by_keyword_outside_node_for_merge:
+      [node) subquery & [keyword) 'USING' & [node^) merge & keyword+1 = node
+    | [node) condition & [keyword) 'ON' & [node^) merge & keyword+2 = node
+    | [node) ')' & [keyword) 'ON' & [node^) merge & keyword+3 = node
+-> {
+    addMarginByName(tuple.get("node"), 5, target.src.get(tuple.get("keyword").from).content,
+        "r2_increment_left_margin_by_keyword_outside_node_for_merge");
 }
 
 r2_increment_left_margin_by_keyword_inside_node:
@@ -1639,8 +1680,21 @@ r2_increment_left_margin_by_keyword_inside_node:
     -- update statement
     | [node) update_set_clause & [keyword) 'SET' & keyword^ = node
 -> {
-    var spaces = addMarginByFirstKeyword(tuple.get("node"), "r2_increment_left_margin_by_keyword_inside_node (node)");
-    addMargin(tuple.get("keyword"), -1 * spaces, "r2_increment_left_margin_by_keyword_inside_node (keyword)");
+    var spaces = addMarginByFirstKeyword(tuple.get("node"), 6,
+        "r2_increment_left_margin_by_keyword_inside_node (node)");
+    addMargin(tuple.get("keyword"), -1 * spaces,
+        "r2_increment_left_margin_by_keyword_inside_node (keyword)");
+}
+
+-- use merge keyword for right alignment (5 chars)
+r2_increment_left_margin_by_keyword_inside_node_for_merge:
+      [node) merge_update_clause & [keyword) 'WHEN' & keyword^ = node
+    | [node) merge_insert_clause & [keyword) 'WHEN' & keyword^ = node
+-> {
+    var spaces = addMarginByFirstKeyword(tuple.get("node"), 5,
+        "r2_increment_left_margin_by_keyword_inside_node_for_merge (node)");
+    addMargin(tuple.get("keyword"), -1 * spaces,
+        "r2_increment_left_margin_by_keyword_inside_node_for_merge (keyword)");
 }
 
 r2_subquery:
@@ -1905,6 +1959,40 @@ r7_delete:
     & parent < keyword
 ;
 
+r7_merge:
+      [parent) merge
+    & (
+          [keyword) 'USING'
+        | [keyword) 'ON'
+        | [keyword) 'WHEN'
+        | [keyword) 'LOG'
+        | [keyword) 'REJECT'
+      )
+    & parent < keyword
+;
+
+r7_merge_update_clause:
+      [grandparent) merge_update_clause
+    & ([parent) 'UPDATE' | [parent) 'DELETE')
+    & (
+          [keyword) 'SET'
+        | [keyword) 'WHERE'
+      )
+    & grandparent < keyword
+    & parent^ = grandparent
+;
+
+r7_merge_insert_clause:
+      [grandparent) merge_insert_clause
+    & [parent) 'INSERT'
+    & (
+          [keyword) 'VALUES'
+        | [keyword) 'WHERE'
+      )
+    & grandparent < keyword
+    & parent^ = grandparent
+;
+
 r7_right_align_keywords:
       r7_select
     | r7_single_table_insert
@@ -1912,6 +2000,9 @@ r7_right_align_keywords:
     | r7_multi_table_insert_cond
     | r7_update
     | r7_delete
+    | r7_merge
+    | r7_merge_update_clause
+    | r7_merge_insert_clause
 -> {
     rightAlign(tuple, "r7_right_align_keywords");
 }
@@ -1921,6 +2012,8 @@ r7_and_or_exceptions:
           [parent) select
         | [parent) subquery
         | [parent) query_block
+        | [parent) update
+        | [parent) delete
       )
     & [keyword) AND_OR
     & parent < keyword
@@ -1936,13 +2029,38 @@ r7_and_or:
           [parent) select
         | [parent) subquery
         | [parent) query_block
+        | [parent) update
+        | [parent) delete
       )
     & [keyword) AND_OR
     & parent < keyword
 ;
 
+r7_and_or_merge_exceptions:
+      ([grandparent) merge_update_clause | [grandparent) merge_insert_clause)
+    & ([parent) 'UPDATE' | [parent) 'DELETE' | [parent) 'INSERT')
+    & [keyword) AND_OR
+    & grandparent < keyword
+    & parent^ = grandparent
+    & (
+          [exception) case_expression
+        | [exception) compound_condition & [exception-1) '('
+      )
+    & exception < keyword
+;
+
+
+r7_and_or_merge:
+      ([grandparent) merge_update_clause | [grandparent) merge_insert_clause)
+    & ([parent) 'UPDATE' | [parent) 'DELETE' | [parent) 'INSERT')
+    & [keyword) AND_OR
+    & grandparent < keyword
+    & parent^ = grandparent
+;
+
 r7_right_align_and_or:
-    r7_and_or - r7_and_or_exceptions
+      (r7_and_or - r7_and_or_exceptions)
+    | (r7_and_or_merge - r7_and_or_merge_exceptions)
 -> {
     rightAlign(tuple, "r7_right_align_and_or");
 }
