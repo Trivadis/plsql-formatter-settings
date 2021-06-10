@@ -455,8 +455,9 @@ define_global_functions:
            "create_view",
            "insert",
            "update",
-           "delete"
-           /*, "merge", "block_stmt"*/
+           "delete",
+           "merge"
+           /*, "block_stmt"*/
         ]);
     }
 
