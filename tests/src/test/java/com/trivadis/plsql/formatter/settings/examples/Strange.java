@@ -68,7 +68,7 @@ public class Strange extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("various issues")
+    @Disabled("comment not indented")
     public void tokenized() throws IOException {
         var input = """
                 begin
@@ -227,13 +227,11 @@ public class Strange extends ConfiguredTestFormatter {
                              p.prod_category
                    )
                    loop
-                      if rec.region = 'Asia'
-                      then
-                         if rec.prod_category = 'Hardware'
-                         then
+                      if rec.region = 'Asia' then
+                         if rec.prod_category = 'Hardware' then
                             /* print only one line for demo purposes */
                             sys.dbms_output.put_line(
-                               'Amount: ' || rec .amount_sold
+                               'Amount: ' || rec.amount_sold
                             );
                          end if;
                       end if;
