@@ -416,6 +416,15 @@ a8_if:
     & [node) 'IF'
 ;
 
+a8_end:
+      [node) 'END'
+    & (
+          [node+1) 'IF'
+        | [node+1) 'LOOP'
+        | [node+1) 'CASE'
+      )
+;
+
 a8_for_identifier:
      [node-1) 'FOR'
    & [node) identifier
@@ -483,6 +492,7 @@ a8_select_clauses:
 
 a8_one_space_after:
       a8_if
+    | a8_end
     | a8_for_identifier
     | a8_as
     | a8_on
