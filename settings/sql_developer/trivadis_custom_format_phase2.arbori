@@ -447,7 +447,8 @@ a8_create_or_replace:
 a8_merge:
       [node) 'MERGE' & [node^) merge
     | [node) 'INTO' & [node^) merge
-    | [node) identifier & [node^) merge & ([node-1) 'INTO' | [node-2) 'INTO')
+    | [node-1) 'INTO' & ![node+1) 'USING' & [node^) merge
+    | [node-2) 'INTO' & ![node+1) 'USING' & [node^) merge
     | [node) 'USING' & [node^) merge
     | [node) 'WHEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
     | [node) 'NOT' & [node^) merge_insert_clause
