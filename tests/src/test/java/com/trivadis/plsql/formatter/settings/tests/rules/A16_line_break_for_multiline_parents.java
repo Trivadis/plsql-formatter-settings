@@ -216,4 +216,32 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 """;
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void single_line_merge() {
+        var sql = """
+                merge into t using s on (s.id = t.id) when not matched then insert (t.id, t.c1) values (s.id, s.c1) where s.c3 = 3;
+                """;
+        formatAndAssert(sql);
+    }
+
+    @Test
+    public void multi_line_merge() throws IOException {
+        var input = """
+                merge into t
+                using s on (s.id = t.id) when not matched then insert (t.id, t.c1) values (s.id, s.c1) where s.c3 = 3;
+                """;
+        var actual = formatter.format(input);
+        var expected = """
+                merge into t
+                using s
+                   on (s.id = t.id)
+                 when not matched then
+                      insert (t.id, t.c1) 
+                      values (s.id, s.c1) 
+                       where s.c3 = 3;
+                """;
+        assertEquals(expected, actual);
+    }
+
 }
