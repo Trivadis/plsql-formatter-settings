@@ -447,6 +447,8 @@ a8_create_or_replace:
 a8_merge:
       [node) 'MERGE' & [node^) merge
     | [node) 'INTO' & [node^) merge
+    | [node) identifier & [node^) merge & ([node-1) 'INTO' | [node-2) 'INTO')
+    | [node) 'USING' & [node^) merge
     | [node) 'WHEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
     | [node) 'NOT' & [node^) merge_insert_clause
     | [node) 'MATCHED' & ([node^) merge_update_clause | [node^) merge_insert_clause)
@@ -520,10 +522,6 @@ a15_line_break_before:
       [node) insert_into_clause & [node^^) multi_table_insert
     | [node) subquery & [node^) multi_table_insert
     | [node) prm_spec & [node-1) ','
-    | [node) 'USING' & [node^) merge
-    | [node) 'ON' & [node^) merge
-    | [node) 'WHEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
-
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.from).contains("\n")) {
@@ -539,9 +537,6 @@ a15_line_break_before:
 
 a14_line_break_after:
       [node) 'AS' & [node^) create_view#
-    | [node) 'THEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
-    | [node) 'UPDATE' & [node^) merge_update_clause
-    | [node) 'DELETE' & [node^) merge_update_clause
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.to).contains("\n")) {
@@ -1173,11 +1168,38 @@ a16_delete:
     & node^ = parent
 ;
 
+a16_merge:
+      [parent) merge
+    & (
+          [node) 'USING'
+        | [node) 'ON'
+        | [node) merge_update_clause
+        | [node) merge_insert_clause
+        | [node) error_logging_clause
+      )
+    & parent < node
+;
+
+a16_permutted_merge_insert_update:
+      [parent) permutted_merge_insert_update
+    & (
+          [node) 'UPDATE'
+        | [node) 'SET'
+        | [node) where_clause
+        | [node) 'DELETE'
+        | [node) 'INSERT'
+        | [node) 'VALUES'
+      )
+    & parent < node
+;
+
 a16_add_line_breaks_before_dml_clause:
       a16_select
     | a16_single_table_insert
     | a16_multi_table_insert
     | a16_delete
+    | a16_merge
+    | a16_permutted_merge_insert_update
 -> {
     var parent = tuple.get("parent");
     var node = tuple.get("node");
