@@ -2275,10 +2275,9 @@ o4_find_body_assignments:
     if (alignAssignments) {
         var scope = tuple.get("scope");
         var value = tuple.get("value")
-        if (getIndent(value.from).contains("\n")) {
-            tuple.remove("value");
+        if (!getIndent(value.from).contains("\n")) {
+            addTupleToMap(tuple, "scope", assignmentsWithValue);
         }
-        addTupleToMap(tuple, "scope", assignmentsWithValue);
     }
 }
 
