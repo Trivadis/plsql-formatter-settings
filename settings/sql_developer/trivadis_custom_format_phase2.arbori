@@ -2246,6 +2246,14 @@ o4_declare_section:
     & scope < node
 ;
 
+o4_function_in_declare_section:
+      [scope) decl_list
+    & [func) fml_part
+    & [node) default_expr_opt
+    & func < node
+    & scope < func
+;
+
 o4_function:
       [scope) fml_part
     & [node) default_expr_opt
@@ -2253,7 +2261,7 @@ o4_function:
 ;
 
 o4_find_assignments:
-      o4_declare_section
+      (o4_declare_section - o4_function_in_declare_section)
     | o4_function
 -> {
     if (alignAssignments) {
