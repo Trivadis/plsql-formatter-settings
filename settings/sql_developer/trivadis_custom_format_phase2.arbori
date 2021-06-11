@@ -1707,6 +1707,23 @@ r2_increment_left_margin_by_keyword_inside_node_for_merge:
         "r2_increment_left_margin_by_keyword_inside_node_for_merge (keyword)");
 }
 
+r2_indent_single_line_clauses:
+      [node) insert_into_clause[13,25)
+    | [node) values_clause[12,20)
+    | [node) merge_insert_clause[23,35) & [node-1) 'INSERT'
+    | [node) merge_insert_clause[43,50) & [node-1) 'VALUES'
+-> {
+    var node = tuple.get("node");
+    print("node: " + node);
+    if (getIndent(node.from).contains("\n")) {
+        print("found");
+        if (!hasNewline(node.to-1, node.from+1)) {
+            print("no newline");
+            addMargin(node, indentSpaces, "r2_indent_single_line_clauses");
+        }
+    }
+}
+
 r2_subquery:
       [node) subquery
     & [from) from_clause
