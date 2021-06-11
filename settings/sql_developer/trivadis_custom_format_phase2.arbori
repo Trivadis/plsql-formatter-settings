@@ -1490,21 +1490,6 @@ r2_init_left_margin:
     }
 }
 
--- TODO: delete query as soon as left margin is enforced for PL/SQL
-r2_remove_indentation_for_assignment:
-    [node-2) ':' & [node-1) '=' & [node) pls_expr
--> {
-    var node = tuple.get("node");
-    for (var i=node.from; i<node.to; i++) {
-        var indent = getIndent(i);
-        var index = indent.lastIndexOf("\n") + 1;
-        if (index > 0) {
-            struct.putNewline(i, indent.substr(0, index));
-            logger.fine(struct.getClass(), "r2_remove_indentation_for_assignment: at " + i + ".");
-        }
-    }
-}
-
 r2_common:
       [node) basic_d
     | [node) full_cursor_body
