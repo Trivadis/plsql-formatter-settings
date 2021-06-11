@@ -385,6 +385,11 @@ a7_parameter_parts:
     | [node) prm_spec_unconstrained_type & [node^) prm_spec
 ;
 
+a7_for_loop_identifier:
+      [node-1) 'FOR'
+    & [node^) iteration_scheme
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -392,6 +397,7 @@ a7_one_space_before:
     | a7_insert_all
     | a7_insert_into
     | a7_parameter_parts
+    | a7_for_loop_identifier
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
