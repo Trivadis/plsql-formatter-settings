@@ -1181,7 +1181,8 @@ a16_merge:
 ;
 
 a16_permutted_merge_insert_update:
-      [parent) permutted_merge_insert_update
+      [parent) merge
+    & [child) permutted_merge_insert_update
     & (
           [node) 'UPDATE'
         | [node) 'SET'
@@ -1190,7 +1191,8 @@ a16_permutted_merge_insert_update:
         | [node) 'INSERT'
         | [node) 'VALUES'
       )
-    & parent < node
+    & child < node
+    & parent < child
 ;
 
 a16_add_line_breaks_before_dml_clause:
