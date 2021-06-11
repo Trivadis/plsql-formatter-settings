@@ -42,18 +42,18 @@ public class Issue_81_boolean_conditions_and_parenthesis extends ConfiguredTestF
     public void plsql_expr_multiline() throws IOException {
         var input = """
                 begin
-                   if ( ( 1 = 2 ) or ( (
-                      2 = 2 and 3 = 3
-                   ) or ( 4 = 5 ) ) ) then
+                   if ( ( variable1 = variable2 ) or ( (
+                      variable2 = variable2 and variable3 = variable3
+                   ) or ( variable4 = variable5 ) ) ) then
                       dbms_output.put_line('Yes');
                    end if;
                 end;
                 """;
         var expected = """
                 begin
-                   if ((1 = 2) or ((
-                               2 = 2 and 3 = 3
-                            ) or (4 = 5)))
+                   if ((variable1 = variable2) or ((
+                               variable2 = variable2 and variable3 = variable3
+                            ) or (variable4 = variable5)))
                    then
                       dbms_output.put_line('Yes');
                    end if;
