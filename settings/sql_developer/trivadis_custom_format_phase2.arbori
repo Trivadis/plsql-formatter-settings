@@ -182,8 +182,10 @@ a13_calls:
     | [node) function_call & ![node^) dotted_expr
     | [node) function_expression
     | [node) dotted_name
+    | [node) dotted_expr
     | [node) column[4,12)
     | [node) compound_expression & ![node^) compound_expression
+    | [node) pls_expr
 ;
 
 a13_calls_with_assoc_args:
