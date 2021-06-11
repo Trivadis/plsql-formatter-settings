@@ -17,7 +17,9 @@ See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) fo
 
 ## Deviating Settings
 
-Please note that these settings do not comply with rule 5. Line breaks are placed after a comma and not before. All other rules are followed. However, you can easily change this in the settings for both products.
+Please note that these settings do not comply with rule 5. Line breaks are placed after a comma and not before. All other rules are followed. However, you can easily change this in the preferences.
+
+![Change Line Breaks On Comma](images/change_line_breaks_on_comma.png)
 
 ## Installation
 
