@@ -14,7 +14,7 @@ public class Issue_33_split_arguments extends ConfiguredTestFormatter {
                    l_actual    t_obj_type;
                    l_expected  t_obj_type;
                 begin
-                   l_input    :=
+                   l_input :=
                       t_obj_type(
                          obj_type('MY_OWNER', 'VIEW', 'MY_VIEW'),
                          obj_type('MY_OWNER', 'PACKAGE', 'MY_PACKAGE'),
@@ -25,7 +25,7 @@ public class Issue_33_split_arguments extends ConfiguredTestFormatter {
                          obj_type('MY_OWNER', 'PACKAGE', 'MY_PACKAGE'),
                          obj_type('MY_OWNER', 'VIEW', 'MY_VIEW')
                       );
-                   l_actual   := type_util.dedup(l_input);
+                   l_actual := type_util.dedup(l_input);
                    ut.expect(l_actual.count).to_equal(2);
                    ut.expect(anydata.convertCollection(l_actual)).to_equal(anydata.convertCollection(l_expected)).unordered;
                 end test_dedup_t_obj;
@@ -42,7 +42,7 @@ public class Issue_33_split_arguments extends ConfiguredTestFormatter {
                    l_actual    t_obj_type;
                    l_expected  t_obj_type;
                 begin
-                   l_input    :=
+                   l_input :=
                       t_obj_type(
                          obj_type('MY_OWNER', 'VIEW', 'MY_VIEW')
                        , obj_type('MY_OWNER', 'PACKAGE', 'MY_PACKAGE')
@@ -53,7 +53,7 @@ public class Issue_33_split_arguments extends ConfiguredTestFormatter {
                          obj_type('MY_OWNER', 'PACKAGE', 'MY_PACKAGE')
                        , obj_type('MY_OWNER', 'VIEW', 'MY_VIEW')
                       );
-                   l_actual   := type_util.dedup(l_input);
+                   l_actual := type_util.dedup(l_input);
                    ut.expect(l_actual.count).to_equal(2);
                    ut.expect(anydata.convertCollection(l_actual)).to_equal(anydata.convertCollection(l_expected)).unordered;
                 end test_dedup_t_obj;
