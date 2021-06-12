@@ -2631,6 +2631,21 @@ a18_indent_comment:
         return false;
     }
 
+    /* Column position is based on the original formatter input,
+     * hence the result might be unsatisfactory.
+     * A second formatter call helps only if the indent is not too large.
+     * Solving this issue would require to calculate the indent
+     * based on all involved struct.newlinePositions.
+     * It's considered feasible to manually fix indentations in such cases.
+     * These fixes will be honored in subsequent formatter calls. */
+    var getCommentCol = function(pos) {
+        var nlpos = pos;
+        while (nlpos > 0 && (tokens[nlpos].type != Token.WS || !tokens[nlpos].content.contains("\n"))) {
+            nlpos = nlpos - 1;
+        }
+        return tokens[pos].begin - tokens[nlpos].end;
+    }
+
     var indentComment = function(pos) {
         var firstWS = getFirstWhitespaceTokenBefore(pos);
         var oldIndent = getContentBetween(firstWS, pos);
@@ -2645,14 +2660,35 @@ a18_indent_comment:
             var content = oldIndent.substring(0, oldIndent.lastIndexOf("\n") + 1)
                 + newIndent.substring(newIndent.lastIndexOf("\n") + 1);
             substitutions.put(tokens[firstWS].begin, tokens[pos].begin, content);
-            logger.fine(struct.getClass(), "a19_indent_comment: at " + parserPos + ".");
+            logger.fine(struct.getClass(), "a18_indent_comment: at " + parserPos + ".");
             if (tokens[pos].type == Token.COMMENT) {
                 var newComment = tokens[pos].content.replaceAll(
                     oldIndent.substring(oldIndent.lastIndexOf("\n")),
                     newIndent.substring(newIndent.lastIndexOf("\n")));
                 substitutions.put(tokens[pos].begin, tokens[pos].end, newComment);
-                logger.fine(struct.getClass(), "a19_indent_comment: within comment at " + parserPos + ".");
+                logger.fine(struct.getClass(), "a18_indent_comment: all lines at " + parserPos + ".");
             }
+        } else if (tokens[pos].type == Token.COMMENT && !oldIndent.contains("\n") && !hasMacroSkipBetween(pos, lexerPos)) {
+            var col = getCommentCol(pos);
+            var p = Pattern.compile("(\\n)([ ]*)");
+            var content = tokens[pos].content;
+            var m = p.matcher(content);
+            var newComment = "";
+            var rpos = 0;
+            while (m.find()) {
+                newComment += content.substring(rpos, m.end(1));
+                if (m.group(2).length >= col) {
+                    newComment += content.substring(m.start(2), m.end(2));
+                } else {
+                    newComment += getSpaces(col);
+                }
+                rpos = m.end(2);
+            }
+            if (content.length > rpos) {
+                newComment += content.substring(rpos);
+            }
+            substitutions.put(tokens[pos].begin, tokens[pos].end, newComment);
+            logger.fine(struct.getClass(), "a18_indent_comment: subsequent lines at " + parserPos + ".");
         }
     }
 
