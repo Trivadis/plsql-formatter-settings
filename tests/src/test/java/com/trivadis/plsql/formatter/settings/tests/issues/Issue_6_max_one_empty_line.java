@@ -75,13 +75,13 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
                    procedure p3;
 
-                        -- p4 (1)
+                   -- p4 (1)
 
-                      -- p4 (2)
+                   -- p4 (2)
 
                    procedure p4;
 
-                    -- p5
+                   -- p5
                    procedure p5;
 
                 end pkg;
