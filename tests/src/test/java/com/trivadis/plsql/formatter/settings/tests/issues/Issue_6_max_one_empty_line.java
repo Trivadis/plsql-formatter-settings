@@ -63,13 +63,13 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
                  */
                 create or replace package pkg is
 
-                    /*
-                     * pkg
-                     */
+                   /*
+                    * pkg
+                    */
 
-                    /*
-                     * p1
-                     */
+                   /*
+                    * p1
+                    */
                    procedure p1;
                    procedure p2;
 
