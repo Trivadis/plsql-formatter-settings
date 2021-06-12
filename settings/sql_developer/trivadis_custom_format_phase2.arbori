@@ -58,6 +58,7 @@ include "std.arbori"
 -- - R6: Call parameters aligned, operators aligned, values aligned.
 -- - A9: Align xmltable columns.
 -- - A4: Split long lines.
+-- - A18: Process line breaks after multiline comments.
 -- - D2: Log time spent in this program.
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -2598,6 +2599,64 @@ a4_add_line_breaks_with_indent:
             pos += contentLength;
         }
     }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- - A18: Process line breaks after multiline comments.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Fixes the issue in SQLDev 20.4.1, SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
+-- See https://community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
+-- It's expected that this section can be removed, when this bug is fixed.
+
+-- This section changes the lexer token stream only, but leaves the parser token stream untouched.
+-- As a result no re-parse is necessary at the end. All indentations in struct.newlinePositions are applicable.
+
+a18_process_indent_after_ml_comments:
+    runOnce
+-> {
+    var hasLineBreakBetween = function(from, to) {
+        for (var i=from; i<to; i++) {
+            var type = tokens[i].type;
+            if (type = Token.WS) {
+                if (tokens[i].content.contains("\n")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    var substitutions = new Substitutions(target.input);
+    var hiddenTokenCount = 0;
+
+    for (var i in tokens) {
+        var type = tokens[i].type;
+        if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS ||
+            type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
+        {
+            hiddenTokenCount++;
+            if (type == Token.COMMENT) {
+                var parserPos = i - hiddenTokenCount + 1;
+                var indent = getIndent(parserPos);
+                /* map expects Integers, therefore convert values to Integer */
+                var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
+                var commentWithLineBreak = hasLineBreakBetween(i + 1, lexerPos);
+                if (commentWithLineBreak && !indent.contains("\n")) {
+                    substitutions.put(tokens[i].begin, tokens[lexerPos].begin, tokens[i].content);
+                    logger.fine(struct.getClass(), "a18_process_indent_after_ml_comments: "
+                        + "remove line break at " + parserPos + ".");
+                } else if (!commentWithLineBreak && indent.contains("\n")) {
+                    /* map expects Integers, therefore convert values to Integer */
+                    struct.putNewline(Integer.valueOf(parserPos), indent.substr(System.lineSeparator().length));
+                    substitutions.put(tokens[i].begin, tokens[lexerPos].begin, tokens[i].content + System.lineSeparator());
+                    logger.fine(struct.getClass(), "a18_process_indent_after_ml_comments: "
+                        + "add line break at " + parserPos + ".");
+                }
+            }
+        }
+    }
+    target.input = substitutions.transformInput();
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
