@@ -2634,7 +2634,7 @@ a18_indent_comment:
         return false;
     }
 
-    var indentSingleLineComment = function(pos) {
+    var indentComment = function(pos) {
         var firstWS = getFirstWhitespaceTokenBefore(pos);
         var oldIndent = getContentBetween(firstWS, pos);
         var parserPos = pos - hiddenTokenCount + 1;
@@ -2646,11 +2646,14 @@ a18_indent_comment:
             && !hasMacroSkipBetween(pos, lexerPos))
         {
             var content = oldIndent.substr(0, oldIndent.lastIndexOf("\n") + 1)
-                + newIndent.substr(newIndent.lastIndexOf("\n") + 1)
-                + tokens[pos].content;
-            substitutions.put(tokens[firstWS].begin, tokens[pos].end, content);
-            logger.fine(struct.getClass(), "a19_indent_comment: "
-                                    + "single line comment at " + parserPos + ".");
+                + newIndent.substr(newIndent.lastIndexOf("\n") + 1);
+            substitutions.put(tokens[firstWS].begin, tokens[pos].begin, content);
+            logger.fine(struct.getClass(), "a19_indent_comment: at " + parserPos + ".");
+            if (tokens[pos].type == Token.COMMENT) {
+                var newComment = tokens[pos].content.replaceAll(oldIndent.substr(oldIndent.lastIndexOf("\n")), newIndent);
+                substitutions.put(tokens[pos].begin, tokens[pos].end, newComment);
+                logger.fine(struct.getClass(), "a19_indent_comment: within comment at " + parserPos + ".");
+            }
         }
     }
 
@@ -2676,13 +2679,13 @@ a18_indent_comment:
         var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
         var commentWithLineBreak = hasLineBreakBetween(pos + 1, lexerPos);
         if (commentWithLineBreak && !indent.contains("\n")) {
-            substitutions.put(tokens[pos].begin, tokens[lexerPos].begin, tokens[pos].content);
+            substitutions.put(tokens[pos].end, tokens[lexerPos].begin, "");
             logger.fine(struct.getClass(), "a18_indent_comment: "
                 + "remove line break at " + parserPos + ".");
         } else if (!commentWithLineBreak && indent.contains("\n")) {
             /* map expects Integers, therefore convert values to Integer */
             struct.putNewline(Integer.valueOf(parserPos), indent.substr(System.lineSeparator().length));
-            substitutions.put(tokens[pos].begin, tokens[lexerPos].begin, tokens[pos].content + System.lineSeparator());
+            substitutions.put(tokens[pos].end, tokens[lexerPos].begin, System.lineSeparator());
             logger.fine(struct.getClass(), "a18_indent_comment: "
                 + "add line break at " + parserPos + ".");
         }
@@ -2696,8 +2699,9 @@ a18_indent_comment:
             {
                 hiddenTokenCount++;
                 if (type == Token.LINE_COMMENT) {
-                    indentSingleLineComment(i);
+                    indentComment(i);
                 } else if (type == Token.COMMENT) {
+                    indentComment(i);
                     fixIndentAfterMultiLineComment(i);
                 }
             }
