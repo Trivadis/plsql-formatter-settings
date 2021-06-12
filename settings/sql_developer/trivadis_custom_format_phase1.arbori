@@ -358,7 +358,7 @@ define_global_functions:
                 if (targetPos > col) {
                     indent += getSpaces(targetPos - col);
                 } else {
-                    indent = indent.substr(0, targetPos + 1);
+                    indent = indent.substring(0, targetPos + 1);
                 }
                 struct.putNewline(alignNode.from, indent);
                 logger.fine(struct.getClass(), logText + ": at " + alignNode.from + ".");
@@ -388,7 +388,7 @@ define_global_functions:
         if (text != null) {
             var index = text.lastIndexOf("\n");
             if (index > 0) {
-                return text.substr(text, index);
+                return text.substring(text, index);
             }
         }
         return text;
@@ -437,7 +437,7 @@ define_global_functions:
                     if (indent.contains("\n")) {
                         var content = target.src.get(node.from).content;
                         if (content == ",") {
-                            struct.putNewline(node.from, indent.substr(0, indent.length - comma));
+                            struct.putNewline(node.from, indent.substring(0, indent.length - comma));
                             logger.fine(struct.getClass(), logText + ": reduced intent at " + node.from + ".");
                         }
                     }
@@ -667,7 +667,7 @@ remove_duplicate_spaces_in_scope:
             } else {
                 var spaces = indent.length - nlpos - 1;
                 if (spaces > 0) {
-                    struct.putNewline(pos, indent.substr(0, nlpos+1));
+                    struct.putNewline(pos, indent.substring(0, nlpos+1));
                     logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at "
                         + pos + ".");
                 }
