@@ -193,6 +193,55 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
         }
 
         @Test
+        public void keep_first_indent_only() throws IOException {
+            var input = """
+                    begin
+                       null; /* comment
+                     to be indented 1
+                    to be indented 2 */
+                       null;
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       null; /* comment
+                             to be indented 1
+                             to be indented 2 */
+                       null;
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void keep_all_indent() throws IOException {
+            var input = """
+                    begin
+                       null; /* comment
+                              to be indented 1
+                              to be indented 2 */
+                       null;
+                    end;
+                    /
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       null; /* comment
+                              to be indented 1
+                              to be indented 2 */
+                       null;
+                    end;
+                    /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+
+        @Test
         public void copyright_header() throws IOException {
             var input = """
                     create or replace package pkg as
