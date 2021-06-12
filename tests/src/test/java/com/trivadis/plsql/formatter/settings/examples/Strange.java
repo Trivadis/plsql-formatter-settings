@@ -1,7 +1,6 @@
 package com.trivadis.plsql.formatter.settings.examples;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,8 +8,6 @@ import java.io.IOException;
 public class Strange extends ConfiguredTestFormatter {
 
     @Test
-    @Disabled("sys.dbms_output.put_line must be placed on new line with right indent")
-    // related to SQLDev 20.4.1 comment bug (indent after ML comment cannot be changed)
     public void ascii_art() throws IOException {
         var input = """
                       begin                                 for rec
@@ -68,7 +65,6 @@ public class Strange extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("comment not indented")
     public void tokenized() throws IOException {
         var input = """
                 begin
@@ -243,9 +239,6 @@ public class Strange extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("sys.dbms_output.put_line must be placed on new line with right indent")
-    // SQLDev comment related
-    // In this case it would be nice to place the comment on a new line with right indent
     public void minified() throws IOException {
         // Note: "...where calendar_year=2000group by..." should work,
         // but SQLDev's parser requires a WS before "group"
@@ -272,8 +265,7 @@ public class Strange extends ConfiguredTestFormatter {
                    )
                    loop
                       if rec.region = 'Asia' then
-                         if rec.prod_category = 'Hardware' then
-                            /* print only one line for demo purposes */
+                         if rec.prod_category = 'Hardware' then/* print only one line for demo purposes */
                             sys.dbms_output.put_line('Amount: ' || rec.amount_sold);
                          end if;
                       end if;
@@ -285,8 +277,6 @@ public class Strange extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("sys.dbms_output.put_line must be placed on new line with right indent")
-    // In this case the comment cannot be joined, but maybe handling indents of subsequent lines?
     public void word_wrapped() throws IOException {
         // Note: "...where calendar_year=2000group by..." should work,
         // but SQLDev's parser requires a WS before "group"
@@ -302,6 +292,7 @@ public class Strange extends ConfiguredTestFormatter {
                 );end if;end if;end loop;end;/
                 """;
         var actual = formatter.format(input);
+        // second comment line inherits indent of the originally formatted code
         var expected = """
                 begin
                    for rec in(
@@ -321,9 +312,8 @@ public class Strange extends ConfiguredTestFormatter {
                    )
                    loop
                       if rec.region = 'Asia' then
-                         if rec.prod_category = 'Hardware' then
-                            /* print only one
-                            line for demo purposes */
+                         if rec.prod_category = 'Hardware' then/* print only one
+                                                                            line for demo purposes */
                             sys.dbms_output.put_line('Amount: ' || rec.amount_sold);
                          end if;
                       end if;
@@ -335,9 +325,6 @@ public class Strange extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("sys.dbms_output.put_line must be placed on new line with right indent")
-    // SQLDev comment related
-    // In this case it would be nice to place the comment on a new line with right indent
     public void justified() throws IOException {
         // Note: "...where calendar_year=2000group by..." should work,
         // but SQLDev's parser requires a WS before "group"
@@ -376,8 +363,7 @@ public class Strange extends ConfiguredTestFormatter {
                    )
                    loop
                       if rec.region = 'Asia' then
-                         if rec.prod_category = 'Hardware' then
-                            /* print only one line for demo purposes */
+                         if rec.prod_category = 'Hardware' then /* print only one line for demo purposes */
                             sys.dbms_output.put_line('Amount: ' || rec.amount_sold);
                          end if;
                       end if;
