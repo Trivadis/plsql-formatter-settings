@@ -58,7 +58,7 @@ include "std.arbori"
 -- - R6: Call parameters aligned, operators aligned, values aligned.
 -- - A9: Align xmltable columns.
 -- - A4: Split long lines.
--- - A18: Process line breaks after multiline comments.
+-- - A18: Indent comment like the subsequent grammar element.
 -- - D2: Log time spent in this program.
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -2595,19 +2595,65 @@ a4_add_line_breaks_with_indent:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- - A18: Process line breaks after multiline comments.
+-- - A18: Indent comment like the subsequent grammar element.
 -- --------------------------------------------------------------------------------------------------------------------
-
--- Fixes the issue in SQLDev 20.4.1, SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
--- See https://community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
--- It's expected that this section can be removed, when this bug is fixed.
 
 -- This section changes the lexer token stream only, but leaves the parser token stream untouched.
 -- As a result no re-parse is necessary at the end. All indentations in struct.newlinePositions are applicable.
+-- However, this is only true because this is logically the last section in the Arbori program.
+-- All global variables based on the lexer token streams are nullified at the end of this section.
 
-a18_process_indent_after_ml_comments:
+a18_indent_comment:
     runOnce
 -> {
+    var substitutions = new Substitutions(target.input);
+    var hiddenTokenCount = 0;
+
+    var getFirstWhitespaceTokenBefore = function(pos) {
+        var i = pos - 1;
+        while (i >= 0 && tokens[i].type == Token.WS) {
+            i = i - 1;
+        }
+        return i + 1;
+    }
+
+    var getContentBetween = function(start, end) {
+        var content = "";
+        for (var i = start; i < end; i++) {
+            content = content + tokens[i].content;
+        }
+        return content;
+    }
+
+    var hasMacroSkipBetween = function(start, end) {
+        for (var i = start; i < end; i++) {
+            if (tokens[i].type == Token.MACRO_SKIP) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    var indentSingleLineComment = function(pos) {
+        var firstWS = getFirstWhitespaceTokenBefore(pos);
+        var oldIndent = getContentBetween(firstWS, pos);
+        var parserPos = pos - hiddenTokenCount + 1;
+        var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
+        var newIndent = getIndent(parserPos);
+        if (oldIndent != newIndent
+            && oldIndent.contains("\n")
+            && newIndent.contains("\n")
+            && !hasMacroSkipBetween(pos, lexerPos))
+        {
+            var content = oldIndent.substr(0, oldIndent.lastIndexOf("\n") + 1)
+                + newIndent.substr(newIndent.lastIndexOf("\n") + 1)
+                + tokens[pos].content;
+            substitutions.put(tokens[firstWS].begin, tokens[pos].end, content);
+            logger.fine(struct.getClass(), "a19_indent_comment: "
+                                    + "single line comment at " + parserPos + ".");
+        }
+    }
+
     var hasLineBreakBetween = function(from, to) {
         for (var i=from; i<to; i++) {
             var type = tokens[i].type;
@@ -2620,36 +2666,50 @@ a18_process_indent_after_ml_comments:
         return false;
     }
 
-    var substitutions = new Substitutions(target.input);
-    var hiddenTokenCount = 0;
+    /* Fixes the issue in SQLDev 20.4.1, SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
+     * See https://community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
+     * It's expected that this function can be removed, when this bug is fixed. */
+    var fixIndentAfterMultiLineComment = function(pos) {
+        var parserPos = pos - hiddenTokenCount + 1;
+        var indent = getIndent(parserPos);
+        /* map expects Integers, therefore convert values to Integer */
+        var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
+        var commentWithLineBreak = hasLineBreakBetween(pos + 1, lexerPos);
+        if (commentWithLineBreak && !indent.contains("\n")) {
+            substitutions.put(tokens[pos].begin, tokens[lexerPos].begin, tokens[pos].content);
+            logger.fine(struct.getClass(), "a18_indent_comment: "
+                + "remove line break at " + parserPos + ".");
+        } else if (!commentWithLineBreak && indent.contains("\n")) {
+            /* map expects Integers, therefore convert values to Integer */
+            struct.putNewline(Integer.valueOf(parserPos), indent.substr(System.lineSeparator().length));
+            substitutions.put(tokens[pos].begin, tokens[lexerPos].begin, tokens[pos].content + System.lineSeparator());
+            logger.fine(struct.getClass(), "a18_indent_comment: "
+                + "add line break at " + parserPos + ".");
+        }
+    }
 
-    for (var i in tokens) {
-        var type = tokens[i].type;
-        if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS ||
-            type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
-        {
-            hiddenTokenCount++;
-            if (type == Token.COMMENT) {
-                var parserPos = i - hiddenTokenCount + 1;
-                var indent = getIndent(parserPos);
-                /* map expects Integers, therefore convert values to Integer */
-                var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
-                var commentWithLineBreak = hasLineBreakBetween(i + 1, lexerPos);
-                if (commentWithLineBreak && !indent.contains("\n")) {
-                    substitutions.put(tokens[i].begin, tokens[lexerPos].begin, tokens[i].content);
-                    logger.fine(struct.getClass(), "a18_process_indent_after_ml_comments: "
-                        + "remove line break at " + parserPos + ".");
-                } else if (!commentWithLineBreak && indent.contains("\n")) {
-                    /* map expects Integers, therefore convert values to Integer */
-                    struct.putNewline(Integer.valueOf(parserPos), indent.substr(System.lineSeparator().length));
-                    substitutions.put(tokens[i].begin, tokens[lexerPos].begin, tokens[i].content + System.lineSeparator());
-                    logger.fine(struct.getClass(), "a18_process_indent_after_ml_comments: "
-                        + "add line break at " + parserPos + ".");
+    var processLexerTokens = function() {
+        for (var i in tokens) {
+            var type = tokens[i].type;
+            if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS ||
+                type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
+            {
+                hiddenTokenCount++;
+                if (type == Token.LINE_COMMENT) {
+                    indentSingleLineComment(i);
+                } else if (type == Token.COMMENT) {
+                    fixIndentAfterMultiLineComment(i);
                 }
             }
         }
+        /* update source code based on substitutions, will be used by the formatter which re-parses everything */
+        target.input = substitutions.transformInput();
+        /* nullify all global variables that are based on the previous lexer token stream */
+        tokens = null;
+        mapParserPosToLexerPos = null;
     }
-    target.input = substitutions.transformInput();
+
+    processLexerTokens();
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -2660,7 +2720,7 @@ d2_log_time:
     runOnce
 -> {
     var endTime = (new Date()).getTime();
-    logger.info(struct.getClass(), "d2_log_time: formatted " + tokens.length + " tokens and "
+    logger.info(struct.getClass(), "d2_log_time: formatted " + target.input.length() + " chars and "
         + target.root.to + " nodes in "
         + ((endTime - startTime) / 1000) + " seconds.");
 }
