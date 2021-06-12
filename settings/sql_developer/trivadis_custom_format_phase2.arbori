@@ -1726,11 +1726,8 @@ r2_indent_single_line_clauses:
     | [node) merge_insert_clause[43,50) & [node-1) 'VALUES'
 -> {
     var node = tuple.get("node");
-    print("node: " + node);
     if (getIndent(node.from).contains("\n")) {
-        print("found");
         if (!hasNewline(node.to-1, node.from+1)) {
-            print("no newline");
             addMargin(node, indentSpaces, "r2_indent_single_line_clauses");
         }
     }
