@@ -1377,19 +1377,12 @@ r5_commas:
             /* situation: a new line was added after the comma instead of before */
             struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
             logger.fine(struct.getClass(), "r5_commas: fix indent before comma at " + commaNode.from + ".");
-            if (!hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
+            var comment = getLastCommentBetweenPos(commaNode.from-1, commaNode.to);
+            if (comment != null && comment.startsWith("--")) {
+                /* we must not remove the newline after a single-line comment */
+            } else {
                 /* remove all whitespace for node */
                 struct.putNewline(commaNode.to, "");
-            } else {
-                var comment = getLastCommentBetweenPos(commaNode.from-1, commaNode.to);
-                if (comment.startsWith("--")) {
-                   /* we must not remove the newline after a single-line comment */
-                } else {
-                   /* removing newline after multi-line comment is wanted, but does not work in SQLDev 20.4.1,
-                    * it would remove indentation only but keep the newline */
-                   logger.fine(struct.getClass(), "r5_commas: SQLDev 20.4.1 bug: new line after a multi-line-comment cannot be set at "
-                       + commaNode.from + ".");
-                }
             }
         }
     }
