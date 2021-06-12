@@ -120,8 +120,7 @@ public class R5_commas extends ConfiguredTestFormatter {
             var expected = """
                     select a
                          , b
-                         , /* multi line comment */
-                           c
+                         , /* multi line comment */c
                     from t;
                     """;
             assertEquals(expected, actual);
@@ -140,8 +139,7 @@ public class R5_commas extends ConfiguredTestFormatter {
             var expected = """
                     select a
                           ,b
-                          , /* multi line comment */
-                           c
+                          , /* multi line comment */c
                     from t;
                     """;
             assertEquals(expected, actual);
@@ -159,8 +157,8 @@ public class R5_commas extends ConfiguredTestFormatter {
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a
-                         , b /* multi line comment */,
-                           c
+                         , b /* multi line comment */
+                         , c
                     from t;
                     """;
             assertEquals(expected, actual);
@@ -179,8 +177,8 @@ public class R5_commas extends ConfiguredTestFormatter {
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a
-                          ,b /* multi line comment */,
-                           c
+                          ,b /* multi line comment */
+                          ,c
                     from t;
                     """;
             assertEquals(expected, actual);
