@@ -55,9 +55,9 @@ public class Strange extends ConfiguredTestFormatter {
                    loop
                       if rec.region = 'Asia' then
                          if rec.prod_category = 'Hardware' then
-                              /* print only one line for demo
-                                 purposes */
-                              sys.dbms_output.put_line('Amount: ' || rec.amount_sold);
+                            /* print only one line for demo
+                               purposes */
+                            sys.dbms_output.put_line('Amount: ' || rec.amount_sold);
                          end if;
                       end if;
                    end loop;
