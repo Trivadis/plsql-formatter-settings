@@ -128,6 +128,7 @@ define_global_variables:
     var Integer = Java.type('java.lang.Integer');
     var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
     var logger = Java.type('oracle.dbtools.util.Logger');
+    var Pattern = Java.type("java.util.regex.Pattern");
     var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
     var System = Java.type('java.lang.System');
     var Token = Java.type('oracle.dbtools.parser.Token');
