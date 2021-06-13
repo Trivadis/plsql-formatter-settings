@@ -548,10 +548,23 @@ a17_whitespace_around_node:
 -- A15: Line break before node.
 -- --------------------------------------------------------------------------------------------------------------------
 
-a15_line_break_before:
+a15_various:
       [node) insert_into_clause & [node^^) multi_table_insert
     | [node) subquery & [node^) multi_table_insert
     | [node) prm_spec & [node-1) ','
+    | [node^) subprg_properties
+;
+
+a15_is_or_as:
+      [node) is_or_as
+    & [prop) subprg_properties
+    & [node-1) subprg_spec
+    & node-1 = prop^
+;
+
+a15_line_break_before:
+      a15_various
+    | a15_is_or_as
 -> {
     var node = tuple.get("node");
     if (!getIndent(node.from).contains("\n")) {
