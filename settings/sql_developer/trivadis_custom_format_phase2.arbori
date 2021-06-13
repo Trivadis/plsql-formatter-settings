@@ -187,6 +187,7 @@ a13_calls:
     | [node) column[4,12)
     | [node) compound_expression & ![node^) compound_expression
     | [node) pls_expr & ![node^) pls_expr
+    | [node) "expr_list" & ![node^) "expr_list"
 ;
 
 a13_calls_with_assoc_args:
