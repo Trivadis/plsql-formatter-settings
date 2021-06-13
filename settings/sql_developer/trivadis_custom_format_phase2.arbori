@@ -670,34 +670,6 @@ o3_no_space_before_open_paren:
 -- R4: Keywords "loop", "else", "elsif", "end", "when" on a new line.
 -- --------------------------------------------------------------------------------------------------------------------
 
-r3_stmt_in_first_conditional_compilation_branch:
-    runOnce
--> {
-    var posInConditionalBranch = new HashSet();
-    var pos = 0;
-    var withinFirstBranch = false;
-    for (i = 0; i < tokens.length; i++) {
-        var type = tokens[i].type
-        var content = tokens[i].content.toLowerCase()
-        if (type == Token.MACRO_SKIP && content.startsWith("$if ")) {
-            withinFirstBranch = true;
-            continue;
-        }
-        if (withinFirstBranch && type == Token.MACRO_SKIP && content.startsWith("$")) {
-            withinFirstBranch = false;
-            continue;
-        }
-        if (type != Token.WS && type != Token.MACRO_SKIP && type != Token.COMMENT && type != Token.LINE_COMMENT) {
-            if (withinFirstBranch) {
-                /* enforce uniform datatype in map, therefore convert values to Integer */
-                posInConditionalBranch.add(Integer.valueOf(pos));
-                logger.fine(struct.getClass(), "r3_stmt_in_first_conditional_compilation_branch: ignore node at " + pos + ".");
-            }
-            pos++;
-        }
-    }
-}
-
 r3_sqlplus_commands:
     [node) sqlplus_command
 ;

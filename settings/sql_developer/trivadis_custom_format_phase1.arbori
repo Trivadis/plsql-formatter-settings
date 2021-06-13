@@ -29,6 +29,7 @@ include "std.arbori"
 -- - I6: Remove duplicate empty lines.
 -- - I7: Keep existing whitespace.
 -- - I8: Remove duplicate spaces in scope.
+-- - I9: Populate parser node positions in first selection directive.
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- D1: Initialize timer.
@@ -188,6 +189,9 @@ define_global_variables:
     // keepSignificantWhitespaceBeforeLeafNodes
     var tokens = null;
     var mapParserPosToLexerPos = new HashMap();
+
+    // parser tokens in first conditional compilation branch - populated in I9
+    var posInConditionalBranch = new HashSet();
 }
 
 -- Global functions, which are likely to be used in more than one Arbory action
@@ -674,6 +678,48 @@ remove_duplicate_spaces_in_scope:
                         + pos + ".");
                 }
             }
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I9: Populate parser node positions in first selection directive.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Only tokens of the first branch in a condition compilation block are visible as parser tokens.
+-- The parser expects valid code within this branch. If the branch contains something
+-- else (e.g. code templates as used in as FTLDB or tePLSQLPL) an incomplete
+-- parse tree is produced and therefore also an unsatisfactory formatting result.
+
+-- We populate a hash map containing parser tokens in the first conditional compilation block.
+-- This hash map can be used to determine if a formatting rule should be applied or not.
+
+populatePosInConditionalBranch:
+    runOnce
+-> {
+    var posInConditionalBranch = new HashSet();
+    var pos = 0;
+    var withinFirstBranch = false;
+    for (var i in tokens) {
+        var type = tokens[i].type
+        var content = tokens[i].content.toLowerCase()
+        if (type == Token.MACRO_SKIP && content.startsWith("$if ")) {
+            withinFirstBranch = true;
+            continue;
+        }
+        if (withinFirstBranch && type == Token.MACRO_SKIP && content.startsWith("$")) {
+            withinFirstBranch = false;
+            continue;
+        }
+        if (type != Token.LINE_COMMENT && type != Token.COMMENT && type != Token.WS &&
+            type != Token.MACRO_SKIP && type != Token.SQLPLUSLINECONTINUE_SKIP)
+        {
+            if (withinFirstBranch) {
+                /* enforce uniform datatype in map, therefore convert values to Integer */
+                posInConditionalBranch.add(Integer.valueOf(pos));
+                logger.fine(struct.getClass(), "populatePosInConditionalBranch: at " + pos + ".");
+            }
+            pos++;
         }
     }
 }
