@@ -31,16 +31,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // package_body.pkb
         var expectedPackageBody = """
                 create or replace package body the_api.math as
-                   function to_int_table (
-                      in_integers  in  varchar2,
-                      in_pattern   in  varchar2 default '[0-9]+'
-                   ) return sys.ora_mining_number_nt
+                   function to_int_table(in_integers in varchar2,
+                                         in_pattern  in varchar2 default '[0-9]+') return sys.ora_mining_number_nt
                       deterministic
-                      accessible by ( package the_api.math, package the_api.test_math )
+                      accessible by (package the_api.math, package the_api.test_math)
                    is
-                      l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     integer := 1;
-                      l_int     integer;
+                      l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                      l_pos    integer                  := 1;
+                      l_int    integer;
                    begin
                       <<integer_tokens>>
                       loop
@@ -69,11 +67,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                             from employees e
                            where e.department_id = d.department_id
                        ) v
-                 where d.department_name in (
-                          'Marketing', 'Operations', 'Public Relations'
-                       )
-                 order by d.department_name,
-                          v.employee_id;
+                 where d.department_name in ('Marketing', 'Operations', 'Public Relations')
+                 order by d.department_name, v.employee_id;
                 """.trim();
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
@@ -90,16 +85,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // package_body.pkb
         var expectedPackageBody = """
                 create or replace package body the_api.math as
-                   function to_int_table (
-                      in_integers  in  varchar2,
-                      in_pattern   in  varchar2 default '[0-9]+'
-                   ) return sys.ora_mining_number_nt
+                   function to_int_table(in_integers in varchar2,
+                                         in_pattern  in varchar2 default '[0-9]+') return sys.ora_mining_number_nt
                       deterministic
-                      accessible by ( package the_api.math, package the_api.test_math )
+                      accessible by (package the_api.math, package the_api.test_math)
                    is
-                      l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     integer := 1;
-                      l_int     integer;
+                      l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                      l_pos    integer                  := 1;
+                      l_int    integer;
                    begin
                       <<integer_tokens>>
                       loop
@@ -184,16 +177,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // package_body.pkb
         var expectedPackageBody = """
                 CREATE OR REPLACE PACKAGE BODY the_api.math AS
-                   FUNCTION to_int_table (
-                      in_integers  IN  VARCHAR2
-                    , in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
-                   ) RETURN sys.ora_mining_number_nt
+                   FUNCTION to_int_table(in_integers IN VARCHAR2
+                                       , in_pattern  IN VARCHAR2 DEFAULT '[0-9]+') RETURN sys.ora_mining_number_nt
                       DETERMINISTIC
-                      ACCESSIBLE BY ( PACKAGE the_api.math, PACKAGE the_api.test_math )
+                      ACCESSIBLE BY (PACKAGE the_api.math, PACKAGE the_api.test_math)
                    IS
-                      l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     INTEGER := 1;
-                      l_int     INTEGER;
+                      l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                      l_pos    INTEGER                  := 1;
+                      l_int    INTEGER;
                    BEGIN
                       <<integer_tokens>>
                       LOOP
@@ -222,11 +213,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                             FROM employees e
                            WHERE e.department_id = d.department_id
                        ) v
-                 WHERE d.department_name IN (
-                          'Marketing', 'Operations', 'Public Relations'
-                       )
-                 ORDER BY d.department_name
-                        , v.employee_id;
+                 WHERE d.department_name IN ('Marketing', 'Operations', 'Public Relations')
+                 ORDER BY d.department_name, v.employee_id;
                 """.trim();
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
@@ -361,27 +349,25 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var actualMarkdown = getFormattedContent("markdown.md").trim();
         var expectedMarkdown = """
                 # Titel
-                            
+                                
                 ## Introduction
-                            
+                                
                 This is a Markdown file with some `code blocks`.\s
-                            
+                                
                 ## Package Body
-                            
+                                
                 Here's the content of package_body.pkb
-                            
+                                
                 ```sql
                 create or replace package body the_api.math as
-                   function to_int_table (
-                      in_integers  in  varchar2,
-                      in_pattern   in  varchar2 default '[0-9]+'
-                   ) return sys.ora_mining_number_nt
+                   function to_int_table(in_integers in varchar2,
+                                         in_pattern  in varchar2 default '[0-9]+') return sys.ora_mining_number_nt
                       deterministic
-                      accessible by ( package the_api.math, package the_api.test_math )
+                      accessible by (package the_api.math, package the_api.test_math)
                    is
-                      l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     integer := 1;
-                      l_int     integer;
+                      l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                      l_pos    integer                  := 1;
+                      l_int    integer;
                    begin
                       <<integer_tokens>>
                       loop
@@ -396,11 +382,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 end math;
                 /
                 ```
-                            
+                                
                 ## Syntax Error
-                            
+                                
                 Here's the content of syntax_error.sql
-                            
+                                
                 ```  sql
                 declare
                     l_var1  integer;
@@ -413,11 +399,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 end;
                 /
                 ```
-                            
+                                
                 ## Query (to be ignored)
-                            
+                                
                 Here's the content of query.sql, but the code block must not be formatted:
-                            
+                                
                 ```
                 Select d.department_name,v.  employee_id\s
                 ,v\s
@@ -428,11 +414,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 'Public Relations') Order By d.
                 department_name,v.employee_id;
                 ```
-                            
+                                
                 ## Query (to be formatted)
-                            
+                                
                 Here's the content of query.sql:
-                            
+                                
                 ``` sql
                 select d.department_name,
                        v.employee_id,
@@ -443,17 +429,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                             from employees e
                            where e.department_id = d.department_id
                        ) v
-                 where d.department_name in (
-                          'Marketing', 'Operations', 'Public Relations'
-                       )
-                 order by d.department_name,
-                          v.employee_id;
+                 where d.department_name in ('Marketing', 'Operations', 'Public Relations')
+                 order by d.department_name, v.employee_id;
                 ```
-                            
+                                
                 ## JavaScript code
-                            
+                                
                 Here's another code which must not be formatted
-                            
+                                
                 ``` js
                 var foo = function (bar) {
                   return bar++;
