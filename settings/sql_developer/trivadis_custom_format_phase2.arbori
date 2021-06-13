@@ -528,6 +528,9 @@ a8_one_space_after:
 a17_whitespace_around_node:
       [node) 'AND'
     | [node) 'OR'
+    | [node) 'RETURN' & [node-1) fml_part
+    | [node) is_or_as
+
 -> {
     var node = tuple.get("node");
     if (getIndent(node.from).length == 0) {
