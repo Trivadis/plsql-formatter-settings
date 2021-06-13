@@ -105,11 +105,11 @@ Variable | Type                                             | JAR File
 
 Formatter settings are also provided for the following products:
 
-Product | Version | Directory
+Product | Version | File
 ------- | ------- | ---------
-[Allround Automations PL/SQL Developer](https://www.allroundautomations.com/products/pl-sql-developer/) | 14.0.6 | [settings/plsql_developer](settings/plsql_developer)
-[JetBrains DataGrip](https://www.jetbrains.com/datagrip/) | 2021.1 | [settings/datagrip](settings/datagrip)
-[Quest Toad for Oracle](https://www.quest.com/products/toad-for-oracle/) | 14.1 | [settings/toad](settings/toad)
+[Allround Automations PL/SQL Developer](https://www.allroundautomations.com/products/pl-sql-developer/) | 14.0.6 | [trivadis_beautifier.br](settings/plsql_developer/trivadis_beautifier.br)
+[JetBrains DataGrip](https://www.jetbrains.com/datagrip/) | 2021.1 | [trivadis.xml](settings/datagrip/trivadis.xml)
+[Quest Toad for Oracle](https://www.quest.com/products/toad-for-oracle/) | 14.1 | [trivadis_fmtplus.opt](settings/toad/trivadis_fmtplus.opt)
 
 Please refer to the vendor's documentation for instructions on how to import these settings.
 
