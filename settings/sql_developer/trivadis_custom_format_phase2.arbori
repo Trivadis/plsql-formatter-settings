@@ -462,6 +462,11 @@ a8_create_or_replace:
     | [node) 'TYPE' & ![node-1) '%'
 ;
 
+a8_accessible_by:
+      [node) 'ACCESSIBLE'
+    | [node) 'BY' & [node-1) 'ACCESSIBLE'
+;
+
 a8_merge:
       [node) 'MERGE' & [node^) merge
     | [node) 'INTO' & [node^) merge
@@ -500,6 +505,7 @@ a8_one_space_after:
     | a8_join
     | a8_from
     | a8_create_or_replace
+    | a8_accessible_by
     | a8_merge
     | a8_case
     | a8_select_clauses
