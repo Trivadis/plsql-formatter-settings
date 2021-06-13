@@ -1833,7 +1833,11 @@ r2_fix_indent_for_subquery_in_paren:
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
-    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
+    if (isInParen(node)
+        && !hasNewLineAfterParen(node)
+        && getIndent(from.from).contains("\n")
+        && !posInConditionalBranch.contains(node.from))
+    {
         /* The r2_subquery results are ordered.
          * This means the outermost subquery is processed first and the innermost subquery last.
          * As a result getColumn() returns correct results, even for nested subqueries. */
