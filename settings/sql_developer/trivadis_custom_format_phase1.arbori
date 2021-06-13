@@ -28,8 +28,8 @@ include "std.arbori"
 -- - I5: Globals.
 -- - I6: Remove duplicate empty lines.
 -- - I7: Keep existing whitespace.
--- - I8: Remove duplicate spaces in scope.
--- - I9: Populate parser node positions in first selection directive.
+-- - I8: Save indentations of parser node positions in first selection directive.
+-- - I9: Remove duplicate spaces in scope.
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- D1: Initialize timer.
@@ -190,8 +190,8 @@ define_global_variables:
     var tokens = null;
     var mapParserPosToLexerPos = new HashMap();
 
-    // parser tokens in first conditional compilation branch - populated in I9
-    var posInConditionalBranch = new HashSet();
+    // parser tokens in first conditional compilation branch with original indent - populated in I8
+    var indentInConditionalBranch = new HashMap();
 }
 
 -- Global functions, which are likely to be used in more than one Arbory action
@@ -650,7 +650,52 @@ keep_significant_whitespace_before_leaf_nodes:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I8: Remove duplicate spaces in scope.
+-- I8: Save indentations of parser node positions in first selection directive.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Only tokens of the first branch in a condition compilation block are visible as parser tokens.
+-- The parser expects valid code within this branch. If the branch contains something
+-- else (e.g. code templates as used in as FTLDB or tePLSQLPL) an incomplete
+-- parse tree is produced and therefore also an unsatisfactory formatting result.
+
+-- We populate a hash map containing parser token positions in the first conditional compilation block
+-- with their initial indent. At the end of the Arbori program we reset the indentation to the
+-- original values. This way we don't have to deal with conditional compilation in other sections.
+-- We cannot use dontFormatNode because the indent of the first position in a consecutive list
+-- of positions is ignored. However, depending on the configuration the case of keywords and
+-- identifiers is changed.
+
+saveIndentInConditionalBranch:
+    runOnce
+-> {
+    var pos = 0;
+    var withinFirstBranch = false;
+    for (var i in tokens) {
+        var type = tokens[i].type
+        var content = tokens[i].content.toLowerCase()
+        if (type == Token.MACRO_SKIP && content.startsWith("$if ")) {
+            withinFirstBranch = true;
+            continue;
+        }
+        if (withinFirstBranch && type == Token.MACRO_SKIP && content.startsWith("$")) {
+            withinFirstBranch = false;
+            continue;
+        }
+        if (type != Token.LINE_COMMENT && type != Token.COMMENT && type != Token.WS &&
+            type != Token.MACRO_SKIP && type != Token.SQLPLUSLINECONTINUE_SKIP)
+        {
+            if (withinFirstBranch) {
+                /* enforce uniform datatype in map, therefore convert values to Integer */
+                indentInConditionalBranch.put(Integer.valueOf(pos), getIndent(pos));
+                logger.fine(struct.getClass(), "saveIndentInConditionalBranch: at " + pos + ".");
+            }
+            pos++;
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I9: Remove duplicate spaces in scope.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- In scope are statements for that are formatted fully (see overrideIndents).
@@ -678,48 +723,6 @@ remove_duplicate_spaces_in_scope:
                         + pos + ".");
                 }
             }
-        }
-    }
-}
-
--- --------------------------------------------------------------------------------------------------------------------
--- I9: Populate parser node positions in first selection directive.
--- --------------------------------------------------------------------------------------------------------------------
-
--- Only tokens of the first branch in a condition compilation block are visible as parser tokens.
--- The parser expects valid code within this branch. If the branch contains something
--- else (e.g. code templates as used in as FTLDB or tePLSQLPL) an incomplete
--- parse tree is produced and therefore also an unsatisfactory formatting result.
-
--- We populate a hash map containing parser tokens in the first conditional compilation block.
--- This hash map can be used to determine if a formatting rule should be applied or not.
-
-populatePosInConditionalBranch:
-    runOnce
--> {
-    var posInConditionalBranch = new HashSet();
-    var pos = 0;
-    var withinFirstBranch = false;
-    for (var i in tokens) {
-        var type = tokens[i].type
-        var content = tokens[i].content.toLowerCase()
-        if (type == Token.MACRO_SKIP && content.startsWith("$if ")) {
-            withinFirstBranch = true;
-            continue;
-        }
-        if (withinFirstBranch && type == Token.MACRO_SKIP && content.startsWith("$")) {
-            withinFirstBranch = false;
-            continue;
-        }
-        if (type != Token.LINE_COMMENT && type != Token.COMMENT && type != Token.WS &&
-            type != Token.MACRO_SKIP && type != Token.SQLPLUSLINECONTINUE_SKIP)
-        {
-            if (withinFirstBranch) {
-                /* enforce uniform datatype in map, therefore convert values to Integer */
-                posInConditionalBranch.add(Integer.valueOf(pos));
-                logger.fine(struct.getClass(), "populatePosInConditionalBranch: at " + pos + ".");
-            }
-            pos++;
         }
     }
 }

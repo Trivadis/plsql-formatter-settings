@@ -59,6 +59,7 @@ include "std.arbori"
 -- - A9: Align xmltable columns.
 -- - A4: Split long lines.
 -- - A18: Indent comment like the subsequent grammar element.
+-- - A19: Restore original indent of nodes in first conditional branch.
 -- - D2: Log time spent in this program.
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -715,17 +716,15 @@ r3_commands:
     | r3_case_expressions
 -> {
     var node = tuple.get("node");
-    if (!posInConditionalBranch.contains(node.from)) {
-        var indent = getIndent(node.from);
-        if (!indent.contains("\n")) {
-            struct.putNewline(node.from, System.lineSeparator());
-            logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
-        } else {
-            /* remove existing indentation, enforce conformity in these cases */
-            var newIndent = getLeadingNewLines(node.from);
-            struct.putNewline(node.from, newIndent);
-            logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from + ".");
-        }
+    var indent = getIndent(node.from);
+    if (!indent.contains("\n")) {
+        struct.putNewline(node.from, System.lineSeparator());
+        logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
+    } else {
+        /* remove existing indentation, enforce conformity in these cases */
+        var newIndent = getLeadingNewLines(node.from);
+        struct.putNewline(node.from, newIndent);
+        logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from + ".");
     }
 }
 
@@ -829,12 +828,10 @@ o6_line_break_before:
 -> {
     if (breaksAfterSelect) {
         var node = tuple.get("node");
-        if (!posInConditionalBranch.contains(node.from)) {
-            var indent = getIndent(node.from);
-            if (!indent.contains("\n")) {
-                struct.putNewline(node.from, System.lineSeparator());
-                logger.fine(struct.getClass(), "o6_line_break_before: at " + node.from + ".");
-            }
+        var indent = getIndent(node.from);
+        if (!indent.contains("\n")) {
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "o6_line_break_before: at " + node.from + ".");
         }
     }
 }
@@ -846,12 +843,10 @@ o6_line_break_after:
 -> {
     if (breaksAfterSelect) {
         var node = tuple.get("node");
-        if (!posInConditionalBranch.contains(node.to)) {
-            var indent = getIndent(node.to);
-            if (!indent.contains("\n")) {
-                struct.putNewline(node.to, System.lineSeparator());
-                logger.fine(struct.getClass(), "o6_line_break_after: at " + node.to + ".");
-            }
+        var indent = getIndent(node.to);
+        if (!indent.contains("\n")) {
+            struct.putNewline(node.to, System.lineSeparator());
+            logger.fine(struct.getClass(), "o6_line_break_after: at " + node.to + ".");
         }
     }
 }
@@ -1833,10 +1828,7 @@ r2_fix_indent_for_subquery_in_paren:
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
-    if (isInParen(node)
-        && !hasNewLineAfterParen(node)
-        && getIndent(from.from).contains("\n")
-        && !posInConditionalBranch.contains(node.from))
+    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n"))
     {
         /* The r2_subquery results are ordered.
          * This means the outermost subquery is processed first and the innermost subquery last.
@@ -2753,6 +2745,26 @@ a18_indent_comment:
     }
 
     processLexerTokens();
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A19: Restore original indent of nodes in first conditional branch.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a19_restore_indent_in_conditional_branch:
+    runOnce
+-> {
+    var indent = getSpaces(indentSpaces);
+    var it = indentInConditionalBranch.keySet().iterator();
+    while (it.hasNext()) {
+        var key = it.next();
+        var originalIndent = indentInConditionalBranch.get(key);
+        var indent = getIndent(key);
+        if (indent != originalIndent) {
+            struct.putNewline(key, originalIndent);
+            logger.fine(struct.getClass(), "a19_restore_indent_in_conditional_branch: at " + key + ".");
+        }
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
