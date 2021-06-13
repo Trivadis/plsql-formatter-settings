@@ -458,7 +458,8 @@ define_global_functions:
            "update",
            "delete",
            "merge",
-           "block_stmt"
+           "block_stmt",
+           "pkg_body"
         ]);
     }
 
