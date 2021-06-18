@@ -716,15 +716,18 @@ r3_commands:
     | r3_case_expressions
 -> {
     var node = tuple.get("node");
-    var indent = getIndent(node.from);
-    if (!indent.contains("\n")) {
-        struct.putNewline(node.from, System.lineSeparator());
-        logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
-    } else {
-        /* remove existing indentation, enforce conformity in these cases */
-        var newIndent = getLeadingNewLines(node.from);
-        struct.putNewline(node.from, newIndent);
-        logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from + ".");
+    // do not add a line break on the first line.
+    if (node.from > 0) {
+        var indent = getIndent(node.from);
+        if (!indent.contains("\n")) {
+            struct.putNewline(node.from, System.lineSeparator());
+            logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
+        } else {
+            /* remove existing indentation, enforce conformity in these cases */
+            var newIndent = getLeadingNewLines(node.from);
+            struct.putNewline(node.from, newIndent);
+            logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from + ".");
+        }
     }
 }
 
