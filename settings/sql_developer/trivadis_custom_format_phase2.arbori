@@ -1918,6 +1918,7 @@ r7_select:
     & parent < keyword
     & ![keyword^^) analytic_clause
     & ![keyword^) analytic_clause
+    & ![keyword^^) function
     & ![keyword^) function
     & ![keyword^) collect[33,45)
 ;
