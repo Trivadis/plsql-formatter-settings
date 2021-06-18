@@ -560,37 +560,8 @@ max_one_empty_line:
         target.input = substitutions.transformInput();
     }
 
-    var removeWSOnEmptyLines = function() {
-        var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
-        populateOffOnRanges(tokens);
-        var substitutions = new Substitutions(target.input);
-        var eolToken = 0
-        for (i = 0; i < tokens.length; i++) {
-            var type = tokens[i].type;
-            if (type != Token.WS) {
-                eolToken = 0;
-                continue;
-            }
-            if (eolToken == 0 && (type == Token.LINE_COMMENT || tokens[i].content == "\n")) {
-                eolToken = tokens[i];
-                continue;
-            }
-            if (tokens[i].content == "\n") {
-                if (eolToken != 0) {
-                    if (!inOffOnRange(eolToken.end)) {
-                        substitutions.put(eolToken.end,tokens[i].begin,"");
-                    }
-                }
-                eolToken = tokens[i];
-            }
-        }
-        // update source code
-        target.input = substitutions.transformInput();
-    }
-
     // replacements
     removeDuplicateEmptyLines();
-    removeWSOnEmptyLines();
 
     // tokens without WS and comments (mimicking default behaviour)
     var Lexer = Java.type('oracle.dbtools.parser.Lexer');
