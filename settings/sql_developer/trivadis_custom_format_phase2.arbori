@@ -220,7 +220,7 @@ a13_short_nodes:
             var indent = getIndent(i);
             if (indent.contains("\n") || indent.length > 1) {
                 struct.putNewline(i, " ");
-                logger.fine(struct.getClass(), "a13_comparison_conditions: one space indent at " + i + ".");
+                logger.fine(struct.getClass(), "a13_short_nodes: one space indent at " + i + ".");
             }
         }
     }
