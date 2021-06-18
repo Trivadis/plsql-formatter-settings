@@ -163,8 +163,10 @@ o2_whitespace_around_operators:
        space = "";
     }
     if (!getIndent(node.from).contains("\n")) {
-        struct.putNewline(node.from, space);
-        logger.fine(struct.getClass(), "o2_whitespace_around_operators: before at " + node.from + ".");
+        if (node.from > 0) {
+            struct.putNewline(node.from, space);
+            logger.fine(struct.getClass(), "o2_whitespace_around_operators: before at " + node.from + ".");
+        }
     }
     if (!getIndent(node.to).contains("\n")) {
         struct.putNewline(node.to, space);
