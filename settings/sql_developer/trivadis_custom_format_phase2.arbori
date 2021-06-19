@@ -202,7 +202,7 @@ a13_calls_with_assoc_args:
 a13_short_nodes:
     a13_calls - a13_calls_with_assoc_args
 -> {
-    var getConditionLength = function(node) {
+    var getNodeLength = function(node) {
         var len = 0;
         for (var i=node.from; i < node.to; i++) {
             var indent = getIndent(i);
@@ -215,8 +215,8 @@ a13_short_nodes:
         }
         return len;
     }
-    var reduceConditionIndents = function(node) {
-        for (var i=node.from+1; i< node.to; i++) {
+    var reduceNodeIndents = function(node) {
+        for (var i=node.from+1; i < node.to; i++) {
             var indent = getIndent(i);
             if (indent.contains("\n") || indent.length > 1) {
                 struct.putNewline(i, " ");
