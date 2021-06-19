@@ -225,10 +225,26 @@ a13_short_nodes:
         }
     }
 
+    var containsConcat = function(node) {
+        // 3 concat chars means that there are at least 2 concats. See also o1_concatenation_option
+        var found = 0;
+        for (var i=node.from+1; i < node.to; i++) {
+            if (target.src.get(i).content == '|') {
+                found++;
+                if (found >= 3) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     var maxLen = maxCharLineSize / 2;
     var node = tuple.get("node");
-    if (getConditionLength(node) <= maxLen) {
-        reduceConditionIndents(node);
+    if (getNodeLength(node) <= maxLen) {
+        if (breaksConcat == Format.Breaks.None || !containsConcat(node)) {
+            reduceNodeIndents(node);
+        }
     }
 }
 
