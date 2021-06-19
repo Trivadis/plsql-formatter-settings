@@ -80,4 +80,15 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
         var actual = formatter.format(input);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void ignore_concat_expression() {
+        var sql = """
+                select '4'
+                       || '2'
+                       || '!' as result
+                  from dual;
+                """;
+        formatAndAssert(sql);
+    }
 }
