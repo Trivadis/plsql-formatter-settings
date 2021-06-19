@@ -534,10 +534,6 @@ max_one_empty_line:
         var lastEOLToken = 0;
         for (i = 0; i < tokens.length; i++) {
             var type = tokens[i].type;
-            if (type == Token.LINE_COMMENT && firstEOLToken == 0) {
-                firstEOLToken = tokens[i];
-                continue;
-            }
             if (tokens[i].content == "\n") {
                 if (firstEOLToken == 0) {
                     firstEOLToken = tokens[i];
