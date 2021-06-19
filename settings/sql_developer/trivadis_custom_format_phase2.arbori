@@ -1535,14 +1535,13 @@ r2_common:
     | [node) ty_def
     | [node) fml_part
     | [node) paren_expr_list
-    | [node) "expr_list" & [node-1) '('
-    | [node) xmlquery
+    | [node) "expr_list" & [node-1) '(' & [node^) in_condition[24,35)
     | [node) xmltable
-    | [node) function_expression & [node-1) '('
-    | [node) expr & [node-1) '(' & ![node^) par_expr_list
-    | [node) analytic_clause
+    | [node) expr & [node-1) '(' & [node^) query_table_expression
     | [node) pls_expr & [node-1) '(' & ![node^) paren_expr_list
     | [node) compound_condition & [node-1) '('
+    | [node^) function
+    | [node^) XML_attributes_clause
 ;
 
 r2_flowcontrol_condition:
@@ -1647,17 +1646,22 @@ r2_decrement_left_margin:
                   [node^) paren_expr_list
                 | [node^) fml_part
                 | [node^) ty_def
-                | [node^) xmlquery
                 | [node^) xmltable
                 | [node^) create_view#[114,130)
                 | [node^) insert_into_clause[13,25)
                 | [node^) par_expr_list
                 | [node^) merge_insert_clause[23,35)
                 | [node^) merge_insert_clause[43,50)
+                | [node^) function
+                | [node^) "(x,y,z)"
+                | [node^) XML_attributes_clause
+                | [node^^) analytic_function
             )
     | [node) 'RECORD' & [node^) ty_def
-    | [node) 'XMLQUERY' & [node^) xmlquery
     | [node) 'XMLTABLE' & [node^) xmltable
+    | [node+1) '(' & [node^) function
+    | [node+1) "(x,y,z)" & [node^) function
+    | [node+1) '(' & [node^) XML_attributes_clause
 -> {
     addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin");
 }
