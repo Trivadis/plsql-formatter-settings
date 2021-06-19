@@ -768,7 +768,7 @@ o6_select_before:
         | [node) 'START' & [node+1) 'WITH'
         | [node) 'GROUP'
         | [node) 'HAVING'
-        | [node) 'ORDER'
+        | [node) 'ORDER' & [node^) order_by_clause & node^^ = parent
       )
     & parent < node
 ;
@@ -1164,7 +1164,7 @@ a16_select:
         | [node) 'START'
         | [node) 'GROUP'
         | [node) 'HAVING'
-        | [node) 'ORDER'
+        | [node) 'ORDER' & [node^) order_by_clause & node^^ = parent
       )
     & parent < node
 ;
