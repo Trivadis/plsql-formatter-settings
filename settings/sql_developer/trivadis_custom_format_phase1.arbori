@@ -201,7 +201,7 @@ define_global_variables:
 define_global_functions:
     runOnce
 -> {
-    /* return a string with the requested number of spaces */
+    // Return a string with the requested number of spaces.
     var getSpaces = function(numberOfSpaces) {
         var result = "";
         for (var i=0; i<numberOfSpaces; i++) {
@@ -210,9 +210,9 @@ define_global_functions:
         return result;
     }
 
-    /* return the indentation at a node position, converts the default null to a single space */
+    // Return the indentation at a node position. Converts the default null to a single space
     var getIndent = function(nodeFrom) {
-        /* map is based on Integer, therefore nodeFrom must be converted to an Integer */
+        // map is based on Integer; therefore nodeFrom must be converted to an Integer
         var indent = newlinePositions.get(Integer.valueOf(nodeFrom));
         if (indent == null) {
             return " ";
@@ -220,7 +220,7 @@ define_global_functions:
         return indent;
     }
 
-    /* returns the indentation without leading new lines from a string */
+    // Returns the indentation without leading new lines from a string.
     var getNumCharsAfterNewLine = function(indent) {
         if (indent.contains("\n")) {
             return indent.length() - indent.lastIndexOf("\n") - 1;
@@ -228,7 +228,7 @@ define_global_functions:
         return indent.length();
     }
 
-    /* returns the leading new lines from a node position (without trailing spaces) */
+    // Returns the leading new lines from a node position (without trailing spaces).
     var getLeadingNewLines = function(nodeFrom) {
         var startPos=nodeFrom;
         var indent = getIndent(startPos);
@@ -238,7 +238,7 @@ define_global_functions:
         return "";
     }
 
-    /* returns the column of a node position, considers all preceding nodes */
+    // Returns the column of a node position. Considers all preceding nodes.
     var getColumn = function(nodeFrom) {
         var startPos=nodeFrom;
         var col=getNumCharsAfterNewLine(getIndent(startPos));
@@ -251,7 +251,7 @@ define_global_functions:
         return col;
     }
 
-    /* same as getColumn, but does not contain the very first indentation */
+    // Same as getColumn but does not contain the very first indentation.
     var getColumnWithoutFirstIndent = function(nodeFrom) {
         var startPos=nodeFrom;
         var col=getNumCharsAfterNewLine(getIndent(startPos));
@@ -266,7 +266,7 @@ define_global_functions:
         return col;
     }
 
-    /* returns true if a node or one of its children contains an indentation with a new line character */
+    // Returns true if a node or one of its children contains an indentation with a new line character.
     var containsLineBreak = function(node) {
         for (var i = node.from; i < node.to; i++) {
             var value = getIndent(i);
@@ -276,9 +276,9 @@ define_global_functions:
         }
     }
 
-    /* returns true if single-line or multi-line comments exists between two node positions */
+    // Returns true if single-line or multi-line comments exists between two node positions.
     var hasCommentsBetweenPos = function(startPos, endPos) {
-        /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
+        // maps are based on Integers; therefore startPost and endPos must be converted to Integers
         tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
         tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
         for (var i = tokenStartPos; i < tokenEndPos; i++) {
@@ -290,10 +290,10 @@ define_global_functions:
         return false;
     }
 
-    /* returns the the last comment (sl or ml) between two node positions */
+    // Returns the the last comment (sl or ml) between two node positions.
     var getLastCommentBetweenPos = function(startPos, endPos) {
         var comment = "";
-        /* maps are based on Integers, therefore startPost and endPos must be converted to Integers */
+        // maps are based on Integers; therefore startPost and endPos must be converted to Integers
         tokenStartPos = mapParserPosToLexerPos.get(Integer.valueOf(startPos));
         tokenEndPos = mapParserPosToLexerPos.get(Integer.valueOf(endPos));
         for (var i = tokenStartPos; i < tokenEndPos; i++) {
@@ -305,7 +305,7 @@ define_global_functions:
         return comment;
     }
 
-    /* returns the maximum column of nodes in an array list of tuples */
+    // Returns the maximum column of nodes in an array list of tuples.
     var getMaxColumn = function(list, nodeName) {
         var maxCol = 0;
         for (var i=0; i < list.length; i++) {
@@ -318,7 +318,7 @@ define_global_functions:
         return maxCol;
     }
 
-    /* adds a tuple to a map indexed by scope */
+    // Adds a tuple to a map indexed by scope.
     var addTupleToMap = function(tuple, scopeNodeName, map) {
         var scope = tuple.get(scopeNodeName);
         var list = map.get(scope);
@@ -329,7 +329,7 @@ define_global_functions:
         map.put(scope, list);
     }
 
-    /* increase the indent for a parent and all its descendants, but only for leaf nodes to avoid duplicate indentation */
+    // Increase the indent for a parent and all its descendants; but only for leaf nodes to avoid duplicate indentation.
     var addIndent = function(parent, increaseBy) {
         if (parent != null) {
             var descendants = parent.descendants();
@@ -345,7 +345,7 @@ define_global_functions:
         }
     }
 
-    /* aligns all nodes per scope */
+    // Aligns all nodes per scope.
     var align = function(map, alignNodeName, indentNodeName, logText) {
         var it = map.keySet().iterator();
         while (it.hasNext()) {
@@ -356,7 +356,7 @@ define_global_functions:
         }
     }
 
-    /* aligns all nodes at a target position */
+    // Aligns all nodes at a target position.
     var alignAtPos = function(targetPos, list, alignNodeName, indentNodeName, logText) {
         for (var i=0; i<list.length; i++) {
             var alignNode = list.get(i).get(alignNodeName);
@@ -381,7 +381,7 @@ define_global_functions:
         }
     }
 
-    /* returns the content of the token position range */
+    // Returns the content of the token position range.
     var getContent = function(fromPos, toPos) {
         var content = "";
         for (var i=fromPos; i<toPos; i++) {
@@ -391,7 +391,7 @@ define_global_functions:
         return content;
     }
 
-    /* returns the content of the last line in a text */
+    // Returns the content of the last line in a text.
     var getLastLine = function(text) {
         if (text != null) {
             var index = text.lastIndexOf("\n");
@@ -402,7 +402,7 @@ define_global_functions:
         return text;
     }
 
-    /* returns true if there is no other parameter defined on the same line */
+    // Returns true if there is no other parameter defined on the same line.
     var firstParameterOnLine = function(nodeFrom, scopeFrom) {
         if (!getIndent(nodeFrom).contains("\n")) {
             for (var i=nodeFrom-1; i>=scopeFrom; i=i-1) {
@@ -418,7 +418,7 @@ define_global_functions:
         return true;
     }
 
-    /* returns true if there is a a new line in the node range, search backwards */
+    // Returns true if there is a a new line in the node range; search backwards.
     var hasNewline = function(from, to) {
         for (var i=from; i>=to; i=i-1) {
             if (getIndent(i).contains("\n")) {
@@ -428,7 +428,7 @@ define_global_functions:
         return false;
     }
 
-    /* reduce indentation for nodes with leading commas */
+    // Reduce indentation for nodes with leading commas.
     var fixIndentOfLeadingCommas = function(map, nodeName, logText) {
         if (struct.breaksBeforeComma()) {
             var comma = 1;
@@ -454,10 +454,10 @@ define_global_functions:
         }
     }
 
-    /* returns true if the node is part of a statement that should be fully formatted */
-    /* subquery could be added to handle select statements that do not end on semicolon.
-     * However, this will have an impact on other statements with subqueries. */
+    // Returns true if the node is part of a statement that should be fully formatted.
     var overrideIndents = function(nodeFrom) {
+        // "subquery" could be added to handle select statements that do not end on semicolon.
+        // But this will have an impact on other statements using "subquery".
         return hasParentOfType(nodeFrom, [
            "select",
            "create_view",
@@ -470,7 +470,7 @@ define_global_functions:
         ]);
     }
 
-    /* returns true if a the node or an ancestors has one of the provided symbols */
+    // Returns true if a the node or an ancestors has one of the provided symbols.
     var hasParentOfType = function(nodeFrom, symbols) {
         var node = target.root.leafAtPos(nodeFrom);
         while (node != null) {
@@ -609,7 +609,7 @@ keep_significant_whitespace_before_leaf_nodes:
                 wsBefore = "";
             }
         } else {
-            /* enforce uniform datatype in map, therefore convert values to Integer */
+            // enforce uniform datatype in map; therefore convert values to Integer
             mapParserPosToLexerPos.put(Integer.valueOf(i-hiddenTokenCount), i);
             if (i-hiddenTokenCount == 0 && hiddenTokenCount == wsBefore.length()) {
                 // first parser token with leading whitespace only (no other hidden tokens like comments)
@@ -663,7 +663,7 @@ saveIndentInConditionalBranch:
             type != Token.MACRO_SKIP && type != Token.SQLPLUSLINECONTINUE_SKIP)
         {
             if (withinFirstBranch) {
-                /* enforce uniform datatype in map, therefore convert values to Integer */
+                // enforce uniform datatype in map; therefore convert values to Integer
                 indentInConditionalBranch.put(Integer.valueOf(pos), getIndent(pos));
                 logger.fine(struct.getClass(), "saveIndentInConditionalBranch: at " + pos + ".");
             }

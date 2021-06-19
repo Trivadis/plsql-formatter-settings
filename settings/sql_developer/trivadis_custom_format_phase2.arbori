@@ -126,9 +126,9 @@ a3_dont_format_off_on_ranges:
         } else if (type == Token.WS || type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP) {
             hiddenTokenCount++
         } else {
-            /* expected types: QUOTED_STRING, DQUOTED_STRING, BQUOTED_STRING, DIGITS, OPERATION, IDENTIFIER, AUXILIARY, INCOMPLETE */
+            // expected types are QUOTED_STRING; DQUOTED_STRING; BQUOTED_STRING; DIGITS; OPERATION; IDENTIFIER; AUXILIARY; INCOMPLETE
             if (!format) {
-                /* map expects Integers, therefore convert values to Integer */
+                // map expects Integers; therefore convert values to Integer
                 var pos = Integer.valueOf(i-hiddenTokenCount);
                 struct.unformattedPositions.add(pos);
                 logger.fine(struct.getClass(), "a3_dont_format_off_on_ranges: at " + pos + ".");
@@ -741,7 +741,7 @@ r3_commands:
             struct.putNewline(node.from, System.lineSeparator());
             logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
         } else {
-            /* remove existing indentation, enforce conformity in these cases */
+            // remove existing indentation; enforce conformity in these cases
             var newIndent = getLeadingNewLines(node.from);
             struct.putNewline(node.from, newIndent);
             logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from + ".");
@@ -1354,7 +1354,7 @@ r5_commas:
     }
 
     var addSpacesAroundComma = function(commaNode) {
-        /* always handle space after comma */
+        // always handle space after comma
         removeLeadingSpaces(commaNode.from);
         removeLeadingSpaces(commaNode.to);
         if (spaceAfterCommas) {
@@ -1374,7 +1374,7 @@ r5_commas:
     var addBreakAfterComma = function(commaNode) {
         var indentCommaNode = getIndent(commaNode.from);
         if (indentCommaNode.contains("\n") && !hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
-            /* situation: a new line was added before the comma instead of after */
+            // A new line was added before the comma instead of after.
             struct.putNewline(commaNode.to, getIndentAfterComma(indentCommaNode));
             logger.fine(struct.getClass(), "r5_commas: fix indent after comma at " + commaNode.to + ".");
             struct.putNewline(commaNode.from, "");
@@ -1385,14 +1385,14 @@ r5_commas:
         var indentCommaNode = getIndent(commaNode.from);
         var indentNextNode = getIndent(commaNode.to);
         if (indentNextNode.contains("\n")) {
-            /* situation: a new line was added after the comma instead of before */
+            // A new line was added after the comma instead of before.
             struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
             logger.fine(struct.getClass(), "r5_commas: fix indent before comma at " + commaNode.from + ".");
             var comment = getLastCommentBetweenPos(commaNode.from-1, commaNode.to);
             if (comment != null && comment.startsWith("--")) {
-                /* we must not remove the newline after a single-line comment */
+                // we must not remove the newline after a single-line comment (belongs to the single line comment)
             } else {
-                /* remove all whitespace for node */
+                // remove all whitespace before node
                 struct.putNewline(commaNode.to, "");
             }
         }
@@ -1439,19 +1439,19 @@ r5_commas:
 r2_init_left_margin:
     runOnce
 -> {
-    /* left margin is expressed in number of spaces. */
+    // Left margin is expressed in number of spaces.
     var leftMargin = new HashMap();
     var it = newlinePositions.keySet().iterator();
     while (it.hasNext()) {
         var key = it.next();
         var value = newlinePositions.get(key);
         if (value.contains("\n")) {
-            /* enforce uniform datatype in map, therefore convert values to Integer */
+            // enforce uniform datatype in map; therefore convert values to Integer
             leftMargin.put(key, Integer.valueOf(0));
         }
     }
 
-    /* increase the left margin for the parent's descendants, but only for leaf nodes to avoid duplicate indentation */
+    // Increase the left margin for the descendants; but only for leaf nodes to avoid duplicate indentation.
     var addMargin = function(parent, increaseBy, logText) {
         var descendants = parent.descendants();
         for (var i = 0, len = descendants.length; i < len; i++) {
@@ -1459,7 +1459,7 @@ r2_init_left_margin:
             var margin = leftMargin.get(node.from);
             if (margin != null) {
                 if (node.children().size() == 0) {
-                    /* enforce uniform datatype in map, therefore convert values to Integer */
+                    // enforce uniform datatype in map; therefore convert values to Integer
                     leftMargin.put(node.from, Integer.valueOf(margin+increaseBy));
                     logger.finer(struct.getClass(), logText + ": set margin to "
                         + (margin+increaseBy) + " spaces at " + node.from + ".");
@@ -1468,11 +1468,11 @@ r2_init_left_margin:
         }
     }
 
-    /* returns the left margin of a node */
+    // Returns the left margin of a node.
     var getMargin = function(node) {
         var i = node.from;
         while (i >= 0) {
-            /* map expects Integers, therefore convert values to Integer */
+            // map expects Integers; therefore convert values to Integer
             var margin = leftMargin.get(Integer.valueOf(i));
             if (margin != null) {
                 return margin;
@@ -1482,7 +1482,7 @@ r2_init_left_margin:
         return null;
     }
 
-    /* returns the first word within a string */
+    // Returns the first word within a string.
     var getFirstWord = function(text) {
         var i = text.indexOf(" ");
         if (i == -1) {
@@ -1492,13 +1492,13 @@ r2_init_left_margin:
         }
     }
 
-    /* increase left margin by first keyword in node */
+    // Increase left margin by first keyword in node.
     var addMarginByFirstKeyword = function(node, mainKeywordLength, logText) {
         return addMarginByName(node, mainKeywordLength,
             getFirstWord(target.src.get(node.from).content), logText);
     }
 
-    /* increase left margin by keyword and SQLDev settings */
+    // Increase left margin by keyword and according SQLDev settings.
     var addMarginByName = function(node, mainKeywordLength, name, logText) {
         var spaces;
         if (breaksAfterSelect) {
@@ -1513,7 +1513,7 @@ r2_init_left_margin:
         return spaces;
     }
 
-    /* returns true, if the node is in parenthesis */
+    // Returns true if the node is in parenthesis.
     var isInParen = function(node) {
         if (target.src.get(node.from).content == '(') {
             return true;
@@ -1525,7 +1525,7 @@ r2_init_left_margin:
         return false;
     }
 
-    /* returns true if the node starts with a open parenthesis and a new line (designed for subquery node) */
+    // Returns true if the node starts with a open parenthesis and a new line (designed for subquery node)
     var hasNewLineAfterParen = function(node) {
         if (target.src.get(node.from).content == '(') {
             return getIndent(node.from+1).contains("\n");
@@ -1766,10 +1766,10 @@ r2_increment_left_margin_for_subquery_in_paren:
     var from = tuple.get("from")
     if (isInParen(node)) {
         if (!hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
-            /* Left margin needs to be calculated based on the position of the left parenthesis.
-             * This cannot be done here because we cannot calculate the position for nested
-             * subqueries. We do that in r2_fix_indent_for_subquery_in_paren once the indentation per node
-             * is available. */
+            // Left margin needs to be calculated based on the position of the left parenthesis.
+            // This cannot be done here because we cannot calculate the position for nested
+            // subqueries. We do that in r2_fix_indent_for_subquery_in_paren once the indentation per node
+            // is available.
         } else {
             var targetNode = node;
             if (target.src.get(node.from).content == '(') {
@@ -1855,9 +1855,9 @@ r2_fix_indent_for_subquery_in_paren:
     var from = tuple.get("from")
     if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n"))
     {
-        /* The r2_subquery results are ordered.
-         * This means the outermost subquery is processed first and the innermost subquery last.
-         * As a result getColumn() returns correct results, even for nested subqueries. */
+        // The r2_subquery results are ordered.
+        // This means the outermost subquery is processed first and the innermost subquery last.
+        // As a result getColumn() returns correct results; even for nested subqueries.
         var spaces = getColumn(node.from) - getColumn(from.from);
         var targetNode = node;
         if (target.src.get(node.from).content == '(') {
@@ -2402,7 +2402,7 @@ o5_align_aliases:
 o7_declarations:
     runOnce
 -> {
-    /* returns true if there is no other equality sign on the line */
+    // Returns true if there is no other equality sign on the line.
     var firstEqualitySignOnLine = function(nodeFrom) {
         for (var i=nodeFrom-1; i>=0 && !getIndent(i).contains("\n"); i=i-1) {
             var content = target.src.get(i).content;
@@ -2579,7 +2579,7 @@ a9_align_xmltable_datatypes:
 -- This piece of code addresses this issue. It adds a new line with the indentation of the current line.
 -- No additional indentation is added to make this work for long argument lists as well
 -- (indentation might not be reduced on subsequent formatter calls).
--- It's important to note that the lines may be a bit longer than the configured max char line width.
+-- It iss important to note that the lines may be a bit longer than the configured max char line width.
 -- That's expected and matches the SQLDev logic. It ensures also that corner cases can be handled by
 -- this code (e.g. string tokens > max char line width).
 -- Due to this simple algorithm, it is expected that a subsequent formatter call will produce a different result.
@@ -2588,7 +2588,7 @@ a4_add_line_breaks_with_indent:
     runOnce
 -> {
     var pos = 0;
-    var indent = System.lineSeparator(); /* handle first line */
+    var indent = System.lineSeparator(); // handle first line
     for (var key=0; key<target.src.size(); key++) {
         if (pos > maxCharLineSize && target.src.get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
             struct.putNewline(key, indent);
@@ -2653,13 +2653,13 @@ a18_indent_comment:
         return false;
     }
 
-    /* Column position is based on the original formatter input,
-     * hence the result might be unsatisfactory.
-     * A second formatter call helps only if the indent is not too large.
-     * Solving this issue would require to calculate the indent
-     * based on all involved struct.newlinePositions.
-     * It's considered feasible to manually fix indentations in such cases.
-     * These fixes will be honored in subsequent formatter calls. */
+    // Column position is based on the original formatter input.
+    // Hence the result might be unsatisfactory.
+    // A second formatter call helps only if the indent is not too large.
+    // Solving this issue would require to calculate the indent
+    // based on all involved struct.newlinePositions.
+    // It is considered feasible to manually fix indentations in such cases.
+    // These fixes will be honored in subsequent formatter calls.
     var getCommentCol = function(pos) {
         var nlpos = pos;
         while (nlpos > 0 && (tokens[nlpos].type != Token.WS || !tokens[nlpos].content.contains("\n"))) {
@@ -2726,13 +2726,13 @@ a18_indent_comment:
         return false;
     }
 
-    /* Fixes the issue in SQLDev 20.4.1, SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
-     * See https://community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
-     * It's expected that this function can be removed, when this bug is fixed. */
+    // Fixes the issue in SQLDev 20.4.1 and SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
+    // See https(colon)//community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
+    // It is expected that this function can be removed when this bug is fixed.
     var fixIndentAfterMultiLineComment = function(pos) {
         var parserPos = pos - hiddenTokenCount + 1;
         var indent = getIndent(parserPos);
-        /* map expects Integers, therefore convert values to Integer */
+        // map expects Integers; therefore convert values to Integer
         var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
         var commentWithLineBreak = hasLineBreakBetween(pos + 1, lexerPos);
         if (commentWithLineBreak && !indent.contains("\n")) {
@@ -2740,7 +2740,7 @@ a18_indent_comment:
             logger.fine(struct.getClass(), "a18_indent_comment: "
                 + "remove line break at " + parserPos + ".");
         } else if (!commentWithLineBreak && indent.contains("\n")) {
-            /* map expects Integers, therefore convert values to Integer */
+            // map expects Integers; therefore convert values to Integer
             struct.putNewline(Integer.valueOf(parserPos), indent.substring(System.lineSeparator().length));
             substitutions.put(tokens[pos].end, tokens[lexerPos].begin, System.lineSeparator());
             logger.fine(struct.getClass(), "a18_indent_comment: "
@@ -2763,9 +2763,9 @@ a18_indent_comment:
                 }
             }
         }
-        /* update source code based on substitutions, will be used by the formatter which re-parses everything */
+        // Update source code based on substitutions. Will be used by the formatter which re-parses everything.
         target.input = substitutions.transformInput();
-        /* nullify all global variables that are based on the previous lexer token stream */
+        // Nullify all global variables that are based on the previous lexer token stream.
         tokens = null;
         mapParserPosToLexerPos = null;
     }
