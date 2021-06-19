@@ -160,6 +160,9 @@ define_global_variables:
     // get option for "Indentation: Indent spaces" (number of spaces for a single indentation)
     var indentSpaces = struct.options.get("identSpaces");
 
+    // get option for "Line breaks: On Concatenation"
+    var breaksConcat = struct.options.get("breaksConcat");
+
     // get option for "Line Breaks: On Boolean connectors"
     var breaksAroundLogicalConjunctions = struct.options.get("breaksAroundLogicalConjunctions");
 
