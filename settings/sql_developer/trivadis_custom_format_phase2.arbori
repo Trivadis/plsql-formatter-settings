@@ -2543,7 +2543,6 @@ a9_align_xmltable_columns:
     var it = xmlTableColumns.keySet().iterator();
     while (it.hasNext()) {
         var scope = it.next();
-        struct.putNewline(scope.from+1, " ");
         var pos = getColumn(scope.from+1);
         var list = xmlTableColumns.get(scope);
         alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
