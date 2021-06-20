@@ -2533,7 +2533,11 @@ a9_find_columns:
     } else {
         tuple.put("aligner", tuple.get("node"));
     }
-    struct.putNewline(tuple.get("aligner").from, System.lineSeparator());
+    var aligner = tuple.get("aligner");
+    if (!getIndent(aligner.from).contains("\n")) {
+        struct.putNewline(aligner.from, System.lineSeparator());
+        logger.fine(struct.getClass(), "a9_find_columns: add line break at " + aligner.from + ".");
+    }
     addTupleToMap(tuple, "scope", xmlTableColumns);
 }
 
