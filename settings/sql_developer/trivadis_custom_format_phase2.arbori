@@ -192,6 +192,8 @@ a13_calls:
     | [node) compound_expression & ![node^) compound_expression
     | [node) pls_expr & ![node^) pls_expr
     | [node) "expr_list" & ![node^) "expr_list"
+    | [node) entry
+    | [node) JSON_value_on_error_clause
 ;
 
 a13_calls_with_assoc_args:
