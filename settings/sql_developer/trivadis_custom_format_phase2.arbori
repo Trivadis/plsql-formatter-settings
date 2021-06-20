@@ -57,6 +57,7 @@ include "std.arbori"
 -- - O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
 -- - R6: Call parameters aligned, operators aligned, values aligned.
 -- - A9: Align xmltable columns.
+-- - A20: Align json_table columns.
 -- - A4: Split long lines.
 -- - A18: Indent comment like the subsequent grammar element.
 -- - A19: Restore original indent of nodes in first conditional branch.
@@ -2570,6 +2571,69 @@ a9_align_xmltable_datatypes:
 -> {
     align(xmlTableDatatypes, "node", null, "a9_align_xmltable_datatypes");
     align(xmlTableDatatypes, "path", null, "a9_align_xmltable_datatypes");
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A20: Align json_table columns.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a20_declarations:
+    runOnce
+-> {
+    var jsonTableColumns = new HashMap();
+    var jsonTableDatatypes = new HashMap();
+}
+
+a20_find_columns:
+      [scope) JSON_columns_clause
+    & [node) JSON_column_definition
+    & [comma) ','
+    & scope < node
+    & node = comma+1
+-> {
+    var scope = tuple.get("scope");
+    if (struct.breaksBeforeComma()) {
+        tuple.put("aligner", tuple.get("comma"));
+    } else {
+        tuple.put("aligner", tuple.get("node"));
+    }
+    var aligner = tuple.get("aligner");
+    if (!getIndent(aligner.from).contains("\n")) {
+        struct.putNewline(aligner.from, System.lineSeparator());
+        logger.fine(struct.getClass(), "a20_find_columns: add line break at " + aligner.from + ".");
+    }
+    addTupleToMap(tuple, "scope", jsonTableColumns);
+}
+
+a20_align_json_table_columns:
+    runOnce
+-> {
+    var it = jsonTableColumns.keySet().iterator();
+    while (it.hasNext()) {
+        var scope = it.next();
+        var pos = getColumn(scope.from+2); // first column
+        var list = jsonTableColumns.get(scope);
+        alignAtPos(pos, list, "aligner", null, "a9_align_json_table_columns");
+        fixIndentOfLeadingCommas(jsonTableColumns, "aligner", "a9_align_json_table_columns");
+    }
+}
+
+a20_find_datatypes:
+     [scope) JSON_columns_clause
+   & [node) JSON_value_return_type
+   & [path) "JSON_value_column[5,10)"
+   & scope < node
+   & path = node+1
+-> {
+    var scope = tuple.get("scope");
+    addTupleToMap(tuple, "scope", jsonTableDatatypes);
+}
+
+a20_align_json_table_datatypes:
+    runOnce
+-> {
+    align(jsonTableDatatypes, "node", null, "a20_align_json_table_datatypes");
+    align(jsonTableDatatypes, "path", null, "a20_align_json_table_datatypes");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
