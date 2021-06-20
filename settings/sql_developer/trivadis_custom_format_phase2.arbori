@@ -2622,8 +2622,8 @@ a20_align_json_table_columns:
         var scope = it.next();
         var pos = getColumn(scope.from+2); // first column
         var list = jsonTableColumns.get(scope);
-        alignAtPos(pos, list, "aligner", null, "a9_align_json_table_columns");
-        fixIndentOfLeadingCommas(jsonTableColumns, "aligner", "a9_align_json_table_columns");
+        alignAtPos(pos, list, "aligner", null, "a20_align_json_table_columns");
+        fixIndentOfLeadingCommas(jsonTableColumns, "aligner", "a20_align_json_table_columns");
     }
 }
 
