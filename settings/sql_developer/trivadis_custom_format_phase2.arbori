@@ -1556,11 +1556,14 @@ r2_common:
     | [node) paren_expr_list
     | [node) "expr_list" & [node-1) '(' & [node^) in_condition[24,35)
     | [node) xmltable
+    | [node) json_table
+    | [node) JSON_columns_clause
     | [node) expr & [node-1) '(' & [node^) query_table_expression
     | [node) pls_expr & [node-1) '(' & ![node^) paren_expr_list
     | [node) compound_condition & [node-1) '('
     | [node^) function
     | [node^) XML_attributes_clause
+    | [node) content & [node^) JSON_OBJECT
 ;
 
 r2_flowcontrol_condition:
@@ -1666,6 +1669,8 @@ r2_decrement_left_margin:
                 | [node^) fml_part
                 | [node^) ty_def
                 | [node^) xmltable
+                | [node^) json_table
+                | [node^) JSON_columns_clause
                 | [node^) create_view#[114,130)
                 | [node^) insert_into_clause[13,25)
                 | [node^) par_expr_list
@@ -1678,6 +1683,8 @@ r2_decrement_left_margin:
             )
     | [node) 'RECORD' & [node^) ty_def
     | [node) 'XMLTABLE' & [node^) xmltable
+    | [node) 'JSON_TABLE' & [node^) json_table
+    | [node) 'COLUMNS' & [node^) JSON_columns_clause
     | [node+1) '(' & [node^) function
     | [node+1) "(x,y,z)" & [node^) function
     | [node+1) '(' & [node^) XML_attributes_clause
