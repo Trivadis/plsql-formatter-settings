@@ -28,7 +28,7 @@ include "std.arbori"
  * A phase consists of one ore more sections.
  * A section consists of one or more Arbori queries.
  *
- * The following phases and sections are defined:
+ * The following phases are defined:
  *
  * - Phase 0 - Main program with minimal configuration. (trivadis_custom_format.arbori).
  * - Phase 1 - Initialization and preprocessing. (trivadis_custom_format_phase1.arbori).
