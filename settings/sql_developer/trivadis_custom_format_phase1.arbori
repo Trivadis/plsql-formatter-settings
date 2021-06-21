@@ -629,7 +629,7 @@ keep_significant_whitespace_before_leaf_nodes:
 
 -- Only tokens of the first branch in a condition compilation block are visible as parser tokens.
 -- The parser expects valid code within this branch. If the branch contains something
--- else (e.g. code templates as used in as FTLDB or tePLSQLPL) an incomplete
+-- else (e.g. code templates as used in FTLDB or tePLSQLPL) an incomplete
 -- parse tree is produced and therefore also an unsatisfactory formatting result.
 
 -- We populate a hash map containing parser token positions in the first conditional compilation block
