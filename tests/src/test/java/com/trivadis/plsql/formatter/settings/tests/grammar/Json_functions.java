@@ -100,5 +100,17 @@ public class Json_functions extends ConfiguredTestFormatter {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void json_dot_notation() {
+        var sql = """
+                select *
+                  from j_purchaseorder
+                       nested po_document.lineitems[*]
+                       columns(itemnumber,
+                               quantity number);
+                """;
+        formatAndAssert(sql);
+    }
+
 
 }
