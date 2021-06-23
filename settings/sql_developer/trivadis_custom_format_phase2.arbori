@@ -1778,6 +1778,7 @@ r2_subquery:
       [node) subquery
     & [from) from_clause
     & node < from
+    & ![from^-1) SET_OPER
 ;
 
 r2_increment_left_margin_for_subquery_in_paren:
