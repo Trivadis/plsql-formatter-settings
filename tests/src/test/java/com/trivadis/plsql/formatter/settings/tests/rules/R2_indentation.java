@@ -1191,6 +1191,44 @@ public class R2_indentation extends ConfiguredTestFormatter {
         }
 
         @Test
+        void union_all() throws IOException {
+            var input = """
+                    select *
+                    from (
+                    select ename, sal
+                    from emp
+                    where ename = 'SMITH'
+                    union all
+                    select ename, sal
+                    from emp
+                    where ename = 'SCOTT'
+                    union all
+                    select ename, sal
+                    from emp
+                    where ename = 'MARTIN'
+                    );
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    select *
+                    from (
+                            select ename, sal
+                            from emp
+                            where ename = 'SMITH'
+                            union all
+                            select ename, sal
+                            from emp
+                            where ename = 'SCOTT'
+                            union all
+                            select ename, sal
+                            from emp
+                            where ename = 'MARTIN'
+                         );
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
         void analytic_function() throws IOException {
             var input = """
                     select last_name
