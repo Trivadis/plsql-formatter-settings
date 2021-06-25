@@ -1587,6 +1587,7 @@ r2_common:
     | [node^) function
     | [node^) XML_attributes_clause
     | [node) content & [node^) JSON_OBJECT
+    | [node) white_list_items & ![node^) white_list_items
 ;
 
 r2_flowcontrol_condition:
