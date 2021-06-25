@@ -86,7 +86,8 @@ resetFormatter:
 
 -- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
 dontFormatNode:
-    [node) numeric_literal
+      [node) numeric_literal
+    | [node) path             -- expected in in SQL*Plus, SQLcl commands only
 ->
 ;
 
