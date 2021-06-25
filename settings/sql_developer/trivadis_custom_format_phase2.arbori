@@ -425,7 +425,7 @@ a7_for_loop_identifier:
     & [node^) iteration_scheme
 ;
 
-a7_assignment :
+a7_assignment:
       [node) ':'
     & [node+1) '='
 ;
