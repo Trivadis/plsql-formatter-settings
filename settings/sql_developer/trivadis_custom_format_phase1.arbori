@@ -467,7 +467,8 @@ define_global_functions:
            "delete",
            "merge",
            "block_stmt",
-           "pkg_body"
+           "pkg_body",
+           "create_plsql"
         ]);
     }
 
