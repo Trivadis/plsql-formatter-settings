@@ -11,8 +11,8 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
                 create or replace function mgrname(
                    p_empno in emp.empno%type
                 ) return emp.ename%type is
-                   result  emp.ename%type;
-                   i       integer;
+                   result emp.ename%type;
+                   i      integer;
                 begin
                    result := null;
                    i      := 1;

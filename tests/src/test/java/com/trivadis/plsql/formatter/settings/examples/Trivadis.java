@@ -21,8 +21,8 @@ public class Trivadis extends ConfiguredTestFormatter {
                        where employee_id = p_employee_id
                        order by last_name,
                              first_name;
-                   r_employee    c_employees%rowtype;
-                   l_new_salary  employees.salary%type;
+                   r_employee   c_employees%rowtype;
+                   l_new_salary employees.salary%type;
                 begin
                    open c_employees(p_employee_id => in_employee_id);
                    fetch c_employees into r_employee;
