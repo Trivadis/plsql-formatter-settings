@@ -430,6 +430,11 @@ a7_assignment:
     & [node+1) '='
 ;
 
+a7_accessible_by:
+      [node) 'BY'
+    & [node+1) 'ACCESSIBLE'
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -439,6 +444,7 @@ a7_one_space_before:
     | a7_parameter_parts
     | a7_for_loop_identifier
     | a7_assignment
+    | a7_accessible_by
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
