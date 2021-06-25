@@ -48,4 +48,27 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
                 """;
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void assignment() throws IOException {
+        var input = """
+                begin
+                a
+                :=
+                1;
+                end;
+                /
+                """;
+        var actual = formatter.format(input);
+        var expected = """
+                begin
+                   a :=
+                      1;
+                end;
+                /
+                """;
+        assertEquals(expected, actual);
+    }
+
+
 }
