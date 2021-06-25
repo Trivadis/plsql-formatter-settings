@@ -331,6 +331,11 @@ a5_brackets:
     | [node) ']'
 ;
 
+a5_indicator_variable:
+      [node) bind_var
+    & [node-1) bind_var
+;
+
 a5_no_space_before:
       a5_semicolon
     | a5_dot
@@ -347,6 +352,7 @@ a5_no_space_before:
     | a5_slash
     | a5_open_paren_before_datatype
     | a5_brackets
+    | a5_indicator_variable
 -> {
     var node = tuple.get("node");
     var content = target.src.get(node.from).content;
@@ -377,10 +383,16 @@ a6_brackets:
       [node) '['
 ;
 
+a6_host_variable:
+      [node) ':'
+    & [node^) bind_var
+;
+
 a6_no_space_after:
       a6_dot
     | a6_less_less
     | a6_brackets
+    | a6_host_variable
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.to, "");
