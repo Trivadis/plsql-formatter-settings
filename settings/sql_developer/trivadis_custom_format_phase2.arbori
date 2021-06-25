@@ -726,6 +726,7 @@ r3_sql_commands:
 r3_plsql_commands:
       [node) subprg_spec
           & ![node^^) create            -- standalone function/procedure
+          & ![node+1) 'USING'           -- standalone function with aggregate_clause
           & ![node-1) member_or_static  -- object type spec
           & ![node^-1) member_or_static -- object type body
           & ![node-1) 'CONSTRUCTOR'     -- object type spec
