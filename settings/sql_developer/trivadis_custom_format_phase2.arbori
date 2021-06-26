@@ -1606,6 +1606,7 @@ r2_common:
     | [node^) XML_attributes_clause
     | [node) content & [node^) JSON_OBJECT
     | [node) white_list_items & ![node^) white_list_items
+    | [node) pragma
 ;
 
 r2_flowcontrol_condition:
