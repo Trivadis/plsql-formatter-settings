@@ -332,6 +332,8 @@ a5_open_paren_before_datatype:
     & (
           [node^) datatype
         | [node^^) datatype
+        | [node^^) constrained_type
+        | [node^) ty_def
       )
 ;
 
