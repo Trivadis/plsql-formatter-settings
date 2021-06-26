@@ -61,12 +61,13 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
         public void records() throws IOException {
             var input = """
                     declare
-                       type dept_rec_typ is record (
-                          dept_id number(4) not null := 10,
-                          dept_name varchar2(30) not null := 'Administration',
-                          mgr_id number(6) := 200,
-                          loc_id number(4) := 1700
-                       );
+                       type dept_rec_typ is
+                          record (
+                             dept_id number(4) not null := 10,
+                             dept_name varchar2(30) not null := 'Administration',
+                             mgr_id number(6) := 200,
+                             loc_id number(4) := 1700
+                          );
                        dept_rec dept_rec_typ;
                        co_x integer;
                     begin
@@ -77,12 +78,13 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     declare
-                       type dept_rec_typ is record (
-                          dept_id   number(4) not null    := 10,
-                          dept_name varchar2(30) not null := 'Administration',
-                          mgr_id    number(6)             := 200,
-                          loc_id    number(4)             := 1700
-                       );
+                       type dept_rec_typ is
+                          record(
+                             dept_id   number(4) not null    := 10,
+                             dept_name varchar2(30) not null := 'Administration',
+                             mgr_id    number(6)             := 200,
+                             loc_id    number(4)             := 1700
+                          );
                        dept_rec dept_rec_typ;
                        co_x     integer;
                     begin
@@ -223,12 +225,12 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
         public void records() {
             var sql = """
                     declare
-                       type dept_rec_typ is record (
-                          dept_id number(4) not null := 10,
-                          dept_name varchar2(30) not null := 'Administration',
-                          mgr_id number(6) := 200,
-                          loc_id number(4) := 1700
-                       );
+                       type dept_rec_typ is record(
+                             dept_id number(4) not null := 10,
+                             dept_name varchar2(30) not null := 'Administration',
+                             mgr_id number(6) := 200,
+                             loc_id number(4) := 1700
+                          );
                        dept_rec dept_rec_typ;
                        co_x integer;
                     begin

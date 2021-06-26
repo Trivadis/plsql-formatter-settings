@@ -132,11 +132,11 @@ public class AllroundAutomations extends ConfiguredTestFormatter {
     public void dept_record() {
         var sql = """
                 declare
-                   type dept_record is record (
-                      deptno number(2),
-                      dname  varchar2(13),
-                      loc    varchar2(13)
-                   );
+                   type dept_record is record(
+                         deptno number(2),
+                         dname  varchar2(13),
+                         loc    varchar2(13)
+                      );
                 begin
                    null;
                 end;

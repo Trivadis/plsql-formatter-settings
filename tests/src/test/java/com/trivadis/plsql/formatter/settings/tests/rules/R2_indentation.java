@@ -221,11 +221,11 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     declare
-                       type t_xyz is record (
-                          c1 integer
-                         ,c2 varchar2(20)
-                         ,c3 date
-                       );
+                       type t_xyz is record(
+                             c1 integer
+                            ,c2 varchar2(20)
+                            ,c3 date
+                          );
                     begin
                        null;
                     end;
