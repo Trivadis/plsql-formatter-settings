@@ -2589,9 +2589,34 @@ r6_find_values:
 -> {
     if (alignNamedArgs) {
         var scope = tuple.get("scope");
-        if (containsLineBreak(scope)) {
-            addTupleToMap(tuple, "scope", assocValues);
+        addTupleToMap(tuple, "scope", assocValues);
+    }
+}
+
+r6_ensure_all_assoc_args_are_on_same_line:
+    runOnce
+-> {
+    var toRemove = new ArrayList();
+    var it = assocValues.keySet().iterator();
+    while (it.hasNext()) {
+        var scope = it.next();
+        var list = assocValues.get(scope);
+        if (list.size() > 0) {
+            // we start with the second AssocArg
+            // because the first assocArg can be defined on the same line as the open parenthesis of the scope
+            var lastPos = list.get(0).get("arg").from;
+            for (var i=1; i < list.size(); i++) {
+                var pos = list.get(i).get("arg").to;
+                if (!containsLineBreakBetweenPos(lastPos, pos)) {
+                    toRemove.add(scope);
+                    break;
+                }
+                lastPos = pos;
+            }
         }
+    }
+    for (var i=0; i < toRemove.size(); i++) {
+        assocValues.remove(toRemove.get(i));
     }
 }
 
