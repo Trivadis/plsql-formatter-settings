@@ -1630,6 +1630,7 @@ r2_common:
     | [node) subquery_factoring_clause
     | [node) cursor_open_statement
     | [node) ty_def
+    | [node) field_list & ![node^) field_list
     | [node) fml_part
     | [node) paren_expr_list
     | [node) "expr_list" & [node-1) '(' & [node^) in_condition[24,35)
@@ -1644,6 +1645,7 @@ r2_common:
     | [node) content & [node^) JSON_OBJECT
     | [node) white_list_items & ![node^) white_list_items
     | [node) pragma
+    | [node) default_expr_opt
 ;
 
 r2_flowcontrol_condition:
@@ -1747,7 +1749,6 @@ r2_decrement_left_margin:
           & (
                   [node^) paren_expr_list
                 | [node^) fml_part
-                | [node^) ty_def
                 | [node^) xmltable
                 | [node^) json_table
                 | [node^) JSON_columns_clause
@@ -1761,7 +1762,6 @@ r2_decrement_left_margin:
                 | [node^) XML_attributes_clause
                 | [node^^) analytic_function
             )
-    | [node) 'RECORD' & [node^) ty_def
     | [node) 'XMLTABLE' & [node^) xmltable
     | [node) 'JSON_TABLE' & [node^) json_table
     | [node) 'COLUMNS' & [node^) JSON_columns_clause
