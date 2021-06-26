@@ -269,7 +269,12 @@ define_global_functions:
 
     // Returns true if a node or one of its children contains an indentation with a new line character.
     var containsLineBreak = function(node) {
-        for (var i = node.from; i < node.to; i++) {
+        return containsLineBreakBetweenPos(node.from, node.to);
+    }
+
+    // Returns true if a new line character is found in the provided position range
+    var containsLineBreakBetweenPos = function(from, to) {
+        for (var i = from; i < to; i++) {
             var value = getIndent(i);
             if (value.contains("\n")) {
                 return true;
