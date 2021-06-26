@@ -554,6 +554,10 @@ a8_select_clauses:
     | [node) 'ORDER'
 ;
 
+a8_pragma:
+   [node) 'PRAGMA'
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -567,6 +571,7 @@ a8_one_space_after:
     | a8_merge
     | a8_case
     | a8_select_clauses
+    | a8_pragma
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
