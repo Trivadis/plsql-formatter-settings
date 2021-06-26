@@ -2388,7 +2388,8 @@ o4_find_assignments:
 -> {
     if (alignAssignments) {
         var scope = tuple.get("scope");
-        if (containsLineBreak(scope)) {
+        var node = tuple.get("node");
+        if (containsLineBreak(scope) & !getIndent(node.from+2).contains("\n")) {
             addTupleToMap(tuple, "scope", assignments);
         }
     }
