@@ -390,6 +390,10 @@ a6_less_less:
     & [node) '<'
 ;
 
+a6_percent:
+    [node) '%'
+;
+
 a6_brackets:
       [node) '['
 ;
@@ -402,6 +406,7 @@ a6_host_variable:
 a6_no_space_after:
       a6_dot
     | a6_less_less
+    | a6_percent
     | a6_brackets
     | a6_host_variable
 -> {
