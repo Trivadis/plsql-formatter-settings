@@ -182,7 +182,7 @@ o2_whitespace_around_operators:
 -- Short is defined as "maxCharLineSize / 2" or less. By default this is 60 characters.
 -- Function or procedure calls with assoc args are ignored.
 
-a13_calls:
+a13_nodes:
       [node) comparison_condition
     | [node) function_call & ![node^) dotted_expr
     | [node) function_expression
@@ -194,6 +194,9 @@ a13_calls:
     | [node) "expr_list" & ![node^) "expr_list"
     | [node) entry
     | [node) JSON_value_on_error_clause
+    | [node) constrained_type
+    | [node) ty_def
+    | [node) assoc_arg
 ;
 
 a13_calls_with_assoc_args:
@@ -202,8 +205,14 @@ a13_calls_with_assoc_args:
     & node < arg
 ;
 
+a13_records:
+      [node) ty_def
+    & [child) 'RECORD'
+    & node < child
+;
+
 a13_short_nodes:
-    a13_calls - a13_calls_with_assoc_args
+    (a13_nodes - a13_calls_with_assoc_args) - a13_records
 -> {
     var getNodeLength = function(node) {
         var len = 0;
