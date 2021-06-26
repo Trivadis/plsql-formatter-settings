@@ -589,6 +589,11 @@ a8_pragma:
    [node) 'PRAGMA'
 ;
 
+a8_variable_identifier:
+      [node) identifier
+    & [node+1) object_d_rhs
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -603,6 +608,7 @@ a8_one_space_after:
     | a8_case
     | a8_select_clauses
     | a8_pragma
+    | a8_variable_identifier
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
