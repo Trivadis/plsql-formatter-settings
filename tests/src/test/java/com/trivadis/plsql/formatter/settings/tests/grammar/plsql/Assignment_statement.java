@@ -1,4 +1,4 @@
-package com.trivadis.plsql.formatter.settings.tests.grammar;
+package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
