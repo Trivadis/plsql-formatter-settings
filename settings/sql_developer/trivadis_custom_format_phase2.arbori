@@ -468,6 +468,7 @@ a7_end_label:
     & (
           [node-1) 'END'
         | [node-1) 'LOOP'
+        | [node-1) 'CASE'
       )
 ;
 
