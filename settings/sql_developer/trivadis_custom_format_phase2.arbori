@@ -199,6 +199,7 @@ a13_nodes:
     | [node) assoc_arg
     | [node) pragma_args
     | [node) subprg_property
+    | [node) adt_field
 ;
 
 a13_calls_with_assoc_args:
