@@ -1674,6 +1674,7 @@ r2_common:
     | [node) default_expr_opt
     | [node) call_specification
     | [node) external_parameter_list
+    | [node) pragma_arg_list & ![node^) pragma_arg_list
 ;
 
 r2_flowcontrol_condition:
