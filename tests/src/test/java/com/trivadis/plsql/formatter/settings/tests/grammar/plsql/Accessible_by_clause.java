@@ -16,13 +16,13 @@ public class Accessible_by_clause extends ConfiguredTestFormatter {
                 end;
                 """;
         var actual = formatter.format(input);
-        var sql = """
+        var expected = """
                 create package pkg as
                    procedure p1
                       accessible by (procedure p2);
                 end;
                 """;
-        formatAndAssert(sql);
+        assertEquals(expected, actual);
     }
 
     @Test
