@@ -595,6 +595,11 @@ a8_variable_identifier:
     & [node+1) object_d_rhs
 ;
 
+a8_close:
+      [node) 'CLOSE'
+    & [node^) close_statement
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -610,6 +615,7 @@ a8_one_space_after:
     | a8_select_clauses
     | a8_pragma
     | a8_variable_identifier
+    | a8_close
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
