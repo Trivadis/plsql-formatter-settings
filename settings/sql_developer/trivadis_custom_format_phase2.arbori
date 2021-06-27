@@ -2270,7 +2270,7 @@ a10_declarations:
 a10_find_param_modes:
       [scope) fml_part
     & [name) decl_id
-    & [node) mode
+    & ([node) mode | [node) 'IN') -- support IN modes with to NOCOPY
     & scope < node
     & name = node-1
 -> {
