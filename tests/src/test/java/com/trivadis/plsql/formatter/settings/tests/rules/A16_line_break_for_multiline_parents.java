@@ -237,8 +237,8 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 using s
                    on (s.id = t.id)
                  when not matched then
-                      insert (t.id, t.c1) 
-                      values (s.id, s.c1) 
+                      insert (t.id, t.c1)
+                      values (s.id, s.c1)
                        where s.c3 = 3;
                 """;
         assertEquals(expected, actual);

@@ -41,8 +41,8 @@ public class Comment extends ConfiguredTestFormatter {
         var actual = formatter.format(input);
         var expected = """
                 begin
-                   /* multi 
-                      line 
+                   /* multi
+                      line
                       comment */
                    null  /* another multi line comment */;
                 end;

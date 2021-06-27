@@ -20,13 +20,13 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
         @Test
         public void correlated_subquery_single_line() throws IOException {
             var input = """
-                    select d.dname, 
+                    select d.dname,
                            (select count(*) from emp e where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select d.dname, 
+                    select d.dname,
                            (select count(*) from emp e where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
@@ -37,8 +37,8 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
         public void correlated_subquery_multiline() throws IOException {
             var input = """
                     select d.dname,
-                           (select count(*) 
-                              from emp e 
+                           (select count(*)
+                              from emp e
                              where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
@@ -46,8 +46,8 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
             var expected = """
                     select d.dname,
                            (
-                              select count(*) 
-                                from emp e 
+                              select count(*)
+                                from emp e
                                where e.deptno = d.deptno
                            ) as emp_count
                       from dept d;
@@ -68,8 +68,8 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
         public void join() {
             var sql = """
                     select d.dname,
-                           (select count(*) 
-                              from emp e 
+                           (select count(*)
+                              from emp e
                              where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;

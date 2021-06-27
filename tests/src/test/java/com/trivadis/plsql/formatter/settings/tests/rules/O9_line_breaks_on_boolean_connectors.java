@@ -43,8 +43,8 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
             var input = """
                     select *
                       from t
-                     where a = 1 
-                           and b = 2 and 
+                     where a = 1
+                           and b = 2 and
                            (c = 3 or d = 4);
                     """;
             var actual = formatter.format(input);
@@ -92,8 +92,8 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
             var input = """
                     select *
                       from t
-                     where a = 1 
-                           and b = 2 and 
+                     where a = 1
+                           and b = 2 and
                            (c = 3 or d = 4);
                     """;
             var actual = formatter.format(input);
@@ -139,8 +139,8 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
             var input = """
                     select *
                       from t
-                     where a = 1 
-                           and b = 2 and 
+                     where a = 1
+                           and b = 2 and
                            (c = 3 or d = 4);
                     """;
             var actual = formatter.format(input);

@@ -20,7 +20,7 @@ public class Aggregate_clause extends ConfiguredTestFormatter {
                    x geometry
                 ) return geometry
                 aggregate
-                using 
+                using
                 spatialunionroutines;
                 """;
         formatAndAssert(sql);
