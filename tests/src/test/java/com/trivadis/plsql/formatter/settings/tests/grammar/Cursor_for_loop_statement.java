@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-public class For_loop extends ConfiguredTestFormatter {
+public class Cursor_for_loop_statement extends ConfiguredTestFormatter {
 
     @Nested
     class Select {
