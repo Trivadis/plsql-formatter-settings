@@ -591,6 +591,12 @@ a8_pragma:
    [node) 'PRAGMA'
 ;
 
+a8_pragma_coverage:
+      [node) identifier
+    & [node-1) 'PRAGMA'
+    & ?node = 'COVERAGE'
+;
+
 a8_variable_identifier:
       [node) identifier
     & [node+1) object_d_rhs
@@ -615,6 +621,7 @@ a8_one_space_after:
     | a8_case
     | a8_select_clauses
     | a8_pragma
+    | a8_pragma_coverage
     | a8_variable_identifier
     | a8_close
 -> {
