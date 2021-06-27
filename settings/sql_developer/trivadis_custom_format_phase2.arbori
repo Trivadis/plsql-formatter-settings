@@ -198,6 +198,7 @@ a13_nodes:
     | [node) ty_def
     | [node) assoc_arg
     | [node) pragma_args
+    | [node) subprg_property
 ;
 
 a13_calls_with_assoc_args:
