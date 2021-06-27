@@ -573,8 +573,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     begin
-                       delete
-                              t
+                       delete t
                         where 1 = 1
                        return c1, c2
                          into l1, l2

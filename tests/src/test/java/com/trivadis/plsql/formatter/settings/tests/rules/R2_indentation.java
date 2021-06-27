@@ -1482,8 +1482,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                 var actual = formatter.format(input);
                 var expected = """
                         begin
-                           delete
-                                  t
+                           delete t
                            where 1 = 1
                                  and 2 = 2
                            return c1, c2
