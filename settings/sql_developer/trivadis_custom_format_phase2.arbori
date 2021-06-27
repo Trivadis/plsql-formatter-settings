@@ -197,6 +197,7 @@ a13_nodes:
     | [node) constrained_type
     | [node) ty_def
     | [node) assoc_arg
+    | [node) pragma_args
 ;
 
 a13_calls_with_assoc_args:
