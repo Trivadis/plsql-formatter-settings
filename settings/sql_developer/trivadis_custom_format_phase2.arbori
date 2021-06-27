@@ -603,6 +603,12 @@ a8_pragma_coverage:
     & ?node = 'COVERAGE'
 ;
 
+a8_pragma_deprecate:
+      [node) identifier
+    & [node-1) 'PRAGMA'
+    & ?node = 'DEPRECATE'
+;
+
 a8_variable_identifier:
       [node) identifier
     & [node+1) object_d_rhs
@@ -629,6 +635,7 @@ a8_one_space_after:
     | a8_select_clauses
     | a8_pragma
     | a8_pragma_coverage
+    | a8_pragma_deprecate
     | a8_variable_identifier
     | a8_close
 -> {
