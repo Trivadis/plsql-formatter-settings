@@ -798,6 +798,7 @@ r3_plsql_keywords:
           & ![node^^) exit_stmt
           & ![node^) merge_insert_clause
           & ![node^) merge_update_clause
+          & ![node^) continue_stmt
     | [node) 'BEGIN'
     | [node) 'END'
     | [node) 'ELSIF'
