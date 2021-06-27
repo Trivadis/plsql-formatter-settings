@@ -200,6 +200,7 @@ a13_nodes:
     | [node) pragma_args
     | [node) subprg_property
     | [node) adt_field
+    | [node) excptn_d
 ;
 
 a13_calls_with_assoc_args:
@@ -406,12 +407,24 @@ a6_host_variable:
     & [node^) bind_var
 ;
 
+a6_pragma_exception_init:
+      [node) identifier
+    & [node-1) 'PRAGMA'
+    & ?node = 'EXCEPTION_INIT'
+;
+
+a6_unary_add_op:
+    [node) unary_add_op
+;
+
 a6_no_space_after:
       a6_dot
     | a6_less_less
     | a6_percent
     | a6_brackets
     | a6_host_variable
+    | a6_pragma_exception_init
+    | a6_unary_add_op
 -> {
     var node = tuple.get("node");
     struct.putNewline(node.to, "");
