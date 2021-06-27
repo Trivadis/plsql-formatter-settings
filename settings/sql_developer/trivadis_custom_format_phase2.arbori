@@ -542,6 +542,11 @@ a8_from:
     & [node^) from_clause
 ;
 
+a8_delete_from:
+      ([node) 'FROM' | [node) 'DELETE' & ![node+1) 'FROM')
+    & [node^) delete
+;
+
 a8_create_or_replace:
       [node) 'CREATE'
     | [node) 'OR' & [node-1) 'CREATE'
@@ -616,6 +621,7 @@ a8_one_space_after:
     | a8_on
     | a8_join
     | a8_from
+    | a8_delete_from
     | a8_create_or_replace
     | a8_accessible_by
     | a8_merge
