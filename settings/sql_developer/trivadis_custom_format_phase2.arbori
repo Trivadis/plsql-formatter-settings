@@ -1642,6 +1642,8 @@ r2_common:
     | [node) white_list_items & ![node^) white_list_items
     | [node) pragma
     | [node) default_expr_opt
+    | [node) call_specification
+    | [node) external_parameter_list
 ;
 
 r2_flowcontrol_condition:
@@ -1757,6 +1759,7 @@ r2_decrement_left_margin:
                 | [node^) "(x,y,z)"
                 | [node^) XML_attributes_clause
                 | [node^^) analytic_function
+                | [node^) external_parameter_list
             )
     | [node) 'XMLTABLE' & [node^) xmltable
     | [node) 'JSON_TABLE' & [node^) json_table
