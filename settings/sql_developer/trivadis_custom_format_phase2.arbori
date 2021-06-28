@@ -201,6 +201,7 @@ a13_nodes:
     | [node) subprg_property
     | [node) adt_field
     | [node) excptn_d
+    | [node) external_parm_list_entry
 ;
 
 a13_calls_with_assoc_args:
