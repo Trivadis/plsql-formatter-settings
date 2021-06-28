@@ -38,4 +38,18 @@ public class Element_specification extends ConfiguredTestFormatter {
                 """;
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void attributes_aligned() {
+        var sql = """
+                create type demo_typ as object (
+                   aaa      number,
+                   bbbb     varchar2(20),
+                   cccccccc date,
+                   member function xyz return varchar2
+                );
+                """;
+        formatAndAssert(sql);
+    }
+
 }
