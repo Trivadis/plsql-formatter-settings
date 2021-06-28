@@ -202,6 +202,7 @@ a13_nodes:
     | [node) adt_field
     | [node) excptn_d
     | [node) external_parm_list_entry
+    | [node) excptn_handler
 ;
 
 a13_calls_with_assoc_args:
