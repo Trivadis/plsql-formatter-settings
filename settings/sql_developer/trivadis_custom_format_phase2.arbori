@@ -2362,12 +2362,20 @@ o8_records:
     & scope < node^
 ;
 
+o8_attributes:
+      [scope) adt_field_list
+    & ![scope^) adt_field_list
+    & [node^) adt_field
+    & [node-1) decl_id
+    & scope < node
+;
+
 o8_find_type_declarations:
       o8_variables
     | o8_records
+    | o8_attributes
 -> {
     if (alignTypeDecl) {
-        var node = tuple.get("node");
         addTupleToMap(tuple, "scope", datatypes);
     }
 }
