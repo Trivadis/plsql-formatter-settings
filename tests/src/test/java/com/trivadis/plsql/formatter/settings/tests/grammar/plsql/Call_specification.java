@@ -21,12 +21,12 @@ public class Call_specification extends ConfiguredTestFormatter {
                       context,
                       in_current_userid ocinumber,
                       in_current_userid indicator,
-                      in_schema_name ocistring,
-                      in_schema_name indicator,
-                      in_query ociloblocator,
-                      in_query indicator,
-                      in_result ociloblocator,
-                      in_result indicator
+                      in_schema_name    ocistring,
+                      in_schema_name    indicator,
+                      in_query          ociloblocator,
+                      in_query          indicator,
+                      in_result         ociloblocator,
+                      in_result         indicator
                    );
                 """;
         formatAndAssert(sql);
