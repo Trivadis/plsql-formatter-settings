@@ -2370,10 +2370,18 @@ o8_attributes:
     & scope < node
 ;
 
+o8_external_params:
+     [scope) external_parm_list_entry_opt
+   & ![scope^) external_parm_list_entry_opt
+   & [node-1) identifier
+   & scope < node
+;
+
 o8_find_type_declarations:
       o8_variables
     | o8_records
     | o8_attributes
+    | o8_external_params
 -> {
     if (alignTypeDecl) {
         addTupleToMap(tuple, "scope", datatypes);
