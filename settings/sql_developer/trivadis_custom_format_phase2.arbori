@@ -827,6 +827,7 @@ r3_plsql_commands:
     | [node) body_adt_field
     | [node) basic_decl_item
     | [node) stmt
+    | [node) external_parm_list_entry
 ;
 
 r3_plsql_keywords:
