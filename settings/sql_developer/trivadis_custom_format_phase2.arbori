@@ -495,6 +495,11 @@ a7_type_definition:
     & [node^) ty_d
 ;
 
+a7_when_cond:
+      [node) WHEN_cond_opt
+    & [node^) exit_stmt
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -507,6 +512,7 @@ a7_one_space_before:
     | a7_accessible_by
     | a7_end_label
     | a7_type_definition
+    | a7_when_cond
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
