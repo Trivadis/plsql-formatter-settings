@@ -2927,9 +2927,13 @@ a18_indent_comment:
     var getIndentBefore = function(pos) {
         var indent = getIndent(pos);
         var content = target.src.get(pos).content.toLowerCase();
-        if (content.startsWith("end") || content == "elsif" || content == "else" || content == "when") {
-            // use indent before the token when the indention is decreased after the comment
-            indent = getIndent(pos-1);
+        if (content.startsWith("end")) {
+            indent += getSpaces(indentSpaces);
+            if (target.src.get(pos+1).content.toLowerCase() == "case") {
+                indent += getSpaces(indentSpaces);
+            }
+        } else if (content == "elsif" || content == "else" || content == "when") {
+            indent += getSpaces(indentSpaces);
         }
         return indent;
     }
