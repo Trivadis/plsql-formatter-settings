@@ -1724,6 +1724,7 @@ r2_common:
     | [node) using_clause_opt & [node^) exec_immediate_statement
     | [node^) exec_immediate_statement & ![node) 'EXECUTE'
     | [node^) fetch_statement & ![node) 'FETCH'
+    | [node^) bulk_loop_stmt & ![node) 'FORALL'
 ;
 
 r2_flowcontrol_condition:
