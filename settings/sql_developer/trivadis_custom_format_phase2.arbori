@@ -1710,9 +1710,8 @@ r2_common:
     | [node) external_parameter_list
     | [node) pragma_arg_list & ![node^) pragma_arg_list
     | [node) using_clause_opt & [node^) exec_immediate_statement
-    | [node) returning_clause_opt & [node^) exec_immediate_statement
-    | [node) into_list & [node^) exec_immediate_statement
-    | [node) BULK_COLLECT_opt & [node^) exec_immediate_statement
+    | [node^) exec_immediate_statement & ![node) 'EXECUTE'
+    | [node^) fetch_statement & ![node) 'FETCH'
 ;
 
 r2_flowcontrol_condition:
