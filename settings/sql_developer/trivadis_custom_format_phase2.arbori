@@ -647,6 +647,10 @@ a8_close:
     & [node^) close_statement
 ;
 
+a8_fetch:
+   [node) 'FETCH'
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -666,6 +670,7 @@ a8_one_space_after:
     | a8_pragma_deprecate
     | a8_variable_identifier
     | a8_close
+    | a8_fetch
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
