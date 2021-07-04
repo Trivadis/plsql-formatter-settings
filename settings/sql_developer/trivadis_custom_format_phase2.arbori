@@ -506,6 +506,11 @@ a7_when_cond:
     & [node^) exit_stmt
 ;
 
+a7_reverse_loop:
+      [node) 'REVERSE'
+    & [node^) loop_prm_spec
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -519,6 +524,7 @@ a7_one_space_before:
     | a7_end_label
     | a7_type_definition
     | a7_when_cond
+    | a7_reverse_loop
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
@@ -651,6 +657,11 @@ a8_fetch:
    [node) 'FETCH'
 ;
 
+a8_reverse_loop:
+      [node) 'REVERSE'
+    & [node^) loop_prm_spec
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -671,6 +682,7 @@ a8_one_space_after:
     | a8_variable_identifier
     | a8_close
     | a8_fetch
+    | a8_reverse_loop
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
