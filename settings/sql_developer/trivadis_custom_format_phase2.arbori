@@ -353,6 +353,11 @@ a5_indicator_variable:
     & [node-1) bind_var
 ;
 
+a5_star_star:
+     [node) '*'
+   & [node-1) '*'
+;
+
 a5_no_space_before:
       a5_semicolon
     | a5_dot
@@ -370,6 +375,7 @@ a5_no_space_before:
     | a5_open_paren_before_datatype
     | a5_brackets
     | a5_indicator_variable
+    | a5_star_star
 -> {
     var node = tuple.get("node");
     var content = target.src.get(node.from).content;
