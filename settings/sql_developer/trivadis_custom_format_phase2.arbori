@@ -1911,6 +1911,21 @@ r2_indent_single_line_clauses:
     }
 }
 
+r2_indent_name_list_after_fetch_into:
+     [node) name_list
+   & [node-1) 'INTO'
+   & [node^) fetch_statement
+-> {
+    var fetch = tuple.get("node^");
+    var into = tuple.get("node-1");
+    var col = getColumnWithoutFirstIndent(into.from) + 5;
+    if (!containsLineBreakBetweenPos(fetch.from+1, into.to)) {
+        col -= indentSpaces;
+    }
+    var node = tuple.get("node");
+    addMargin(node, col, "r2_indent_name_list_after_fetch_into");
+}
+
 r2_subquery:
       [node) subquery
     & [from) from_clause
