@@ -382,7 +382,7 @@ a5_no_space_before:
     if (content == '/') {
         struct.putNewline(node.from, System.lineSeparator());
         logger.fine(struct.getClass(), "a5_no_space_before: <" + content + ">, add line break at " + node.from + ".");
-    } else if (content != '.' || !getIndent(node.from).contains("\n")) {
+    } else if (content != '.' || !getIndent(node.from).contains("\n") || target.src.get(node.from+1).content == '.') {
         // support fluent type methods across multiple lines
         struct.putNewline(node.from, "");
         logger.fine(struct.getClass(), "a5_no_space_before: <" + content + "> at " + node.from + ".");
