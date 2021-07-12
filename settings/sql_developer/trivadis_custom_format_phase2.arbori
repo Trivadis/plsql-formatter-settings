@@ -856,7 +856,7 @@ r3_plsql_commands:
     | [node) adt_field
     | [node) body_adt_field
     | [node) basic_decl_item
-    | [node) stmt
+    | [node) stmt & ![node^) sqlplus_command
     | [node) external_parm_list_entry
 ;
 
