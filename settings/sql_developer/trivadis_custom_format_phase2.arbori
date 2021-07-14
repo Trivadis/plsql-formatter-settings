@@ -2122,6 +2122,7 @@ r7_select:
         | [keyword) 'ORDER'
       )
     & parent < keyword
+    & ![keyword^^^) analytic_clause
     & ![keyword^^) analytic_clause
     & ![keyword^) analytic_clause
     & ![keyword^^) function
