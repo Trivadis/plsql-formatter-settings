@@ -1846,11 +1846,17 @@ r2_decrement_left_margin:
     | [node) 'XMLTABLE' & [node^) xmltable
     | [node) 'JSON_TABLE' & [node^) json_table
     | [node) 'COLUMNS' & [node^) JSON_columns_clause
-    | [node+1) '(' & [node^) function
-    | [node+1) "(x,y,z)" & [node^) function
     | [node+1) '(' & [node^) XML_attributes_clause
 -> {
     addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin");
+}
+
+r2_decrement_left_margin_for_function_name:
+        ([node^) function | [node^) count | [node^) over_clause)
+      & [lparen) '('
+      & [lparen = node)
+-> {
+    addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin_for_function_name");
 }
 
 r2_increment_left_margin_by_keyword_outside_node:
