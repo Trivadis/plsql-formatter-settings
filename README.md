@@ -4,11 +4,10 @@
 
 This repository provides formatter settings for the [coding style rules](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.0/3-coding-style/coding-style/#rules) of the Trivadis PL/SQL & SQL Coding Guidelines.
 
-Settings are provided for
+Settings are primarily provided for
 
 - [Oracle SQLcl, Version 21.1.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
 - [Oracle SQL Developer, Version 20.4.1](https://www.oracle.com/database/technologies/appdev/sql-developer.html)
-- [Allround Automations PL/SQL Developer, Version 14.0.5](https://www.allroundautomations.com/products/pl-sql-developer/)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
@@ -18,7 +17,9 @@ See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) fo
 
 ## Deviating Settings
 
-Please note that these settings do not comply with rule 5. Line breaks are placed after a comma and not before. All other rules are followed. However, you can easily change this in the settings for both products.
+Please note that these settings do not comply with rule 5. Line breaks are placed after a comma and not before. All other rules are followed. However, you can easily change this in the preferences.
+
+![Change Line Breaks On Comma](images/change_line_breaks_on_comma.png)
 
 ## Installation
 
@@ -31,6 +32,30 @@ Clone this repository or download the ZIP file and extract it.
 See [sqlcl/README.md](sqlcl/README.md).
 
 ### SQL Developer
+
+#### Configure `dbtools.arbori.home`
+
+1. Start SQL Developer
+2. Open `Help` -> `About`
+3. Select `Properties` tab
+4. Type `user.conf` in the search box and press enter
+   ![About Properties - user.conf](images/about_properties_user_conf.png)
+5. Select the row with `user.conf` and press `Ctrl-C` to copy it into your clipboard
+6. Press `OK` to close the dialog
+7. Select `File` -> `Open...`
+8. Press `Ctrl-V` to paste the content of the clipboard into the `File Name` field
+9. Remove `user.conf` and the double quotes from the file name
+   ![File Open Dialog](images/file_open.png)
+10. Press `Open`
+11. Add `AddVMOption -Ddbtools.arbori.home=/.../plsql-formatter-settings/settings/sql_developer` at the end of the file
+12. Replace `/.../` to match the directory of the [`trivadis_custom_format.arbori`](settings/sql_developer/trivadis_custom_format.arbori) file on your system
+    ![product.conf](images/product_conf.png)
+13. Press the `Save` button in the toolbar 
+14. Restart SQL Developer to apply this JVM configuration change
+15. Optionally check if `dbtools.arbori.home` is configured correctly
+    ![About Properties - dbtools.arbori.home](images/about_properties_arbori.png)
+
+#### Import Settings
 
 1. Start SQL Developer
 2. Open `Preferences`
@@ -45,22 +70,6 @@ See [sqlcl/README.md](sqlcl/README.md).
 9. Select [`trivadis_custom_format.arbori`](settings/sql_developer/trivadis_custom_format.arbori)
 10. Press `Open`
 11. Press `OK` to save the settings
-
-### PL/SQL Developer
-
-1. Start PL/SQL Developer
-2. Open `Preferences`
-3. Select `User interface` -> `PL/SQL Beautifier`
-4. Press `Edit...`
-5. Press `Open...`
-   ![PL/SQL Beautifier](images/plsql_beautifier.png)
-6. Select [`trivadis_beautifier.br`](settings/plsql_developer/trivadis_beautifier.br)
-7. Press `Open`
-8. Press `Save as...`
-9. Select a permanent location for these settings and press `Save` 
-10. Press `Close`
-11. Select the rule file you've saved previoulsy.
-12. Press `OK`
 
 ## Arbori
 
@@ -91,6 +100,18 @@ Variable | Type                                             | JAR File
 `target` | oracle.dbtools.parser.Parsed                     | dbtools-common.jar 
 `tuple`  | HashMap<String, oracle.dbtools.parser.ParseNode> | dbtools-common.jar
 `logger` | oracle.dbtools.util.Logger                       | dbtools-common.jar
+
+## Settings for other Products
+
+Formatter settings are also provided for the following products:
+
+Product | Version | File
+------- | ------- | ---------
+[Allround Automations PL/SQL Developer](https://www.allroundautomations.com/products/pl-sql-developer/) | 14.0.6 | [trivadis_beautifier.br](settings/plsql_developer/trivadis_beautifier.br)
+[JetBrains DataGrip](https://www.jetbrains.com/datagrip/) | 2021.1 | [trivadis.xml](settings/datagrip/trivadis.xml)
+[Quest Toad for Oracle](https://www.quest.com/products/toad-for-oracle/) | 14.1 | [trivadis_fmtplus.opt](settings/toad/trivadis_fmtplus.opt)
+
+Please refer to the vendor's documentation for instructions on how to import these settings.
 
 ## Issues
 Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).

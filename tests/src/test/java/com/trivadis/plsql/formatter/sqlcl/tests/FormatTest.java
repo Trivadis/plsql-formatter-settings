@@ -1,8 +1,8 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import java.io.IOException;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import java.io.IOException;
 
 public class FormatTest extends AbstractFormatTest {
 
@@ -14,11 +14,6 @@ public class FormatTest extends AbstractFormatTest {
     @Test
     public void process_pkb_only() {
         process_pkb_only(RunType.FormatJS);
-    }
-
-    @Test
-    public void process_with_original_arbori() {
-        process_with_original_arbori(RunType.FormatJS);
     }
 
     @Test
@@ -45,7 +40,7 @@ public class FormatTest extends AbstractFormatTest {
     public void process_markdown_only() {
         process_markdown_only(RunType.FormatJS);
     }
-    
+
     @Test
     public void process_config_file_array() throws IOException {
         process_config_file_array(RunType.FormatJS);
@@ -60,5 +55,4 @@ public class FormatTest extends AbstractFormatTest {
     public void process_config_file_object_and_param() throws IOException {
         process_config_file_object_and_param(RunType.FormatJS);
     }
-
 }

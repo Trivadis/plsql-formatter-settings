@@ -29,8 +29,9 @@ var javaFormat = Java.type("oracle.dbtools.app.Format");
 var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
+var javaSystem = Java.type("java.lang.System");
 var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
-var javaCommandListener =  Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
+var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
 
 var getFiles = function (rootPath, extensions) {
     var files;
@@ -56,21 +57,23 @@ var configure = function (formatter, xmlPath, arboriPath) {
             formatter.options.put(keySet[j], options.get(keySet[j]));
         }
     } else if ("embedded".equals(xmlPath)) {
-        // General
-        formatter.options.put(formatter.kwCase, javaFormat.Case.UPPER);                                     // default: javaFormat.Case.UPPER
+        // Code Editor: Format
+        formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
+        // Advanced Format: General
+        formatter.options.put(formatter.kwCase, javaFormat.Case.lower);                                     // default: javaFormat.Case.UPPER
         formatter.options.put(formatter.idCase, javaFormat.Case.NoCaseChange);                              // default: javaFormat.Case.lower
         formatter.options.put(formatter.singleLineComments, javaFormat.InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
-        // Alignment
+        // Advanced Format: Alignment
         formatter.options.put(formatter.alignTabColAliases, false);                                         // default: true
         formatter.options.put(formatter.alignTypeDecl, true);                                               // default: true
         formatter.options.put(formatter.alignNamedArgs, true);                                              // default: true
         formatter.options.put(formatter.alignAssignments, true);                                            // default: false
         formatter.options.put(formatter.alignEquality, false);                                              // default: false
         formatter.options.put(formatter.alignRight, true);                                                  // default: false
-        // Indentation
+        // Advanced Format: Indentation
         formatter.options.put(formatter.identSpaces, 3);                                                    // default: 3
         formatter.options.put(formatter.useTab, false);                                                     // default: false
-        // Line Breaks
+        // Advanced Format: Line Breaks
         formatter.options.put(formatter.breaksComma, javaFormat.Breaks.After);                              // default: javaFormat.Breaks.After
         formatter.options.put("commasPerLine", 1);                                                          // default: 5
         formatter.options.put(formatter.breaksConcat, javaFormat.Breaks.Before);                            // default: javaFormat.Breaks.Before
@@ -83,13 +86,12 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat.BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
         formatter.options.put(formatter.breaksAfterSelect, false);                                          // default: true
         formatter.options.put(formatter.flowControl, javaFormat.FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
-        // White Space
+        // Advanced Format: White Space
         formatter.options.put(formatter.spaceAroundOperators, true);                                        // default: true
         formatter.options.put(formatter.spaceAfterCommas, true);                                            // default: true
         formatter.options.put(formatter.spaceAroundBrackets, javaFormat.Space.Default);                     // default: javaFormat.Space.Default
-        // Hidden, not configurable in the GUI preferences dialog of SQLDev 20.2
+        // Advanced Format: Hidden, not configurable in the GUI preferences dialog of SQLDev 20.4.1
         formatter.options.put(formatter.breaksProcArgs, false);                                             // default: false (overridden in Arbori program based on other settings)
-        formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
         formatter.options.put(formatter.formatThreshold, 1);                                                // default: 1 (disables deprecated post-processing logic)
     }
     var arboriFileName = arboriPath;
@@ -100,6 +102,11 @@ var configure = function (formatter, xmlPath, arboriPath) {
 }
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
+    // set relative path for include directive in Arbori program to the directory of the main Arbori program
+    if (arboriPath != "default") {
+        javaSystem.setProperty("dbtools.arbori.home", new javaFile(arboriPath).getParentFile().getAbsolutePath());
+    }
+    // now instantiate and configure the formatter
     var formatter = new javaFormat();
     configure(formatter, xmlPath, arboriPath);
     return formatter;
@@ -116,7 +123,7 @@ var hasParseErrors = function (content, consoleOutput) {
             ctx.write("... ");
         }
         return true;
-    } 
+    }
     return false;
 }
 
@@ -130,12 +137,12 @@ var writeFile = function (file, content) {
     javaFiles.write(file, contentString.getBytes());
 }
 
-var existsDirectory = function(dir) {
+var existsDirectory = function (dir) {
     var f = new javaFile(dir);
     return f.isDirectory();
 }
 
-var existsFile = function(file) {
+var existsFile = function (file) {
     var f = new javaFile(file);
     return f.isFile();
 }
@@ -163,12 +170,12 @@ var printUsage = function (asCommand) {
     ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n\n");
 }
 
-var getJsPath = function() {
+var getJsPath = function () {
     // use original args array at the time when the command was registered
     return args[0].substring(0, args[0].lastIndexOf(javaFile.separator) + 1);
 }
 
-var getCdPath = function(path) {
+var getCdPath = function (path) {
     if (path.startsWith("/")) {
         return path; // Unix, fully qualified
     } else if (path.length > 1 && path.substring(1, 2) == ":") {
@@ -195,15 +202,15 @@ var processAndValidateArgs = function (args) {
     var xmlPath = null;
     var arboriPath = null;
     var files = [];
-    var result = function(valid) {
+    var result = function (valid) {
         var result = {
-            rootPath : rootPath,
+            rootPath: rootPath,
             files: files,
-            extensions : extensions,
-            markdownExtensions : markdownExtensions,
-            xmlPath : xmlPath,
-            arboriPath : arboriPath, 
-            valid : valid
+            extensions: extensions,
+            markdownExtensions: markdownExtensions,
+            xmlPath: xmlPath,
+            arboriPath: arboriPath,
+            valid: valid
         }
         return result;
     }
@@ -334,7 +341,7 @@ var processAndValidateArgs = function (args) {
         return result(false);
     }
     if (!extArgFound) {
-        extensions = [".sql", ".prc", ".fnc", ".pks", ".pkb", ".trg", ".vw", ".tps", ".tpb", ".tbp", ".plb", ".pls", ".rcv", ".spc", ".typ", 
+        extensions = [".sql", ".prc", ".fnc", ".pks", ".pkb", ".trg", ".vw", ".tps", ".tpb", ".tbp", ".plb", ".pls", ".rcv", ".spc", ".typ",
             ".aqt", ".aqp", ".ctx", ".dbl", ".tab", ".dim", ".snp", ".con", ".collt", ".seq", ".syn", ".grt", ".sp", ".spb", ".sps", ".pck"];
     }
     if (!mextArgFound) {
@@ -347,20 +354,20 @@ var processAndValidateArgs = function (args) {
         xmlPath = getJsPath() + "../settings/sql_developer/trivadis_advanced_format.xml"
         if (!existsFile(xmlPath)) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
-            xmlPath = "embedded"; 
+            xmlPath = "embedded";
         }
     }
     if (arboriPath == null) {
         arboriPath = getJsPath() + "../settings/sql_developer/trivadis_custom_format.arbori"
         if (!existsFile(arboriPath)) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
-            arboriPath = "default"; 
+            arboriPath = "default";
         }
     }
     return result(true);
 }
 
-var formatBuffer = function(formatter) {
+var formatBuffer = function (formatter) {
     ctx.write("Formatting SQLcl buffer... ");
     ctx.getOutputStream().flush();
     var original = ctx.getSQLPlusBuffer().getBufferSafe().getBuffer();
@@ -376,16 +383,16 @@ var formatBuffer = function(formatter) {
     ctx.getOutputStream().flush();
 }
 
-var isMarkdownFile = function(file, markdownExtensions) {
+var isMarkdownFile = function (file, markdownExtensions) {
     for (var j in markdownExtensions) {
         if (file.toString().toLowerCase().endsWith(markdownExtensions[j])) {
             return true;
         }
     }
     return false;
-} 
+}
 
-var formatMarkdownFile = function(file, formatter) {
+var formatMarkdownFile = function (file, formatter) {
     var original = readFile(file)
     var p = javaPattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
     var m = p.matcher(original);
@@ -408,7 +415,7 @@ var formatMarkdownFile = function(file, formatter) {
     ctx.write("done.\n");
 }
 
-var formatFile = function(file, formatter) {
+var formatFile = function (file, formatter) {
     var original = readFile(file)
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
@@ -418,9 +425,9 @@ var formatFile = function(file, formatter) {
     }
 }
 
-var formatFiles = function(files, formatter, markdownExtensions) {
+var formatFiles = function (files, formatter, markdownExtensions) {
     for (var i = 0; i < files.length; i++) {
-        ctx.write("Formatting file " + (i+1) + " of " + files.length + ": " + files[i].toString() + "... ");
+        ctx.write("Formatting file " + (i + 1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
         if (isMarkdownFile(files[i], markdownExtensions)) {
             formatMarkdownFile(files[i], formatter);
@@ -431,7 +438,7 @@ var formatFiles = function(files, formatter, markdownExtensions) {
     }
 }
 
-var run = function(args) { 
+var run = function (args) {
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
@@ -451,7 +458,7 @@ var run = function(args) {
     }
 }
 
-var getArgs = function(cmdLine) {
+var getArgs = function (cmdLine) {
     var p = javaPattern.compile('("([^"]*)")|([^ ]+)');
     var m = p.matcher(cmdLine.trim());
     var args = [];
@@ -461,7 +468,7 @@ var getArgs = function(cmdLine) {
     return args;
 }
 
-var unregisterTvdFormat = function() {
+var unregisterTvdFormat = function () {
     var listeners = javaCommandRegistry.getListeners(ctx.getBaseConnection(), ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
     // remove all commands registered with javaCommandRegistry.addForAllStmtsListener
     javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
@@ -476,8 +483,8 @@ var unregisterTvdFormat = function() {
     }
 }
 
-var registerTvdFormat = function() {
-    var handleEvent = function(conn, ctx, cmd) {
+var registerTvdFormat = function () {
+    var handleEvent = function (conn, ctx, cmd) {
         var args = getArgs(cmd.getSql());
         if (args != null && typeof args[0] != "undefined" && args[0].equalsIgnoreCase("tvdformat")) {
             run(args);
@@ -485,9 +492,11 @@ var registerTvdFormat = function() {
         }
         return false;
     }
-    var beginEvent = function(conn, ctx, cmd) {}
-    var endEvent = function(conn, ctx, cmd) {}
-    var toString = function() {
+    var beginEvent = function (conn, ctx, cmd) {
+    }
+    var endEvent = function (conn, ctx, cmd) {
+    }
+    var toString = function () {
         // to identify this dynamically created class during unregisterTvdFormat()
         return "TvdFormat";
     }

@@ -3,16 +3,16 @@ package com.trivadis.plsql.formatter.sqlcl.tests;
 import oracle.dbtools.raptor.newscriptrunner.CommandListener;
 import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
 import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
 public class TvdFormatTest extends AbstractFormatTest {
 
-    @Before
+    @BeforeEach
     public void register() {
         runScript("--register");
         byteArrayOutputStream.reset();
@@ -21,27 +21,26 @@ public class TvdFormatTest extends AbstractFormatTest {
     @Test
     public void duplicate_registration_using_mixed_case() {
         reset();
-        final List<CommandListener> originalListeners = CommandRegistry.getListeners(null, ctx).get(
+        var originalListeners = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        final String expected =
-            """
-            tvdformat registered as SQLcl command.
-            """;
+        var expected = """
+                tvdformat registered as SQLcl command.
+                """;
 
         // first registrations
-        final String actual1 = runScript("--RegisteR");
-        Assert.assertEquals(expected, actual1);
+        var actual1 = runScript("--RegisteR");
+        Assertions.assertEquals(expected, actual1);
         final List<CommandListener> listeners1 = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        Assert.assertEquals(originalListeners.size() + 1, listeners1.size());
+        Assertions.assertEquals(originalListeners.size() + 1, listeners1.size());
 
         // second registration
         byteArrayOutputStream.reset();
-        final String actual2 = runScript("-R");
-        Assert.assertEquals(expected, actual2);
+        var actual2 = runScript("-R");
+        Assertions.assertEquals(expected, actual2);
         final List<CommandListener> listeners2 = CommandRegistry.getListeners(null, ctx).get(
                 SQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
-        Assert.assertEquals(originalListeners.size() + 1, listeners2.size());
+        Assertions.assertEquals(originalListeners.size() + 1, listeners2.size());
     }
 
     @Test
@@ -52,11 +51,6 @@ public class TvdFormatTest extends AbstractFormatTest {
     @Test
     public void process_pkb_only() {
         process_pkb_only(RunType.TvdFormatCommand);
-    }
-
-    @Test
-    public void process_with_original_arbori() {
-        process_with_original_arbori(RunType.TvdFormatCommand);
     }
 
     @Test
@@ -98,5 +92,4 @@ public class TvdFormatTest extends AbstractFormatTest {
     public void process_config_file_object_and_param() throws IOException {
         process_config_file_object_and_param(RunType.TvdFormatCommand);
     }
-
 }
