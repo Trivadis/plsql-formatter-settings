@@ -1257,6 +1257,41 @@ public class R2_indentation extends ConfiguredTestFormatter {
         }
 
         @Test
+        void last_value_order_by() throws IOException {
+            var sql = """
+                    select name
+                          ,signature
+                          ,type
+                          ,object_name
+                          ,object_type
+                          ,usage
+                          ,usage_id
+                          ,line
+                          ,col
+                          ,case
+                              when sane_fk = 'YES' then
+                                 usage_context_id
+                              else
+                                 last_value(
+                                    case
+                                       when sane_fk = 'YES'
+                                          and usage in ('DECLARATION', 'DEFINITION', 'ASSIGNMENT', 'EXECUTE')
+                                       then
+                                          usage_id
+                                    end
+                                 ) ignore nulls over (
+                                    partition by object_name, object_type
+                                    order by line, col
+                                    rows between unbounded preceding and 1 preceding
+                                 )
+                           end as usage_context_id,
+                          ,origin_con_id
+                      from base_ids;
+                    """;
+            formatAndAssert(sql);
+        }
+
+        @Test
         void distinct() throws IOException {
             var input = """
                     select distinct
