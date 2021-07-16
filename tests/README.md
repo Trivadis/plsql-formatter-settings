@@ -41,12 +41,12 @@ This is a Maven project that does not produce an artifact. It's designed to exec
 [INFO] 
 [INFO] Results:
 [INFO] 
-[WARNING] Tests run: 362, Failures: 0, Errors: 0, Skipped: 8
+[INFO] Tests run: 474, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  01:05 min
-[INFO] Finished at: 2021-06-07T16:16:15+02:00
+[INFO] Total time:  44.661 s
+[INFO] Finished at: 2021-07-17T00:03:36+02:00
 [INFO] ------------------------------------------------------------------------
 ```

@@ -14,65 +14,59 @@
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
     </properties>
     <dependencies>
-        <!-- Nashorn JavaScript engine used by the formatter in Arbori programs -->
-        <dependency>
-            <groupId>org.openjdk.nashorn</groupId>
-            <artifactId>nashorn-core</artifactId>
-            <version>15.2</version>
-            <scope>test</scope>
-        </dependency>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
+        <!-- It's the default script engine also for Arbori callback functions since SQLcl 21.2.0 -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>21.0.0.2</version>
+            <version>21.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>21.0.0.2</version>
+            <version>21.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.7.1</version>
+            <version>5.7.2</version>
             <scope>test</scope>
         </dependency>
         <!-- SQLcl dependencies not available in public Maven repositories -->
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-common</artifactId>
-            <version>21.1.0</version>
+            <version>21.2.0</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-sqlcl</artifactId>
-            <version>21.1.0</version>
+            <version>21.2.0</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-sqlcl.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.xml</groupId>
             <artifactId>xmlparserv2-sans-jaxp-services</artifactId>
-            <version>21.1.0</version>
+            <version>21.2.0</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/xmlparserv2-sans-jaxp-services.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.i18n</groupId>
             <artifactId>orai18n</artifactId>
-            <version>21.1.0</version>
+            <version>21.2.0</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/orai18n.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.soda</groupId>
             <artifactId>orajsoda</artifactId>
-            <version>21.1.0</version>
+            <version>21.2.0</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/orajsoda.jar</systemPath>
         </dependency>
