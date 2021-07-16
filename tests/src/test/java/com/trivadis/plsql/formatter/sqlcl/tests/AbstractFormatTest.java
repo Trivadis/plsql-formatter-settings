@@ -23,7 +23,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^                                         \s
                             
-                Expected: name_wo_function_call,identifier,term,factor,pri,n... skipped.
+                Expected: expr#,simple_expression,name_wo_function_call,iden... skipped.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var actual = run(runType, tempDir.toString(), "mext=");
         Assertions.assertEquals(expected, actual);
