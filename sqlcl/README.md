@@ -6,20 +6,15 @@ You can apply the formatter settings in SQL Developer. Another option is to appl
 
 ## Why not Use `FORMAT FILE`?
 
-Yes, you can use the built-in `FORMAT FILE` command. Here's the help output from SQLcl 21.1.0:
+Yes, you can use the built-in `FORMAT FILE` command. Here's the help output from SQLcl 21.2.0:
 
 ```
 FORMAT
 ---------
 
 FORMAT BUFFER - formats the script in the SQLcl Buffer
-FORMAT RULES <filename> - Loads SQLDeveloper Formatter rules file to formatter.
-FORMAT FILE <input_file> <output_file> 
-
-Format used is default or for SQLcl can be chosen by setting an environmental variable
-pointing to a SQLDeveloper export (.xml) of formatter options.
-The variable is called SQLFORMATPATH
-In SQLDeveloper the format options are the default chosen in the preferences.
+FORMAT RULES <filename> - Loads formatter preferences file from SQL Developer export.
+FORMAT FILE <input_file> <output_file>
 ```
 
 You can use a directory for `<input_file>` and `output_file`. It can be even the same. Only files that are parsed without errors are formatted. This is good. However, you cannot configure an `.arbori` file as input. `FORMAT RULES` can only load the `.xml` file. 
