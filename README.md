@@ -40,7 +40,7 @@ See [sqlcl/README.md](sqlcl/README.md).
 3. Select `Properties` tab
 4. Type `user.conf` in the search box and press enter
    ![About Properties - user.conf](images/about_properties_user_conf.png)
-5. Select the row with `user.conf` and press `Ctrl-C` to copy it into your clipboard
+5. Select the row with `user.conf` and press `Ctrl-C` (also on macOS) to copy it into your clipboard
 6. Press `OK` to close the dialog
 7. Select `File` -> `Open...`
 8. Press `Ctrl-V` to paste the content of the clipboard into the `File Name` field
