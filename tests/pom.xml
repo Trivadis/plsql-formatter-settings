@@ -14,13 +14,6 @@
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
     </properties>
     <dependencies>
-        <!-- Nashorn JavaScript engine used by the formatter in Arbori programs -->
-        <dependency>
-            <groupId>org.openjdk.nashorn</groupId>
-            <artifactId>nashorn-core</artifactId>
-            <version>15.2</version>
-            <scope>test</scope>
-        </dependency>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
