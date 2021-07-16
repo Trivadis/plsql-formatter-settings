@@ -490,6 +490,31 @@ define_global_functions:
         }
         return false;
     }
+
+    //-- Alternative implementation of Java String's replaceAll method due to
+    //-- https://github.com/oracle/graaljs/issues/460 .
+    //-- We cannot influence the JS engine initialization in an Arbori program,
+    //-- and therefore cannot delete the String.prototype.replaceAll.
+    //-- However, it would be possible to pass a JS regex, e.g.
+    //--     someString.replaceAll(/old/g, "new");
+    //-- This works, but when a backslash (e.g. \n for newline) is used in the regex an error is thrown.
+    //-- As soon as the issue 460 is fixed in the GraalVM JS script engine and this new version is used
+    //-- in SQLcl and SQLDev this workaround can be eliminated.
+    var replaceAll = function(input, pattern, replacement) {
+        var p = Pattern.compile(pattern);
+        var m = p.matcher(input);
+        var result = "";
+        var pos = 0;
+        while (m.find()) {
+            result += input.substring(pos, m.start());
+            result += replacement;
+            pos = m.end();
+        }
+        if (input.length > pos) {
+            result += input.substring(pos);
+        }
+        return result;
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
