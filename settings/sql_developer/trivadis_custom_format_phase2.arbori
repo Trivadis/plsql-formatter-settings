@@ -473,8 +473,8 @@ a7_parameter_parts:
 ;
 
 a7_for_loop_identifier:
-      [node-1) 'FOR'
-    & [node^) iteration_scheme
+      [node) iterand_decl
+    & [node^) iterator
 ;
 
 a7_assignment:
@@ -508,7 +508,7 @@ a7_when_cond:
 
 a7_reverse_loop:
       [node) 'REVERSE'
-    & [node^) loop_prm_spec
+    & [node^) iterator_control
 ;
 
 a7_one_space_before:
@@ -552,9 +552,9 @@ a8_end:
       )
 ;
 
-a8_for_identifier:
-     [node-1) 'FOR'
-   & [node) identifier
+a8_for_loop_identifier:
+      [node) iterand_decl
+    & [node^) iterator
 ;
 
 a8_as:
@@ -659,13 +659,13 @@ a8_fetch:
 
 a8_reverse_loop:
       [node) 'REVERSE'
-    & [node^) loop_prm_spec
+    & [node^) iterator_control
 ;
 
 a8_one_space_after:
       a8_if
     | a8_end
-    | a8_for_identifier
+    | a8_for_loop_identifier
     | a8_as
     | a8_on
     | a8_join
@@ -1713,8 +1713,9 @@ r2_common:
     | [node) pls_expr & [node-1) '(' & ![node^) paren_expr_list
     | [node) compound_condition & [node-1) '('
     | [node^) function
+    | [node^) function_expression
     | [node^) XML_attributes_clause
-    | [node) content & [node^) JSON_OBJECT
+    | [node) JSON_OBJECT_content & [node^) JSON_function
     | [node) white_list_items & ![node^) white_list_items
     | [node) pragma
     | [node) default_expr_opt
@@ -1838,6 +1839,7 @@ r2_decrement_left_margin:
                 | [node^) merge_insert_clause[23,35)
                 | [node^) merge_insert_clause[43,50)
                 | [node^) function
+                | [node^) function_expression
                 | [node^) "(x,y,z)"
                 | [node^) XML_attributes_clause
                 | [node^^) analytic_function
@@ -1852,7 +1854,7 @@ r2_decrement_left_margin:
 }
 
 r2_decrement_left_margin_for_function_name:
-        ([node^) function | [node^) count | [node^) over_clause)
+        ([node^) function | [node^) function_expression | [node^) count | [node^) over_clause)
       & [lparen) '('
       & [lparen = node)
 -> {
@@ -2134,7 +2136,7 @@ r7_select:
     & ![keyword^) analytic_clause
     & ![keyword^^) function
     & ![keyword^) function
-    & ![keyword^) collect[33,45)
+    & ![keyword^) collect[33,52) -- order by clause in collect function
 ;
 
 r7_single_table_insert:
@@ -2450,7 +2452,7 @@ o8_find_type_declarations:
 o8_find_parameter_declarations:
       [scope) fml_part
     & [name) decl_id
-    & [node) unconstrained_type
+    & [node) prm_spec_unconstrained_type
     & scope < node
     & (name = node-1 | name = node-2)
 -> {
