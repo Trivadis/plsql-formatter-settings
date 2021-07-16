@@ -1759,7 +1759,7 @@ r2_case_expression_plsql:
         | [node) ELSE_expr_opt
         | [node) pls_expr & ([node-1) 'THEN' | [node-1) 'ELSE')
       )
-    & parent < node
+    & parent << node -- "<" returns wrong result. Arbori query result changed between 20.4.1 and 21.2.0.
 ;
 
 r2_view:
@@ -1776,7 +1776,7 @@ r2_object_type:
 r2_body:
       [node) subprg_body
     & [parent) pkg_body
-    & parent < node
+    & parent << node -- "<" returns wrong result. Arbori query result changed between 20.4.1 and 21.2.0.
 ;
 
 r2_single_table_insert:
