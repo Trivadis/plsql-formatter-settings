@@ -15,16 +15,17 @@
     </properties>
     <dependencies>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
+        <!-- It's the default script engine also for Arbori callback functions since SQLcl 21.2.0 -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>21.0.0.2</version>
+            <version>21.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>21.0.0.2</version>
+            <version>21.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
