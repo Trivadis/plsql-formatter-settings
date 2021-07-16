@@ -614,7 +614,7 @@ keep_significant_whitespace_before_leaf_nodes:
         } else {
             // enforce uniform datatype in map; therefore convert values to Integer
             mapParserPosToLexerPos.put(Integer.valueOf(i-hiddenTokenCount), i);
-            if (i-hiddenTokenCount == 0 && hiddenTokenCount == wsBefore.length()) {
+            if (i-hiddenTokenCount == 0 && hiddenTokenCount == wsBefore.length) {
                 // first parser token with leading whitespace only (no other hidden tokens like comments)
                 struct.putNewline(0, "");
                 logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: remove all whitespace at 0.");
@@ -623,7 +623,7 @@ keep_significant_whitespace_before_leaf_nodes:
                 // add also empty strings to ensure that not a space is added between tokens
                 struct.putNewline(i-hiddenTokenCount, wsBefore);
                 logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: add "
-                    + wsBefore.length() + " whitespace at " + (i-hiddenTokenCount) + ".");
+                    + wsBefore.length + " whitespace at " + (i-hiddenTokenCount) + ".");
             }
             wsBefore = "";
         }
