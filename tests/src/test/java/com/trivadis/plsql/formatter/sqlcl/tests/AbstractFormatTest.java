@@ -119,18 +119,22 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
         // package_body.pkb
         var expectedPackageBody = """
-                create or replace package body the_api.math as function to_int_table (
-                      in_integers  in  varchar2,
-                      in_pattern   in  varchar2 default '[0-9]+'
+                create or replace package body the_api.math as
+                                
+                   function to_int_table (
+                      in_integers in varchar2,
+                      in_pattern  in varchar2 default '[0-9]+'
                    ) return sys.ora_mining_number_nt
                       deterministic
                       accessible by ( package the_api.math, package the_api.test_math )
-                   is l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     integer := 1;
-                      l_int     integer;
+                   is
+                                
+                      l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                      l_pos    integer := 1;
+                      l_int    integer;
                    begin
                       << integer_tokens >> loop
-                         l_int               := to_number(regexp_substr(
+                         l_int           := to_number(regexp_substr(
                                                          in_integers,
                                                          in_pattern,
                                                          1,
@@ -138,10 +142,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                             ));
                          exit integer_tokens when l_int is null;
                          l_result.extend;
-                         l_result(l_pos)     := l_int;
-                         l_pos               := l_pos + 1;
-                      end loop integer_tokens;return l_result;
-                   end to_int_table;end math;
+                         l_result(l_pos) := l_int;
+                         l_pos           := l_pos + 1;
+                      end loop integer_tokens;
+                                
+                      return l_result;
+                   end to_int_table;
+                                
+                end math;
                 /
                 """.trim();
         var actualPackageBody = getFormattedContent("package_body.pkb");
@@ -152,7 +160,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 select d.department_name,
                        v.employee_id,
                        v.last_name
-                  from departments d cross apply (
+                  from departments d
+                cross apply (
                    select *
                      from employees e
                     where e.department_id = d.department_id
@@ -229,18 +238,18 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // package_body.pkb
         var expectedPackageBody = """
                 CREATE OR REPLACE PACKAGE BODY the_api.math AS
-                            
+                                
                     FUNCTION to_int_table (
-                        in_integers  IN  VARCHAR2,
-                        in_pattern   IN  VARCHAR2 DEFAULT '[0-9]+'
+                        in_integers IN VARCHAR2,
+                        in_pattern  IN VARCHAR2 DEFAULT '[0-9]+'
                     ) RETURN sys.ora_mining_number_nt
                         DETERMINISTIC
                         ACCESSIBLE BY ( PACKAGE the_api.math, PACKAGE the_api.test_math )
                     IS
-                            
-                        l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                        l_pos     INTEGER := 1;
-                        l_int     INTEGER;
+                                
+                        l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                        l_pos    INTEGER := 1;
+                        l_int    INTEGER;
                     BEGIN
                         << integer_tokens >> LOOP
                             l_int := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
@@ -249,10 +258,10 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                             l_result(l_pos) := l_int;
                             l_pos := l_pos + 1;
                         END LOOP integer_tokens;
-                            
+                                
                         RETURN l_result;
                     END to_int_table;
-                            
+                                
                 END math;
                 /
                 """.trim();
@@ -266,14 +275,15 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     v.employee_id,
                     v.last_name
                 FROM
-                    departments  d CROSS APPLY (
+                    departments d
+                    CROSS APPLY (
                         SELECT
                             *
                         FROM
                             employees e
                         WHERE
                             e.department_id = d.department_id
-                    )            v
+                    )           v
                 WHERE
                     d.department_name IN ( 'Marketing', 'Operations', 'Public Relations' )
                 ORDER BY
@@ -292,18 +302,22 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
         // package_body.pkb
         var expectedPackageBody = """
-                create or replace package body the_api.math as function to_int_table (
-                      in_integers  in  varchar2,
-                      in_pattern   in  varchar2 default '[0-9]+'
+                create or replace package body the_api.math as
+                                
+                   function to_int_table (
+                      in_integers in varchar2,
+                      in_pattern  in varchar2 default '[0-9]+'
                    ) return sys.ora_mining_number_nt
                       deterministic
                       accessible by ( package the_api.math, package the_api.test_math )
-                   is l_result  sys.ora_mining_number_nt := sys.ora_mining_number_nt();
-                      l_pos     integer := 1;
-                      l_int     integer;
+                   is
+                                
+                      l_result sys.ora_mining_number_nt := sys.ora_mining_number_nt();
+                      l_pos    integer := 1;
+                      l_int    integer;
                    begin
                       << integer_tokens >> loop
-                         l_int               := to_number(regexp_substr(
+                         l_int           := to_number(regexp_substr(
                                                          in_integers,
                                                          in_pattern,
                                                          1,
@@ -311,10 +325,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                             ));
                          exit integer_tokens when l_int is null;
                          l_result.extend;
-                         l_result(l_pos)     := l_int;
-                         l_pos               := l_pos + 1;
-                      end loop integer_tokens;return l_result;
-                   end to_int_table;end math;
+                         l_result(l_pos) := l_int;
+                         l_pos           := l_pos + 1;
+                      end loop integer_tokens;
+                                
+                      return l_result;
+                   end to_int_table;
+                                
+                end math;
                 /
                 """.trim();
         var actualPackageBody = getFormattedContent("package_body.pkb");
@@ -325,7 +343,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 select d.department_name,
                        v.employee_id,
                        v.last_name
-                  from departments d cross apply (
+                  from departments d
+                cross apply (
                    select *
                      from employees e
                     where e.department_id = d.department_id
