@@ -104,7 +104,8 @@ include "std.arbori"
 -- I1: Include custom Arbori programs.
 -- --------------------------------------------------------------------------------------------------------------------
 
--- The Arbori program is too large for a single file in SQLDev 20.4.1.
+-- The Arbori program is too large for a single file in SQLDev 21.2.0.
+-- (SQLDev editor only, see https://community.oracle.com/tech/developers/discussion/4486903/).
 -- With include files an unlimited number of Arbori queries can be processed.
 -- Include files are executed first, regardless of the position of the include directive in the Arbori program.
 -- However, the order of the include files is relevant.
