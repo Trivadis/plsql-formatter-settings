@@ -1519,7 +1519,7 @@ r5_commas:
             var indentCommaNode = getIndent(commaNode.from);
             var indentNextNode = getIndent(commaNode.to);
             if (!indentCommaNode.contains("\n") && !indentNextNode.contains("\n")) {
-                struct.putNewline(commaNode.to, " ");
+                struct.putNewline(commaNode.to, ""); // honor spaceAfterCommas configuration
             }
         }
     }
