@@ -123,10 +123,10 @@ public class R2_indentation extends ConfiguredTestFormatter {
                        l_a integer;
                        l_b varchar2(20);
                        cursor l_c is
-                          select a, b, c, d
+                          select a,b,c,d
                           from t
                           where a = b
-                          order by a, b;
+                          order by a,b;
                     begin
                        null;
                        delete from t;
@@ -774,7 +774,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     ) is
                     l_var integer;
                     begin
-                    something(p1, p2);
+                    something(p1,p2);
                     exception
                     when others then
                     null;
@@ -802,7 +802,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                        ) is
                           l_var integer;
                        begin
-                          something(p1, p2);
+                          something(p1,p2);
                        exception
                           when others then
                              null;
@@ -854,7 +854,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     create or replace view v as
-                       select a, b, c
+                       select a,b,c
                        from t;
                     """;
             assertEquals(expected, actual);
@@ -884,11 +884,11 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     create or replace view v as
                        with
                           a as (
-                             select a, b, c
+                             select a,b,c
                              from t1
                           )
                          ,b as (
-                             select a, b, c
+                             select a,b,c
                              from t2
                           )
                        select *
@@ -922,7 +922,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                       ,constraint id_pk primary key (emp_id) rely disable novalidate
                     )
                     as
-                       select employee_id, last_name, email
+                       select employee_id,last_name,email
                        from employees
                     with read only;
                     """;
@@ -965,7 +965,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     select a
-                    from t, (
+                    from t,(
                             select * from t
                          ) t2;
                     """;
@@ -1044,7 +1044,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select deptno, count(*)
+                    select deptno,count(*)
                     from emp
                     group by deptno;
                     """;
@@ -1064,7 +1064,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select deptno, count(*)
+                    select deptno,count(*)
                     from emp
                     group by deptno
                     having count(*) > 4;
@@ -1084,7 +1084,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     """;
             var actual = formatter.format(input);
             var expected = """
-                    select empno, ename
+                    select empno,ename
                     from emp
                     order by ename
                          ,empno;
@@ -1140,9 +1140,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
             // whole from clause is indented, that's correct, right-align moves keywords to the left
             var expected = """
                     select *
-                    from emp, dual d1, dual d2
+                    from emp,dual d1,dual d2
                     where (1 = 2 or 3 = 4) and
-                          0 = 1 + 2 and exists(select 1, 2, 3
+                          0 = 1 + 2 and exists(select 1,2,3
                                                from wsh_new_deliveries wnd
                                                     join wsh_delivery_assignments wda
                                                     on wnd.delivery_id = wda.delivery_id
@@ -1212,15 +1212,15 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     select *
                     from (
-                            select ename, sal
+                            select ename,sal
                             from emp
                             where ename = 'SMITH'
                             union all
-                            select ename, sal
+                            select ename,sal
                             from emp
                             where ename = 'SCOTT'
                             union all
-                            select ename, sal
+                            select ename,sal
                             from emp
                             where ename = 'MARTIN'
                          );
@@ -1275,13 +1275,13 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                  last_value(
                                     case
                                        when sane_fk = 'YES'
-                                          and usage in ('DECLARATION', 'DEFINITION', 'ASSIGNMENT', 'EXECUTE')
+                                          and usage in ('DECLARATION','DEFINITION','ASSIGNMENT','EXECUTE')
                                        then
                                           usage_id
                                     end
                                  ) ignore nulls over (
-                                    partition by object_name, object_type
-                                    order by line, col
+                                    partition by object_name,object_type
+                                    order by line,col
                                     rows between unbounded preceding and 1 preceding
                                  )
                            end as usage_context_id,
@@ -1367,8 +1367,8 @@ public class R2_indentation extends ConfiguredTestFormatter {
                       ,c2
                       ,c3
                     )
-                    into t2 (c1, c2, c3)
-                    (select 1 as c1, 2 as c2, 3 as c3
+                    into t2 (c1,c2,c3)
+                    (select 1 as c1,2 as c2,3 as c3
                      from dual
                      where dummy = 'X');
                     """;
@@ -1386,9 +1386,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var actual = formatter.format(input);
             var expected = """
                     insert into t
-                       (c1, c2, c3)
+                       (c1,c2,c3)
                     values
-                       ('1', '2', '3');
+                       ('1','2','3');
                     """;
             assertEquals(expected, actual);
         }
@@ -1409,10 +1409,10 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     insert all
                     into t1
-                       (c1, c2, c3)
+                       (c1,c2,c3)
                     into t2
-                       (c1, c2, c3)
-                    select 1 as c1, 2 as c2, 3 as c3
+                       (c1,c2,c3)
+                    select 1 as c1,2 as c2,3 as c3
                     from dual
                     where dummy = 'X';
                     """;
@@ -1443,8 +1443,8 @@ public class R2_indentation extends ConfiguredTestFormatter {
                        ,c2 = 2
                        ,c3 = 3
                     where 1 = 1
-                    returning c1, c2
-                              into l1, l2
+                    returning c1,c2
+                              into l1,l2
                     log errors into error_table
                         reject limit 10;
                     """;
@@ -1520,8 +1520,8 @@ public class R2_indentation extends ConfiguredTestFormatter {
                            delete t
                            where 1 = 1
                                  and 2 = 2
-                           return c1, c2
-                                  into l1, l2
+                           return c1,c2
+                                  into l1,l2
                            log errors into error_table
                                reject limit 10;
                         end;
@@ -1679,9 +1679,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     on (s.id = t.id)
                     when not matched then
                          insert
-                            (t.id, t.c1)
+                            (t.id,t.c1)
                          values
-                            (s.id, s.c1)
+                            (s.id,s.c1)
                          where s.c3 = 3;
                     """;
             assertEquals(expected, actual);
