@@ -1462,7 +1462,7 @@ a16_add_line_breaks_before:
 --     "Before" enforces a line break before the comma (this is rule 5)
 --     "After" enforces line break after the comma
 --     "No Breaks" keeps line breaks before/after comma "as is"
--- - White Space After Commas (option for lines starting with a comma)
+-- - White Space After Commas
 --     "checked" enforces exactly one space after the comma
 --     "unchecked" enforces no space after a comma
 
