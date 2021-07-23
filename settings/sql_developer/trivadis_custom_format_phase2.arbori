@@ -76,7 +76,7 @@ a1_replace_tabs_with_spaces:
     while (it.hasNext()) {
         var key = it.next();
         var value = newlinePositions.get(key);
-        if (value.contains("\t")) {
+        if (value.indexOf("\t") != -1) {
             struct.putNewline(key, value.replaceAll("\t", indent));
             logger.fine(struct.getClass(), "a1_replace_tabs_with_spaces: at " + key + ".");
         }
@@ -117,10 +117,10 @@ a3_dont_format_off_on_ranges:
         var type = tokens[i].type;
         if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
             var content = tokens[i].content.toLowerCase();
-            if (content.contains("@formatter:off") || content.contains("noformat start")) {
+            if (content.indexOf("@formatter:off") != -1 || content.indexOf("noformat start") != -1) {
                 format = false;
             }
-            if (content.contains("@formatter:on") || content.contains("noformat end")) {
+            if (content.indexOf("@formatter:on") != -1 || content.indexOf("noformat end") != -1) {
                 format = true;
             }
             hiddenTokenCount++;
@@ -163,13 +163,13 @@ o2_whitespace_around_operators:
     } else {
        space = "";
     }
-    if (!getIndent(node.from).contains("\n")) {
+    if (getIndent(node.from).indexOf("\n") == -1) {
         if (node.from > 0) {
             struct.putNewline(node.from, space);
             logger.fine(struct.getClass(), "o2_whitespace_around_operators: before at " + node.from + ".");
         }
     }
-    if (!getIndent(node.to).contains("\n")) {
+    if (getIndent(node.to).indexOf("\n") == -1) {
         struct.putNewline(node.to, space);
         logger.fine(struct.getClass(), "o2_whitespace_around_operators: after at " + node.to + ".");
     }
@@ -236,7 +236,7 @@ a13_short_nodes:
     var reduceNodeIndents = function(node) {
         for (var i=node.from+1; i < node.to; i++) {
             var indent = getIndent(i);
-            if (indent.contains("\n") || indent.length > 1) {
+            if (indent.indexOf("\n") != -1 || indent.length > 1) {
                 struct.putNewline(i, " ");
                 logger.fine(struct.getClass(), "a13_short_nodes: one space indent at " + i + ".");
             }
@@ -382,7 +382,7 @@ a5_no_space_before:
     if (content == '/') {
         struct.putNewline(node.from, System.lineSeparator());
         logger.fine(struct.getClass(), "a5_no_space_before: <" + content + ">, add line break at " + node.from + ".");
-    } else if (content != '.' || !getIndent(node.from).contains("\n") || target.src.get(node.from+1).content == '.') {
+    } else if (content != '.' || getIndent(node.from).indexOf("\n") == -1 || target.src.get(node.from+1).content == '.') {
         // support fluent type methods across multiple lines
         struct.putNewline(node.from, "");
         logger.fine(struct.getClass(), "a5_no_space_before: <" + content + "> at " + node.from + ".");
@@ -740,7 +740,7 @@ a15_line_break_before:
     | a15_is_or_as
 -> {
     var node = tuple.get("node");
-    if (!getIndent(node.from).contains("\n")) {
+    if (getIndent(node.from).indexOf("\n") == -1) {
         struct.putNewline(node.from, System.lineSeparator());
         var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a15_line_break_before: <" + content + "> at " + node.from + ".");
@@ -755,7 +755,7 @@ a14_line_break_after:
       [node) 'AS' & [node^) create_view#
 -> {
     var node = tuple.get("node");
-    if (!getIndent(node.to).contains("\n")) {
+    if (getIndent(node.to).indexOf("\n") == -1) {
         struct.putNewline(node.to, System.lineSeparator());
         var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a14_line_break_after: <" + content + "> at " + node.to + ".");
@@ -771,7 +771,7 @@ o3_whitespace_around_open_paren:
 -> {
     var node = tuple.get("node");
     if (spaceAroundBrackets != Format.Space.Default) {
-        if (!getIndent(node.from).contains("\n")) {
+        if (getIndent(node.from).indexOf("\n") == -1) {
             var spaceBefore;
             if (spaceAroundBrackets == Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
                 spaceBefore = "";
@@ -782,7 +782,7 @@ o3_whitespace_around_open_paren:
             logger.fine(struct.getClass(), "o3_whitespace_around_open_paren: " + spaceBefore.length + " space before at " + node.from + ".");
         }
     }
-    if (!getIndent(node.to).contains("\n")) {
+    if (getIndent(node.to).indexOf("\n") == -1) {
         var spaceAfter;
         if (spaceAroundBrackets ==  Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
             spaceAfter = "";
@@ -798,7 +798,7 @@ o3_whitespace_around_close_paren:
    [node) ')'
 -> {
     var node = tuple.get("node");
-    if (!getIndent(node.from).contains("\n")) {
+    if (getIndent(node.from).indexOf("\n") == -1) {
         var spaceBefore;
         if (spaceAroundBrackets == Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
             spaceBefore = "";
@@ -809,7 +809,7 @@ o3_whitespace_around_close_paren:
         logger.fine(struct.getClass(), "o3_whitespace_around_close_paren: <" + spaceBefore + "> before at " + node.from + ".");
     }
     if (spaceAroundBrackets != Format.Space.Default) {
-        if (!getIndent(node.to).contains("\n")) {
+        if (getIndent(node.to).indexOf("\n") == -1) {
             var spaceAfter;
             if (spaceAroundBrackets ==  Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
                 spaceAfter = "";
@@ -890,7 +890,7 @@ r3_commands:
     // do not add a line break on the first line.
     if (node.from > 0) {
         var indent = getIndent(node.from);
-        if (!indent.contains("\n")) {
+        if (indent.indexOf("\n") == -1) {
             struct.putNewline(node.from, System.lineSeparator());
             logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
         } else {
@@ -1003,7 +1003,7 @@ o6_line_break_before:
     if (breaksAfterSelect) {
         var node = tuple.get("node");
         var indent = getIndent(node.from);
-        if (!indent.contains("\n")) {
+        if (indent.indexOf("\n") == -1) {
             struct.putNewline(node.from, System.lineSeparator());
             logger.fine(struct.getClass(), "o6_line_break_before: at " + node.from + ".");
         }
@@ -1018,7 +1018,7 @@ o6_line_break_after:
     if (breaksAfterSelect) {
         var node = tuple.get("node");
         var indent = getIndent(node.to);
-        if (!indent.contains("\n")) {
+        if (indent.indexOf("\n") == -1) {
             struct.putNewline(node.to, System.lineSeparator());
             logger.fine(struct.getClass(), "o6_line_break_after: at " + node.to + ".");
         }
@@ -1047,7 +1047,7 @@ o9_boolean_option:
 -> {
     var node = tuple.get("node")
     if (struct.breaksBeforeLogicalConjunction()) {
-        if (!getIndent(node.from).contains("\n")) {
+        if (getIndent(node.from).indexOf("\n") == -1) {
             if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
                struct.putNewline(node.to, " ");
             }
@@ -1056,7 +1056,7 @@ o9_boolean_option:
         }
     }
     if (struct.breaksAfterLogicalConjunction()) {
-        if (!getIndent(node.to).contains("\n")) {
+        if (getIndent(node.to).indexOf("\n") == -1) {
             if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
                struct.putNewline(node.from, " ");
             }
@@ -1076,7 +1076,7 @@ a12_add_line_break_before_then:
     var node = tuple.get("node");
     var then = tuple.get("node+1");
     if (containsLineBreak(node)) {
-        if (!getIndent(then.from).contains("\n")) {
+        if (getIndent(then.from).indexOf("\n") == -1) {
             struct.putNewline(then.from, System.lineSeparator());
             logger.fine(struct.getClass(), "a12_add_line_break_before_then: at " + then.from + ".");
         }
@@ -1113,7 +1113,7 @@ o12_line_break_around_conditions:
 -> {
     var node = tuple.get("node");
     if (struct.indentConditions()) {
-        if (!getIndent(node.from).contains("\n")) {
+        if (getIndent(node.from).indexOf("\n") == -1) {
             struct.putNewline(node.from, System.lineSeparator());
             logger.fine(struct.getClass(), "o12_line_break_around_conditions: before at " + node.from + ".");
         }
@@ -1124,7 +1124,7 @@ o12_line_break_around_conditions:
         }
     }
     if (struct.indentConditions() || struct.breakAfterConditions()) {
-        if (!getIndent(node.to).contains("\n")) {
+        if (getIndent(node.to).indexOf("\n") == -1) {
             struct.putNewline(node.to, System.lineSeparator());
             logger.fine(struct.getClass(), "o12_line_break_around_conditions: after at " + node.to + ".");
         }
@@ -1150,7 +1150,7 @@ o12_line_break_before_actions:
 -> {
     var node = tuple.get("node");
     if (struct.indentActions()) {
-        if (!getIndent(node.from).contains("\n")) {
+        if (getIndent(node.from).indexOf("\n") == -1) {
             struct.putNewline(node.from, System.lineSeparator());
             logger.fine(struct.getClass(), "o12_line_break_before_actions: at " + node.from + ".");
         }
@@ -1186,13 +1186,13 @@ o1_concatenation_option:
         var concat = tuple.get("node+1");
         if (struct.breaksBeforeConcat()) {
             struct.putNewline(concat.to, " "); // Before and After is not an option
-            if (!getIndent(concat.from).contains("\n")) {
+            if (getIndent(concat.from).indexOf("\n") == -1) {
                 struct.putNewline(concat.from, System.lineSeparator());
                 logger.fine(struct.getClass(), "o1_concatenation_option: add line break before at " + concat.from + ".");
             }
         } else if (struct.breaksAfterConcat()) {
             struct.putNewline(concat.from, " "); // Before and After is not an option
-            if (!getIndent(concat.to).contains("\n")) {
+            if (getIndent(concat.to).indexOf("\n") == -1) {
                 struct.putNewline(concat.to, System.lineSeparator());
                 logger.fine(struct.getClass(), "o1_concatenation_option: add line break after at " + concat.to + ".");
             }
@@ -1270,7 +1270,7 @@ o10_break_on_join_keywords:
 -> {
     if (breakAnsiiJoin) {
         var keyword = tuple.get("keyword");
-        if (!getIndent(keyword.from).contains("\n")) {
+        if (getIndent(keyword.from).indexOf("\n") == -1) {
             struct.putNewline(keyword.from, System.lineSeparator());
             logger.fine(struct.getClass(), "o10_break_on_join_keywords: add line break at " + keyword.from + ".");
         }
@@ -1292,11 +1292,11 @@ o11_break_on_subqueries:
         var node = tuple.get("node");
         if (hasNewline(node.to-1, node.from+1)) {
             var rparen = tuple.get("rparen");
-            if (!getIndent(node.from).contains("\n")) {
+            if (getIndent(node.from).indexOf("\n") == -1) {
                 struct.putNewline(node.from, System.lineSeparator());
                 logger.fine(struct.getClass(), "o11_break_on_subqueries: before subquery at " + node.from + ".");
             }
-            if (!getIndent(rparen.from).contains("\n")) {
+            if (getIndent(rparen.from).indexOf("\n") == -1) {
                 struct.putNewline(rparen.from, System.lineSeparator());
                 logger.fine(struct.getClass(), "o11_break_on_subqueries: before ')' at " + rparen.from + ".");
             }
@@ -1390,7 +1390,7 @@ a16_add_line_breaks_before_dml_clause:
     var parent = tuple.get("parent");
     var node = tuple.get("node");
     if (hasNewline(parent.to-1, parent.from+1)) {
-        if (!getIndent(node.from).contains("\n")) {
+        if (getIndent(node.from).indexOf("\n") == -1) {
             struct.putNewline(node.from, System.lineSeparator());
             logger.fine(struct.getClass(), "a16_add_line_breaks_before_subquery_clause: at " + node.from + ".");
         }
@@ -1441,7 +1441,7 @@ a16_add_line_breaks_before:
     var node = tuple.get("node");
     var comma = tuple.get("comma")
     if (hasNewline(parent.to-1, parent.from+1)) {
-        if (!getIndent(node.from).contains("\n") && !getIndent(comma.from).contains("\n")) {
+        if (getIndent(node.from).indexOf("\n") == -1 && getIndent(comma.from).indexOf("\n") == -1) {
             if (struct.breaksBeforeComma()) {
                 struct.putNewline(comma.from, System.lineSeparator());
                 logger.fine(struct.getClass(), "a16_add_line_breaks_before: comma at " + comma.from + ".");
@@ -1491,7 +1491,7 @@ r5_commas:
 
     var removeLeadingSpaces = function(nodeFrom) {
         var indent = getIndent(nodeFrom);
-        if (indent.contains("\n")) {
+        if (indent.indexOf("\n") != -1) {
             var pos = 0;
             for (var i=0; i<indent.length(); i++) {
                 if (indent.substring(i, i+1) == " ") {
@@ -1512,7 +1512,7 @@ r5_commas:
         removeLeadingSpaces(commaNode.to);
         if (spaceAfterCommas) {
             var indent = getIndent(commaNode.to);
-            if (!indent.contains("\n")) {
+            if (indent.indexOf("\n") == -1) {
                 struct.putNewline(commaNode.to, " " + indent);
             }
         }
@@ -1520,7 +1520,7 @@ r5_commas:
 
     var addBreakAfterComma = function(commaNode) {
         var indentCommaNode = getIndent(commaNode.from);
-        if (indentCommaNode.contains("\n") && !hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
+        if (indentCommaNode.indexOf("\n") != -1 && !hasCommentsBetweenPos(commaNode.from-1, commaNode.to)) {
             // A new line was added before the comma instead of after.
             struct.putNewline(commaNode.to, getIndentAfterComma(indentCommaNode));
             logger.fine(struct.getClass(), "r5_commas: fix indent after comma at " + commaNode.to + ".");
@@ -1531,7 +1531,7 @@ r5_commas:
     var addBreakBeforeComma = function(commaNode) {
         var indentCommaNode = getIndent(commaNode.from);
         var indentNextNode = getIndent(commaNode.to);
-        if (indentNextNode.contains("\n")) {
+        if (indentNextNode.indexOf("\n") != -1) {
             // A new line was added after the comma instead of before.
             struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
             logger.fine(struct.getClass(), "r5_commas: fix indent before comma at " + commaNode.from + ".");
@@ -1592,7 +1592,7 @@ r2_init_left_margin:
     while (it.hasNext()) {
         var key = it.next();
         var value = newlinePositions.get(key);
-        if (value.contains("\n")) {
+        if (value.indexOf("\n") != -1) {
             // enforce uniform datatype in map; therefore convert values to Integer
             leftMargin.put(key, Integer.valueOf(0));
         }
@@ -1675,11 +1675,11 @@ r2_init_left_margin:
     // Returns true if the node starts with a open parenthesis and a new line (designed for subquery node)
     var hasNewLineAfterParen = function(node) {
         if (target.src.get(node.from).content == '(') {
-            return getIndent(node.from+1).contains("\n");
+            return getIndent(node.from+1).indexOf("\n") != -1;
         } else if (node.from == 0) {
             return false;
         } else if (target.src.get(node.from-1).content == '(') {
-            return getIndent(node.from).contains("\n");
+            return getIndent(node.from).indexOf("\n") != -1;
         }
         return false;
     }
@@ -1919,7 +1919,7 @@ r2_indent_single_line_clauses:
     | [node) merge_insert_clause[43,50) & [node-1) 'VALUES'
 -> {
     var node = tuple.get("node");
-    if (getIndent(node.from).contains("\n")) {
+    if (getIndent(node.from).indexOf("\n") != -1) {
         if (!hasNewline(node.to-1, node.from+1)) {
             addMargin(node, indentSpaces, "r2_indent_single_line_clauses");
         }
@@ -1954,7 +1954,7 @@ r2_increment_left_margin_for_subquery_in_paren:
     var node = tuple.get("node");
     var from = tuple.get("from")
     if (isInParen(node)) {
-        if (!hasNewLineAfterParen(node) && getIndent(from.from).contains("\n")) {
+        if (!hasNewLineAfterParen(node) && getIndent(from.from).indexOf("\n") != -1) {
             // Left margin needs to be calculated based on the position of the left parenthesis.
             // This cannot be done here because we cannot calculate the position for nested
             // subqueries. We do that in r2_fix_indent_for_subquery_in_paren once the indentation per node
@@ -1995,7 +1995,7 @@ r2_increment_left_margin_for_assignment:
     var parent = tuple.get("parent");
     var parentCol = getColumnWithoutFirstIndent(parent.from);
     var nodeCol = getColumnWithoutFirstIndent(node.from);
-    if (!getIndent(node.from).contains("\n")) {
+    if (getIndent(node.from).indexOf("\n") == -1) {
         addMargin(node, nodeCol-parentCol, "r2_increment_left_margin_for_assignment");
     } else {
         addMargin(node, indentSpaces, "r2_increment_left_margin_for_assignment");
@@ -2042,7 +2042,7 @@ r2_fix_indent_for_subquery_in_paren:
 -> {
     var node = tuple.get("node");
     var from = tuple.get("from")
-    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).contains("\n"))
+    if (isInParen(node) && !hasNewLineAfterParen(node) && getIndent(from.from).indexOf("\n") != -1)
     {
         // The r2_subquery results are ordered.
         // This means the outermost subquery is processed first and the innermost subquery last.
@@ -2080,7 +2080,7 @@ r7_declaration:
             if (target.src.get(parent.from).content.toLowerCase() == "with") {
                 parentLength = 6;
             }
-            if (getIndent(keyword.from).contains("\n")) {
+            if (getIndent(keyword.from).indexOf("\n") != -1) {
                 if (alignRight) {
                     var content = target.src.get(keyword.from).content;
                     var missingSpaces = parentLength - target.src.get(keyword.from).content.length();
@@ -2504,7 +2504,7 @@ o4_find_assignments:
     if (alignAssignments) {
         var scope = tuple.get("scope");
         var node = tuple.get("node");
-        if (containsLineBreak(scope) & !getIndent(node.from+2).contains("\n")) {
+        if (containsLineBreak(scope) & getIndent(node.from+2).indexOf("\n") == -1) {
             addTupleToMap(tuple, "scope", assignments);
         }
     }
@@ -2521,7 +2521,7 @@ o4_find_body_assignments:
     if (alignAssignments) {
         var scope = tuple.get("scope");
         var value = tuple.get("value")
-        if (!getIndent(value.from).contains("\n")) {
+        if (getIndent(value.from).indexOf("\n") == -1) {
             addTupleToMap(tuple, "scope", assignmentsWithValue);
         }
     }
@@ -2542,12 +2542,12 @@ o5_declarations:
     runOnce
 -> {
     var selectTermEndsOnNewline = function(node) {
-        if (getIndent(node.to).contains("\n")) {
+        if (getIndent(node.to).indexOf("\n") != -1) {
             return true;
         } else {
             var content = target.src.get(node.to).content;
             if (content == ",") {
-                if (getIndent(node.to+1).contains("\n")) {
+                if (getIndent(node.to+1).indexOf("\n") != -1) {
                     return true;
                 }
             }
@@ -2559,7 +2559,7 @@ o5_declarations:
         var n = target.root.leafAtPos(node.from - 1);
         do {
             n = target.root.leafAtPos(n.from - 1);
-            if (getIndent(n.from).contains("\n")) {
+            if (getIndent(n.from).indexOf("\n") != -1) {
                 return true;
             }
         } while (!n.contains("'FROM'") && !n.contains("query_table_expression"))
@@ -2611,7 +2611,7 @@ o7_declarations:
 -> {
     // Returns true if there is no other equality sign on the line.
     var firstEqualitySignOnLine = function(nodeFrom) {
-        for (var i=nodeFrom-1; i>=0 && !getIndent(i).contains("\n"); i=i-1) {
+        for (var i=nodeFrom-1; i>=0 && getIndent(i).indexOf("\n") == -1; i=i-1) {
             var content = target.src.get(i).content;
             if (content == "=") {
                 return false;
@@ -2667,8 +2667,8 @@ r6_find_names:
         var arg = tuple.get("node+1")
         var parenOrCommaContent = target.src.get(parenOrComma.from).content;
         if (parenOrCommaContent == '('
-                || getIndent(parenOrComma.from).contains("\n")
-                || getIndent(arg.from).contains("\n"))
+                || getIndent(parenOrComma.from).indexOf("\n") != -1
+                || getIndent(arg.from).indexOf("\n") != -1)
         {
             if (struct.breaksBeforeComma()) {
                 if (parenOrCommaContent == ',') {
@@ -2766,7 +2766,7 @@ a9_find_columns:
         tuple.put("aligner", tuple.get("node"));
     }
     var aligner = tuple.get("aligner");
-    if (!getIndent(aligner.from).contains("\n")) {
+    if (getIndent(aligner.from).indexOf("\n") == -1) {
         struct.putNewline(aligner.from, System.lineSeparator());
         logger.fine(struct.getClass(), "a9_find_columns: add line break at " + aligner.from + ".");
     }
@@ -2829,7 +2829,7 @@ a20_find_columns:
         tuple.put("aligner", tuple.get("node"));
     }
     var aligner = tuple.get("aligner");
-    if (!getIndent(aligner.from).contains("\n")) {
+    if (getIndent(aligner.from).indexOf("\n") == -1) {
         struct.putNewline(aligner.from, System.lineSeparator());
         logger.fine(struct.getClass(), "a20_find_columns: add line break at " + aligner.from + ".");
     }
@@ -2888,13 +2888,13 @@ a4_add_line_breaks_with_indent:
     var pos = 0;
     var indent = System.lineSeparator(); // handle first line
     for (var key=0; key<target.src.size(); key++) {
-        if (pos > maxCharLineSize && target.src.get(key).content.length() > 1 && !getIndent(key).contains("\n")) {
+        if (pos > maxCharLineSize && target.src.get(key).content.length() > 1 && getIndent(key).indexOf("\n") == -1) {
             struct.putNewline(key, indent);
             pos = indent.length() + target.src.get(key).content.length();
             logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: at " + key + ".");
         } else {
             var value = getIndent(key);
-            if (value.contains("\n")) {
+            if (value.indexOf("\n") != -1) {
                 pos = getNumCharsAfterNewLine(value);
                 indent = System.lineSeparator() + getSpaces(pos);
             } else {
@@ -2960,7 +2960,7 @@ a18_indent_comment:
     // These fixes will be honored in subsequent formatter calls.
     var getCommentCol = function(pos) {
         var nlpos = pos;
-        while (nlpos > 0 && (tokens[nlpos].type != Token.WS || !tokens[nlpos].content.contains("\n"))) {
+        while (nlpos > 0 && (tokens[nlpos].type != Token.WS || tokens[nlpos].content.indexOf("\n") == -1)) {
             nlpos = nlpos - 1;
         }
         return tokens[pos].begin - tokens[nlpos].end;
@@ -2987,8 +2987,8 @@ a18_indent_comment:
         var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
         var newIndent = getIndentBefore(parserPos);
         if (oldIndent != newIndent
-            && oldIndent.contains("\n")
-            && newIndent.contains("\n")
+            && oldIndent.indexOf("\n") != -1
+            && newIndent.indexOf("\n") != -1
             && !hasMacroSkipBetween(pos, lexerPos))
         {
             var content = oldIndent.substring(0, oldIndent.lastIndexOf("\n") + 1)
@@ -3002,7 +3002,7 @@ a18_indent_comment:
                 substitutions.put(tokens[pos].begin, tokens[pos].end, newComment);
                 logger.fine(struct.getClass(), "a18_indent_comment: all lines at " + parserPos + ".");
             }
-        } else if (tokens[pos].type == Token.COMMENT && !oldIndent.contains("\n") && !hasMacroSkipBetween(pos, lexerPos)) {
+        } else if (tokens[pos].type == Token.COMMENT && oldIndent.indexOf("\n") == -1 && !hasMacroSkipBetween(pos, lexerPos)) {
             var col = getCommentCol(pos);
             var p = Pattern.compile("(\\n)([ ]*)");
             var content = tokens[pos].content;
@@ -3030,7 +3030,7 @@ a18_indent_comment:
         for (var i=from; i<to; i++) {
             var type = tokens[i].type;
             if (type = Token.WS) {
-                if (tokens[i].content.contains("\n")) {
+                if (tokens[i].content.indexOf("\n") != -1) {
                     return true;
                 }
             }
@@ -3048,11 +3048,11 @@ a18_indent_comment:
         // map expects Integers; therefore convert values to Integer
         var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
         var commentWithLineBreak = hasLineBreakBetween(pos + 1, lexerPos);
-        if (commentWithLineBreak && !indent.contains("\n")) {
+        if (commentWithLineBreak && indent.indexOf("\n") == -1) {
             substitutions.put(tokens[pos].end, tokens[lexerPos].begin, "");
             logger.fine(struct.getClass(), "a18_indent_comment: "
                 + "remove line break at " + parserPos + ".");
-        } else if (!commentWithLineBreak && indent.contains("\n")) {
+        } else if (!commentWithLineBreak && indent.indexOf("\n") != -1) {
             // map expects Integers; therefore convert values to Integer
             struct.putNewline(Integer.valueOf(parserPos), indent.substring(System.lineSeparator().length));
             substitutions.put(tokens[pos].end, tokens[lexerPos].begin, System.lineSeparator());

@@ -223,7 +223,7 @@ define_global_functions:
 
     // Returns the indentation without leading new lines from a string.
     var getNumCharsAfterNewLine = function(indent) {
-        if (indent.contains("\n")) {
+        if (indent.indexOf("\n") != -1) {
             return indent.length() - indent.lastIndexOf("\n") - 1;
         }
         return indent.length();
@@ -233,7 +233,7 @@ define_global_functions:
     var getLeadingNewLines = function(nodeFrom) {
         var startPos=nodeFrom;
         var indent = getIndent(startPos);
-        if (indent.contains("\n")) {
+        if (indent.indexOf("\n") != -1) {
             return indent.substring(0, indent.lastIndexOf("\n") + 1);
         }
         return "";
@@ -244,7 +244,7 @@ define_global_functions:
         var startPos=nodeFrom;
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
-        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
+        for (var i=startPos-1; i>=0 && indent.indexOf("\n") == -1; i=i-1) {
             col += target.src.get(i).content.length();
             var indent = getIndent(i);
             col += getNumCharsAfterNewLine(indent);
@@ -257,10 +257,10 @@ define_global_functions:
         var startPos=nodeFrom;
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
-        for (var i=startPos-1; i>=0 && !indent.contains("\n"); i=i-1) {
+        for (var i=startPos-1; i>=0 && indent.indexOf("\n") == -1; i=i-1) {
             col += target.src.get(i).content.length();
             var indent = getIndent(i);
-            if (!indent.contains("\n")) {
+            if (indent.indexOf("\n") == -1) {
                 col += getNumCharsAfterNewLine(indent);
             }
         }
@@ -276,7 +276,7 @@ define_global_functions:
     var containsLineBreakBetweenPos = function(from, to) {
         for (var i = from; i < to; i++) {
             var value = getIndent(i);
-            if (value.contains("\n")) {
+            if (value.indexOf("\n") != -1) {
                 return true;
             }
         }
@@ -342,7 +342,7 @@ define_global_functions:
             for (var i = 0, len = descendants.length; i < len; i++) {
                 var node = descendants.get(i);
                 var indent = getIndent(node.from);
-                if (indent.contains("\n")) {
+                if (indent.indexOf("\n") != -1) {
                     if (node.children().size() == 0) {
                         struct.putNewline(node.from, indent + getSpaces(increaseBy));
                     }
@@ -410,13 +410,13 @@ define_global_functions:
 
     // Returns true if there is no other parameter defined on the same line.
     var firstParameterOnLine = function(nodeFrom, scopeFrom) {
-        if (!getIndent(nodeFrom).contains("\n")) {
+        if (getIndent(nodeFrom).indexOf("\n") == -1) {
             for (var i=nodeFrom-1; i>=scopeFrom; i=i-1) {
                 var prevNode = target.root.leafAtPos(i);
                 if (prevNode.contains("decl_id")) {
                     return false;
                 }
-                if (getIndent(prevNode.from).contains("\n")) {
+                if (getIndent(prevNode.from).indexOf("\n") != -1) {
                     break;
                 }
             }
@@ -427,7 +427,7 @@ define_global_functions:
     // Returns true if there is a a new line in the node range; search backwards.
     var hasNewline = function(from, to) {
         for (var i=from; i>=to; i=i-1) {
-            if (getIndent(i).contains("\n")) {
+            if (getIndent(i).indexOf("\n") != -1) {
                 return true;
             }
         }
@@ -448,7 +448,7 @@ define_global_functions:
                 for (var i=0; i<list.length; i++) {
                     var node = list.get(i).get(nodeName);
                     var indent = getIndent(node.from);
-                    if (indent.contains("\n")) {
+                    if (indent.indexOf("\n") != -1) {
                         var content = target.src.get(node.from).content;
                         if (content == ",") {
                             struct.putNewline(node.from, indent.substring(0, indent.length - comma));
@@ -535,11 +535,11 @@ max_one_empty_line:
         for (var i in tokens) {
             var type = tokens[i].type;
             if (type == Token.LINE_COMMENT || type == Token.COMMENT) {
-                if (tokens[i].content.toLowerCase().contains("@formatter:off") || tokens[i].content.toLowerCase().contains("noformat start")) {
+                if (tokens[i].content.toLowerCase().indexOf("@formatter:off") != -1 || tokens[i].content.toLowerCase().indexOf("noformat start") != -1) {
                     off = tokens[i].begin;
                 }
                 if (off != -1) {
-                    if (tokens[i].content.toLowerCase().contains("@formatter:on") || tokens[i].content.toLowerCase().contains("noformat end")) {
+                    if (tokens[i].content.toLowerCase().indexOf("@formatter:on") != -1 || tokens[i].content.toLowerCase().indexOf("noformat end") != -1) {
                         offOnRanges.push([off, tokens[i].end]);
                         off = -1;
                     }
