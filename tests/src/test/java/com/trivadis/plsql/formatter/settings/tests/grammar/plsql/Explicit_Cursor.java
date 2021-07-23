@@ -112,22 +112,22 @@ public class Explicit_Cursor extends ConfiguredTestFormatter {
                          and salary > max_sal
                        order by salary;
                                 
-                procedure print_overpaid is
-                   last_name_   employees.last_name%type;
-                   first_name_  employees.first_name%type;
-                   overpayment_ employees.salary%type;
-                begin
-                   loop
-                      fetch c into last_name_, first_name_, overpayment_;
-                      exit when c%notfound;
-                      dbms_output.put_line(last_name_
-                         || ', '
-                         || first_name_
-                         || ' (by '
-                         || overpayment_
-                         || ')');
-                   end loop;
-                end print_overpaid;
+                   procedure print_overpaid is
+                      last_name_   employees.last_name%type;
+                      first_name_  employees.first_name%type;
+                      overpayment_ employees.salary%type;
+                   begin
+                      loop
+                         fetch c into last_name_, first_name_, overpayment_;
+                         exit when c%notfound;
+                         dbms_output.put_line(last_name_
+                            || ', '
+                            || first_name_
+                            || ' (by '
+                            || overpayment_
+                            || ')');
+                      end loop;
+                   end print_overpaid;
                                 
                 begin
                    dbms_output.put_line('----------------------');
