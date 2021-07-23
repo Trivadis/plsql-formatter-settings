@@ -667,6 +667,11 @@ a8_return:
     & [node^) subprg_spec
 ;
 
+a8_goto:
+      [node) 'GOTO'
+    & [node^) goto_stmt
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -689,6 +694,7 @@ a8_one_space_after:
     | a8_fetch
     | a8_reverse_loop
     | a8_return
+    | a8_goto
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
