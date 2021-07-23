@@ -2448,7 +2448,7 @@ o8_find_parameter_declarations:
     & [name) decl_id
     & [node) prm_spec_unconstrained_type
     & scope < node
-    & (name = node-1 | name = node-2)
+    & (name = node-1 | name = node-2 | name = node-3 | name = node-4)
 -> {
     if (alignTypeDecl) {
         var name = tuple.get("name");
