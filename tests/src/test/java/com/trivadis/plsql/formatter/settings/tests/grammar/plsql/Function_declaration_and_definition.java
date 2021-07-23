@@ -48,4 +48,60 @@ public class Function_declaration_and_definition extends ConfiguredTestFormatter
                 """;
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void full_function_definition_tokenized() throws IOException {
+        var input = """
+                create
+                function
+                f
+                (
+                p
+                in
+                varchar2
+                )
+                return
+                integer
+                deterministic
+                pipelined
+                parallel_enable
+                result_cache
+                relies_on
+                (
+                emp
+                ,
+                dept
+                ,
+                bonus
+                )
+                is
+                begin
+                return
+                to_char
+                (
+                p
+                )
+                ;
+                end;
+                /
+                """;
+        var actual = formatter.format(input);
+        var expected = """
+                create function f(
+                   p in varchar2
+                )
+                   return integer
+                   deterministic
+                   pipelined
+                   parallel_enable
+                   result_cache relies_on (emp, dept, bonus)
+                is
+                begin
+                   return
+                   to_char(p);
+                end;
+                /
+                """;
+        assertEquals(expected, actual);
+    }
 }
