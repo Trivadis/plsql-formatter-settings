@@ -9,9 +9,9 @@ public class Call_specification extends ConfiguredTestFormatter {
     public void c_declaration() {
         var sql = """
                 create procedure utl_xml_parse_query(
-                   in_current_userid in number,
-                   in_schema_name    in varchar2,
-                   in_query          in clob,
+                   in_current_userid in            number,
+                   in_schema_name    in            varchar2,
+                   in_query          in            clob,
                    in_result         in out nocopy clob
                 ) is
                    language c
