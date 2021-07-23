@@ -662,6 +662,11 @@ a8_reverse_loop:
     & [node^) iterator_control
 ;
 
+a8_return:
+      [node) 'RETURN'
+    & [node^) subprg_spec
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -683,6 +688,7 @@ a8_one_space_after:
     | a8_close
     | a8_fetch
     | a8_reverse_loop
+    | a8_return
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
