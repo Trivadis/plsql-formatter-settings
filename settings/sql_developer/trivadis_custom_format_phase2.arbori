@@ -203,6 +203,7 @@ a13_nodes:
     | [node) excptn_d
     | [node) external_parm_list_entry
     | [node) excptn_handler
+    | [node) pragma
 ;
 
 a13_calls_with_assoc_args:
