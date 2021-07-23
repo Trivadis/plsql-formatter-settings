@@ -1770,7 +1770,7 @@ r2_object_type:
 
 r2_body:
       [node) subprg_body
-    & [parent) pkg_body
+    & ([parent) pkg_body | [parent) DECLARE_decls_opt)
     & parent << node -- "<" returns wrong result. Arbori query result changed between 20.4.1 and 21.2.0.
 ;
 
