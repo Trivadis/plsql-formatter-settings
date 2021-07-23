@@ -1721,6 +1721,7 @@ r2_common:
     | [node^) fetch_statement & ![node) 'FETCH'
     | [node^) bulk_loop_stmt & ![node) 'FORALL'
     | [node) analytic_clause & ![node^) over_clause
+    | [node) 'RETURN' & [node^) subprg_spec
 ;
 
 r2_flowcontrol_condition:
