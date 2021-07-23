@@ -2938,7 +2938,7 @@ a18_indent_comment:
     var getContentBetween = function(start, end) {
         var content = "";
         for (var i = start; i < end; i++) {
-            content = content + tokens[i].content;
+            content += tokens[i].content;
         }
         return content;
     }
