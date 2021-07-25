@@ -1,0 +1,201 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- The Basics -->
+    <groupId>com.trivadis.plsql.formatter</groupId>
+    <artifactId>tvdformat</artifactId>
+    <version>21.2.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>1.8</jdk.version>
+        <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
+        <graalvm.version>21.2.0</graalvm.version>
+        <skip.native>true</skip.native>
+    </properties>
+    <dependencies>
+        <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
+        <!-- It's the default script engine also for Arbori callback functions since SQLcl 21.2.0 -->
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- SQLcl dependencies not available in public Maven repositories -->
+        <dependency>
+            <groupId>oracle.dbtools</groupId>
+            <artifactId>dbtools-common</artifactId>
+            <version>21.2.0</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
+        </dependency>
+        <!-- GraalVM native image and Context -->
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- Build Settings -->
+    <build>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.8.1</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <finalName>${project.artifactId}</finalName>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <useUniqueVersions>false</useUniqueVersions>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.trivadis.plsql.formatter.TvdFormat</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>lib/dbtools-common-21.2.0.jar</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>false</excludeTransitive>
+                            <includeScope>compile</includeScope>
+                            <stripVersion>false</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.nativeimage</groupId>
+                <artifactId>native-image-maven-plugin</artifactId>
+                <version>${graalvm.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>native-image</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${skip.native}</skip>
+                    <imageName>tvdformat</imageName>
+                    <!-- "-language:js -no-fallback" leads to a runtime error:
+                        Exception in thread "main" javax.script.ScriptException: org.graalvm.polyglot.PolyglotException: TypeError: Access to host class java.lang.String is not allowed or does not exist.
+                            at com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.toScriptException(GraalJSScriptEngine.java:483)
+                            at com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:460)
+                            at com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:400)
+                            at com.trivadis.plsql.formatter.TvdFormat.run(TvdFormat.java:40)
+                            at com.trivadis.plsql.formatter.TvdFormat.main(TvdFormat.java:46)
+                        Caused by: org.graalvm.polyglot.PolyglotException: TypeError: Access to host class java.lang.String is not allowed or does not exist.
+                            at <js>.:program(<eval>:19)
+                            at org.graalvm.polyglot.Context.eval(Context.java:375)
+                            at com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:458)
+	                -->
+                    <buildArgs>
+                        -H:IncludeResources=.* --force-fallback
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- More Project Information -->
+    <name>com.trivadis.org.plsql.formatter.settings</name>
+    <description>PL/SQL and SQL Formatter</description>
+    <url>https://github.com/Trivadis/plsql-formatter-settings</url>
+    <inceptionYear>2021</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>Trivadis</name>
+        <url>https://www.trivadis.com/</url>
+    </organization>
+    <developers>
+        <developer>
+            <email>philipp.salvisberg@trivadis.com</email>
+            <name>Philipp Salvisberg</name>
+            <url>https://github.com/PhilippSalvisberg/</url>
+            <id>PhilippSalvisberg</id>
+            <roles>
+                <role>lead</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- Environment Settings -->
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/Trivadis/plsql-formatter-settings/issues</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git://github.com/Trivadis/plsql-formater-settings.git</connection>
+        <developerConnection>scm:git:git@github.com:Triviadis/plsql-formatter-settings.git</developerConnection>
+        <tag>main</tag>
+        <url>https://github.com/Trivadis/plsql-formatter-settings</url>
+    </scm>
+
+</project>

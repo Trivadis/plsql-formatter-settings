@@ -19,7 +19,7 @@ public class Deterministic_clause extends ConfiguredTestFormatter {
         var actual = formatter.format(input);
         var expected = """
                 create or replace function text_length(a clob)
-                return number
+                   return number
                    deterministic
                 is
                 begin
