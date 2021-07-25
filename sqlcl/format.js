@@ -160,7 +160,7 @@ var printUsage = function (asCommand, standalone) {
         ctx.write("  *               use * to format the SQLcl buffer\n\n");
     }
     ctx.write("options:\n");
-    if (!asCommand) {
+    if (!asCommand && !standalone) {
         ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
     }
     ctx.write("  ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb\n");
