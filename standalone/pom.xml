@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>11</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
         <graalvm.version>21.2.0</graalvm.version>
         <skip.native>true</skip.native>
@@ -38,12 +38,12 @@
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
         </dependency>
-        <!-- GraalVM native image -->
+        <!-- GraalVM native image and Context -->
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
             <version>${graalvm.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -64,7 +64,8 @@
                 <version>3.8.1</version>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <release>${jdk.version}</release>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
             <plugin>
