@@ -10,8 +10,8 @@ import java.util.function.Predicate;
 import java.util.logging.LogManager;
 
 public class TvdFormat {
-    private ScriptEngine scriptEngine;
-    private ScriptRunnerContext ctx;
+    private final ScriptEngine scriptEngine;
+    private final ScriptRunnerContext ctx;
 
     TvdFormat() {
         scriptEngine = GraalJSScriptEngine.create(null,
