@@ -2998,6 +2998,9 @@ a18_indent_comment:
         var firstWS = getFirstWhitespaceTokenBefore(pos);
         var oldIndent = getContentBetween(firstWS, pos);
         var parserPos = pos - hiddenTokenCount + 1;
+        if (parserPos > target.src.length - 1) {
+            parserPos -= 1;
+        }
         var lexerPos = mapParserPosToLexerPos.get(Integer.valueOf(parserPos));
         var newIndent = getIndentBefore(parserPos);
         if (oldIndent != newIndent

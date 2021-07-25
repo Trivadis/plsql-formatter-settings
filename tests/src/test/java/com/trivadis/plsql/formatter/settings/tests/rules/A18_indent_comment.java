@@ -91,6 +91,28 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     """;
             assertEquals(expected, actual);
         }
+
+        @Test
+        public void at_end() throws IOException {
+            var input = """
+                    begin
+                    null;
+                    null;
+                    end;
+                    /
+                       -- a comment
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       null;
+                       null;
+                    end;
+                    /
+                    -- a comment
+                    """;
+            assertEquals(expected, actual);
+        }
     }
 
     @Nested
@@ -283,6 +305,32 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                        procedure p;
                     end;
                     /
+                    """;
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void at_end() throws IOException {
+            var input = """
+                    begin
+                    null;
+                    null;
+                    end;
+                    /
+                       /*
+                        * a comment
+                        */
+                    """;
+            var actual = formatter.format(input);
+            var expected = """
+                    begin
+                       null;
+                       null;
+                    end;
+                    /
+                    /*
+                     * a comment
+                     */
                     """;
             assertEquals(expected, actual);
         }
