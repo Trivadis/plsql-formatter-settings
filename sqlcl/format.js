@@ -147,8 +147,8 @@ var existsFile = function (file) {
     return f.isFile();
 }
 
-var printUsage = function (asCommand) {
-    if (asCommand) {
+var printUsage = function (asCommand, standalone) {
+    if (asCommand || standalone) {
         ctx.write("usage: tvdformat <rootPath> [options]\n\n");
     } else {
         ctx.write("usage: script format.js <rootPath> [options]\n\n");
@@ -156,7 +156,9 @@ var printUsage = function (asCommand) {
     ctx.write("mandatory argument: (one of the following)\n");
     ctx.write("  <rootPath>      file or path to directory containing files to format (content will be replaced!)\n");
     ctx.write("  <config.json>   configuration file in JSON format (must end with .json)\n");
-    ctx.write("  *               use * to format the SQLcl buffer\n\n");
+    if (!standalone) {
+        ctx.write("  *               use * to format the SQLcl buffer\n\n");
+    }
     ctx.write("options:\n");
     if (!asCommand) {
         ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
@@ -442,7 +444,7 @@ var run = function (args) {
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
-        printUsage(args[0].equalsIgnoreCase("tvdformat"));
+        printUsage(args[0].equalsIgnoreCase("tvdformat"), javaSystem.getProperty('tvdformat.standalone') != null);
     } else {
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
         if (options.rootPath == "*") {
