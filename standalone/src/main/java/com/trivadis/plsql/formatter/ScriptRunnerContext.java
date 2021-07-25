@@ -11,6 +11,7 @@ public class ScriptRunnerContext {
         super();
     }
 
+    @SuppressWarnings("unused")
     public Object getProperty(String name) {
         if (name.equals("script.runner.cd_command")) {
             return Paths.get("").toAbsolutePath().toString();
@@ -26,6 +27,7 @@ public class ScriptRunnerContext {
         return outputStream;
     }
 
+    @SuppressWarnings("unused")
     public void write(String string) throws IOException {
         outputStream.write(string.getBytes(StandardCharsets.UTF_8));
     }
