@@ -61,6 +61,7 @@ include "std.arbori"
 -- - A4: Split long lines.
 -- - A18: Indent comment like the subsequent grammar element.
 -- - A19: Restore original indent of nodes in first conditional branch.
+-- - A21: Remove non-whitespace indentations.
 -- - D2: Log time spent in this program.
 
 -- --------------------------------------------------------------------------------------------------------------------
@@ -3119,6 +3120,29 @@ a19_restore_indent_in_conditional_branch:
         if (indent != originalIndent) {
             struct.putNewline(key, originalIndent);
             logger.fine(struct.getClass(), "a19_restore_indent_in_conditional_branch: at " + key + ".");
+        }
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A21: Remove non-whitespace indentations.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- This is a fail-safe.
+-- Introduced due to issue #123 where a user reported that some "undefined" string was inserted between tokens.
+-- A log containing an a21_remove_non_ws_indent entry indicates a bug that must be fixed.
+
+a21_remove_non_ws_indent:
+    runOnce
+-> {
+    var it = newlinePositions.keySet().iterator();
+    while (it.hasNext()) {
+        var pos = it.next();
+        var indent = getIndent(pos);
+        var newIndent = replaceAll(indent, "[^\\s]+", "");
+        if (indent != newIndent) {
+            struct.putNewline(pos, newIndent);
+            logger.fine(struct.getClass(), "a21_remove_non_ws_indent: at " + pos + ".");
         }
     }
 }
