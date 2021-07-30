@@ -16,21 +16,14 @@ public class TvdFormat {
     TvdFormat() {
         scriptEngine = GraalJSScriptEngine.create(null,
                 Context.newBuilder("js")
-                .option("js.nashorn-compat", "true")
-                .allowHostAccess(true)
-                .allowNativeAccess(true)
-                .allowCreateThread(true)
-                .allowIO(true)
-                .allowHostClassLoading(true)
-                .allowHostClassLookup((Predicate<String>) s -> true)
-                .allowAllAccess(true));
+                        .option("js.nashorn-compat", "true")
+                        .allowAllAccess(true));
         ctx = new ScriptRunnerContext();
         ctx.setOutputStream(System.out);
         scriptEngine.getContext().setAttribute("ctx", ctx, ScriptContext.ENGINE_SCOPE);
     }
 
     public void run(String[] arguments) throws IOException, ScriptException {
-        LogManager.getLogManager().reset();
         URL script = Thread.currentThread().getContextClassLoader().getResource("format.js");
         String[] args = new String[arguments.length + 1];
         args[0] = "format.js";
@@ -42,6 +35,7 @@ public class TvdFormat {
     }
 
     public static void main(String[] args) throws IOException, ScriptException {
+        LogManager.getLogManager().reset();
         System.setProperty("tvdformat.standalone", "true");
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         TvdFormat formatter = new TvdFormat();

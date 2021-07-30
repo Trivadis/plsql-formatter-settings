@@ -24,14 +24,11 @@ var javaFiles = Java.type("java.nio.file.Files");
 var javaCollectors = Java.type("java.util.stream.Collectors");
 var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
 var javaPattern = Java.type("java.util.regex.Pattern");
-var javaSQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
 var javaFormat = Java.type("oracle.dbtools.app.Format");
 var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
 var javaSystem = Java.type("java.lang.System");
-var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
-var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
 
 var getFiles = function (rootPath, extensions) {
     var files;
@@ -515,6 +512,9 @@ var registerTvdFormat = function () {
 
 // main
 if (args.length >= 2 && (args[1].equalsIgnoreCase("-r") || args[1].equalsIgnoreCase("--register"))) {
+    var javaSQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
+    var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
+    var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
     registerTvdFormat();
 } else {
     run(args);
