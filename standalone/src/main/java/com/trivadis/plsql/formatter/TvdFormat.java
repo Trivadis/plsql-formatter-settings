@@ -16,14 +16,8 @@ public class TvdFormat {
     TvdFormat() {
         scriptEngine = GraalJSScriptEngine.create(null,
                 Context.newBuilder("js")
-                .option("js.nashorn-compat", "true")
-                .allowHostAccess(true)
-                .allowNativeAccess(true)
-                .allowCreateThread(true)
-                .allowIO(true)
-                .allowHostClassLoading(true)
-                .allowHostClassLookup((Predicate<String>) s -> true)
-                .allowAllAccess(true));
+                        .option("js.nashorn-compat", "true")
+                        .allowAllAccess(true));
         ctx = new ScriptRunnerContext();
         ctx.setOutputStream(System.out);
         scriptEngine.getContext().setAttribute("ctx", ctx, ScriptContext.ENGINE_SCOPE);
