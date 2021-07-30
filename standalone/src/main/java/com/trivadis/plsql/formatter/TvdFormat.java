@@ -24,7 +24,6 @@ public class TvdFormat {
     }
 
     public void run(String[] arguments) throws IOException, ScriptException {
-        LogManager.getLogManager().reset();
         URL script = Thread.currentThread().getContextClassLoader().getResource("format.js");
         String[] args = new String[arguments.length + 1];
         args[0] = "format.js";
@@ -36,6 +35,7 @@ public class TvdFormat {
     }
 
     public static void main(String[] args) throws IOException, ScriptException {
+        LogManager.getLogManager().reset();
         System.setProperty("tvdformat.standalone", "true");
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
         TvdFormat formatter = new TvdFormat();
