@@ -740,6 +740,7 @@ a15_various:
     | [node) subquery & [node^) multi_table_insert
     | [node) prm_spec & [node-1) ','
     | [node) subprg_property
+    | [node) ')' & [node^) create_view#[114,130)
 ;
 
 a15_is_or_as:
@@ -749,9 +750,16 @@ a15_is_or_as:
     & node-1 = prop^
 ;
 
+a15_view_column_alias:
+      [parent) create_view#[114,130)
+    & [node) alias_in_out_constraints
+    & parent < node
+;
+
 a15_line_break_before:
       a15_various
     | a15_is_or_as
+    | a15_view_column_alias
 -> {
     var node = tuple.get("node");
     if (getIndent(node.from).indexOf("\n") == -1) {
