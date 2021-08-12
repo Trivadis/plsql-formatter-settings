@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>16</jdk.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
+        <sqlcl.version>21.2.2</sqlcl.version>
     </properties>
     <dependencies>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
@@ -19,13 +20,13 @@
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>21.1.0</version>
+            <version>${graalvm.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>21.1.0</version>
+            <version>${graalvm.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
