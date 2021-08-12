@@ -13,6 +13,7 @@
         <jdk.version>16</jdk.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
         <sqlcl.version>21.2.2</sqlcl.version>
+        <graalvm.version>21.2.0</graalvm.version>
     </properties>
     <dependencies>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
@@ -39,35 +40,35 @@
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-common</artifactId>
-            <version>21.2.0</version>
+            <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-sqlcl</artifactId>
-            <version>21.2.0</version>
+            <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-sqlcl.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.xml</groupId>
             <artifactId>xmlparserv2-sans-jaxp-services</artifactId>
-            <version>21.2.0</version>
+            <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/xmlparserv2-sans-jaxp-services.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.i18n</groupId>
             <artifactId>orai18n</artifactId>
-            <version>21.2.0</version>
+            <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/orai18n.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>oracle.soda</groupId>
             <artifactId>orajsoda</artifactId>
-            <version>21.2.0</version>
+            <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/orajsoda.jar</systemPath>
         </dependency>
