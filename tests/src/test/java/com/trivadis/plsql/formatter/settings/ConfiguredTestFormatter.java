@@ -15,6 +15,7 @@ public abstract class ConfiguredTestFormatter {
 
     public ConfiguredTestFormatter() {
         super();
+        System.setProperty("polyglot.engine.WarnInterpreterOnly","false");
         setArboriHome();
         loadLoggingConf();
         formatter = new Format();
