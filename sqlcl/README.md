@@ -6,7 +6,7 @@ You can apply the formatter settings in SQL Developer. Another option is to appl
 
 ## Why not Use `FORMAT FILE`?
 
-Yes, you can use the built-in `FORMAT FILE` command. Here's the help output from SQLcl 21.2.0:
+Yes, you can use the built-in `FORMAT FILE` command. Here's the help output from SQLcl 21.2.2:
 
 ```
 FORMAT
