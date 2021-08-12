@@ -33,30 +33,6 @@ See [sqlcl/README.md](sqlcl/README.md).
 
 ### SQL Developer
 
-#### Configure `dbtools.arbori.home`
-
-1. Start SQL Developer
-2. Open `Help` -> `About`
-3. Select `Properties` tab
-4. Type `user.conf` in the search box and press enter
-   ![About Properties - user.conf](images/about_properties_user_conf.png)
-5. Select the row with `user.conf` and press `Ctrl-C` (also on macOS) to copy it into your clipboard
-6. Press `OK` to close the dialog
-7. Select `File` -> `Open...`
-8. Press `Ctrl-V` to paste the content of the clipboard into the `File Name` field
-9. Remove `user.conf` and the double quotes from the file name
-   ![File Open Dialog](images/file_open.png)
-10. Press `Open`
-11. Add `AddVMOption -Ddbtools.arbori.home=/.../plsql-formatter-settings/settings/sql_developer` at the end of the file
-12. Replace `/.../` to match the directory of the [`trivadis_custom_format.arbori`](settings/sql_developer/trivadis_custom_format.arbori) file on your system
-    ![product.conf](images/product_conf.png)
-13. Press the `Save` button in the toolbar 
-14. Restart SQL Developer to apply this JVM configuration change
-15. Optionally check if `dbtools.arbori.home` is configured correctly
-    ![About Properties - dbtools.arbori.home](images/about_properties_arbori.png)
-
-#### Import Settings
-
 1. Start SQL Developer
 2. Open `Preferences`
 3. Select `Code Editor` -> `Format` -> `Advanced Format`
