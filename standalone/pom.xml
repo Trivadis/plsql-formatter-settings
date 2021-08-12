@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
+        <sqlcl.version>21.2.2</sqlcl.version>
         <graalvm.version>21.2.0</graalvm.version>
         <skip.native>true</skip.native>
     </properties>
@@ -34,7 +35,7 @@
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-common</artifactId>
-            <version>21.2.0</version>
+            <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
         </dependency>
