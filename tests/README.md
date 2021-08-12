@@ -29,7 +29,7 @@ This is a Maven project that does not produce an artifact. It's designed to exec
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ---------------< com.trivadis:plsql.formatter.settings >----------------
-[INFO] Building com.trivadis.org.plsql.formatter.settings 21.0.0-SNAPSHOT
+[INFO] Building com.trivadis.org.plsql.formatter.settings 21.2.2-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]  
 ...
@@ -41,12 +41,12 @@ This is a Maven project that does not produce an artifact. It's designed to exec
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 474, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 492, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  44.661 s
-[INFO] Finished at: 2021-07-17T00:03:36+02:00
+[INFO] Total time:  51.975 s
+[INFO] Finished at: 2021-08-13T00:06:44+02:00
 [INFO] ------------------------------------------------------------------------
 ```
