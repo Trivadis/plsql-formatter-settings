@@ -29,4 +29,5 @@
     <breaksAfterSelect>false</breaksAfterSelect>
     <spaceAfterCommas>true</spaceAfterCommas>
     <kwCase>oracle.dbtools.app.Format.Case.lower</kwCase>
+    <formatWhenSyntaxError>false</formatWhenSyntaxError>
 </options>
