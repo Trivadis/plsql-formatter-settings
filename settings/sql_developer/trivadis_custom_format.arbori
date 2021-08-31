@@ -2745,11 +2745,21 @@ r2_indent_name_list_after_fetch_into:
     addMargin(node, col, "r2_indent_name_list_after_fetch_into");
 }
 
-r2_subquery:
+r2_subquery_all:
       [node) subquery
     & [from) from_clause
     & node < from
-    & ![from^-1) SET_OPER
+;
+
+r2_subquery_set:
+      [node) subquery
+    & [from) from_clause
+    & node < from
+    & [from^-1) SET_OPER -- must not negate this predicate in SQLDev 21.2.1, see issue #133
+;
+
+r2_subquery:
+    r2_subquery_all - r2_subquery_set
 ;
 
 r2_increment_left_margin_for_subquery_in_paren:
