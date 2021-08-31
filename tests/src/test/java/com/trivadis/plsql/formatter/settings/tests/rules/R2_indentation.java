@@ -1284,9 +1284,9 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                     order by line,col
                                     rows between unbounded preceding and 1 preceding
                                  )
-                           end as usage_context_id,
+                           end as usage_context_id
                           ,origin_con_id
-                      from base_ids;
+                    from base_ids;
                     """;
             formatAndAssert(sql);
         }
