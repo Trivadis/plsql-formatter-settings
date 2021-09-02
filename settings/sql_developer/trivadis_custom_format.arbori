@@ -2651,6 +2651,8 @@ r2_decrement_left_margin:
     addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin");
 }
 
+-- not defining [node) makes this query slow (see #137)
+-- I do not see an alternative way to fetch all kind of functions
 r2_decrement_left_margin_for_function_name:
         ([node^) function | [node^) function_expression | [node^) count | [node^) over_clause)
       & [lparen) '('
@@ -2659,20 +2661,27 @@ r2_decrement_left_margin_for_function_name:
     addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin_for_function_name");
 }
 
-r2_increment_left_margin_by_keyword_outside_node:
+-- separated due to performance issues in SQLDev 21.2.1 - see #137
+r2_increment_left_margin_by_keyword_outside_select:
     -- select statement
       [node) select_list & [keyword) 'SELECT' & (keyword = node-1 | keyword = node-2)
     | [node) condition & [keyword) 'CONNECT' & [keyword+1) 'BY' & keyword = node-2
     | [node) condition & [keyword) 'START' & [keyword+1) 'WITH' & keyword = node-2
+-> {
+    addMarginByName(tuple.get("node"), 6, target.src.get(tuple.get("keyword").from).content,
+        "r2_increment_left_margin_by_keyword_outside_select");
+}
+
+r2_increment_left_margin_by_keyword_outside_update_delete_merge:
     -- update statement
-    | [node) aliased_dml_table_expression_clause & keyword = node^
+      [node) aliased_dml_table_expression_clause & keyword = node^
     -- delete statement
     | [node) 'FROM' & [keyword) 'DELETE' & [node^) delete & keyword+1 = node
     -- merge statement
     | [node) merge_update_clause[36,56) & [keyword) 'SET' & [node^) merge_update_clause & keyword^ = node^
 -> {
     addMarginByName(tuple.get("node"), 6, target.src.get(tuple.get("keyword").from).content,
-        "r2_increment_left_margin_by_keyword_outside_node");
+        "r2_increment_left_margin_by_keyword_outside_update_delete_merge");
 }
 
 -- use merge keyword for right alignment (5 chars)
