@@ -2651,6 +2651,8 @@ r2_decrement_left_margin:
     addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin");
 }
 
+-- not defining [node) makes this query slow (see #137)
+-- I do not see an alternative way to fetch all kind of functions
 r2_decrement_left_margin_for_function_name:
         ([node^) function | [node^) function_expression | [node^) count | [node^) over_clause)
       & [lparen) '('
