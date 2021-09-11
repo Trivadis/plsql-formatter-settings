@@ -1294,6 +1294,12 @@ a7_reverse_loop:
     & [node^) iterator_control
 ;
 
+a7_in_out_mode:
+      [node) 'OUT'
+    & [node-1) 'IN'
+    & [node^) mode
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -1308,6 +1314,7 @@ a7_one_space_before:
     | a7_type_definition
     | a7_when_cond
     | a7_reverse_loop
+    | a7_in_out_mode
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
