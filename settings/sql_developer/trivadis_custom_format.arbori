@@ -531,6 +531,7 @@ define_global_functions:
         return hasParentOfType(nodeFrom, [
            "select",
            "create_view",
+           "create_materialized_view",
            "insert",
            "update",
            "delete",
@@ -1529,6 +1530,7 @@ a15_various:
     | [node) prm_spec & [node-1) ','
     | [node) subprg_property
     | [node) ')' & [node^) create_view#[114,130)
+    | [node) ')' & [node^) create_materialized_view[33,79)
 ;
 
 a15_is_or_as:
@@ -1544,10 +1546,17 @@ a15_view_column_alias:
     & parent < node
 ;
 
+a15_materialized_view_column_alias:
+      [parent) create_materialized_view[33,79)
+    & [node) identifier
+    & parent < node
+;
+
 a15_line_break_before:
       a15_various
     | a15_is_or_as
     | a15_view_column_alias
+    | a15_materialized_view_column_alias
 -> {
     var node = tuple.get("node");
     if (getIndent(node.from).indexOf("\n") == -1) {
@@ -1563,6 +1572,7 @@ a15_line_break_before:
 
 a14_line_break_after:
       [node) 'AS' & [node^) create_view#
+    | [node) 'AS' & [node^) create_materialized_view
 -> {
     var node = tuple.get("node");
     if (getIndent(node.to).indexOf("\n") == -1) {
@@ -2572,6 +2582,17 @@ r2_view:
     | [node) subquery & [node^) create_view#
 ;
 
+r2_materialized_view:
+      [node) create_materialized_view[33,79)
+    | [node) subquery & [node^) create_materialized_view
+    | [node) create_materialized_view[91,136)
+    | [node) create_materialized_view[136,174)
+    | [node) create_mv_refresh
+    | [node) 'DISABLE' & [node^) create_materialized_view
+    | [node) create_materialized_view[200,210)
+    | [node) query_rewrite_clause
+;
+
 r2_object_type:
       [node) adt_field
     | [node) ',' & [node+1) adt_field
@@ -2620,6 +2641,7 @@ r2_increment_left_margin:
     | r2_case_expression
     | r2_case_expression_plsql
     | r2_view
+    | r2_materialized_view
     | r2_object_type
     | r2_body
     | r2_single_table_insert
@@ -2639,6 +2661,7 @@ r2_decrement_left_margin:
                 | [node^) json_table
                 | [node^) JSON_columns_clause
                 | [node^) create_view#[114,130)
+                | [node^) create_materialized_view[33,79)
                 | [node^) insert_into_clause[13,25)
                 | [node^) par_expr_list
                 | [node^) merge_insert_clause[23,35)
