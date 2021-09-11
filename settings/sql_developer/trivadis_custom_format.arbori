@@ -834,11 +834,11 @@ remove_duplicate_spaces_in_scope:
 -- - A10: Align parameter modes.
 -- - O8: Alignment: Type Declarations. Options: true; false. (alignTypeDecl).
 -- - O4: Alignment: Assignment Operator :=. Options: true; false. (alignAssignments).
--- - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
 -- - O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
 -- - R6: Call parameters aligned, operators aligned, values aligned.
 -- - A9: Align xmltable columns.
 -- - A20: Align json_table columns.
+-- - O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
 -- - A4: Split long lines.
 -- - A18: Indent comment like the subsequent grammar element.
 -- - A19: Restore original indent of nodes in first conditional branch.
@@ -3358,74 +3358,6 @@ o4_align_assignments:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
--- --------------------------------------------------------------------------------------------------------------------
-
-o5_declarations:
-    runOnce
--> {
-    var selectTermEndsOnNewline = function(node) {
-        if (getIndent(node.to).indexOf("\n") != -1) {
-            return true;
-        } else {
-            var content = target.src.get(node.to).content;
-            if (content == ",") {
-                if (getIndent(node.to+1).indexOf("\n") != -1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    var tableReferenceOnNewline = function(node) {
-        var n = target.root.leafAtPos(node.from - 1);
-        do {
-            n = target.root.leafAtPos(n.from - 1);
-            if (getIndent(n.from).indexOf("\n") != -1) {
-                return true;
-            }
-        } while (!n.contains("'FROM'") && !n.contains("query_table_expression"))
-        return false;
-    }
-
-    var aliases = new HashMap();
-}
-
-o5_column_alias:
-      [scope) select_clause
-    & [node) as_alias
-    & scope < node
--> {
-    if (alignTabColAliases) {
-        var node = tuple.get("node");
-        if (selectTermEndsOnNewline(node)) {
-            addTupleToMap(tuple, "scope", aliases);
-        }
-    }
-}
-
-o5_table_alias:
-      [scope) from_clause
-    & [node) identifier
-    & [node-1) query_table_expression
-    & scope < node
--> {
-    if (alignTabColAliases) {
-        var node = tuple.get("node");
-        if (tableReferenceOnNewline(node)) {
-            addTupleToMap(tuple, "scope", aliases);
-        }
-    }
-}
-
-o5_align_aliases:
-    runOnce
--> {
-    align(aliases, "node", null, "o5_align_aliases");
-}
-
--- --------------------------------------------------------------------------------------------------------------------
 -- O7: Alignment: Equality Predicate =. Options: true; false. (alignEquality).
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -3605,8 +3537,8 @@ a9_align_xmltable_columns:
         var pos = getColumn(scope.from+1);
         var list = xmlTableColumns.get(scope);
         alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
-        fixIndentOfLeadingCommas(xmlTableColumns, "aligner", "a9_align_xmltable_columns");
     }
+    fixIndentOfLeadingCommas(xmlTableColumns, "aligner", "a9_align_xmltable_columns");
 }
 
 a9_find_datatypes:
@@ -3688,6 +3620,74 @@ a20_align_json_table_datatypes:
 -> {
     align(jsonTableDatatypes, "node", null, "a20_align_json_table_datatypes");
     align(jsonTableDatatypes, "path", null, "a20_align_json_table_datatypes");
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- O5: Alignment: Column and Table aliases. Options: true; false. (alignTabColAliases).
+-- --------------------------------------------------------------------------------------------------------------------
+
+o5_declarations:
+    runOnce
+-> {
+    var selectTermEndsOnNewline = function(node) {
+        if (getIndent(node.to).indexOf("\n") != -1) {
+            return true;
+        } else {
+            var content = target.src.get(node.to).content;
+            if (content == ",") {
+                if (getIndent(node.to+1).indexOf("\n") != -1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    var tableReferenceOnNewline = function(node) {
+        var n = target.root.leafAtPos(node.from - 1);
+        do {
+            n = target.root.leafAtPos(n.from - 1);
+            if (getIndent(n.from).indexOf("\n") != -1) {
+                return true;
+            }
+        } while (!n.contains("'FROM'") && !n.contains("query_table_expression"))
+        return false;
+    }
+
+    var aliases = new HashMap();
+}
+
+o5_column_alias:
+      [scope) select_clause
+    & [node) as_alias
+    & scope < node
+-> {
+    if (alignTabColAliases) {
+        var node = tuple.get("node");
+        if (selectTermEndsOnNewline(node)) {
+            addTupleToMap(tuple, "scope", aliases);
+        }
+    }
+}
+
+o5_table_alias:
+      [scope) from_clause
+    & [node) identifier
+    & [node-1) query_table_expression
+    & scope < node
+-> {
+    if (alignTabColAliases) {
+        var node = tuple.get("node");
+        if (tableReferenceOnNewline(node)) {
+            addTupleToMap(tuple, "scope", aliases);
+        }
+    }
+}
+
+o5_align_aliases:
+    runOnce
+-> {
+    align(aliases, "node", null, "o5_align_aliases");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
