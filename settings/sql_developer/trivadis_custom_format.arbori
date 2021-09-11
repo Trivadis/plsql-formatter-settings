@@ -3605,8 +3605,8 @@ a9_align_xmltable_columns:
         var pos = getColumn(scope.from+1);
         var list = xmlTableColumns.get(scope);
         alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
-        fixIndentOfLeadingCommas(xmlTableColumns, "aligner", "a9_align_xmltable_columns");
     }
+    fixIndentOfLeadingCommas(xmlTableColumns, "aligner", "a9_align_xmltable_columns");
 }
 
 a9_find_datatypes:
