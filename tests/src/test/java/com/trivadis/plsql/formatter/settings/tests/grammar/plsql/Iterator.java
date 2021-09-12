@@ -94,4 +94,48 @@ public class Iterator extends ConfiguredTestFormatter {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void tokenized_values_of_control() throws IOException {
+        var input = """
+                declare
+                type t_calling_code_type is table of integer index by varchar2(2);
+                t_calling_codes t_calling_code_type;
+                begin
+                t_calling_codes := t_calling_code_type(
+                'U' || 'S' => 1, 'DE' => 49, 'AT' => 43,
+                'CH' => 41, 'DK' => 45, 'RO' => 40
+                );
+                for
+                l_value
+                in
+                values
+                of
+                t_calling_codes
+                when
+                l_value
+                >
+                1
+                loop
+                dbms_output.put_line('country calling code: ' || l_value);
+                end loop;
+                end;
+                """;
+        var actual = formatter.format(input);
+        var expected = """
+                declare
+                   type t_calling_code_type is table of integer index by varchar2(2);
+                   t_calling_codes t_calling_code_type;
+                begin
+                   t_calling_codes := t_calling_code_type(
+                                         'U' || 'S' => 1, 'DE' => 49, 'AT' => 43,
+                                         'CH' => 41, 'DK' => 45, 'RO' => 40
+                                      );
+                   for l_value in values of t_calling_codes when l_value > 1
+                   loop
+                      dbms_output.put_line('country calling code: ' || l_value);
+                   end loop;
+                end;
+                """;
+        assertEquals(expected, actual);
+    }
 }
