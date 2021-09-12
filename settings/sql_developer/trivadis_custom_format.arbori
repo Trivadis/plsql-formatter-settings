@@ -1724,6 +1724,7 @@ r3_plsql_keywords:
           & ![node^) merge_insert_clause
           & ![node^) merge_update_clause
           & ![node^) continue_stmt
+          & ![node^^) iterator_control
     | [node) 'BEGIN'
     | [node) 'END'
     | [node) 'ELSIF'
