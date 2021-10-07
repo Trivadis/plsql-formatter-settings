@@ -6,11 +6,11 @@ This is a Maven project that does not produce an artifact. It's designed to exec
 
 ## How to Run Tests
 
-1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 20.4.1
-2. Download and install a JDK 16, e.g. from
-   - https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html
-   - https://jdk.java.net/
-3. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.1
+1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 21.2.2
+2. Download and install a JDK 17, e.g. from
+   - https://www.oracle.com/java/technologies/downloads/#JDK17
+   - https://jdk.java.net/17/
+3. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.2
 4. [Download](https://git-scm.com/downloads) and install a git command line client
 5. Clone the plsql-formatter-settings repository
 6. Open a terminal window in the plsql-formatter-settings root folder and type
@@ -41,12 +41,12 @@ This is a Maven project that does not produce an artifact. It's designed to exec
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 492, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 516, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  51.975 s
-[INFO] Finished at: 2021-08-13T00:06:44+02:00
+[INFO] Total time:  54.793 s
+[INFO] Finished at: 2021-09-16T01:10:58+02:00
 [INFO] ------------------------------------------------------------------------
 ```

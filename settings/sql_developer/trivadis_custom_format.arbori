@@ -987,6 +987,7 @@ a13_nodes:
     | [node) external_parm_list_entry
     | [node) excptn_handler
     | [node) pragma
+    | [node) iterator_control_list
 ;
 
 a13_calls_with_assoc_args:
@@ -1001,8 +1002,15 @@ a13_records:
     & node < child
 ;
 
+a13_iterator_control_list_subquery:
+      [node) iterator_control_list
+    & [node^) iterator
+    & [subquery) subquery
+    & node < subquery
+;
+
 a13_short_nodes:
-    (a13_nodes - a13_calls_with_assoc_args) - a13_records
+    ((a13_nodes - a13_calls_with_assoc_args) - a13_records) - a13_iterator_control_list_subquery
 -> {
     var getNodeLength = function(node) {
         var len = 0;
@@ -1261,6 +1269,16 @@ a7_for_loop_identifier:
     & [node^) iterator
 ;
 
+a7_iterand_mutable_opt:
+      [node) mutable_opt
+    & [node^) iterand_decl
+;
+
+a7_iterand_type:
+      [node) constrained_type
+    & [node^) iterand_decl
+;
+
 a7_assignment:
       [node) ':'
     & [node+1) '='
@@ -1283,6 +1301,22 @@ a7_end_label:
 a7_type_definition:
       [node) 'IS'
     & [node^) ty_d
+;
+
+a7_iterator_control_list_all:
+      [node) iterator_control_list
+    & [node^) iterator
+;
+
+a7_iterator_control_list_subquery:
+      [node) iterator_control_list
+    & [node^) iterator
+    & [subquery) subquery
+    & node < subquery
+;
+
+a7_iterator_control_list:
+    a7_iterator_control_list_all - a7_iterator_control_list_subquery
 ;
 
 a7_when_cond:
@@ -1309,6 +1343,9 @@ a7_one_space_before:
     | a7_insert_into
     | a7_parameter_parts
     | a7_for_loop_identifier
+    | a7_iterand_mutable_opt
+    | a7_iterand_type
+    | a7_iterator_control_list
     | a7_assignment
     | a7_accessible_by
     | a7_end_label
@@ -1687,6 +1724,7 @@ r3_plsql_keywords:
           & ![node^) merge_insert_clause
           & ![node^) merge_update_clause
           & ![node^) continue_stmt
+          & ![node^^) iterator_control
     | [node) 'BEGIN'
     | [node) 'END'
     | [node) 'ELSIF'
