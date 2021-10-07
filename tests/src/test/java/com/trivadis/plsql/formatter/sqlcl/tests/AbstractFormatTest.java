@@ -478,7 +478,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     "#TEMP_DIR##FILE_SEP#dont_format.txt"
                 ]
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString());
         Assertions.assertEquals(expected, actual);
@@ -490,7 +490,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
                 Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md2... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        Files.move(Paths.get(tempDir.toString() + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
+        Files.move(Paths.get(tempDir + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
         var configFileContent = """
                 {
                     "files": [
@@ -504,7 +504,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     "arbori": "default"
                 }
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString());
         Assertions.assertEquals(expected, actual);
@@ -535,7 +535,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     ]
                 }
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "mext=md2");
         Assertions.assertEquals(expected, actual);
