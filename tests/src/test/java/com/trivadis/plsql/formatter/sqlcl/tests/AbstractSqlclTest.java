@@ -13,7 +13,7 @@ import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 public abstract class AbstractSqlclTest {
-    {
+    static {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
     }
 
