@@ -142,8 +142,7 @@ var hasParseErrors = function (content, consoleOutput) {
 }
 
 var readFile = function (file) {
-    var content = new javaString(javaFiles.readAllBytes(file));
-    return content;
+    return new javaString(javaFiles.readAllBytes(file));
 }
 
 var writeFile = function (file, content) {
@@ -219,7 +218,7 @@ var processAndValidateArgs = function (args) {
     var arboriPath = null;
     var files = [];
     var result = function (valid) {
-        var result = {
+        return {
             rootPath: rootPath,
             files: files,
             extensions: extensions,
@@ -227,8 +226,7 @@ var processAndValidateArgs = function (args) {
             xmlPath: xmlPath,
             arboriPath: arboriPath,
             valid: valid
-        }
-        return result;
+        };
     }
 
     if (args.length < 2) {
