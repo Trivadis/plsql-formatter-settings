@@ -52,7 +52,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    end to_int_table;
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -69,7 +69,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                        ) v
                  where d.department_name in ('Marketing', 'Operations', 'Public Relations')
                  order by d.department_name, v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
 
@@ -106,7 +106,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    end to_int_table;
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
     }
@@ -151,7 +151,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -171,7 +171,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                               'Public Relations' )
                  order by d.department_name,
                           v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -207,7 +207,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    END to_int_table;
                 END math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -224,7 +224,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                        ) v
                  WHERE d.department_name IN ('Marketing', 'Operations', 'Public Relations')
                  ORDER BY d.department_name, v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -264,7 +264,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                 END math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -289,7 +289,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 ORDER BY
                     d.department_name,
                     v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -334,7 +334,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -354,7 +354,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                               'Public Relations' )
                  order by d.department_name,
                           v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -365,7 +365,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assertions.assertTrue(actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
 
         // markdown.md
-        var actualMarkdown = getFormattedContent("markdown.md").trim();
+        var actualMarkdown = getFormattedContent("markdown.md");
         var expectedMarkdown = """
                 # Titel
                                 
@@ -461,7 +461,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                   return bar++;
                 };
                 ```
-                """.trim();
+                """;
         Assertions.assertEquals(expectedMarkdown, actualMarkdown);
     }
 
