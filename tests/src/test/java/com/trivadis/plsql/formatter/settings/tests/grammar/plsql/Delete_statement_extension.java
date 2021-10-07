@@ -44,7 +44,7 @@ public class Delete_statement_extension extends ConfiguredTestFormatter {
                    loop
                       fetch c1 into my_emp_id, my_job_id, my_sal;
                       if my_job_id = 'SA_REP' then
-                         delete employees 
+                         delete employees
                           where current of c1;
                       end if;
                       exit when c1%notfound;
@@ -74,7 +74,7 @@ public class Delete_statement_extension extends ConfiguredTestFormatter {
         var expected = """
                 begin
                    delete
-                     from employees 
+                     from employees
                     where current of c1;
                 end;
                 /
