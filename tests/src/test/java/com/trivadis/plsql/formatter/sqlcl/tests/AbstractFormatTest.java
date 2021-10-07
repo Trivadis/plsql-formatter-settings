@@ -474,7 +474,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var configFileContent = """
                 [
                     "#TEMP_DIR##FILE_SEP#query.sql",
-                    "#TEMP_DIR##FILE_SEP#markdown.md"
+                    "#TEMP_DIR##FILE_SEP#markdown.md",
+                    "#TEMP_DIR##FILE_SEP#dont_format.txt"
                 ]
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
@@ -494,9 +495,10 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 {
                     "files": [
                         "#TEMP_DIR##FILE_SEP#query.sql",
-                        "#TEMP_DIR##FILE_SEP#markdown.md2"
+                        "#TEMP_DIR##FILE_SEP#markdown.md2",
+                        "#TEMP_DIR##FILE_SEP#dont_format.txt"
                     ],
-                    "mext": ["sql"],
+                    "ext": ["sql"],
                     "mext": ["md2", "md3", "md4"],
                     "xml": "default",
                     "arbori": "default"
@@ -523,8 +525,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_config_file_object_and_param(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                Formatting file 1 of 1: #TEMP_DIR##FILE_SEP#query.sql... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var configFileContent = """
                 {
@@ -538,9 +539,5 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "mext=md2");
         Assertions.assertEquals(expected, actual);
-        // Formatter processed .md2 file as SQL file and throws no error. The file changed only slightly.
-        var processed = getFormattedContent("markdown.md");
-        // Don't assert content since the change depends on the formatter configuration and this would make the test flaky
-        Assertions.assertNotNull(processed);
     }
 }
