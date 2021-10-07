@@ -31,7 +31,7 @@ public class Fetch_statement extends ConfiguredTestFormatter {
                    open c1;
                    loop
                       fetch c1
-                         into v_lastname, 
+                         into v_lastname,
                               v_jobid;
                       exit when c1%notfound;
                    end loop;

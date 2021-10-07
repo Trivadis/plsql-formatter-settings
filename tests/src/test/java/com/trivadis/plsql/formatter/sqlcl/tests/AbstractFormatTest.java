@@ -52,7 +52,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    end to_int_table;
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -69,7 +69,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                        ) v
                  where d.department_name in ('Marketing', 'Operations', 'Public Relations')
                  order by d.department_name, v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
 
@@ -106,7 +106,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    end to_int_table;
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
     }
@@ -151,7 +151,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -171,7 +171,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                               'Public Relations' )
                  order by d.department_name,
                           v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -207,7 +207,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    END to_int_table;
                 END math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -224,7 +224,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                        ) v
                  WHERE d.department_name IN ('Marketing', 'Operations', 'Public Relations')
                  ORDER BY d.department_name, v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -264,7 +264,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                 END math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -289,7 +289,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 ORDER BY
                     d.department_name,
                     v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -334,7 +334,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                 end math;
                 /
-                """.trim();
+                """;
         var actualPackageBody = getFormattedContent("package_body.pkb");
         Assertions.assertEquals(expectedPackageBody, actualPackageBody);
 
@@ -354,7 +354,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                               'Public Relations' )
                  order by d.department_name,
                           v.employee_id;
-                """.trim();
+                """;
         var actualQuery = getFormattedContent("query.sql");
         Assertions.assertEquals(expectedQuery, actualQuery);
     }
@@ -365,7 +365,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assertions.assertTrue(actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
 
         // markdown.md
-        var actualMarkdown = getFormattedContent("markdown.md").trim();
+        var actualMarkdown = getFormattedContent("markdown.md");
         var expectedMarkdown = """
                 # Titel
                                 
@@ -461,7 +461,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                   return bar++;
                 };
                 ```
-                """.trim();
+                """;
         Assertions.assertEquals(expectedMarkdown, actualMarkdown);
     }
 
@@ -474,10 +474,11 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var configFileContent = """
                 [
                     "#TEMP_DIR##FILE_SEP#query.sql",
-                    "#TEMP_DIR##FILE_SEP#markdown.md"
+                    "#TEMP_DIR##FILE_SEP#markdown.md",
+                    "#TEMP_DIR##FILE_SEP#dont_format.txt"
                 ]
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString());
         Assertions.assertEquals(expected, actual);
@@ -489,20 +490,21 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
                 Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md2... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        Files.move(Paths.get(tempDir.toString() + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
+        Files.move(Paths.get(tempDir + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
         var configFileContent = """
                 {
                     "files": [
                         "#TEMP_DIR##FILE_SEP#query.sql",
-                        "#TEMP_DIR##FILE_SEP#markdown.md2"
+                        "#TEMP_DIR##FILE_SEP#markdown.md2",
+                        "#TEMP_DIR##FILE_SEP#dont_format.txt"
                     ],
-                    "mext": ["sql"],
+                    "ext": ["sql"],
                     "mext": ["md2", "md3", "md4"],
                     "xml": "default",
                     "arbori": "default"
                 }
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString());
         Assertions.assertEquals(expected, actual);
@@ -523,8 +525,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_config_file_object_and_param(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                Formatting file 1 of 1: #TEMP_DIR##FILE_SEP#query.sql... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var configFileContent = """
                 {
@@ -534,13 +535,9 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     ]
                 }
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir.toString() + File.separator + "config.json");
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "mext=md2");
         Assertions.assertEquals(expected, actual);
-        // Formatter processed .md2 file as SQL file and throws no error. The file changed only slightly.
-        var processed = getFormattedContent("markdown.md");
-        // Don't assert content since the change depends on the formatter configuration and this would make the test flaky
-        Assertions.assertNotNull(processed);
     }
 }

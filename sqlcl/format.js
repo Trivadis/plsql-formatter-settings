@@ -36,13 +36,30 @@ var getFiles = function (rootPath, extensions) {
         files = javaArrays.asList(javaPaths.get(rootPath));
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath))
-            .filter(function (f) javaFiles.isRegularFile(f)
-                && javaArrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
-            )
-            .sorted()
+            .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions))
+    .sorted()
             .collect(javaCollectors.toList());
     }
     return files;
+}
+
+var isRelevantFile = function (file, extensions) {
+    for (var i in extensions) {
+        if (file.toString().toLowerCase().endsWith(extensions[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+var getRelevantFiles = function (files, extensions) {
+    var relevantFiles = [];
+    for (var i in files) {
+        if (isRelevantFile(files[i], extensions)) {
+            relevantFiles.push(files[i]);
+        }
+    }
+    return relevantFiles;
 }
 
 var configure = function (formatter, xmlPath, arboriPath) {
@@ -125,8 +142,7 @@ var hasParseErrors = function (content, consoleOutput) {
 }
 
 var readFile = function (file) {
-    var content = new javaString(javaFiles.readAllBytes(file));
-    return content;
+    return new javaString(javaFiles.readAllBytes(file));
 }
 
 var writeFile = function (file, content) {
@@ -202,7 +218,7 @@ var processAndValidateArgs = function (args) {
     var arboriPath = null;
     var files = [];
     var result = function (valid) {
-        var result = {
+        return {
             rootPath: rootPath,
             files: files,
             extensions: extensions,
@@ -210,8 +226,7 @@ var processAndValidateArgs = function (args) {
             xmlPath: xmlPath,
             arboriPath: arboriPath,
             valid: valid
-        }
-        return result;
+        };
     }
 
     if (args.length < 2) {
@@ -419,7 +434,7 @@ var formatFile = function (file, formatter) {
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
     } else {
-        writeFile(file, formatter.format(original));
+        writeFile(file, formatter.format(original) + javaSystem.lineSeparator());
         ctx.write("done.\n");
     }
 }
@@ -447,12 +462,13 @@ var run = function (args) {
         if (options.rootPath == "*") {
             formatBuffer(formatter);
         } else {
+            var files;
             if (options.files.length > 0) {
-                formatFiles(options.files, formatter, options.markdownExtensions);
+                files = getRelevantFiles(options.files, options.extensions);
             } else {
-                var files = getFiles(options.rootPath, options.extensions);
-                formatFiles(files, formatter, options.markdownExtensions);
+                files = getFiles(options.rootPath, options.extensions);
             }
+            formatFiles(files, formatter, options.markdownExtensions);
         }
     }
 }

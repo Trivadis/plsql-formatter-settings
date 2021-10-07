@@ -1,30 +1,22 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
-import oracle.dbtools.raptor.newscriptrunner.CommandRegistry;
-import oracle.dbtools.raptor.newscriptrunner.SQLCommand;
-import oracle.dbtools.raptor.newscriptrunner.ScriptExecutor;
-import oracle.dbtools.raptor.newscriptrunner.ScriptRunnerContext;
-import oracle.dbtools.raptor.newscriptrunner.WrapListenBufferOutputStream;
+import oracle.dbtools.raptor.newscriptrunner.*;
 import org.junit.jupiter.api.BeforeEach;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-import javax.script.SimpleScriptContext;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.script.*;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Predicate;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 public abstract class AbstractSqlclTest {
+    static {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+    }
+
     protected final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
     protected final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
     protected final ScriptContext scriptContext = new SimpleScriptContext();
@@ -35,6 +27,16 @@ public abstract class AbstractSqlclTest {
 
     AbstractSqlclTest() {
         reset();
+        loadLoggingConf();
+    }
+
+    private void loadLoggingConf() {
+        var manager = LogManager.getLogManager();
+        try {
+            manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void reset() {
