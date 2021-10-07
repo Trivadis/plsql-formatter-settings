@@ -434,7 +434,7 @@ var formatFile = function (file, formatter) {
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
     } else {
-        writeFile(file, formatter.format(original));
+        writeFile(file, formatter.format(original) + javaSystem.lineSeparator());
         ctx.write("done.\n");
     }
 }
