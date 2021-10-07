@@ -36,13 +36,30 @@ var getFiles = function (rootPath, extensions) {
         files = javaArrays.asList(javaPaths.get(rootPath));
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath))
-            .filter(function (f) javaFiles.isRegularFile(f)
-                && javaArrays.stream(Java.to(extensions, "java.lang.String[]")).anyMatch(function (e) f.toString().toLowerCase().endsWith(e))
-            )
-            .sorted()
+            .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions))
+    .sorted()
             .collect(javaCollectors.toList());
     }
     return files;
+}
+
+var isRelevantFile = function (file, extensions) {
+    for (var i in extensions) {
+        if (file.toString().toLowerCase().endsWith(extensions[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+var getRelevantFiles = function (files, extensions) {
+    var relevantFiles = [];
+    for (var i in files) {
+        if (isRelevantFile(files[i], extensions)) {
+            relevantFiles.push(files[i]);
+        }
+    }
+    return relevantFiles;
 }
 
 var configure = function (formatter, xmlPath, arboriPath) {
@@ -447,12 +464,13 @@ var run = function (args) {
         if (options.rootPath == "*") {
             formatBuffer(formatter);
         } else {
+            var files;
             if (options.files.length > 0) {
-                formatFiles(options.files, formatter, options.markdownExtensions);
+                files = getRelevantFiles(options.files, options.extensions);
             } else {
-                var files = getFiles(options.rootPath, options.extensions);
-                formatFiles(files, formatter, options.markdownExtensions);
+                files = getFiles(options.rootPath, options.extensions);
             }
+            formatFiles(files, formatter, options.markdownExtensions);
         }
     }
 }
