@@ -1257,7 +1257,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
         }
 
         @Test
-        void last_value_order_by() throws IOException {
+        void last_value_order_by() {
             var sql = """
                     select name
                           ,signature
