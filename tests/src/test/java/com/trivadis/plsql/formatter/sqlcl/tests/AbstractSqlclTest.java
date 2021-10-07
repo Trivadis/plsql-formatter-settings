@@ -25,6 +25,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class AbstractSqlclTest {
+    {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+    }
+
     protected final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
     protected final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
     protected final ScriptContext scriptContext = new SimpleScriptContext();
