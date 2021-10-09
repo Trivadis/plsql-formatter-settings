@@ -41,7 +41,7 @@ FORMATTER_JAR="$FORMATTER_GITHUB_DIR/standalone/target/tvdformat.jar"
 # Location of the SQL Developer's settings
 FORMATTER_SQLDEV_SETTINGS_DIR="$FORMATTER_GITHUB_DIR/settings/sql_developer"
 
-# Formatter options beside $JSONFILE
+# Formatter options beside $FORMATTER_SCOPE
 FORMATTER_EXT="sql,prc,fnc,pks,pkb,trg,vw,tps,tpb,tbp,plb,pls,rcv,spc,typ,aqt,aqp,ctx,dbl,tab,dim,snp,con,collt,seq,syn,grt,sp,spb,sps,pck"
 FORMATTER_MEXT="markdown,mdown,mkdn,md"
 FORMATTER_XML="$FORMATTER_SQLDEV_SETTINGS_DIR/trivadis_advanced_format.xml"
@@ -153,12 +153,14 @@ function exit_when_no_staged_files_found() {
 }
 
 function check_if_formatter_can_be_applied() {
-    # Provide information why changes are committed without calling the formatter.
-    # Formatting code is de facto optional. As a result we do not want the pre-commit hook to abort.
-    exit_when_formatter_prerequisites_are_missing
-    exit_when_using_non_default_staging_area
-    exit_when_partially_staged_files_exist
-    exit_when_no_staged_files_found
+    if [[ "$ROOT_PATH" = "" ]]; then
+        # Provide information why changes are committed without calling the formatter.
+        # Formatting code is de facto optional. As a result we do not want the pre-commit hook to abort.
+        exit_when_formatter_prerequisites_are_missing
+        exit_when_using_non_default_staging_area
+        exit_when_partially_staged_files_exist
+        exit_when_no_staged_files_found
+    fi
 }
 
 function create_json_file() {
@@ -185,13 +187,23 @@ function create_json_file() {
         > $JSONFILE
 }
 
+function set_formatter_scope() {
+    if [[ "$ROOT_PATH" != "" ]]; then
+        # To format a file or a directory without calling "git commit". 
+        FORMATTER_SCOPE="$ROOT_PATH"
+    else
+        # Format staged files via "git commit".
+        FORMATTER_SCOPE=$JSONFILE
+    fi 
+}
+
 function format_via_tvdformat_command() {
     if [ "$FORMATTER_SHOW_COMMAND" = true ]; then
         echo "sql $SQLCL_OPTS"
-        echo "tvdformat $JSONFILE $FORMATTER_OPTS"
+        echo "tvdformat $FORMATTER_SCOPE $FORMATTER_OPTS"
     fi
     sql $SQLCL_OPTS <<EOF
-tvdformat $JSONFILE $FORMATTER_OPTS
+tvdformat $FORMATTER_SCOPE $FORMATTER_OPTS
 exit
 EOF
 }
@@ -199,19 +211,19 @@ EOF
 function format_via_format_js() {
     if [ "$FORMATTER_SHOW_COMMAND" = true ]; then
         echo "sql $SQLCL_OPTS"
-        echo "script $FORMATTER_JS $JSONFILE $FORMATTER_OPTS"
+        echo "script $FORMATTER_JS $FORMATTER_SCOPE $FORMATTER_OPTS"
     fi
     sql $SQLCL_OPTS <<EOF
-script $FORMATTER_JS $JSONFILE $FORMATTER_OPTS
+script $FORMATTER_JS $FORMATTER_SCOPE $FORMATTER_OPTS
 exit
 EOF
 }
 
 function format_via_tvdformat_jar() {
     if [ "$FORMATTER_SHOW_COMMAND" = true ]; then
-        echo "java -jar $FORMATTER_JAR $JSONFILE $FORMATTER_OPTS"
+        echo "java -jar $FORMATTER_JAR $FORMATTER_SCOPE $FORMATTER_OPTS"
     fi
-    java -jar $FORMATTER_JAR $JSONFILE $FORMATTER_OPTS
+    java -jar $FORMATTER_JAR $FORMATTER_SCOPE $FORMATTER_OPTS
 }
 
 function format_staged_files_in_workspace() {
@@ -238,11 +250,13 @@ function update_staging_area() {
 }
 
 function abort_on_empty_staging_area() {
-    STAGED_FILES_COUNT=`git diff --cached --name-only | wc -l`
-    if [ "$STAGED_FILES_COUNT" -eq "0" ]; then
-        echo "Info: Aborting commit. No files found in staging area."
-        echo "      This may happen when all changes are eliminated by the formatter."
-        exit 1
+    if [[ "$ROOT_PATH" = "" ]]; then
+        STAGED_FILES_COUNT=`git diff --cached --name-only | wc -l`
+        if [ "$STAGED_FILES_COUNT" -eq "0" ]; then
+            echo "Info: Aborting commit. No files found in staging area."
+            echo "      This may happen when all changes are eliminated by the formatter."
+            exit 1
+        fi
     fi
 }
 
@@ -250,9 +264,11 @@ function abort_on_empty_staging_area() {
 # Main code section - Changes should not be required.
 # -----------------------------------------------------------------------------
 
+ROOT_PATH=$1
 get_staged_files
 check_if_formatter_can_be_applied
 create_json_file
+set_formatter_scope
 format_staged_files_in_workspace
 update_staging_area
 abort_on_empty_staging_area
