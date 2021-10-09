@@ -32,10 +32,10 @@ FORMATTER_VARIANT="2"
 # Used as root directory of known subdirectories and files in the Git respository.
 FORMATTER_GITHUB_DIR="$HOME/github/trivadis/plsql-formatter-settings"
 
-# Location of the `format.js` JavaScript file. Required only for FORMATTER_VARIANT 2.
+# Location of the `format.js` JavaScript file. Required only for $FORMATTER_VARIANT 2.
 FORMATTER_JS="$FORMATTER_GITHUB_DIR/sqlcl/format.js"
 
-# Location of the `tvdformat.jar` JAR. Required only for FORMATTER_VARIANT 3.
+# Location of the `tvdformat.jar` JAR. Required only for $FORMATTER_VARIANT 3.
 FORMATTER_JAR="$FORMATTER_GITHUB_DIR/standalone/target/tvdformat.jar"
 
 # Location of the SQL Developer's settings
@@ -167,7 +167,7 @@ function create_json_file() {
     case $OSTYPE in
         msys*)
             # Git Bash, mount point /tmp is not visible in Java and leads to a file not found error.
-            # Original TMP and TEMP environment variables are overwritten by Git Bash.
+            # Original $TMP and $TEMP environment variables are overwritten by Git Bash.
             TEMPDIR=`mount | grep 'on /tmp' | awk '{print $1}'`
             JSONFILE=${TEMPDIR}/`basename $TEMPFILE`.json
             ;;
