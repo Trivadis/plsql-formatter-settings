@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
-        <sqlcl.version>21.2.2</sqlcl.version>
+        <sqlcl.version>21.3.0</sqlcl.version>
         <graalvm.version>21.2.0</graalvm.version>
     </properties>
     <dependencies>
