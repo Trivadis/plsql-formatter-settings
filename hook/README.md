@@ -208,7 +208,7 @@ SQL Developer has also a Git integration via [JGit](https://www.eclipse.org/jgit
 
 ## Example
 
-See [this GitHub repository](https://github.com/PhilippSalvisberg/plscope-utils) for an example how to integrate the `pre-commit` hook to format PL/SQL and SQL code. This repository uses the [Optimal `tvdformat.jar` Variant](#optimal-tvdformat-jar-variant).
+See [this GitHub repository](https://github.com/PhilippSalvisberg/plscope-utils) for an example how to integrate the `pre-commit` hook to format PL/SQL and SQL code. This repository uses the [Optimal `tvdformat.jar` Variant](#optimal-tvdformatjar-variant).
 
 ## Why `tvdformat.jar`?
 
