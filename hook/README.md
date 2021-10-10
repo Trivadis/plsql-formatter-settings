@@ -20,7 +20,7 @@ See server-side hooks in the chapters [8.3](https://git-scm.com/book/en/v2/Custo
 
 ## How to Install
 
-### Minimal Variant
+### Minimal SQLcl & `format.js` Variant
 
 1. Clone this repository.
 2. Copy the [`pre-commit`](pre-commit) script into the `.git/hooks` directory of your target Git workspace.
@@ -28,7 +28,7 @@ See server-side hooks in the chapters [8.3](https://git-scm.com/book/en/v2/Custo
 
 The minimal installation variant has the advantage that you do not have to change anything in your target directory. The downside is that you are dependent on another locally installed Git repository. And you have not documented the formatter settings used for your target repository.
 
-### Optimal Variant
+### Optimal SQLcl & `format.js` Variant
 
 1. Create a subdirectory `formatter` in the workspace of your target repository
 
@@ -62,7 +62,43 @@ The minimal installation variant has the advantage that you do not have to chang
     - `formatter/install-pre-commit-hook.sh`
 6. Commit the files in the `formatter` subdirectory and push the changes so that others can install the hook with the same formatter configuration.
 
-This installation variant is independent of the `Trivadis/plsql-formatter-settings` Git repository and offers all team members to automatically format their code on `git commit` using the same settings. However, the `pre-commit` script requires the `sql` command (SQLcl) to be found in the PATH.
+This installation variant is independent of the `Trivadis/plsql-formatter-settings` Git repository and offers all team members to automatically format their code on `git commit` using the same settings.
+
+### Optimal `tvdformat.jar` Variant
+
+1. Create a subdirectory `formatter` in the workspace of your target repository
+
+2. Copy the following files into this subdirectory:
+    - [`pre-commit`](pre-commit)
+    - [`settings/sql_developer/trivadis_advanced_format.xml`](../settings/sql_developer/trivadis_advanced_format.xml)
+    - [`settings/sql_developer/trivadis_custom_format.arbori`](../settings/sql_developer/trivadis_custom_format.arbori)
+
+3. Open the `pre-commit` script in your workspace in an editor and change the following environment variables:
+
+    Enivronment Variable | New Value
+    -------------------- | ---------
+    `FORMATTER_JAR` | `"$(dirname $0)/tvdformat.jar"`
+    `FORMATTER_SQLDEV_SETTINGS_DIR` | `"formatter"`
+
+4. Create a file named `install-pre-commit-hook.sh` in the `formatter` directory and save it with the following content:
+
+    ```sh
+    #!/bin/sh
+
+    FORMATTER_DIR="$(dirname $0)"
+    GIT_HOOK_DIR="$FORMATTER_DIR/../.git/hooks"
+    cp $FORMATTER_DIR/pre-commit $GIT_HOOK_DIR/pre-commit
+    chmod +x $GIT_HOOK_DIR/pre-commit
+    curl -o $GIT_HOOK_DIR/tvdformat.jar -L https://github.com/Trivadis/plsql-formatter-settings/releases/download/sqldev-21.2.1/tvdformat.jar
+    echo "pre-commit hook installed in $GIT_HOOK_DIR/pre-commit."
+    ```
+
+5. Open a terminal window (on Windows use `"C:\Program Files\Git\bin\bash.exe" --cd-to-home`), change to the rott directory of your workspace and run the following commands:
+    - `chmod +x formatter/install-pre-commit-hook.sh`
+    - `formatter/install-pre-commit-hook.sh`
+6. Commit the files in the `formatter` subdirectory and push the changes so that others can install the hook with the same formatter configuration.
+
+This installation variant is independent of the `Trivadis/plsql-formatter-settings` Git repository and offers all team members to automatically format their code on `git commit` using the same settings. 
 
 ## How to Test
 
@@ -172,9 +208,13 @@ SQL Developer has also a Git integration via [JGit](https://www.eclipse.org/jgit
 
 ## Example
 
-See [this GitHub repository](https://github.com/PhilippSalvisberg/plscope-utils) for an example how to integrate the `pre-commit` hook to format PL/SQL and SQL code. 
+See [this GitHub repository](https://github.com/PhilippSalvisberg/plscope-utils) for an example how to integrate the `pre-commit` hook to format PL/SQL and SQL code. This repository uses the [Optimal `tvdformat.jar` Variant](#optimal-tvdformat-jar-variant).
 
-The `pre-commit` is configured to use the standalone executable `tvdformat.jar` instead of SQLcl and `format.js`. See [standalone](../standalone) for information how to build `tvdformat.jar`. This approach has the following advantages:
+## Why `tvdformat.jar`?
+
+The [standalone](../standalone) executable `tvdformat.jar` combines the formatter components of SQLcl with `format.js`.
+
+### Advantages
 
 - Performance
 
@@ -218,12 +258,12 @@ The `pre-commit` is configured to use the standalone executable `tvdformat.jar` 
 
       SQLcl requires Java 8 or Java 11. It currently does not work with new Java versions. The standalone `tvdformat.jar` works with any Java version >= 8. Using Java 17 improves the runtime performance further.
 
-There are also disadvantages. For example:
+### Disadvantages
 
-- Binary file in Git
+- Combination of SQLcl and `format.js`
   
-  The `tvdformat.jar` has a size of around 30M. This is nowadays not that large. However, for small repositories this might lead to a major contribution of the overall size.
+  A change of `format.js` or a change of SQL might require to build a new version of `tvdformat.jar`. If the required combination is not provided in [Releases](https://github.com/Trivadis/plsql-formatter-settings/releases) you need to build the standalone executable yourself and make it available for all repository users. When you decide to store it in the Git repository you should consider that the JAR file has a size of around 30M. This is nowadays not that large. However, for small repositories this might lead to a major contribution of the overall size. Especially when the file is updated regularly. 
 
 - Licensing questions
   
-  SQLcl is licensed under the [Oracle Free Use Terms and Conditions license](https://www.oracle.com/downloads/licenses/oracle-free-license.html) since May, 4 2021. See [@gvenzl](https://github.com/gvenzl)'s [blog post](https://blogs.oracle.com/database/post/sqlcl-now-under-the-oracle-free-use-terms-and-conditions-license). Redistribution is allowed under certain conditions. The standalone formatter uses SQLcl as a library like GraalVM's js-scriptengine, which is available on [Maven Central](https://search.maven.org/artifact/org.graalvm.js/js-scriptengine/21.2.0/jar). The use of `tvdformat.jar` raises for sure some additional questions regarding licensing. If you want to avoid that, you should use SQLcl.
+  SQLcl is licensed under the [Oracle Free Use Terms and Conditions license](https://www.oracle.com/downloads/licenses/oracle-free-license.html) since May, 4 2021. See [this blog post](https://blogs.oracle.com/database/post/sqlcl-now-under-the-oracle-free-use-terms-and-conditions-license). Redistribution is allowed under certain conditions. The standalone formatter uses SQLcl as a library like GraalVM's js-scriptengine, which is available on [Maven Central](https://search.maven.org/artifact/org.graalvm.js/js-scriptengine/21.2.0/jar). Using `tvdformat.jar` might raise some questions about licensing. If you want to avoid this, you should use SQLcl.
