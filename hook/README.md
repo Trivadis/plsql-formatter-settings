@@ -34,9 +34,9 @@ The minimal installation variant has the advantage that you do not have to chang
 
 2. Copy the following files into this subdirectory:
     - [`pre-commit`](pre-commit)
-    - [`settings/sql_developer/trivadis_advanced_format.xml`](settings/sql_developer/trivadis_advanced_format.xml)
-    - [`settings/sql_developer/trivadis_custom_format.arbori`](settings/sql_developer/trivadis_custom_format.arbori)
-    - [`sqlcl/format.js`](sqlcl/format.js)
+    - [`settings/sql_developer/trivadis_advanced_format.xml`](../settings/sql_developer/trivadis_advanced_format.xml)
+    - [`settings/sql_developer/trivadis_custom_format.arbori`](../settings/sql_developer/trivadis_custom_format.arbori)
+    - [`sqlcl/format.js`](../sqlcl/format.js)
 
 3. Open the `pre-commit` script in your workspace in an editor and change the following environment variables:
 
@@ -174,7 +174,7 @@ SQL Developer has also a Git integration via [JGit](https://www.eclipse.org/jgit
 
 See [this GitHub repository](https://github.com/PhilippSalvisberg/plscope-utils) for an example how to integrate the `pre-commit` hook to format PL/SQL and SQL code. 
 
-The `pre-commit` is configured to use the standalone executable `tvdformat.jar` instead of SQLcl and `format.js`. See [standalone](plsql-formatter-settings/tree/main/standalone) for information how to build `tvdformat.jar`. This approach has the following advantages:
+The `pre-commit` is configured to use the standalone executable `tvdformat.jar` instead of SQLcl and `format.js`. See [standalone](../standalone) for information how to build `tvdformat.jar`. This approach has the following advantages:
 
 - Performance
 
@@ -218,7 +218,7 @@ The `pre-commit` is configured to use the standalone executable `tvdformat.jar` 
 
       SQLcl requires Java 8 or Java 11. It currently does not work with new Java versions. The standalone `tvdformat.jar` works with any Java version >= 8. Using Java 17 improves the runtime performance further.
 
-There are also disadvantages:
+There are also disadvantages. For example:
 
 - Binary file in Git
   
@@ -226,4 +226,4 @@ There are also disadvantages:
 
 - Licensing questions
   
-  SQLcl is licensed under the [Oracle Free Use Terms and Conditions license](https://www.oracle.com/downloads/licenses/oracle-free-license.html) since May, 4 2021. See @gvenzl's [blog post](https://blogs.oracle.com/database/post/sqlcl-now-under-the-oracle-free-use-terms-and-conditions-license). Redistribution is allowed under certain conditions. The standalone formatter uses SQLcl as a library like GraalVM's js-scriptengine, which is available on [Maven Central](https://search.maven.org/artifact/org.graalvm.js/js-scriptengine/21.2.0/jar). The use of `tvdformat.jar` raises for sure some additional questions regarding licensing. If you want to avoid that, you should use SQLcl.
+  SQLcl is licensed under the [Oracle Free Use Terms and Conditions license](https://www.oracle.com/downloads/licenses/oracle-free-license.html) since May, 4 2021. See [@gvenzl](https://github.com/gvenzl)'s [blog post](https://blogs.oracle.com/database/post/sqlcl-now-under-the-oracle-free-use-terms-and-conditions-license). Redistribution is allowed under certain conditions. The standalone formatter uses SQLcl as a library like GraalVM's js-scriptengine, which is available on [Maven Central](https://search.maven.org/artifact/org.graalvm.js/js-scriptengine/21.2.0/jar). The use of `tvdformat.jar` raises for sure some additional questions regarding licensing. If you want to avoid that, you should use SQLcl.
