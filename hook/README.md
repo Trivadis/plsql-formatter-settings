@@ -57,7 +57,7 @@ The minimal installation variant has the advantage that you do not have to chang
     echo "pre-commit hook installed in $GIT_HOOK_DIR/pre-commit."
     ```
 
-5. Open a terminal window (on Windows use `"C:\Program Files\Git\bin\bash.exe" --cd-to-home`), change to the rott directory of your workspace and run the following commands:
+5. Open a terminal window (on Windows use `"C:\Program Files\Git\bin\bash.exe" --cd-to-home`), change to the root directory of your workspace and run the following commands:
     - `chmod +x formatter/install-pre-commit-hook.sh`
     - `formatter/install-pre-commit-hook.sh`
 6. Commit the files in the `formatter` subdirectory and push the changes so that others can install the hook with the same formatter configuration.
@@ -93,7 +93,7 @@ This installation variant is independent of the `Trivadis/plsql-formatter-settin
     echo "pre-commit hook installed in $GIT_HOOK_DIR/pre-commit."
     ```
 
-5. Open a terminal window (on Windows use `"C:\Program Files\Git\bin\bash.exe" --cd-to-home`), change to the rott directory of your workspace and run the following commands:
+5. Open a terminal window (on Windows use `"C:\Program Files\Git\bin\bash.exe" --cd-to-home`), change to the root directory of your workspace and run the following commands:
     - `chmod +x formatter/install-pre-commit-hook.sh`
     - `formatter/install-pre-commit-hook.sh`
 6. Commit the files in the `formatter` subdirectory and push the changes so that others can install the hook with the same formatter configuration.
