@@ -262,7 +262,7 @@ The [standalone](../standalone) executable `tvdformat.jar` combines the formatte
 
 - Combination of SQLcl and `format.js`
   
-  A change of `format.js` or a change of SQL might require to build a new version of `tvdformat.jar`. If the required combination is not provided in [Releases](https://github.com/Trivadis/plsql-formatter-settings/releases) you need to build the standalone executable yourself and make it available for all repository users. When you decide to store it in the Git repository you should consider that the JAR file has a size of around 30M. This is nowadays not that large. However, for small repositories this might lead to a major contribution of the overall size. Especially when the file is updated regularly. 
+  A change of `format.js` or SQLcl might require to build a new version of `tvdformat.jar`. If the required combination is not provided in [Releases](https://github.com/Trivadis/plsql-formatter-settings/releases) you need to build the standalone executable yourself and make it available for all repository users. When you decide to store it in the Git repository you should consider that the JAR file has a size of around 30M. This is nowadays not that large. However, for small repositories this might lead to a major contribution of the overall size. Especially when the file is updated regularly. 
 
 - Licensing questions
   
