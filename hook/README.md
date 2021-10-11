@@ -233,7 +233,7 @@ The [standalone](../standalone) executable `tvdformat.jar` combines the formatte
     
       Test results calling `pre-commit` script for all files in the example repository, fastest of three runs, no login.sql, Java 11, 56 files:
 
-      Variant | Startup time [s] | Percentage
+      Variant | Runtime [s] | Percentage
       ------- | ---------------- | ----------
       SQLcl | 72.680 | 100
       `tvdformat.jar` | 25.341 | 35
