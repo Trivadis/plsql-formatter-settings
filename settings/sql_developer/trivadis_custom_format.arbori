@@ -3932,10 +3932,10 @@ a18_indent_comment:
         return false;
     }
 
-    // Fixes the issue in SQLDev 20.4.1 and SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
-    // See https(colon)//community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
-    // It is expected that this function can be removed when this bug is fixed.
-    // Still required in SQLDev 21.2.0 and SQLcl 21.2.0 (otherwise some R5 test cases fail).
+    //-- Fixes the issue in SQLDev 20.4.1 and SQLcl 21.1.0 where the indent after a multiline comment cannot be changed.
+    //-- See https://community.oracle.com/tech/developers/discussion/4482624/sqldev-20-4-1-formatter-issues-after-multi-line-comment-bug
+    //-- It is expected that this function can be removed when this bug is fixed.
+    //-- Still required in SQLDev 21.2.1 and SQLcl 21.3.0 (otherwise two R5_commas test cases fail).
     var fixIndentAfterMultiLineComment = function(pos) {
         var parserPos = pos - hiddenTokenCount + 1;
         var indent = getIndent(parserPos);
