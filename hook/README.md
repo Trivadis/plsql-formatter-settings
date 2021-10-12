@@ -77,6 +77,7 @@ This installation variant is independent of the `Trivadis/plsql-formatter-settin
 
     Enivronment Variable | New Value
     -------------------- | ---------
+    `FORMATTER_VARIANT` | `"3"`
     `FORMATTER_JAR` | `"$(dirname $0)/tvdformat.jar"`
     `FORMATTER_SQLDEV_SETTINGS_DIR` | `"formatter"`
 
