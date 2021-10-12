@@ -2956,7 +2956,7 @@ r2_fix_indent_for_subquery_in_paren:
 -- Right align keywords with primary keyword of a SQL command.
 -- For the select statement the primary keyword is "select", even if it starts with the "with" keyword.
 -- Only one keyword is right aligned. E.g. "group" without the "by".
--- The right margin is reduced if the keyword is longer than the primary keyword (e.g. "distinct" in for select statement).
+-- The right margin is reduced if the keyword is longer than the primary keyword (e.g. "distinct" in select statement).
 -- This behavior is consistent with the reduction of the right margin for leading commas.
 -- Right alignment for longer keywords requires a the left margin that is large enough.
 
@@ -3768,7 +3768,7 @@ o5_align_aliases:
 -- This piece of code addresses this issue. It adds a new line with the indentation of the current line.
 -- No additional indentation is added to make this work for long argument lists as well
 -- (indentation might not be reduced on subsequent formatter calls).
--- It iss important to note that the lines may be a bit longer than the configured max char line width.
+-- It is important to note that the lines may be a bit longer than the configured max char line width.
 -- That's expected and matches the SQLDev logic. It ensures also that corner cases can be handled by
 -- this code (e.g. string tokens > max char line width).
 -- Due to this simple algorithm, it is expected that a subsequent formatter call will produce a different result.
