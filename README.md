@@ -11,8 +11,6 @@ Settings are primarily provided for
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
-The grammar and formatter classes in SQLcl 21.3.0 and SQLDev 21.2.1 are different. However, the formatter settings are supposed to be compatible.
-
 See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) for settings supporting older versions.
 
 ## Deviating Settings
@@ -47,13 +45,50 @@ See [sqlcl/README.md](sqlcl/README.md).
 10. Press `Open`
 11. Press `OK` to save the settings
 
-## Arbori
+### Git `pre-commit` Hook
+
+See [hook/README.md](hook/README.md).
+
+## Nice to Know
+
+### Lightweight Formatter
+
+The Arbori program implements a [lightweight formatter](https://www.salvis.com/blog/2021/07/18/lightweight-formatter-for-pl-sql-sql/) which accepts different coding styles. If you need a heavyweight formatter to enforce the conformity of your code, you will need to use the default Arbori program provided by the SQL Developer team. 
+
+In any case, you can use our SQLcl JavaScript [`format.js`](sqlcl/README.md), the [standalone formatter](standalone/README.md) or the [Git `pre-commit` hook](hook/README.md) to format your code.
+
+### Disable Formatter
+
+The formatter is enabled by default. You can disable the formatter with a single-line or multi-line comment containing `@formatter:off`. From that point on, whitespace are kept as is. To re-enable the formatter use `@formatter:on`. 
+
+Supported Marker Comment | Action | Origin 
+-- | -- | --
+`@formatter:off` | Disables formatter | Eclipse IDE
+`@formatter:on` | Enables formatter | Eclipse IDE
+`noformat start` | Disables formatter | PL/SQL Developer
+`noformat end` | Enables formatter | PL/SQL Developer
+
+The marker commands are case sensitive.
+
+Here's an example showing the code after calling the formatter:
+
+```sql
+-- @formatter:off
+select decode(dummy, 'X', 1 
+                   , 'Y', 2
+                   , 'Z', 3
+                        , 0) /* @formatter:on */
+  from dual;
+```
+
+### Arbori
 
 SQL Developer uses its own parse tree query language called Arbori for its advanced formatter configuration. Here is some additional information that might be useful if you plan to tweak the behavior of the formatter yourself.
 
-### Links
+#### Links
 
 - [Formatting Code With SQL Developer](https://www.salvis.com/blog/2020/04/13/formatting-code-with-sql-developer/)
+- [Formatter Callback Functions](https://www.salvis.com/blog/2020/11/12/formatter-callback-functions/)
 - [SQL Developer 20.4 User Guide, Code Editor: Format](https://docs.oracle.com/en/database/oracle/sql-developer/20.4/rptug/sql-developer-concepts-usage.html#GUID-9421DA6E-A48A-427B-88C9-4414D83EC9D1__GUID-64BE7F6C-37D1-4D21-96A5-E9A19C7D3543)
 - [Arbori Starter Manual](https://vadimtropashko.files.wordpress.com/2017/02/arbori-starter-manual.pdf)
 - [Semantic Analysis with Arbori](https://vadimtropashko.files.wordpress.com/2019/11/arbori.pdf)
@@ -66,7 +101,7 @@ SQL Developer uses its own parse tree query language called Arbori for its advan
 
 Thank you, Vadim Tropashko for providing this valuable information.
 
-### JavaScript Global Variables
+#### JavaScript Global Variables
 
 To get the most out of the dynamic JavaScript actions from an Arbori program, you should know the following global variables and their corresponding Java class. 
 
@@ -77,7 +112,7 @@ Variable | Type                                             | JAR File
 `tuple`  | HashMap<String, oracle.dbtools.parser.ParseNode> | dbtools-common.jar
 `logger` | oracle.dbtools.util.Logger                       | dbtools-common.jar
 
-## Settings for other Products
+### Settings for other Products
 
 Formatter settings are also provided for the following products:
 
