@@ -103,7 +103,7 @@ include "std.arbori"
 
 -- ":indentCondtions" must be used,
 -- otherwise the Arbori program will be considered invalid and the default is used.
--- The Arbori query "dummy" never called, hence it does not matter what node is selected.
+-- The Arbori query "dummy" is never called, hence it does not matter what node is selected.
 -- However, I chose to use "identifier" to avoid an Arbori warning.
 dummy:
     :indentConditions & [node) identifier
@@ -151,7 +151,7 @@ startCustomFormat:
 -- Callback function to ensure numeric literals are formatted correctly (without whitespaces)
 dontFormatNode:
       [node) numeric_literal
-    | [node) path             -- expected in in SQL*Plus, SQLcl commands only
+    | [node) path             -- expected in SQL*Plus, SQLcl commands only
 ->
 ;
 
