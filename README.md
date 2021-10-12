@@ -68,7 +68,7 @@ Supported Marker Comment | Action | Origin
 `noformat start` | Disables formatter | PL/SQL Developer
 `noformat end` | Enables formatter | PL/SQL Developer
 
-The marker commands are case sensitive.
+The marker comments are case sensitive.
 
 Here's an example showing the code after calling the formatter:
 
