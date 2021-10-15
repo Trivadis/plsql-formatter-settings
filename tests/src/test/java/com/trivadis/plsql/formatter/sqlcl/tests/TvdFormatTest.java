@@ -92,4 +92,9 @@ public class TvdFormatTest extends AbstractFormatTest {
     public void process_config_file_object_and_param() throws IOException {
         process_config_file_object_and_param(RunType.TvdFormatCommand);
     }
+
+    @Test
+    public void process_config_dir_array() throws IOException {
+        process_config_dir_array(RunType.TvdFormatCommand);
+    }
 }

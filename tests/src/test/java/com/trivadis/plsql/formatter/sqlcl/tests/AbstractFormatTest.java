@@ -540,4 +540,29 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var actual = run(runType, configFile.toString(), "mext=md2");
         Assertions.assertEquals(expected, actual);
     }
+
+    public void process_config_dir_array(final RunType runType) throws IOException {
+        var expected = """
+                                
+                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+
+
+                   for r in /*(*/ select x.* from x join y on y.a = x.a)
+                            ^^^                                         \s
+                                                                                     
+                Expected: expr#,simple_expression,name_wo_function_call,iden... skipped.
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        var configFileContent = """
+                [
+                    "#TEMP_DIR#"
+                ]
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
+        Files.write(configFile, configFileContent.getBytes());
+        var actual = run(runType, configFile.toString());
+        Assertions.assertEquals(expected, actual);
+    }
 }

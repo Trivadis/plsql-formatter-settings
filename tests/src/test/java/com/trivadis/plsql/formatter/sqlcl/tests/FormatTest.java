@@ -55,4 +55,9 @@ public class FormatTest extends AbstractFormatTest {
     public void process_config_file_object_and_param() throws IOException {
         process_config_file_object_and_param(RunType.FormatJS);
     }
+
+    @Test
+    public void process_config_dir_array() throws IOException {
+        process_config_dir_array(RunType.FormatJS);
+    }
 }
