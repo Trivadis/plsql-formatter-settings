@@ -37,7 +37,7 @@ var getFiles = function (rootPath, extensions) {
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath))
             .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions))
-		    .sorted()
+            .sorted()
             .collect(javaCollectors.toList());
     }
     return files;
