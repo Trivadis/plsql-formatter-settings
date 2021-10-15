@@ -37,7 +37,7 @@ var getFiles = function (rootPath, extensions) {
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath))
             .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions))
-    .sorted()
+            .sorted()
             .collect(javaCollectors.toList());
     }
     return files;
@@ -55,7 +55,9 @@ var isRelevantFile = function (file, extensions) {
 var getRelevantFiles = function (files, extensions) {
     var relevantFiles = [];
     for (var i in files) {
-        if (isRelevantFile(files[i], extensions)) {
+        if (existsDirectory(files[i])) {
+            relevantFiles.push.apply(relevantFiles, getFiles(files[i], extensions));
+        } else if (isRelevantFile(files[i], extensions)) {
             relevantFiles.push(files[i]);
         }
     }
