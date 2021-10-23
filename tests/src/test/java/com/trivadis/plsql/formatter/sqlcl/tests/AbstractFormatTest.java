@@ -565,4 +565,41 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var actual = run(runType, configFile.toString());
         Assertions.assertEquals(expected, actual);
     }
+
+    public void process_sql_txt_default(final RunType runType) throws IOException {
+        var expected = """
+                            
+                """.toString();
+        final Path file = Paths.get(tempDir.toString() + File.separator + "sql.txt");
+        var actual = run(runType, file.toString());
+        Assertions.assertEquals(expected, actual);
+
+        var expectedContent = """
+                select
+                *
+                from
+                dual
+                ;
+                """.toString();
+        var actualContent = getFormattedContent("sql.txt");
+        Assertions.assertEquals(expectedContent, actualContent);
+    }
+
+    public void process_sql_txt_force(final RunType runType) throws IOException {
+        var expected = """
+                
+                Formatting file 1 of 1: #TEMP_DIR##FILE_SEP#sql.txt... done.
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        final Path file = Paths.get(tempDir.toString() + File.separator + "sql.txt");
+        var actual = run(runType, file.toString(), "ext=txt");
+        Assertions.assertEquals(expected, actual);
+
+        var expectedContent = """
+                select *
+                  from dual;
+                """.toString();
+        var actualContent = getFormattedContent("sql.txt");
+        Assertions.assertEquals(expectedContent, actualContent);
+    }
+
 }

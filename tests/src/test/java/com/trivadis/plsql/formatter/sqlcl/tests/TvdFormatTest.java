@@ -97,4 +97,14 @@ public class TvdFormatTest extends AbstractFormatTest {
     public void process_config_dir_array() throws IOException {
         process_config_dir_array(RunType.TvdFormatCommand);
     }
+
+    @Test
+    public void process_sql_txt_default() throws IOException {
+        process_sql_txt_default(RunType.TvdFormatCommand);
+    }
+
+    @Test
+    public void process_sql_txt_force() throws IOException {
+        process_sql_txt_force(RunType.TvdFormatCommand);
+    }
 }
