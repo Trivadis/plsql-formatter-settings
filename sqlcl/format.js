@@ -33,7 +33,11 @@ var javaSystem = Java.type("java.lang.System");
 var getFiles = function (rootPath, extensions) {
     var files;
     if (existsFile(rootPath)) {
-        files = javaArrays.asList(javaPaths.get(rootPath));
+        if (isRelevantFile(rootPath, extensions)) {
+            files = javaArrays.asList(javaPaths.get(rootPath));
+        } else {
+            files = [];
+        }
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath))
             .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions))

@@ -60,4 +60,14 @@ public class FormatTest extends AbstractFormatTest {
     public void process_config_dir_array() throws IOException {
         process_config_dir_array(RunType.FormatJS);
     }
+
+    @Test
+    public void process_sql_txt_default() throws IOException {
+        process_sql_txt_default(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_sql_txt_force() throws IOException {
+        process_sql_txt_force(RunType.FormatJS);
+    }
 }
