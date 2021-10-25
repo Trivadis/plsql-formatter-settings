@@ -2715,6 +2715,7 @@ r2_decrement_left_margin:
     | [node) 'JSON_TABLE' & [node^) json_table
     | [node) 'COLUMNS' & [node^) JSON_columns_clause
     | [node+1) '(' & [node^) XML_attributes_clause
+    | [node) function_expression & [node+1) '.'
 -> {
     addMargin(tuple.get("node"), -1 * indentSpaces, "r2_decrement_left_margin");
 }
