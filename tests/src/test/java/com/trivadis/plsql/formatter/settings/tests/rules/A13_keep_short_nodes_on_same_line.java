@@ -91,4 +91,27 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
                 """;
         formatAndAssert(sql);
     }
+
+    @Test
+    public void null_expression() throws IOException {
+        var input = """
+                select
+                *
+                from
+                dual
+                where
+                dummy
+                is
+                not
+                null
+                ;
+                """;
+        var expected = """
+                select *
+                  from dual
+                 where dummy is not null;
+                """;
+        var actual = formatter.format(input);
+        assertEquals(expected, actual);
+    }
 }
