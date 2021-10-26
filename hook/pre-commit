@@ -55,14 +55,43 @@ SQLCL_OPTS="-nolog -noupdates -S"
 # Show formatter command before execution? true/false.
 FORMATTER_SHOW_COMMAND=true
 
+# Git pre-commit formatter staged files filter :
+#    1) No filter
+#    2) Grep including filter : includes only the files that match the grep filter
+#    3) Grep excluding filter : excludes all the files that match the grep filter
+STAGED_FILES_FILTERING_MODE="3"
+
+# Grep filter for staged files, compatible with regular expressions
+# /!\ Unused if filtering mode 1 is selected
+# ex : the following expression allows you to exclude / include the files ending with "_sqlplus.sql" or files from the "archives/" directory directly under root or files from any "scripts/" subdirectory
+#STAGED_FILES_GREP_FILTER_EXPRESSION="_sqlplus.sql$\|^archives/\|/scripts/"
+STAGED_FILES_GREP_FILTER_EXPRESSION=""
+
 # -----------------------------------------------------------------------------
 # Subroutines code section - Changes should not be required.
 # -----------------------------------------------------------------------------
 
 function get_staged_files() {
-    # Only added (A) and modified (M) files need to be formatted.
-    # Only configured file extensions will be formatted, hence no need to apply additional filters.
-    STAGED_FILES=`git diff --cached --name-only --diff-filter=AM`
+    
+	# if the filter is empty, we default to mode "1 : No filter" anyway
+	if [ -z "$STAGED_FILES_GREP_FILTER_EXPRESSION" ]; then
+		STAGED_FILES_FILTERING_MODE="1"
+	fi
+	
+	# Only added (A) and modified (M) files need to be formatted.
+    # Only configured file extensions will be formatted, hence no need to apply additional file filters related to extensions.
+	# You may want to include / exclude some entire directories or others said files based on a regular expression
+    case $STAGED_FILES_FILTERING_MODE in
+        "1") 
+			STAGED_FILES=`git diff --cached --name-only --diff-filter=AM`
+            ;;
+        "2")
+			STAGED_FILES=`git diff --cached --name-only --diff-filter=AM | grep $STAGED_FILES_GREP_FILTER_EXPRESSION`
+            ;;
+        "3")
+			STAGED_FILES=`git diff --cached --name-only --diff-filter=AM | grep -v $STAGED_FILES_GREP_FILTER_EXPRESSION`
+            ;;
+    esac
 }
 
 function exit_when_sqlcl_not_found() {
