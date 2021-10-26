@@ -988,6 +988,7 @@ a13_nodes:
     | [node) excptn_handler
     | [node) pragma
     | [node) iterator_control_list
+    | [node) null_condition
 ;
 
 a13_calls_with_assoc_args:
