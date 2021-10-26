@@ -59,7 +59,7 @@ FORMATTER_SHOW_COMMAND=true
 #    1) No filter
 #    2) Grep including filter : includes only the files that match the grep filter
 #    3) Grep excluding filter : excludes all the files that match the grep filter
-STAGED_FILES_FILTERING_MODE="3"
+STAGED_FILES_FILTERING_MODE="1"
 
 # Grep filter for staged files, compatible with regular expressions
 # /!\ Unused if filtering mode 1 is selected
