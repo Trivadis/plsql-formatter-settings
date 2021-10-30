@@ -341,13 +341,6 @@ var processAndValidateArgs = function (args) {
         }
         if (args[i].toLowerCase().startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
-            if (!"default".equals(arboriPath)) {
-                arboriPath = getCdPath(arboriPath);
-                if (!existsFile(getCdPath(arboriPath))) {
-                    ctx.write("file " + arboriPath + " does not exist.\n\n");
-                    return result(false);
-                }
-            }
             continue;
         }
         ctx.write("invalid argument " + args[i] + ".\n\n");
@@ -384,6 +377,15 @@ var processAndValidateArgs = function (args) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
             arboriPath = "default";
         }
+    } else {
+        if (!"default".equals(arboriPath)) {
+            arboriPath = getCdPath(arboriPath);
+            if (!existsFile(arboriPath)) {
+                ctx.write("Arbori file " + arboriPath + " does not exist.\n\n");
+                return result(false);
+            }
+        }
+    }
     }
     return result(true);
 }
