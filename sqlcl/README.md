@@ -102,3 +102,20 @@ Here's an example configuration file:
   ]
 }
 ```
+
+## Using an Ignore File
+
+With the `ignore` parameter you can define a file containing with file name patterns to be ignored. Here's an example of an ignore file content:
+
+```
+# ignore all files under an "archive" subdirectory
+**/archive/**
+
+              
+# ignore files containing "test" in the file name
+**/*test*
+```
+
+[Glob](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-) patterns are applied on the complete file including the directory name. All patterns are supported except subpatterns (`{}`).
+
+Please note that defining file name patterns such as `*.?` will not work because they do not match the directory name of the file. Use `**/*.?` instead.
