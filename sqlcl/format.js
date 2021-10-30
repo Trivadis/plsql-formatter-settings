@@ -337,13 +337,6 @@ var processAndValidateArgs = function (args) {
         }
         if (args[i].toLowerCase().startsWith("xml=")) {
             xmlPath = args[i].substring(4);
-            if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
-                xmlPath = getCdPath(xmlPath);
-                if (!existsFile(xmlPath)) {
-                    ctx.write("file " + xmlPath + " does not exist.\n\n");
-                    return result(false);
-                }
-            }
             continue;
         }
         if (args[i].toLowerCase().startsWith("arbori=")) {
@@ -375,6 +368,14 @@ var processAndValidateArgs = function (args) {
         if (!existsFile(xmlPath)) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
             xmlPath = "embedded";
+        }
+    } else {
+        if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
+            xmlPath = getCdPath(xmlPath);
+            if (!existsFile(xmlPath)) {
+                ctx.write("XML file " + xmlPath + " does not exist.\n\n");
+                return result(false);
+            }
         }
     }
     if (arboriPath == null) {
