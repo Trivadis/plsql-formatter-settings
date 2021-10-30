@@ -126,6 +126,7 @@ skipWhiteSpaceBeforeNode:
 -- - I3: Do not format nodes.
 -- - I4: Identifiers.
 -- - I5: Globals.
+-- - I10: Determine and normalize line separators.
 -- - I6: Remove duplicate empty lines.
 -- - I7: Keep existing whitespace.
 -- - I8: Save indentations of parser node positions in first selection directive.
@@ -580,6 +581,49 @@ define_global_functions:
         }
         return result;
     }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I10: Determine and normalize line separators.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Determine global variable theLineSeparator based on input as follows:
+--    - if a CRLF is found, then use CRLF
+--    - if a LF is found then use LF
+--    - if neither a CRLF nor a LF is used (single line) then use the default, OS specific System.lineSeparator()
+-- Ensure that only theLineSeparator is used in the input.
+-- This section might change the target.input and requires a reparse.
+-- However, the reparse is done in the next section I6, which can handle an amended target.input.
+-- This way the overhead of determining and normalizing line separators can be minimized.
+
+i10_determine_and_normalize_line_separators:
+    runOnce
+-> {
+    var getLineSeparator = function() {
+        var lineSep;
+        if (target.input.indexOf("\r\n") != -1) {
+            lineSep = "\r\n";
+            logger.fine(struct.getClass(), "i10_determine_and_normalize_line_separators: using CRLF.");
+        } else if (target.input.indexOf("\n") != -1) {
+            lineSep = "\n";
+            logger.fine(struct.getClass(), "i10_determine_and_normalize_line_separators: using LF.");
+        } else {
+            lineSep = System.lineSeparator();
+            logger.fine(struct.getClass(), "i10_determine_and_normalize_line_separators: using the OS default.");
+        }
+        return lineSep;
+    }
+
+    var normalizeLineSeparators = function() {
+        target.input = target.input.replaceAll("\r", "");
+        if (theLineSeparator == "\r\n") {
+            target.input = target.input.replaceAll("\n", "\r\n");
+        }
+        logger.fine(struct.getClass(), "i10_determine_and_normalize_line_separators: normalized.");
+    }
+
+    var theLineSeparator = getLineSeparator();
+    normalizeLineSeparators();
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
