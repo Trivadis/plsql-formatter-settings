@@ -21,6 +21,7 @@ var javaArrays = Java.type("java.util.Arrays");
 var javaPaths = Java.type("java.nio.file.Paths");
 var javaFile = Java.type("java.io.File");
 var javaFiles = Java.type("java.nio.file.Files");
+var javaFileSystems = Java.type("java.nio.file.FileSystems");
 var javaCollectors = Java.type("java.util.stream.Collectors");
 var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
 var javaPattern = Java.type("java.util.regex.Pattern");
@@ -30,24 +31,29 @@ var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
 var javaSystem = Java.type("java.lang.System");
 
-var getFiles = function (rootPath, extensions) {
+var getFiles = function (rootPath, extensions, ignoreMatcher) {
     var files;
     if (existsFile(rootPath)) {
-        if (isRelevantFile(rootPath, extensions)) {
+        if (isRelevantFile(rootPath, extensions, ignoreMatcher)) {
             files = javaArrays.asList(javaPaths.get(rootPath));
         } else {
             files = [];
         }
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath))
-            .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions))
+            .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions, ignoreMatcher))
             .sorted()
             .collect(javaCollectors.toList());
     }
     return files;
 }
 
-var isRelevantFile = function (file, extensions) {
+var isRelevantFile = function (file, extensions, ignoreMatcher) {
+    if (ignoreMatcher != null) {
+        if (ignoreMatcher.matches(file)) {
+            return false;
+        }
+    }
     for (var i in extensions) {
         if (file.toString().toLowerCase().endsWith(extensions[i])) {
             return true;
@@ -56,12 +62,12 @@ var isRelevantFile = function (file, extensions) {
     return false;
 }
 
-var getRelevantFiles = function (files, extensions) {
+var getRelevantFiles = function (files, extensions, ignoreMatcher) {
     var relevantFiles = [];
     for (var i in files) {
         if (existsDirectory(files[i])) {
-            relevantFiles.push.apply(relevantFiles, getFiles(files[i], extensions));
-        } else if (isRelevantFile(files[i], extensions)) {
+            relevantFiles.push.apply(relevantFiles, getFiles(files[i], extensions, ignoreMatcher));
+        } else if (isRelevantFile(files[i], extensions, ignoreMatcher)) {
             relevantFiles.push(files[i]);
         }
     }
@@ -188,7 +194,10 @@ var printUsage = function (asCommand, standalone) {
     ctx.write("                  xml=default uses default advanced settings included in sqlcl\n");
     ctx.write("                  xml=embedded uses advanced settings defined in format.js\n");
     ctx.write("  arbori=<file>   path to the file containing the Arbori program for custom format settings\n");
-    ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n\n");
+    ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n");
+    ctx.write("  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined\n");
+    ctx.write("                  per line. Each line represent a glob pattern. Empty lines and lines starting\n");
+    ctx.write("                  with a hash sign (#) are ignored.\n\n");
 }
 
 var getJsPath = function () {
@@ -214,6 +223,22 @@ var getCdPath = function (path) {
     }
 }
 
+var createIgnoreMatcher = function (ignorePath) {
+    var globPattern = "glob:{"
+    var lines = javaFiles.readAllLines(javaPaths.get(ignorePath));
+    for (var i=0; i < lines.size(); i++) {
+        var line = lines[i].trim();
+        if (line.length > 0 && !line.startsWith('#')) {
+            if (globPattern.length > 6) {
+                globPattern += ",";
+            }
+            globPattern += line
+        }
+    }
+    globPattern += "}";
+    return javaFileSystems.getDefault().getPathMatcher(globPattern);
+}
+
 var processAndValidateArgs = function (args) {
     var rootPath = null;
     var extArgFound = false;
@@ -222,6 +247,8 @@ var processAndValidateArgs = function (args) {
     var markdownExtensions = [];
     var xmlPath = null;
     var arboriPath = null;
+    var ignorePath = null;
+    var ignoreMatcher = null;
     var files = [];
     var result = function (valid) {
         return {
@@ -231,6 +258,7 @@ var processAndValidateArgs = function (args) {
             markdownExtensions: markdownExtensions,
             xmlPath: xmlPath,
             arboriPath: arboriPath,
+            ignoreMatcher: ignoreMatcher,
             valid: valid
         };
     }
@@ -287,6 +315,9 @@ var processAndValidateArgs = function (args) {
             if (typeof configJson.arbori !== 'undefined') {
                 arboriPath = configJson.arbori;
             }
+            if (typeof configJson.ignore !== 'undefined') {
+                ignorePath = configJson.ignore;
+            }
             if (typeof configJson.files !== 'undefined') {
                 if (!Array.isArray(configJson.files)) {
                     ctx.write("files in " + rootPath + " is not an array.\n\n");
@@ -337,24 +368,14 @@ var processAndValidateArgs = function (args) {
         }
         if (args[i].toLowerCase().startsWith("xml=")) {
             xmlPath = args[i].substring(4);
-            if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
-                xmlPath = getCdPath(xmlPath);
-                if (!existsFile(xmlPath)) {
-                    ctx.write("file " + xmlPath + " does not exist.\n\n");
-                    return result(false);
-                }
-            }
             continue;
         }
         if (args[i].toLowerCase().startsWith("arbori=")) {
             arboriPath = args[i].substring(7);
-            if (!"default".equals(arboriPath)) {
-                arboriPath = getCdPath(arboriPath);
-                if (!existsFile(getCdPath(arboriPath))) {
-                    ctx.write("file " + arboriPath + " does not exist.\n\n");
-                    return result(false);
-                }
-            }
+            continue;
+        }
+        if (args[i].toLowerCase().startsWith("ignore=")) {
+            ignorePath = args[i].substring(7);
             continue;
         }
         ctx.write("invalid argument " + args[i] + ".\n\n");
@@ -376,6 +397,14 @@ var processAndValidateArgs = function (args) {
             ctx.write('Warning: ' + xmlPath + ' not found, using "embedded" instead.\n\n');
             xmlPath = "embedded";
         }
+    } else {
+        if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
+            xmlPath = getCdPath(xmlPath);
+            if (!existsFile(xmlPath)) {
+                ctx.write("XML file " + xmlPath + " does not exist.\n\n");
+                return result(false);
+            }
+        }
     }
     if (arboriPath == null) {
         arboriPath = getJsPath() + "../settings/sql_developer/trivadis_custom_format.arbori"
@@ -383,6 +412,22 @@ var processAndValidateArgs = function (args) {
             ctx.write('Warning: ' + arboriPath + ' not found, using "default" instead.\n\n');
             arboriPath = "default";
         }
+    } else {
+        if (!"default".equals(arboriPath)) {
+            arboriPath = getCdPath(arboriPath);
+            if (!existsFile(arboriPath)) {
+                ctx.write("Arbori file " + arboriPath + " does not exist.\n\n");
+                return result(false);
+            }
+        }
+    }
+    if (ignorePath != null) {
+        ignorePath = getCdPath(ignorePath);
+        if (!existsFile(ignorePath)) {
+            ctx.write("Ignore file " + ignorePath + " does not exist.\n\n");
+            return result(false);
+        }
+        ignoreMatcher = createIgnoreMatcher(ignorePath);
     }
     return result(true);
 }
@@ -470,9 +515,9 @@ var run = function (args) {
         } else {
             var files;
             if (options.files.length > 0) {
-                files = getRelevantFiles(options.files, options.extensions);
+                files = getRelevantFiles(options.files, options.extensions, options.ignoreMatcher);
             } else {
-                files = getFiles(options.rootPath, options.extensions);
+                files = getFiles(options.rootPath, options.extensions, options.ignoreMatcher);
             }
             formatFiles(files, formatter, options.markdownExtensions);
         }

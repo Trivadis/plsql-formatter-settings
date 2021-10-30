@@ -44,6 +44,9 @@ options:
                   xml=embedded uses advanced settings defined in format.js
   arbori=<file>   path to the file containing the Arbori program for custom format settings
                   arbori=default uses default Arbori program included in sqlcl
+  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined 
+                  per line. Each line represent a glob pattern. Empty lines and lines starting
+                  with a hash sign (#) are ignored. 
 ```
 
 ## Register Script `format.js` as SQLcl Command `tvdformat`
@@ -76,7 +79,7 @@ options:
 
 It's very similar to `script format.js`. The advantage is, that you do not need to know where [`format.js`](format.js) is stored. You may pass relative paths for `rootPath` and `file`. The SQLcl `CD` command is honored.
 
-## Using a configuration file
+## Using a Configuration File
 
 In addition to `rootPath` and `*`, `format.js` can accept a JSON configuration file as the mandatory argument. Here's an example of using a configuration file:
 
@@ -99,3 +102,19 @@ Here's an example configuration file:
   ]
 }
 ```
+
+## Using an Ignore File
+
+With the `ignore` parameter you can define a file containing with file name patterns to be ignored. Here's an example of an ignore file content:
+
+```
+# ignore all files under an "archive" subdirectory
+**/archive/**
+              
+# ignore files containing "test" in the file name
+**/*test*
+```
+
+[Glob](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-) patterns are applied on the complete file including the directory name. All patterns are supported except subpatterns (`{}`).
+
+Please note that defining file name patterns such as `*.?` will not work because they do not match the directory name of the file. Use `**/*.?` instead.
