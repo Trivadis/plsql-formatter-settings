@@ -76,7 +76,7 @@ options:
 
 It's very similar to `script format.js`. The advantage is, that you do not need to know where [`format.js`](format.js) is stored. You may pass relative paths for `rootPath` and `file`. The SQLcl `CD` command is honored.
 
-## Using a configuration file
+## Using a Configuration File
 
 In addition to `rootPath` and `*`, `format.js` can accept a JSON configuration file as the mandatory argument. Here's an example of using a configuration file:
 
