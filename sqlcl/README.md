@@ -44,6 +44,9 @@ options:
                   xml=embedded uses advanced settings defined in format.js
   arbori=<file>   path to the file containing the Arbori program for custom format settings
                   arbori=default uses default Arbori program included in sqlcl
+  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined 
+                  per line. Each line represent a glob pattern. Empty lines and lines starting
+                  with a hash sign (#) are ignored. 
 ```
 
 ## Register Script `format.js` as SQLcl Command `tvdformat`
