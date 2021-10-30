@@ -103,9 +103,9 @@ include "std.arbori"
 
 -- ":indentCondtions" must be used,
 -- otherwise the Arbori program will be considered invalid and the default is used.
--- The Arbori query "dummy" is never called, hence it does not matter what node is selected.
+-- The Arbori query "i2_dummy" is never called, hence it does not matter what node is selected.
 -- However, I chose to use "identifier" to avoid an Arbori warning.
-dummy:
+i2_dummy:
     :indentConditions & [node) identifier
 ;
 
@@ -124,8 +124,8 @@ skipWhiteSpaceBeforeNode:
 -- Sections:
 -- - D1: Initialize timer.
 -- - I3: Do not format nodes.
--- - I4: Identifiers.
--- - I5: Globals.
+-- - I4: Define identifiers.
+-- - I5: Define global variables and functions.
 -- - I10: Determine and normalize line separators.
 -- - I6: Remove duplicate empty lines.
 -- - I7: Keep existing whitespace.
@@ -136,7 +136,7 @@ skipWhiteSpaceBeforeNode:
 -- D1: Initialize timer.
 -- --------------------------------------------------------------------------------------------------------------------
 
-startCustomFormat:
+d1_initialize_timer:
     runOnce
 -> {
     var startTime = (new Date()).getTime();
@@ -157,34 +157,34 @@ dontFormatNode:
 ;
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I4: Identifiers
+-- I4: Define identifiers
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- analytic functions, to be treated as keywords
-"analytics":
+i4_analytics:
       [identifier) identifier
     & [call) analytic_function
     & [call = [identifier
 ;
 
 -- all identifiers
-"ids":
+i4_ids:
     [identifier) identifier
 ;
 
 -- Callback function to reduce the list of keywords by the identifiers provided here
 -- This is relevant for general options "Keyword case" and "Indentifier case".
 identifiers:
-    "ids" - "analytics"
+    i4_ids - i4_analytics
 ->
 ;
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I5: Globals.
+-- I5: Define global variables and functions.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- Global variables, which are likely to be used in more than one Arbori query/action
-define_global_variables:
+i5_define_global_variables:
     runOnce
 -> {
     // Java classes
@@ -264,7 +264,7 @@ define_global_variables:
 }
 
 -- Global functions, which are likely to be used in more than one Arbory action
-define_global_functions:
+i5_define_global_functions:
     runOnce
 -> {
     // Return a string with the requested number of spaces.
@@ -633,7 +633,7 @@ i10_determine_and_normalize_line_separators:
 -- Replace multiple, consecutive empty lines with one empty line.
 -- This code changes the input (target.input) and the lexer tokens (target.src).
 -- Therefore this code must run at the beginning of the Arbori program.
-max_one_empty_line:
+i6_remove_duplicate_empty_lines:
     runOnce
 -> {
     var offOnRanges = [];
@@ -725,7 +725,7 @@ max_one_empty_line:
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- add explicit whitespace before each leaf node, if the whitespace before is not a single space (default)
-keep_significant_whitespace_before_leaf_nodes:
+i7_keep_significant_whitespace:
     runOnce
 -> {
     tokens = LexerToken.parse(target.input, true);  // include hidden tokens not relevant to build a parse tree
@@ -751,12 +751,12 @@ keep_significant_whitespace_before_leaf_nodes:
             if (i-hiddenTokenCount == 0 && hiddenTokenCount == wsBefore.length) {
                 // first parser token with leading whitespace only (no other hidden tokens like comments)
                 struct.putNewline(0, "");
-                logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: remove all whitespace at 0.");
+                logger.fine(struct.getClass(), "i7_keep_significant_whitespace: remove all whitespace at 0.");
             } else if (wsBefore != " ") {
                 // add collected whitespace before leaf node (actually at the position of the leaf node)
                 // add also empty strings to ensure that not a space is added between tokens
                 struct.putNewline(i-hiddenTokenCount, wsBefore);
-                logger.fine(struct.getClass(), "keepSignificantWhitespaceBeforeLeafNodes: add "
+                logger.fine(struct.getClass(), "i7_keep_significant_whitespace: add "
                     + wsBefore.length + " whitespace at " + (i-hiddenTokenCount) + ".");
             }
             wsBefore = "";
@@ -780,7 +780,7 @@ keep_significant_whitespace_before_leaf_nodes:
 -- of positions is ignored. However, depending on the configuration the case of keywords and
 -- identifiers is changed.
 
-saveIndentInConditionalBranch:
+i8_save_indent_in_conditional_branch:
     runOnce
 -> {
     var pos = 0;
@@ -802,7 +802,7 @@ saveIndentInConditionalBranch:
             if (withinFirstBranch) {
                 // enforce uniform datatype in map; therefore convert values to Integer
                 indentInConditionalBranch.put(Integer.valueOf(pos), getIndent(pos));
-                logger.fine(struct.getClass(), "saveIndentInConditionalBranch: at " + pos + ".");
+                logger.fine(struct.getClass(), "i8_save_indent_in_conditional_branch: at " + pos + ".");
             }
             pos++;
         }
@@ -816,7 +816,7 @@ saveIndentInConditionalBranch:
 -- In scope are statements for that are formatted fully (see overrideIndents).
 -- Only spaces after the last new line character are considered. So, all line breaks are kept.
 
-remove_duplicate_spaces_in_scope:
+i9_remove_duplicate_spaces_in_scope:
     runOnce
 -> {
     var it = newlinePositions.keySet().iterator();
@@ -828,13 +828,13 @@ remove_duplicate_spaces_in_scope:
             if (nlpos == -1) {
                 if (indent.length > 1) {
                     struct.putNewline(pos, " ");
-                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: single space at " + pos + ".");
+                    logger.fine(struct.getClass(), "i9_remove_duplicate_spaces_in_scope: single space at " + pos + ".");
                 }
             } else {
                 var spaces = indent.length - nlpos - 1;
                 if (spaces > 0) {
                     struct.putNewline(pos, indent.substring(0, nlpos+1));
-                    logger.fine(struct.getClass(), "remove_duplicate_spaces_in_scope: keeping line breaks only at "
+                    logger.fine(struct.getClass(), "i9_remove_duplicate_spaces_in_scope: keeping line breaks only at "
                         + pos + ".");
                 }
             }
