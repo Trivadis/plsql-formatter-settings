@@ -6,13 +6,13 @@
     <!-- The Basics -->
     <groupId>com.trivadis</groupId>
     <artifactId>plsql.formatter.settings</artifactId>
-    <version>21.3.1-SNAPSHOT</version>
+    <version>21.3.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
-        <sqlcl.version>21.3.1</sqlcl.version>
+        <sqlcl.version>21.3.2</sqlcl.version>
         <graalvm.version>21.3.0</graalvm.version>
     </properties>
     <dependencies>
