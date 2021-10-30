@@ -110,7 +110,6 @@ With the `ignore` parameter you can define a file containing with file name patt
 ```
 # ignore all files under an "archive" subdirectory
 **/archive/**
-
               
 # ignore files containing "test" in the file name
 **/*test*
