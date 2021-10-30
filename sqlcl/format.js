@@ -480,12 +480,24 @@ var formatMarkdownFile = function (file, formatter) {
     ctx.write("done.\n");
 }
 
+var getLineSeparator = function (input) {
+    var lineSep;
+    if (input.indexOf("\r\n") != -1) {
+        lineSep = "\r\n";
+    } else if (input.indexOf("\n") != -1) {
+        lineSep = "\n";
+    } else {
+        lineSep = javaSystem.lineSeparator();
+    }
+    return lineSep;
+}
+
 var formatFile = function (file, formatter) {
     var original = readFile(file)
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
     } else {
-        writeFile(file, formatter.format(original) + javaSystem.lineSeparator());
+        writeFile(file, formatter.format(original) + getLineSeparator(original));
         ctx.write("done.\n");
     }
 }
