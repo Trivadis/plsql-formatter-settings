@@ -3,6 +3,8 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 public class Aggregate_clause extends ConfiguredTestFormatter {
 
     @Test
@@ -14,8 +16,8 @@ public class Aggregate_clause extends ConfiguredTestFormatter {
     }
 
     @Test
-    public void standalone_multi_line() {
-        var sql = """
+    public void standalone_multi_line() throws IOException {
+        var input = """
                 create function spatialunion(
                    x geometry
                 ) return geometry
@@ -23,7 +25,14 @@ public class Aggregate_clause extends ConfiguredTestFormatter {
                 using
                 spatialunionroutines;
                 """;
-        formatAndAssert(sql);
+        var expected = """
+                create function spatialunion(
+                   x geometry
+                ) return geometry
+                   aggregate using spatialunionroutines;
+                """;
+        var actual = formatter.format(input);
+        assertEquals(expected, actual);
     }
 
 }
