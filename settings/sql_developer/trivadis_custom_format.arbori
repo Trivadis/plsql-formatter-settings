@@ -1380,6 +1380,11 @@ a7_in_out_mode:
     & [node^) mode
 ;
 
+a7_for:
+      [node) 'FOR'
+    & [node^) sql_stmt
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -1398,6 +1403,7 @@ a7_one_space_before:
     | a7_when_cond
     | a7_reverse_loop
     | a7_in_out_mode
+    | a7_for
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
@@ -1546,7 +1552,8 @@ a8_goto:
 ;
 
 a8_open:
-    [node) 'OPEN' & [node^) open_statement
+      [node) 'OPEN'
+    & [node^) sql_stmt
 ;
 
 a8_one_space_after:
