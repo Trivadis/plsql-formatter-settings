@@ -1034,6 +1034,7 @@ a13_nodes:
     | [node) iterator_control_list
     | [node) null_condition
     | [node) using_clause_opt
+    | [node) pipe_stmt
 ;
 
 a13_calls_with_assoc_args:
