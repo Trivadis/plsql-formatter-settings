@@ -2750,6 +2750,11 @@ r2_subprg:
     [node) subprg_property
 ;
 
+-- should behave like subprg_property
+r2_aggregate:
+    [node) 'AGGREGATE' & [node^) subprg_spec
+;
+
 r2_increment_left_margin:
       r2_common
     | r2_flowcontrol_condition
@@ -2763,6 +2768,7 @@ r2_increment_left_margin:
     | r2_multi_table_insert
     | r2_merge_insert_clause
     | r2_subprg
+    | r2_aggregate
 -> {
     addMargin(tuple.get("node"), indentSpaces, "r2_increment_left_margin");
 }
