@@ -1558,6 +1558,16 @@ a8_open:
     & [node^) sql_stmt
 ;
 
+a8_polymorphic:
+      [node) 'POLYMORPHIC'
+    & [node^^^+1) 'USING'
+;
+
+a8_using:
+      [node) 'USING'
+    & [node-1) subprg_spec
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -1582,6 +1592,8 @@ a8_one_space_after:
     | a8_return
     | a8_goto
     | a8_open
+    | a8_polymorphic
+    | a8_using
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
