@@ -1033,6 +1033,7 @@ a13_nodes:
     | [node) pragma
     | [node) iterator_control_list
     | [node) null_condition
+    | [node) using_clause_opt
 ;
 
 a13_calls_with_assoc_args:
