@@ -1013,11 +1013,12 @@ public class R2_indentation extends ConfiguredTestFormatter {
 
         @Test
         public void start_with() throws IOException {
+            // #168 - "start with" must not start on column 1. Issue introduce in 21.4.0
             var input = """
                     select level
                     ,ename
                     from emp
-                    start with
+                     start with
                     mgr is null
                     connect by
                     prior empno = mgr;
