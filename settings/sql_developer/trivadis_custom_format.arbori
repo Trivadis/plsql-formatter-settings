@@ -1641,11 +1641,22 @@ a17_whitespace_around_node:
 a15_various:
       [node) insert_into_clause & [node^^) multi_table_insert
     | [node) subquery & [node^) multi_table_insert
-    | [node) prm_spec & [node-1) ','
     | [node) subprg_property
     | [node) ')' & [node^) create_view#[114,130)
     | [node) ')' & [node^) create_materialized_view[33,79)
 ;
+
+a15_subsequent_prm_spec_trailing_comma:
+     [node) prm_spec
+   & [node-1) ','
+   & :breaksAfterComma
+;
+a15_subsequent_prm_spec_leading_comma:
+     [node) ','
+   & [node+1) prm_spec
+   & :breaksBeforeComma
+;
+
 
 a15_is_or_as:
       [node) is_or_as
@@ -1668,6 +1679,8 @@ a15_materialized_view_column_alias:
 
 a15_line_break_before:
       a15_various
+    | a15_subsequent_prm_spec_trailing_comma
+    | a15_subsequent_prm_spec_leading_comma
     | a15_is_or_as
     | a15_view_column_alias
     | a15_materialized_view_column_alias
