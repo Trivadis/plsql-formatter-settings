@@ -3,7 +3,6 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -16,10 +15,10 @@ public class Issue_149_spool extends ConfiguredTestFormatter {
     }
 
     @Test
-    @Disabled("SQLDev 21.2.1 bug")
     public void spool_and_plsql_block() throws IOException {
         // in SQLDev 21.2.1 DECLARE is part of the SPOOL command
         // As a result there is no way to format that correctly
+        // Fixed in SQLDev 21.4.0
         var input = """
                 SET SERVEROUTPUT ON
                 SPOOL install_options.tmp
