@@ -42,7 +42,7 @@ public abstract class ConfiguredTestFormatter {
             URL advancedFormat = Thread.currentThread().getContextClassLoader().getResource("trivadis_advanced_format.xml"); // symbolic link
             assert advancedFormat != null;
             map = Persist2XML.read(advancedFormat);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return map;
