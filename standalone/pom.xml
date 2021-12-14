@@ -137,6 +137,7 @@
                                 <include>oracle/dbtools/raptor/*</include>
                                 <include>oracle/dbtools/raptor/utils/**</include>
                                 <include>oracle/dbtools/util/**</include>
+                                <include>oracle/dbtools/scripting/**</include>
                             </includes>
                         </filter>
                         <filter>
