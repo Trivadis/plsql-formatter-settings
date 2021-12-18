@@ -35,12 +35,12 @@ var getFiles = function (rootPath, extensions, ignoreMatcher) {
     var files;
     if (existsFile(rootPath)) {
         if (isRelevantFile(rootPath, extensions, ignoreMatcher)) {
-            files = javaArrays.asList(javaPaths.get(rootPath));
+            files = javaArrays.asList(javaPaths.get(rootPath.toString()));
         } else {
             files = [];
         }
     } else {
-        files = javaFiles.walk(javaPaths.get(rootPath))
+        files = javaFiles.walk(javaPaths.get(rootPath.toString()))
             .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions, ignoreMatcher))
             .sorted()
             .collect(javaCollectors.toList());
