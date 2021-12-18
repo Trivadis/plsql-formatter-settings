@@ -163,12 +163,13 @@ var writeFile = function (file, content) {
 }
 
 var existsDirectory = function (dir) {
-    var f = new javaFile(dir);
+    var f = new javaFile(dir.toString());
     return f.isDirectory();
+    return true;
 }
 
 var existsFile = function (file) {
-    var f = new javaFile(file);
+    var f = new javaFile(file.toString());
     return f.isFile();
 }
 
