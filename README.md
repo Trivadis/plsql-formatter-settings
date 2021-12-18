@@ -7,7 +7,7 @@ This repository provides formatter settings for the [coding style rules](https:/
 Settings are primarily provided for
 
 - [Oracle SQLcl, Version 21.4.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
-- [Oracle SQL Developer, Version 21.4.0](https://www.oracle.com/tools/downloads/sqldev-downloads.html)
+- [Oracle SQL Developer, Version 21.4.1](https://www.oracle.com/tools/downloads/sqldev-downloads.html)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
