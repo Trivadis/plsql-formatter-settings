@@ -1197,6 +1197,12 @@ a5_star_star:
    & [node-1) '*'
 ;
 
+a5_pragma_references_args:
+     [node) pragma_args
+   & [node^) pragma
+   & ?node-1 = 'restrict_references'
+;
+
 a5_no_space_before:
       a5_semicolon
     | a5_dot
@@ -1215,6 +1221,7 @@ a5_no_space_before:
     | a5_brackets
     | a5_indicator_variable
     | a5_star_star
+    | a5_pragma_references_args
 -> {
     var node = tuple.get("node");
     var content = target.src.get(node.from).content;
@@ -1387,6 +1394,22 @@ a7_for:
     & [node^) sql_stmt
 ;
 
+a7_collect:
+      [node) 'COLLECT'
+    & [node^) BULK_COLLECT_opt
+;
+
+a7_sharing:
+      [node) '=' & [node-1) 'SHARING' & ([node+1) 'METADATA' | [node+1) 'NONE')
+    | [node) 'METADATA' & [node-1) '=' & [node-2) 'SHARING'
+    | [node) 'NONE' & [node-1) '=' & [node-2) 'SHARING'
+;
+
+a7_update_set_clause_expr:
+      [node) '=' & [node-1) identifier & [node^) update_set_clause_expr
+    | [node-1) '=' & [node-2) identifier & [node^) update_set_clause_expr
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -1406,6 +1429,9 @@ a7_one_space_before:
     | a7_reverse_loop
     | a7_in_out_mode
     | a7_for
+    | a7_collect
+    | a7_sharing
+    | a7_update_set_clause_expr
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
@@ -1573,6 +1599,33 @@ a8_using:
     & [node-1) subprg_spec
 ;
 
+a8_raise:
+      [node) 'RAISE'
+    & [node^) raise_stmt
+    & [node+1) identifier
+;
+
+a8_return_stmt:
+      [node) 'RETURN'
+    & [node^) return_stmt
+    & [node+1) pls_expr
+;
+
+a8_returning:
+      [node) 'RETURNING'
+    & [node^) returning_clause
+;
+
+a8_update_set_clause:
+      [node) 'SET'
+    & [node^) update_set_clause
+;
+
+a8_while:
+      [node) 'WHILE'
+    & [node^) iteration_scheme
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -1600,6 +1653,11 @@ a8_one_space_after:
     | a8_aggregate
     | a8_polymorphic
     | a8_using
+    | a8_raise
+    | a8_return_stmt
+    | a8_returning
+    | a8_update_set_clause
+    | a8_while
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
@@ -1621,7 +1679,6 @@ a17_whitespace_around_node:
     | [node) 'OR'
     | [node) 'RETURN' & [node-1) fml_part
     | [node) is_or_as
-
 -> {
     var node = tuple.get("node");
     if (getIndent(node.from).length == 0) {
@@ -3190,6 +3247,7 @@ r7_delete:
         | [keyword) 'WHERE'
         | [keyword) 'RETURN'
         | [keyword) 'RETURNING'
+        | [keyword) 'BULK'
         | [keyword) 'INTO'
         | [keyword) 'LOG'
         | [keyword) 'REJECT'
