@@ -97,8 +97,7 @@ public class Function_declaration_and_definition extends ConfiguredTestFormatter
                    result_cache relies_on (emp, dept, bonus)
                 is
                 begin
-                   return
-                   to_char(p);
+                   return to_char(p);
                 end;
                 /
                 """;
