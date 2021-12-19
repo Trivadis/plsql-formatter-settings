@@ -1394,6 +1394,11 @@ a7_for:
     & [node^) sql_stmt
 ;
 
+a7_collect:
+      [node) 'COLLECT'
+    & [node^) BULK_COLLECT_opt
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -1413,6 +1418,7 @@ a7_one_space_before:
     | a7_reverse_loop
     | a7_in_out_mode
     | a7_for
+    | a7_collect
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
