@@ -1197,6 +1197,12 @@ a5_star_star:
    & [node-1) '*'
 ;
 
+a5_pragma_references_args:
+     [node) pragma_args
+   & [node^) pragma
+   & ?node-1 = 'restrict_references'
+;
+
 a5_no_space_before:
       a5_semicolon
     | a5_dot
@@ -1215,6 +1221,7 @@ a5_no_space_before:
     | a5_brackets
     | a5_indicator_variable
     | a5_star_star
+    | a5_pragma_references_args
 -> {
     var node = tuple.get("node");
     var content = target.src.get(node.from).content;
