@@ -1405,6 +1405,11 @@ a7_sharing:
     | [node) 'NONE' & [node-1) '=' & [node-2) 'SHARING'
 ;
 
+a7_update_set_clause_expr:
+      [node) '=' & [node-1) identifier & [node^) update_set_clause_expr
+    | [node-1) '=' & [node-2) identifier & [node^) update_set_clause_expr
+;
+
 a7_one_space_before:
       a7_param_list
     | a7_as_alias
@@ -1426,6 +1431,7 @@ a7_one_space_before:
     | a7_for
     | a7_collect
     | a7_sharing
+    | a7_update_set_clause_expr
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
