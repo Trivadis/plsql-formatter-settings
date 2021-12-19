@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class sqlerrm_function extends ConfiguredTestFormatter {
+public class Suppresses_warning_6009_pragma extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
@@ -17,20 +17,28 @@ public class sqlerrm_function extends ConfiguredTestFormatter {
     @Test
     public void tokenized() throws IOException {
         var input = """
+                CREATE PROCEDURE p1
+                AUTHID DEFINER
+                IS
+                PRAGMA
+                SUPPRESSES_WARNING_6009
+                (
+                p1
+                )
+                ;
                 BEGIN
-                  DBMS_OUTPUT.PUT_LINE('SQLERRM(-6511): ' || TO_CHAR(
-                  SQLERRM
-                  (
-                  -6511
-                  )
-                  ));
+                    RAISE_APPLICATION_ERROR(-20000, 'Unexpected error raised');
                 END;
                 /
                 """;
         var actual = formatter.format(input);
         var expected = """
+                create procedure p1
+                   authid definer
+                is
+                   pragma suppresses_warning_6009 (p1);
                 begin
-                   dbms_output.put_line('SQLERRM(-6511): ' || to_char(sqlerrm(-6511)));
+                   raise_application_error(-20000, 'Unexpected error raised');
                 end;
                 /
                 """;

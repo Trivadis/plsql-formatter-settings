@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class sqlcode_function extends ConfiguredTestFormatter {
+public class Sqlcode_function extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
