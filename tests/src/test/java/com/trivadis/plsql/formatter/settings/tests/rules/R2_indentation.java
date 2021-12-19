@@ -1468,8 +1468,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
             var expected = """
                     update
                            t
-                    set
-                        c1 = 1
+                    set c1 = 1
                        ,c2 = 2
                        ,c3 = 3
                     where -- force new line
