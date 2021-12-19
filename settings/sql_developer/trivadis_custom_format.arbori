@@ -1586,6 +1586,12 @@ a8_raise:
     & [node+1) identifier
 ;
 
+a8_return_stmt:
+      [node) 'RETURN'
+    & [node^) return_stmt
+    & [node+1) pls_expr
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -1614,6 +1620,7 @@ a8_one_space_after:
     | a8_polymorphic
     | a8_using
     | a8_raise
+    | a8_return_stmt
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
