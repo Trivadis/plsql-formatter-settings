@@ -1573,6 +1573,12 @@ a8_using:
     & [node-1) subprg_spec
 ;
 
+a8_raise:
+      [node) 'RAISE'
+    & [node^) raise_stmt
+    & [node+1) identifier
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -1600,6 +1606,7 @@ a8_one_space_after:
     | a8_aggregate
     | a8_polymorphic
     | a8_using
+    | a8_raise
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
