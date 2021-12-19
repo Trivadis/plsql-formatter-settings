@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class serially_reusable_pragma extends ConfiguredTestFormatter {
+public class Serially_reusable_pragma extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
