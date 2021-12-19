@@ -65,10 +65,9 @@ public class Fetch_statement extends ConfiguredTestFormatter {
                 begin
                    open c1;
                    fetch c1
-                      bulk
-                      collect into a,
-                                   b,
-                                   c
+                      bulk collect into a,
+                                        b,
+                                        c
                       limit 10;
                    close c1;
                 end;
