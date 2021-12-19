@@ -1621,6 +1621,11 @@ a8_update_set_clause:
     & [node^) update_set_clause
 ;
 
+a8_while:
+      [node) 'WHILE'
+    & [node^) iteration_scheme
+;
+
 a8_one_space_after:
       a8_if
     | a8_end
@@ -1652,6 +1657,7 @@ a8_one_space_after:
     | a8_return_stmt
     | a8_returning
     | a8_update_set_clause
+    | a8_while
 -> {
     var node = tuple.get("node");
     if (!hasCommentsBetweenPos(node.from, node.to)) {
