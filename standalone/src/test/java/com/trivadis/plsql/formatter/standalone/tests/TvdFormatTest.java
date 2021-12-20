@@ -1,5 +1,6 @@
-package com.trivadis.plsql.formatter;
+package com.trivadis.plsql.formatter.standalone.tests;
 
+import com.trivadis.plsql.formatter.TvdFormat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

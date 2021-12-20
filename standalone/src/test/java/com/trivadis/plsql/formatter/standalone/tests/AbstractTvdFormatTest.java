@@ -1,5 +1,6 @@
-package com.trivadis.plsql.formatter;
+package com.trivadis.plsql.formatter.standalone.tests;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
