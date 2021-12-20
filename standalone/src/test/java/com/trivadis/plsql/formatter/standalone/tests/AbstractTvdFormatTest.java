@@ -32,6 +32,12 @@ public abstract class AbstractTvdFormatTest {
         }
     }
 
+    @AfterEach
+    public void teardown() {
+        System.clearProperty("tvdformat.standalone");
+        System.clearProperty("polyglot.engine.WarnInterpreterOnly");
+    }
+
     private String getFileContent(Path file) {
         try {
             return new String(Files.readAllBytes(file));
