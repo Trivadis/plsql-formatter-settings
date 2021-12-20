@@ -10,8 +10,8 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
-        <jdk.test.version>1.8</jdk.test.version>
+        <jdk.version>8</jdk.version>
+        <jdk.test.version>17</jdk.test.version>
         <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
         <sqlcl.version>21.4.0</sqlcl.version>
         <graalvm.version>21.3.0</graalvm.version>
@@ -98,18 +98,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <version>3.8.1</version>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                    <!-- not supported by IntelliJ, see https://youtrack.jetbrains.com/issue/IDEA-85478 -->
-                    <testSource>${jdk.test.version}</testSource>
-                    <testTarget>${jdk.test.version}</testTarget>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -253,4 +241,53 @@
         <url>https://github.com/Trivadis/plsql-formatter-settings</url>
     </scm>
 
+    <!-- Profiles as workaround for https://youtrack.jetbrains.com/issue/IDEA-85478 as described in -->
+    <!-- https://intellij-support.jetbrains.com/hc/en-us/community/posts/360009767720-I-want-to-run-tests-with-different-java-version-than-my-source-java-version -->
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <version>3.8.1</version>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <!-- different Java version for main and test -->
+                            <!-- works with Maven builder from IDE or command line -->
+                            <release>${jdk.version}</release>
+                            <testRelease>${jdk.test.version}</testRelease>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>idea</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>idea.maven.embedder.version</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <version>3.8.1</version>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <!-- IDEA requires same Java version for main and test -->
+                            <!-- see https://youtrack.jetbrains.com/issue/IDEA-85478 -->
+                            <release>${jdk.test.version}</release>
+                            <testRelease>${jdk.test.version}</testRelease>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
