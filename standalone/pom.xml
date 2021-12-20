@@ -33,13 +33,49 @@
             <version>${graalvm.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!-- SQLcl dependencies not available in public Maven repositories -->
+        <!-- SQLcl dependencies available in public Maven repositories -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.0.1-jre</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- SQLcl dependencies not available in public Maven repositories (compile) -->
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-common</artifactId>
             <version>${sqlcl.version}</version>
             <scope>system</scope>
             <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
+        </dependency>
+        <!-- SQLcl dependencies not available in public Maven repositories (test) -->
+        <dependency>
+            <groupId>oracle.dbtools</groupId>
+            <artifactId>dbtools-sqlcl</artifactId>
+            <version>${sqlcl.version}</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/dbtools-sqlcl.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>oracle.xml</groupId>
+            <artifactId>xmlparserv2-sans-jaxp-services</artifactId>
+            <version>${sqlcl.version}</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/xmlparserv2_sans_jaxp_services.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>oracle.i18n</groupId>
+            <artifactId>orai18n</artifactId>
+            <version>${sqlcl.version}</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/orai18n.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>oracle.soda</groupId>
+            <artifactId>orajsoda</artifactId>
+            <version>${sqlcl.version}</version>
+            <scope>system</scope>
+            <systemPath>${sqlcl.libdir}/orajsoda.jar</systemPath>
         </dependency>
         <!-- GraalVM native image and Context -->
         <dependency>
