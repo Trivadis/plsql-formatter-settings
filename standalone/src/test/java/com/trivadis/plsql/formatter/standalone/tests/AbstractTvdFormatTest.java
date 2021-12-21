@@ -17,7 +17,7 @@ public abstract class AbstractTvdFormatTest {
     public void setup() {
         try {
             tempDir = Files.createTempDirectory("tvdformat-test-");
-            var url = Thread.currentThread().getContextClassLoader().getResource("input");
+            var url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
             assert url != null;
             var resourceDir = Paths.get(url.getPath());
             var sources = Files.walk(resourceDir)
