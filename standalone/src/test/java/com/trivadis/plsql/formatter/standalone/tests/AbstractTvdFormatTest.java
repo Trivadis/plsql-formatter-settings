@@ -3,14 +3,20 @@ package com.trivadis.plsql.formatter.standalone.tests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class AbstractTvdFormatTest {
+    static final PrintStream originalPrintStream = System.out;
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(outputStream);
     Path tempDir;
 
     @BeforeEach
@@ -27,6 +33,8 @@ public abstract class AbstractTvdFormatTest {
                 var target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
                 Files.copy(source, target);
             }
+            System.setOut(printStream);
+            outputStream.reset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -36,6 +44,7 @@ public abstract class AbstractTvdFormatTest {
     public void teardown() {
         System.clearProperty("tvdformat.standalone");
         System.clearProperty("polyglot.engine.WarnInterpreterOnly");
+        System.setOut(originalPrintStream);
     }
 
     private String getFileContent(Path file) {
@@ -51,5 +60,7 @@ public abstract class AbstractTvdFormatTest {
         return getFileContent(file);
     }
 
+    public String getConsoleOutput() {
+        return outputStream.toString();
     }
 }
