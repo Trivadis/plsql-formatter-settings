@@ -1,1 +1,0 @@
-../../../../sqlcl/format.js
