@@ -51,9 +51,5 @@ public abstract class AbstractTvdFormatTest {
         return getFileContent(file);
     }
 
-    public String getExpectedContent(String fileName) {
-        var url = Thread.currentThread().getContextClassLoader().getResource("expected");
-        assert url != null;
-        return getFileContent(Paths.get(url.getPath() + File.separator + fileName));
     }
 }
