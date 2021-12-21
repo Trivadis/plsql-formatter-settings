@@ -17,7 +17,7 @@ The project requires a JDK 17, but it produces a Java 8 JAR file. A GraalVM JDK 
 
 ## How to Build
 
-1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 21.3.0
+1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 21.4.0
 2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases) and install the GraalVM JDK 17 21.3.0
 3. Go to the bin directory of the GraalVM JDK and run `gu install native-image`, if you want to produce a native image
 4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.4
