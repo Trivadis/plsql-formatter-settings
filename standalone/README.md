@@ -6,6 +6,15 @@ This Maven project produces a standalone command line executable `tvdformat.jar`
 
 The startup time of standalone JAR file and the native image are identical since the image still requires a JDK to execute. However, it is faster than running `format.js` from SQLcl.
 
+This project contains JUnit tests for
+
+- the SQLDev/SQLcl formatter settings `trivadis_advanced_format.xml` and `trivadis_custom_format.arbori`
+- the SQLcl script `format.js`
+- the SQLcl command `tvdformat`
+- the standalone executable `tvdformat`
+
+The project requires a JDK 17, but it produces a Java 8 JAR file. A GraalVM JDK is required only if you want to produce a native image.
+
 ## How to Build
 
 1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 21.3.0
