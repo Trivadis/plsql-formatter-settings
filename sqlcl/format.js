@@ -41,7 +41,7 @@ var getFiles = function (rootPath, extensions, ignoreMatcher) {
         }
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath.toString()))
-            .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions, ignoreMatcher))
+            .filter(function (f) {return javaFiles.isRegularFile(f) && isRelevantFile(f, extensions, ignoreMatcher)})
             .sorted()
             .collect(javaCollectors.toList());
     }
@@ -553,7 +553,7 @@ var unregisterTvdFormat = function () {
     javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
     javaCommandRegistry.clearCaches(ctx.getBaseConnection(), ctx);
     var remainingListeners = javaCommandRegistry.getListeners(ctx.getBaseConnection(), ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
-        .stream().map(function(l) l.getClass()).collect(javaCollectors.toSet());
+        .stream().map(function(l) {return l.getClass()}).collect(javaCollectors.toSet());
     // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
     for (var i in listeners) {
         if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
