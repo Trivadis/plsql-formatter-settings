@@ -129,7 +129,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
     // set relative path for include directive in Arbori program to the directory of the main Arbori program
-    if (arboriPath != "default") {
+    if (arboriPath !== "default") {
         javaSystem.setProperty("dbtools.arbori.home", new javaFile(arboriPath).getParentFile().getAbsolutePath());
     }
     // now instantiate and configure the formatter
@@ -208,7 +208,7 @@ var getJsPath = function () {
 var getCdPath = function (path) {
     if (path.startsWith("/")) {
         return path; // Unix, fully qualified
-    } else if (path.length > 1 && path.substring(1, 2) == ":") {
+    } else if (path.length > 1 && path.substring(1, 2) === ":") {
         return path; // Windows, fully qualified, e.g. C:\mydir
     }
     var currentDir = ctx.getProperty("script.runner.cd_command");
@@ -268,7 +268,7 @@ var processAndValidateArgs = function (args) {
         return result(false);
     }
     rootPath = getCdPath(args[1]);
-    if (rootPath != "*" && !existsFile(rootPath) && !existsDirectory(rootPath)) {
+    if (rootPath !== "*" && !existsFile(rootPath) && !existsDirectory(rootPath)) {
         ctx.write("file or directory " + rootPath + " does not exist.\n\n");
         return result(false);
     }
@@ -482,9 +482,9 @@ var formatMarkdownFile = function (file, formatter) {
 
 var getLineSeparator = function (input) {
     var lineSep;
-    if (input.indexOf("\r\n") != -1) {
+    if (input.indexOf("\r\n") !== -1) {
         lineSep = "\r\n";
-    } else if (input.indexOf("\n") != -1) {
+    } else if (input.indexOf("\n") !== -1) {
         lineSep = "\n";
     } else {
         lineSep = javaSystem.lineSeparator();
@@ -522,7 +522,7 @@ var run = function (args) {
         printUsage(args[0].equalsIgnoreCase("tvdformat"), javaSystem.getProperty('tvdformat.standalone') != null);
     } else {
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
-        if (options.rootPath == "*") {
+        if (options.rootPath === "*") {
             formatBuffer(formatter);
         } else {
             var files;
