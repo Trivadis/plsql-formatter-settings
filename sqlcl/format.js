@@ -165,7 +165,6 @@ var writeFile = function (file, content) {
 var existsDirectory = function (dir) {
     var f = new javaFile(dir.toString());
     return f.isDirectory();
-    return true;
 }
 
 var existsFile = function (file) {
