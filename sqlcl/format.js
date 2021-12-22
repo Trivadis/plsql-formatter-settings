@@ -16,6 +16,9 @@
 
 "use strict";
 
+// SQLcl uses the Nashorn JS engine of the JDK 8/11 by default.
+// As a result, this JS file must comply with ECMAScript 5.1.
+
 var javaString = Java.type("java.lang.String");
 var javaArrays = Java.type("java.util.Arrays");
 var javaPaths = Java.type("java.nio.file.Paths");
