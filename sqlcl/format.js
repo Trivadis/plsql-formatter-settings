@@ -522,7 +522,7 @@ var run = function (args) {
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
-        printUsage(args[0].equalsIgnoreCase("tvdformat"), javaSystem.getProperty('tvdformat.standalone') != null);
+        printUsage(args[0].toLowerCase() === "tvdformat", javaSystem.getProperty('tvdformat.standalone') != null);
     } else {
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
         if (options.rootPath === "*") {
@@ -567,7 +567,7 @@ var unregisterTvdFormat = function () {
 var registerTvdFormat = function () {
     var handleEvent = function (conn, ctx, cmd) {
         var args = getArgs(cmd.getSql());
-        if (args != null && typeof args[0] != "undefined" && args[0].equalsIgnoreCase("tvdformat")) {
+        if (args != null && typeof args[0] != "undefined" && args[0].toLowerCase() === "tvdformat") {
             run(args);
             return true;
         }
@@ -593,7 +593,7 @@ var registerTvdFormat = function () {
 }
 
 // main
-if (args.length >= 2 && (args[1].equalsIgnoreCase("-r") || args[1].equalsIgnoreCase("--register"))) {
+if (args.length >= 2 && (args[1].toLowerCase() === "-r" || args[1].toLowerCase() === "--register")) {
     var javaSQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
     var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
     var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");
