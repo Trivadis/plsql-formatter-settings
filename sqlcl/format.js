@@ -559,7 +559,7 @@ var unregisterTvdFormat = function () {
         .stream().map(function(l) {return l.getClass()}).collect(javaCollectors.toSet());
     // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
     for (var i in listeners) {
-        if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
+        if (listeners.get(i).toString() !== "TvdFormat" && !remainingListeners.contains(listeners.get(i).getClass())) {
             javaCommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
         }
     }
