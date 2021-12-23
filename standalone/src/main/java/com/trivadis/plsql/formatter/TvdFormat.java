@@ -38,9 +38,13 @@ public class TvdFormat {
     }
 
     public static void main(String[] args) throws IOException, ScriptException {
+        // suppress all logging output
         LogManager.getLogManager().reset();
+        // amend usage help in format.js for standalone tvdformat
         System.setProperty("tvdformat.standalone", "true");
+        // format.js is compiled at runtime with a GraalVM JDK but interpreted with other JDKs
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        // run formatter with command line parameters
         TvdFormat formatter = new TvdFormat();
         formatter.run(args);
     }
