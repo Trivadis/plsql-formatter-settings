@@ -78,14 +78,14 @@ var getRelevantFiles = function (files, extensions, ignoreMatcher) {
 }
 
 var configure = function (formatter, xmlPath, arboriPath) {
-    if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && xmlPath != null) {
+    if ("default" !==  xmlPath && "embedded" !== xmlPath && xmlPath != null) {
         var url = new javaFile(xmlPath).toURI().toURL();
         var options = javaPersist2XML.read(url);
         var keySet = options.keySet().stream().collect(javaCollectors.toList());
         for (var j in keySet) {
             formatter.options.put(keySet[j], options.get(keySet[j]));
         }
-    } else if ("embedded".equals(xmlPath)) {
+    } else if ("embedded" === xmlPath) {
         // Code Editor: Format
         formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
         // Advanced Format: General
@@ -124,7 +124,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.formatThreshold, 1);                                                // default: 1 (disables deprecated post-processing logic)
     }
     var arboriFileName = arboriPath;
-    if (!"default".equals(arboriPath)) {
+    if ("default" !== arboriPath) {
         arboriFileName = new javaFile(arboriPath).getAbsolutePath();
     }
     formatter.options.put(formatter.formatProgramURL, arboriFileName);                                      // default: "default" (= provided by SQLDev / SQLcl)
@@ -401,7 +401,7 @@ var processAndValidateArgs = function (args) {
             xmlPath = "embedded";
         }
     } else {
-        if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
+        if ("default" !== xmlPath && "embedded" !== xmlPath) {
             xmlPath = getCdPath(xmlPath);
             if (!existsFile(xmlPath)) {
                 ctx.write("XML file " + xmlPath + " does not exist.\n\n");
@@ -416,7 +416,7 @@ var processAndValidateArgs = function (args) {
             arboriPath = "default";
         }
     } else {
-        if (!"default".equals(arboriPath)) {
+        if ("default" !== arboriPath) {
             arboriPath = getCdPath(arboriPath);
             if (!existsFile(arboriPath)) {
                 ctx.write("Arbori file " + arboriPath + " does not exist.\n\n");
