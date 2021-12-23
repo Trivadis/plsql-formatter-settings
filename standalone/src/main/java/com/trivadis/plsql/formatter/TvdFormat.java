@@ -2,6 +2,9 @@ package com.trivadis.plsql.formatter;
 
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.EnvironmentAccess;
+import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.PolyglotAccess;
 
 import javax.script.*;
 import java.io.*;
@@ -16,8 +19,8 @@ public class TvdFormat {
     TvdFormat() {
         scriptEngine = GraalJSScriptEngine.create(null,
                 Context.newBuilder("js")
-                        .option("js.nashorn-compat", "true")
-                        .allowAllAccess(true));
+                        .allowHostAccess(HostAccess.ALL)
+                        .allowHostClassLookup((Predicate<String>) s -> true));
         ctx = new ScriptRunnerContext();
         ctx.setOutputStream(System.out);
         scriptEngine.getContext().setAttribute("ctx", ctx, ScriptContext.ENGINE_SCOPE);
