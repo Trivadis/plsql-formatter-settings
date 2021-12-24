@@ -58,7 +58,8 @@ var isRelevantFile = function (file, extensions, ignoreMatcher) {
         }
     }
     for (var i in extensions) {
-        if (file.toString().toLowerCase().endsWith(extensions[i])) {
+        var fileName = file.toString().toLowerCase();
+        if (fileName.lastIndexOf(extensions[i]) + extensions[i].length === fileName.length) {
             return true;
         }
     }
@@ -219,8 +220,8 @@ var getCdPath = function (path) {
     if (currentDir == null) {
         return path;
     } else {
-        if (path.endsWith(javaFile.separator)) {
-            return currentdir + path;
+        if (path.lastIndexOf(javaFile.separator) + javaFile.separator.length === path.length) {
+            return currentDir + path;
         } else {
             return currentDir + javaFile.separator + path;
         }
@@ -278,8 +279,8 @@ var processAndValidateArgs = function (args) {
     }
 
     // If the rootPath ends with '.json', then the file is assumed to be a 
-    // <config.json> instead. 
-    if (rootPath.endsWith('.json')) {
+    // <config.json> instead.
+    if ((rootPath.lastIndexOf('.json') + 5) === rootPath.length) {
         var configJson = readFile(javaPaths.get(rootPath));
         try {
             configJson = JSON.parse(configJson);
@@ -454,7 +455,8 @@ var formatBuffer = function (formatter) {
 
 var isMarkdownFile = function (file, markdownExtensions) {
     for (var j in markdownExtensions) {
-        if (file.toString().toLowerCase().endsWith(markdownExtensions[j])) {
+        var fileName = file.toString().toLowerCase();
+        if (fileName.lastIndexOf(markdownExtensions[j]) + markdownExtensions[j].length === fileName.length) {
             return true;
         }
     }
