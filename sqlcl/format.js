@@ -19,20 +19,32 @@
 // SQLcl uses the Nashorn JS engine of the JDK 8/11 by default.
 // As a result, this JS file must comply with ECMAScript 5.1.
 
+// java.lang
 var javaString = Java.type("java.lang.String");
-var javaArrays = Java.type("java.util.Arrays");
-var javaPaths = Java.type("java.nio.file.Paths");
-var javaFile = Java.type("java.io.File");
+var javaSystem = Java.type("java.lang.System");
+// java.nio
 var javaFiles = Java.type("java.nio.file.Files");
 var javaFileSystems = Java.type("java.nio.file.FileSystems");
-var javaCollectors = Java.type("java.util.stream.Collectors");
-var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
+var javaPaths = Java.type("java.nio.file.Paths");
+// java.io
+var javaFile = Java.type("java.io.File");
+// java.util
+var javaArrays = Java.type("java.util.Arrays");
 var javaPattern = Java.type("java.util.regex.Pattern");
+var javaCollectors = Java.type("java.util.stream.Collectors");
+// oracle.dbtools.app
 var javaFormat = Java.type("oracle.dbtools.app.Format");
+var javaFormat$Breaks = Java.type("oracle.dbtools.app.Format$Breaks");
+var javaFormat$BreaksX2 = Java.type("oracle.dbtools.app.Format$BreaksX2");
+var javaFormat$Case = Java.type("oracle.dbtools.app.Format$Case");
+var javaFormat$FlowControl = Java.type("oracle.dbtools.app.Format$FlowControl");
+var javaFormat$InlineComments = Java.type("oracle.dbtools.app.Format$InlineComments");
+var javaFormat$Space = Java.type("oracle.dbtools.app.Format$Space");
+var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
+// oracle.dbtools.parser
 var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
-var javaSystem = Java.type("java.lang.System");
 
 var getFiles = function (rootPath, extensions, ignoreMatcher) {
     var files;
@@ -90,9 +102,9 @@ var configure = function (formatter, xmlPath, arboriPath) {
         // Code Editor: Format
         formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
         // Advanced Format: General
-        formatter.options.put(formatter.kwCase, javaFormat.Case.lower);                                     // default: javaFormat.Case.UPPER
-        formatter.options.put(formatter.idCase, javaFormat.Case.NoCaseChange);                              // default: javaFormat.Case.lower
-        formatter.options.put(formatter.singleLineComments, javaFormat.InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
+        formatter.options.put(formatter.kwCase, javaFormat$Case.lower);                                     // default: javaFormat.Case.UPPER
+        formatter.options.put(formatter.idCase, javaFormat$Case.NoCaseChange);                              // default: javaFormat.Case.lower
+        formatter.options.put(formatter.singleLineComments, javaFormat$InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
         // Advanced Format: Alignment
         formatter.options.put(formatter.alignTabColAliases, false);                                         // default: true
         formatter.options.put(formatter.alignTypeDecl, true);                                               // default: true
@@ -104,22 +116,22 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.identSpaces, 3);                                                    // default: 3
         formatter.options.put(formatter.useTab, false);                                                     // default: false
         // Advanced Format: Line Breaks
-        formatter.options.put(formatter.breaksComma, javaFormat.Breaks.After);                              // default: javaFormat.Breaks.After
+        formatter.options.put(formatter.breaksComma, javaFormat$Breaks.After);                              // default: javaFormat.Breaks.After
         formatter.options.put("commasPerLine", 1);                                                          // default: 5
-        formatter.options.put(formatter.breaksConcat, javaFormat.Breaks.Before);                            // default: javaFormat.Breaks.Before
-        formatter.options.put(formatter.breaksAroundLogicalConjunctions, javaFormat.Breaks.Before);         // default: javaFormat.Breaks.Before
+        formatter.options.put(formatter.breaksConcat, javaFormat$Breaks.Before);                            // default: javaFormat.Breaks.Before
+        formatter.options.put(formatter.breaksAroundLogicalConjunctions, javaFormat$Breaks.Before);         // default: javaFormat.Breaks.Before
         formatter.options.put(formatter.breakAnsiiJoin, true);                                              // default: false
         formatter.options.put(formatter.breakParenCondition, true);                                         // default: false
         formatter.options.put(formatter.breakOnSubqueries, true);                                           // default: true
         formatter.options.put(formatter.maxCharLineSize, 120);                                              // default: 128
         formatter.options.put(formatter.forceLinebreaksBeforeComment, false);                               // default: false
-        formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat.BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
+        formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat$BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
         formatter.options.put(formatter.breaksAfterSelect, false);                                          // default: true
-        formatter.options.put(formatter.flowControl, javaFormat.FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
+        formatter.options.put(formatter.flowControl, javaFormat$FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
         // Advanced Format: White Space
         formatter.options.put(formatter.spaceAroundOperators, true);                                        // default: true
         formatter.options.put(formatter.spaceAfterCommas, true);                                            // default: true
-        formatter.options.put(formatter.spaceAroundBrackets, javaFormat.Space.Default);                     // default: javaFormat.Space.Default
+        formatter.options.put(formatter.spaceAroundBrackets, javaFormat$Space.Default);                     // default: javaFormat.Space.Default
         // Advanced Format: Hidden, not configurable in the GUI preferences dialog of SQLDev 20.4.1
         formatter.options.put(formatter.breaksProcArgs, false);                                             // default: false (overridden in Arbori program based on other settings)
         formatter.options.put(formatter.formatThreshold, 1);                                                // default: 1 (disables deprecated post-processing logic)
