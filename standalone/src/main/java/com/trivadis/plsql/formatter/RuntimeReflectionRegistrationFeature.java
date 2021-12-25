@@ -12,19 +12,37 @@ import java.util.Set;
 
 @SuppressWarnings("unused")
 public class RuntimeReflectionRegistrationFeature implements Feature {
+    private static final String[] SKIP_CLASS_NAMES = {
+            "oracle.dbtools.util.Closeables",
+    };
 
-    private static void register(String classNamePrefix, ClassLoader classLoader) {
-        Reflections reflections = new Reflections(classNamePrefix);
+    private static void register(String packageName, boolean includeSubPackages, ClassLoader classLoader) {
+        Reflections reflections = new Reflections(packageName);
         Set<String> allClassNames = reflections.getAll(Scanners.SubTypes);
         // allClassNames contains also inner classes
         for (String className : allClassNames) {
-            registerClass(className, classLoader);
+            if (className.startsWith((packageName))) {
+                if (includeSubPackages || (!className.substring(packageName.length() + 1).contains("."))) {
+                    if (validClass(className)) {
+                        registerClass(className, classLoader);
+                    }
+                }
+            }
         }
+    }
+
+    private static boolean validClass(String className) {
+        for (String skipClassName : SKIP_CLASS_NAMES) {
+            if (className.startsWith(skipClassName)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void registerClass(String className, ClassLoader classLoader) {
         try {
-            Class<?> clazz = Class.forName(className,false, classLoader);
+            Class<?> clazz = Class.forName(className, false, classLoader);
             // calling getClass() on a clazz throws an Exception when not found on the classpath
             RuntimeReflection.register(clazz.getClass());
             for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
@@ -39,16 +57,15 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
         } catch (Throwable t) {
             // ignore
         }
-     }
+    }
 
     public void beforeAnalysis(BeforeAnalysisAccess access) {
         ClassLoader classLoader = access.getApplicationClassLoader();
         // register all classes in a package
-        register("oracle.dbtools.app", classLoader);
-        register("oracle.dbtools.arbori", classLoader);
-        register("oracle.dbtools.parser", classLoader);
-        register("oracle.dbtools.raptor.utils", classLoader);
-        register("oracle.dbtools.util", classLoader);
-        register("oracle.dbtools.scripting", classLoader);
+        register("oracle.dbtools.app", true, classLoader);
+        register("oracle.dbtools.arbori", true, classLoader);
+        register("oracle.dbtools.parser", true, classLoader);
+        register("oracle.dbtools.raptor", false, classLoader);
+        register("oracle.dbtools.util", true, classLoader);
     }
 }
