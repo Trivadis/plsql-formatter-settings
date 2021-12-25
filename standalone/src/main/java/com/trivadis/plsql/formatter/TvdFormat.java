@@ -53,6 +53,11 @@ public class TvdFormat {
         if (debug != null && debug.trim().equalsIgnoreCase("true")) {
             Program.debug = true;
         }
+        // enable Arbori program timing
+        String timing = System.getenv("TVDFORMAT_TIMING");
+        if (timing != null && timing.trim().equalsIgnoreCase("true")) {
+            Program.timing = true;
+        }
         // amend usage help in format.js for standalone tvdformat
         System.setProperty("tvdformat.standalone", "true");
         // format.js is compiled at runtime with a GraalVM JDK but interpreted with other JDKs
