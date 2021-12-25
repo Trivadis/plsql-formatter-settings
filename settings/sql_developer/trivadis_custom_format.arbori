@@ -300,9 +300,9 @@ i5_define_global_functions:
     // Returns the indentation without leading new lines from a string.
     var getNumCharsAfterNewLine = function(indent) {
         if (indent.indexOf("\n") != -1) {
-            return indent.length() - indent.lastIndexOf("\n") - 1;
+            return indent.length - indent.lastIndexOf("\n") - 1;
         }
-        return indent.length();
+        return indent.length;
     }
 
     // Returns the leading new lines from a node position (without trailing spaces).
@@ -321,7 +321,7 @@ i5_define_global_functions:
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
         for (var i=startPos-1; i>=0 && indent.indexOf("\n") == -1; i=i-1) {
-            col += target.src.get(i).content.length();
+            col += target.src.get(i).content.length;
             var indent = getIndent(i);
             col += getNumCharsAfterNewLine(indent);
         }
@@ -334,7 +334,7 @@ i5_define_global_functions:
         var col=getNumCharsAfterNewLine(getIndent(startPos));
         var indent = getIndent(startPos);
         for (var i=startPos-1; i>=0 && indent.indexOf("\n") == -1; i=i-1) {
-            col += target.src.get(i).content.length();
+            col += target.src.get(i).content.length;
             var indent = getIndent(i);
             if (indent.indexOf("\n") == -1) {
                 col += getNumCharsAfterNewLine(indent);
@@ -2494,7 +2494,7 @@ r5_commas:
     }
 
     var getIndentForComma = function(indent) {
-        var len = indent.length() - 1;
+        var len = indent.length - 1;
         if (spaceAfterCommas) {
            len = len - 1;
         }
@@ -2509,7 +2509,7 @@ r5_commas:
         var indent = getIndent(nodeFrom);
         if (indent.indexOf("\n") != -1) {
             var pos = 0;
-            for (var i=0; i<indent.length(); i++) {
+            for (var i=0; i<indent.length; i++) {
                 if (indent.substring(i, i+1) == " ") {
                     pos++;
                 } else {
@@ -3066,7 +3066,7 @@ r2_indent_nodes:
         var key = keys[i];
         var margin = leftMargin.get(key);
         var value = newlinePositions.get(key);
-        var spaces = value.length()-value.lastIndexOf("\n")-1; // 0 = first column
+        var spaces = value.length-value.lastIndexOf("\n")-1; // 0 = first column
         var comma = 0;
         if (key < target.src.size()) {
             if (target.src.get(key).content == ",") {
@@ -3132,14 +3132,14 @@ r7_declaration:
         if (!breaksAfterSelect) {
             var keyword = tuple.get("keyword");
             var parent = tuple.get("parent");
-            var parentLength = target.src.get(parent.from).content.length();
+            var parentLength = target.src.get(parent.from).content.length;
             if (target.src.get(parent.from).content.toLowerCase() == "with") {
                 parentLength = 6;
             }
             if (getIndent(keyword.from).indexOf("\n") != -1) {
                 if (alignRight) {
                     var content = target.src.get(keyword.from).content;
-                    var missingSpaces = parentLength - target.src.get(keyword.from).content.length();
+                    var missingSpaces = parentLength - target.src.get(keyword.from).content.length;
                     var keywordIndent = theLineSeparator
                         + getSpaces(getColumn(parent.from) + missingSpaces)
                     struct.putNewline(keyword.from, keywordIndent);
@@ -3945,9 +3945,9 @@ a4_add_line_breaks_with_indent:
     var pos = 0;
     var indent = theLineSeparator; // handle first line
     for (var key=0; key<target.src.size(); key++) {
-        if (pos > maxCharLineSize && target.src.get(key).content.length() > 1 && getIndent(key).indexOf("\n") == -1) {
+        if (pos > maxCharLineSize && target.src.get(key).content.length > 1 && getIndent(key).indexOf("\n") == -1) {
             struct.putNewline(key, indent);
-            pos = indent.length() + target.src.get(key).content.length();
+            pos = indent.length + target.src.get(key).content.length;
             logger.fine(struct.getClass(), "a4_add_line_breaks_with_indent: at " + key + ".");
         } else {
             var value = getIndent(key);
@@ -4197,7 +4197,7 @@ d2_log_time:
     runOnce
 -> {
     var endTime = (new Date()).getTime();
-    logger.info(struct.getClass(), "d2_log_time: formatted " + target.input.length() + " chars and "
+    logger.info(struct.getClass(), "d2_log_time: formatted " + target.input.length + " chars and "
         + target.root.to + " nodes in "
         + ((endTime - startTime) / 1000) + " seconds.");
 }
