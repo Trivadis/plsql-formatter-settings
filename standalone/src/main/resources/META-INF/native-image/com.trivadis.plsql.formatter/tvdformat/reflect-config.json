@@ -72,6 +72,17 @@
     "allPublicClasses": true
   },
   {
+    "name" : "java.lang.StringBuilder",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
     "name" : "java.lang.reflect.Field",
     "methods" : [
       { "name" : "setAccessible"},
