@@ -35,8 +35,18 @@ public class TvdFormat {
     }
 
     public static void main(String[] args) throws IOException, ScriptException {
-        // suppress all logging output
+        // configure logging
         LogManager.getLogManager().reset();
+        String loggingConfFile = System.getenv("TVDFORMAT_LOGGING_CONF_FILE");
+        if (loggingConfFile != null) {
+            // enable logging according java.util.logging configuration file
+            try {
+                LogManager.getLogManager().readConfiguration(new FileInputStream(loggingConfFile));
+            } catch (FileNotFoundException e) {
+                System.out.println("\nWarning: The file '" + loggingConfFile +
+                        "' does not exist. Please update the environment variable TVDFORMAT_LOGGING_CONF_FILE.\n");
+            }
+        }
         // amend usage help in format.js for standalone tvdformat
         System.setProperty("tvdformat.standalone", "true");
         // format.js is compiled at runtime with a GraalVM JDK but interpreted with other JDKs
