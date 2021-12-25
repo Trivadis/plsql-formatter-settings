@@ -799,11 +799,11 @@ i8_save_indent_in_conditional_branch:
     for (var i in tokens) {
         var type = tokens[i].type
         var content = tokens[i].content.toLowerCase()
-        if (type == Token.MACRO_SKIP && content.startsWith("$if ")) {
+        if (type == Token.MACRO_SKIP && content.indexOf("$if ") == 0) {
             withinFirstBranch = true;
             continue;
         }
-        if (withinFirstBranch && type == Token.MACRO_SKIP && content.startsWith("$")) {
+        if (withinFirstBranch && type == Token.MACRO_SKIP && content.indexOf("$") == 0) {
             withinFirstBranch = false;
             continue;
         }
@@ -2552,7 +2552,7 @@ r5_commas:
             struct.putNewline(commaNode.from, getIndentForComma(indentNextNode));
             logger.fine(struct.getClass(), "r5_commas: fix indent before comma at " + commaNode.from + ".");
             var comment = getLastCommentBetweenPos(commaNode.from-1, commaNode.to);
-            if (comment != null && comment.startsWith("--")) {
+            if (comment != null && comment.indexOf("--") == 0) {
                 // we must not remove the newline after a single-line comment (belongs to the single line comment)
             } else {
                 // remove all whitespace before node
@@ -4026,7 +4026,7 @@ a18_indent_comment:
     var getIndentBefore = function(pos) {
         var indent = getIndent(pos);
         var content = target.src.get(pos).content.toLowerCase();
-        if (content.startsWith("end")) {
+        if (content.indexOf("end") == 0) {
             indent += getSpaces(indentSpaces);
             if (target.src.get(pos+1).content.toLowerCase() == "case") {
                 indent += getSpaces(indentSpaces);
