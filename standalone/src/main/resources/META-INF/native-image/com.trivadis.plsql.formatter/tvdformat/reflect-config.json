@@ -55,6 +55,17 @@
     "allPublicClasses": true
   },
   {
+    "name" : "java.util.TreeSet",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
     "name" : "java.lang.Class",
     "methods" : [
       {"name" : "getDeclaredField"}
