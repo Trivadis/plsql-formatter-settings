@@ -1,0 +1,495 @@
+[
+  {
+    "name" : "com.trivadis.plsql.formatter.ScriptRunnerContext",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.net.URI",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.Collection",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.HashMap",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.HashMap$KeySet",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.Class",
+    "methods" : [
+      {"name" : "getDeclaredField"}
+    ]
+  },
+  {
+    "name" : "java.lang.String",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.reflect.Field",
+    "methods" : [
+      { "name" : "setAccessible"},
+      { "name" : "get"}
+    ]
+  },
+  {
+    "name" : "java.util.Arrays",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.nio.file.Paths",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.io.BufferedWriter",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.io.File",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.nio.file.Files",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.nio.file.FileSystems",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.ArrayList",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.HashMap",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.HashSet",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.Iterator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.regex.Matcher",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.stream.Collectors",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.stream.ReferencePipeline$Head",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.stream.Stream",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.Integer",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.System",
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.io.PrintStream",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.regex.Pattern",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format$Breaks",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format$BreaksX2",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format$Case",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format$FlowControl",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format$InlineComments",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Format$Space",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.app.Persist2XML",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.arbori.Program",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.arbori.SqlProgram",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.Lexer",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.LexerToken",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.Parsed",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.ParseNode",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.Substitutions",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.Token",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.plsql.SqlEarley",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.plsql.SyntaxError",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.util.Logger",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.util.Service",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  }
+]
