@@ -5,6 +5,9 @@ import org.graalvm.nativeimage.hosted.RuntimeReflection;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -24,6 +27,15 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
             Class<?> clazz = Class.forName(className,false, classLoader);
             // calling getClass() on a clazz throws an Exception when not found on the classpath
             RuntimeReflection.register(clazz.getClass());
+            for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+                RuntimeReflection.register(constructor);
+            }
+            for (Method method : clazz.getDeclaredMethods()) {
+                RuntimeReflection.register((method));
+            }
+            for (Field field : clazz.getDeclaredFields()) {
+                RuntimeReflection.register(field);
+            }
         } catch (Throwable t) {
             // ignore
         }
