@@ -236,20 +236,16 @@
                     <mainClass>com.trivadis.plsql.formatter.TvdFormat</mainClass>
                     <!-- There are basically two options to create a native image
 
-                         a) with "force-fallback" option (works)
+                         a) with "force-fallback" option (stable)
                             The resulting image is relatively small (14 MB) and works.
                             The executable requires a JDK 8 or higher. The distribution does not matter.
 
-                         b) with "no-fallback" option (does not work)
+                         b) with "no-fallback" option (experimental)
                             The resulting image is large (almost 500 MB).
                             The executable does not require a JDK.
                             Must be build for every target platform/architecture combination.
-                            However, it produces various runtime errors and is currently not ready to use.
-                            Known issues (excerpt):
-                                - Crash in "Break long procedure argument lists" when using default Arbori program.
-                                  No exception is thrown
-                                - Crash in o2_whitespace_around_operators when using trivadis_custom_format.arbori.
-                                  java.lang.NumberFormatException: Cannot parse null string
+                            It should work with the default Arbori program and the trivadis_custom_format.arbori.
+                            However, runtime errors are possible when using unconfigured Java classes.
 	                -->
                     <buildArgs>
                         -H:IncludeResources=.*
