@@ -198,7 +198,7 @@ i5_define_global_variables:
     var Pattern = Java.type("java.util.regex.Pattern");
     var Collectors = Java.type('java.util.stream.Collectors');
 
-    // oracle.dptools.app classes
+    // oracle.dbtools.app classes
     var Format = Java.type('oracle.dbtools.app.Format');
     var Format$Breaks = Java.type("oracle.dbtools.app.Format$Breaks");
     var Format$Space = Java.type("oracle.dbtools.app.Format$Space");
