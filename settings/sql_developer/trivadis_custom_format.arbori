@@ -187,19 +187,29 @@ identifiers:
 i5_define_global_variables:
     runOnce
 -> {
-    // Java classes
+    // java.lang classes
+    var Integer = Java.type('java.lang.Integer');
+    var System = Java.type('java.lang.System');
+
+    // java.util classes
     var ArrayList = Java.type('java.util.ArrayList');
-    var Format = Java.type('oracle.dbtools.app.Format');
     var HashMap = Java.type('java.util.HashMap');
     var HashSet = Java.type('java.util.HashSet');
-    var Integer = Java.type('java.lang.Integer');
-    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
-    var logger = Java.type('oracle.dbtools.util.Logger');
     var Pattern = Java.type("java.util.regex.Pattern");
-    var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
-    var System = Java.type('java.lang.System');
-    var Token = Java.type('oracle.dbtools.parser.Token');
     var Collectors = Java.type('java.util.stream.Collectors');
+
+    // oracle.dptools.app classes
+    var Format = Java.type('oracle.dbtools.app.Format');
+    var Format$Breaks = Java.type("oracle.dbtools.app.Format$Breaks");
+    var Format$Space = Java.type("oracle.dbtools.app.Format$Space");
+
+    // oracle.dbtools.parser classes
+    var LexerToken = Java.type('oracle.dbtools.parser.LexerToken');
+    var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
+    var Token = Java.type('oracle.dbtools.parser.Token');
+
+    // oracle.dbtools.util classes
+    var logger = Java.type('oracle.dbtools.util.Logger');
 
     // use reflection to access hidden field newlinePositions
     var newlinePositionsField = Format.class.getDeclaredField("newlinePositions");
@@ -1100,7 +1110,7 @@ a13_short_nodes:
     var maxLen = maxCharLineSize / 2;
     var node = tuple.get("node");
     if (getNodeLength(node) <= maxLen) {
-        if (breaksConcat == Format.Breaks.None || !containsConcat(node)) {
+        if (breaksConcat == Format$Breaks.None || !containsConcat(node)) {
             reduceNodeIndents(node);
         }
     }
@@ -1775,10 +1785,10 @@ o3_whitespace_around_open_paren:
      [node) '('
 -> {
     var node = tuple.get("node");
-    if (spaceAroundBrackets != Format.Space.Default) {
+    if (spaceAroundBrackets != Format$Space.Default) {
         if (getIndent(node.from).indexOf("\n") == -1) {
             var spaceBefore;
-            if (spaceAroundBrackets == Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
+            if (spaceAroundBrackets == Format$Space.Inside || spaceAroundBrackets == Format$Space.NoSpace) {
                 spaceBefore = "";
             } else {
                 spaceBefore = " ";
@@ -1789,7 +1799,7 @@ o3_whitespace_around_open_paren:
     }
     if (getIndent(node.to).indexOf("\n") == -1) {
         var spaceAfter;
-        if (spaceAroundBrackets ==  Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
+        if (spaceAroundBrackets ==  Format$Space.Outside || spaceAroundBrackets == Format$Space.NoSpace || spaceAroundBrackets == Format$Space.Default) {
             spaceAfter = "";
         } else {
             spaceAfter = " ";
@@ -1805,7 +1815,7 @@ o3_whitespace_around_close_paren:
     var node = tuple.get("node");
     if (getIndent(node.from).indexOf("\n") == -1) {
         var spaceBefore;
-        if (spaceAroundBrackets == Format.Space.Outside || spaceAroundBrackets == Format.Space.NoSpace || spaceAroundBrackets == Format.Space.Default) {
+        if (spaceAroundBrackets == Format$Space.Outside || spaceAroundBrackets == Format$Space.NoSpace || spaceAroundBrackets == Format$Space.Default) {
             spaceBefore = "";
         } else {
             spaceBefore = " ";
@@ -1813,10 +1823,10 @@ o3_whitespace_around_close_paren:
         struct.putNewline(node.from, spaceBefore);
         logger.fine(struct.getClass(), "o3_whitespace_around_close_paren: <" + spaceBefore + "> before at " + node.from + ".");
     }
-    if (spaceAroundBrackets != Format.Space.Default) {
+    if (spaceAroundBrackets != Format$Space.Default) {
         if (getIndent(node.to).indexOf("\n") == -1) {
             var spaceAfter;
-            if (spaceAroundBrackets ==  Format.Space.Inside || spaceAroundBrackets == Format.Space.NoSpace) {
+            if (spaceAroundBrackets ==  Format$Space.Inside || spaceAroundBrackets == Format$Space.NoSpace) {
                 spaceAfter = "";
             } else {
                 spaceAfter = " ";
@@ -1827,7 +1837,7 @@ o3_whitespace_around_close_paren:
     }
 }
 
--- based on issue #99, applied only with Format.Space.Default
+-- based on issue #99, applied only with Format$Space.Default
 o3_no_space_before_open_paren:
       [node) '('
     & (
@@ -1836,7 +1846,7 @@ o3_no_space_before_open_paren:
         | [node^) paren_expr_list & [node^^) function_call
       )
 -> {
-    if (spaceAroundBrackets == Format.Space.Default) {
+    if (spaceAroundBrackets == Format$Space.Default) {
         var node = tuple.get("node");
         struct.putNewline(node.from, "");
         logger.fine(struct.getClass(), "o3_no_space_before_open_paren: at " + node.from + ".");
@@ -2054,7 +2064,7 @@ o9_boolean_option:
     var node = tuple.get("node")
     if (struct.breaksBeforeLogicalConjunction()) {
         if (getIndent(node.from).indexOf("\n") == -1) {
-            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
+            if (breaksAroundLogicalConjunctions != Format$Breaks.BeforeAndAfter) {
                struct.putNewline(node.to, " ");
             }
             struct.putNewline(node.from, theLineSeparator);
@@ -2063,7 +2073,7 @@ o9_boolean_option:
     }
     if (struct.breaksAfterLogicalConjunction()) {
         if (getIndent(node.to).indexOf("\n") == -1) {
-            if (breaksAroundLogicalConjunctions != Format.Breaks.BeforeAndAfter) {
+            if (breaksAroundLogicalConjunctions != Format$Breaks.BeforeAndAfter) {
                struct.putNewline(node.from, " ");
             }
             struct.putNewline(node.to, theLineSeparator);
