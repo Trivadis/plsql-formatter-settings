@@ -915,7 +915,7 @@ a1_replace_tabs_with_spaces:
         var key = keys[i];
         var value = newlinePositions.get(key);
         if (value.indexOf("\t") != -1) {
-            struct.putNewline(key, value.replaceAll("\t", indent));
+            struct.putNewline(key, replaceAll(value, "\t", indent));
             logger.fine(struct.getClass(), "a1_replace_tabs_with_spaces: at " + key + ".");
         }
     }
@@ -4056,7 +4056,7 @@ a18_indent_comment:
             substitutions.put(tokens[firstWS].begin, tokens[pos].begin, content);
             logger.fine(struct.getClass(), "a18_indent_comment: at " + parserPos + ".");
             if (tokens[pos].type == Token.COMMENT) {
-                var newComment = tokens[pos].content.replaceAll(
+                var newComment = replaceAll(tokens[pos].content,
                     oldIndent.substring(oldIndent.lastIndexOf("\n")),
                     newIndent.substring(newIndent.lastIndexOf("\n")));
                 substitutions.put(tokens[pos].begin, tokens[pos].end, newComment);
