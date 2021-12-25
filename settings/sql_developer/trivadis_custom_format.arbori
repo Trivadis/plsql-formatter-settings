@@ -615,9 +615,9 @@ i10_determine_and_normalize_line_separators:
     }
 
     var normalizeLineSeparators = function() {
-        target.input = target.input.replaceAll("\r", "");
+        target.input = replaceAll(target.input, "\r", "");
         if (theLineSeparator == "\r\n") {
-            target.input = target.input.replaceAll("\n", "\r\n");
+            target.input = replaceAll(target.input, "\n", "\r\n");
         }
         logger.fine(struct.getClass(), "i10_determine_and_normalize_line_separators: normalized.");
     }
