@@ -925,7 +925,7 @@ a2_remove_trailing_spaces:
         var value = newlinePositions.get(key);
         // handle Linux and Windows line separators regardless of the OS
         var newValue = replaceAll(replaceAll(value, "[ ]+\\n", "\n"), "[ ]+\\r\\n", "\r\n");
-        if (!value.equals(newValue)) {
+        if (value !== newValue) {
             struct.putNewline(key, newValue);
             logger.fine(struct.getClass(), "a2_remove_trailing_spaces: at " + key + ".");
         }
