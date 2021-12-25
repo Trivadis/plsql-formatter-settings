@@ -1,6 +1,7 @@
 package com.trivadis.plsql.formatter;
 
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+import oracle.dbtools.arbori.Program;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 
@@ -46,6 +47,11 @@ public class TvdFormat {
                 System.out.println("\nWarning: The file '" + loggingConfFile +
                         "' does not exist. Please update the environment variable TVDFORMAT_LOGGING_CONF_FILE.\n");
             }
+        }
+        // enable Arbori program debug
+        String debug = System.getenv("TVDFORMAT_DEBUG");
+        if (debug != null && debug.trim().equalsIgnoreCase("true")) {
+            Program.debug = true;
         }
         // amend usage help in format.js for standalone tvdformat
         System.setProperty("tvdformat.standalone", "true");
