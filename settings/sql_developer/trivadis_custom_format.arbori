@@ -199,6 +199,7 @@ i5_define_global_variables:
     var Substitutions = Java.type('oracle.dbtools.parser.Substitutions');
     var System = Java.type('java.lang.System');
     var Token = Java.type('oracle.dbtools.parser.Token');
+    var Collectors = Java.type('java.util.stream.Collectors');
 
     // use reflection to access hidden field newlinePositions
     var newlinePositionsField = Format.class.getDeclaredField("newlinePositions");
@@ -418,9 +419,9 @@ i5_define_global_functions:
 
     // Aligns all nodes per scope.
     var align = function(map, alignNodeName, indentNodeName, logText) {
-        var it = map.keySet().iterator();
-        while (it.hasNext()) {
-            var scope = it.next();
+        var keys = map.keySet().stream().collect(Collectors.toList()).toArray();
+        for (var i in keys) {
+            var scope = keys[i];
             var list = map.get(scope);
             var maxCol = getMaxColumn(list, alignNodeName);
             alignAtPos(maxCol, list, alignNodeName, indentNodeName, logText);
@@ -506,9 +507,9 @@ i5_define_global_functions:
             if (spaceAfterCommas) {
                 comma += 1;
             }
-            var it = map.keySet().iterator();
-            while (it.hasNext()) {
-                var scope = it.next();
+            var keys = map.keySet().stream().collect(Collectors.toList()).toArray();
+            for (var i in keys) {
+                var scope = keys[i];
                 var list = map.get(scope);
                 for (var i=0; i<list.length; i++) {
                     var node = list.get(i).get(nodeName);
@@ -819,9 +820,9 @@ i8_save_indent_in_conditional_branch:
 i9_remove_duplicate_spaces_in_scope:
     runOnce
 -> {
-    var it = newlinePositions.keySet().iterator();
-    while (it.hasNext()) {
-        var pos = it.next();
+    var keys = newlinePositions.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var pos = keys[i];
         if (overrideIndents(pos)) {
             var indent = getIndent(pos);
             var nlpos = indent.lastIndexOf("\n");
@@ -899,9 +900,9 @@ a1_replace_tabs_with_spaces:
     runOnce
 -> {
     var indent = getSpaces(indentSpaces);
-    var it = newlinePositions.keySet().iterator();
-    while (it.hasNext()) {
-        var key = it.next();
+    var keys = newlinePositions.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var key = keys[i];
         var value = newlinePositions.get(key);
         if (value.indexOf("\t") != -1) {
             struct.putNewline(key, value.replaceAll("\t", indent));
@@ -918,9 +919,9 @@ a2_remove_trailing_spaces:
     runOnce
 -> {
     var indent = getSpaces(indentSpaces);
-    var it = newlinePositions.keySet().iterator();
-    while (it.hasNext()) {
-        var key = it.next();
+    var keys = newlinePositions.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var key = keys[i];
         var value = newlinePositions.get(key);
         // handle Linux and Windows line separators regardless of the OS
         var newValue = replaceAll(replaceAll(value, "[ ]+\\n", "\n"), "[ ]+\\r\\n", "\r\n");
@@ -2593,9 +2594,9 @@ r2_init_left_margin:
 -> {
     // Left margin is expressed in number of spaces.
     var leftMargin = new HashMap();
-    var it = newlinePositions.keySet().iterator();
-    while (it.hasNext()) {
-        var key = it.next();
+    var keys = newlinePositions.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var key = keys[i];
         var value = newlinePositions.get(key);
         if (value.indexOf("\n") != -1) {
             // enforce uniform datatype in map; therefore convert values to Integer
@@ -3050,9 +3051,9 @@ r2_increment_left_margin_for_assignment:
 r2_indent_nodes:
     runOnce
 -> {
-    var it = leftMargin.keySet().iterator();
-    while (it.hasNext()) {
-        var key = it.next();
+    var keys = leftMargin.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var key = keys[i];
         var margin = leftMargin.get(key);
         var value = newlinePositions.get(key);
         var spaces = value.length()-value.lastIndexOf("\n")-1; // 0 = first column
@@ -3690,9 +3691,9 @@ r6_ensure_all_assoc_args_are_on_same_line:
     runOnce
 -> {
     var toRemove = new ArrayList();
-    var it = assocValues.keySet().iterator();
-    while (it.hasNext()) {
-        var scope = it.next();
+    var keys = assocValues.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var scope = keys[i];
         var list = assocValues.get(scope);
         if (list.size() > 0) {
             // we start with the second AssocArg
@@ -3754,9 +3755,9 @@ a9_find_columns:
 a9_align_xmltable_columns:
     runOnce
 -> {
-    var it = xmlTableColumns.keySet().iterator();
-    while (it.hasNext()) {
-        var scope = it.next();
+    var keys = xmlTableColumns.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var scope = keys[i];
         var pos = getColumn(scope.from+1);
         var list = xmlTableColumns.get(scope);
         alignAtPos(pos, list, "aligner", null, "a9_align_xmltable_columns");
@@ -3817,9 +3818,9 @@ a20_find_columns:
 a20_align_json_table_columns:
     runOnce
 -> {
-    var it = jsonTableColumns.keySet().iterator();
-    while (it.hasNext()) {
-        var scope = it.next();
+    var keys = jsonTableColumns.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var scope = keys[i];
         var pos = getColumn(scope.from+2); // first column
         var list = jsonTableColumns.get(scope);
         alignAtPos(pos, list, "aligner", null, "a20_align_json_table_columns");
@@ -4143,9 +4144,9 @@ a19_restore_indent_in_conditional_branch:
     runOnce
 -> {
     var indent = getSpaces(indentSpaces);
-    var it = indentInConditionalBranch.keySet().iterator();
-    while (it.hasNext()) {
-        var key = it.next();
+    var keys = indentInConditionalBranch.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var key = keys[i];
         var originalIndent = indentInConditionalBranch.get(key);
         var indent = getIndent(key);
         if (indent != originalIndent) {
@@ -4166,9 +4167,9 @@ a19_restore_indent_in_conditional_branch:
 a21_remove_non_ws_indent:
     runOnce
 -> {
-    var it = newlinePositions.keySet().iterator();
-    while (it.hasNext()) {
-        var pos = it.next();
+    var keys = newlinePositions.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var pos = keys[i];
         var indent = getIndent(pos);
         var newIndent = replaceAll(indent, "[^\\s]+", "");
         if (indent != newIndent) {
