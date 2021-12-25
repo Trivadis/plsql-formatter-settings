@@ -2,9 +2,7 @@ package com.trivadis.plsql.formatter;
 
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.EnvironmentAccess;
 import org.graalvm.polyglot.HostAccess;
-import org.graalvm.polyglot.PolyglotAccess;
 
 import javax.script.*;
 import java.io.*;
