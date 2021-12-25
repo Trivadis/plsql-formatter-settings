@@ -259,6 +259,7 @@
                         --language:js
                         --features=com.trivadis.plsql.formatter.RuntimeReflectionRegistrationFeature
                         --${native.image.fallback}-fallback
+                        --allow-incomplete-classpath
                     </buildArgs>
                 </configuration>
             </plugin>
