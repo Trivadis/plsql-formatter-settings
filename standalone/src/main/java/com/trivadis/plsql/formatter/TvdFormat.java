@@ -9,7 +9,6 @@ import org.graalvm.polyglot.PolyglotAccess;
 import javax.script.*;
 import java.io.*;
 import java.net.URL;
-import java.util.function.Predicate;
 import java.util.logging.LogManager;
 
 public class TvdFormat {
@@ -20,7 +19,7 @@ public class TvdFormat {
         scriptEngine = GraalJSScriptEngine.create(null,
                 Context.newBuilder("js")
                         .allowHostAccess(HostAccess.ALL)
-                        .allowHostClassLookup((Predicate<String>) s -> true));
+                        .allowHostClassLookup(s -> true));
         ctx = new ScriptRunnerContext();
         ctx.setOutputStream(System.out);
         scriptEngine.getContext().setAttribute("ctx", ctx, ScriptContext.ENGINE_SCOPE);
