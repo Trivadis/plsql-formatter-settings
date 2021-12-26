@@ -29,7 +29,7 @@ Variable | Description
 
 ### Executable JAR
 
-The `tvdformat.jar` is a shaded, executable JAR. This means it contains all dependend Java classes. However, it still needs a JDK 8 or higher.
+The `tvdformat.jar` is a shaded, executable JAR. This means it contains all dependent Java classes. However, it still needs a JDK 8 or higher.
 
 To run it, open a terminal window and type
 
