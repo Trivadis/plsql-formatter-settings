@@ -17,6 +17,9 @@
         <graalvm.version>21.3.0</graalvm.version>
         <graalvm.native.version>21.2.0</graalvm.native.version>
         <skip.native>true</skip.native>
+        <!-- relevant when skip.native is false, valid: "no", "force" -->
+        <native.image.fallback>force</native.image.fallback>
+        <disable.logging>true</disable.logging>
     </properties>
     <dependencies>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
@@ -89,6 +92,17 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
+        </dependency>
+        <!-- For native image with no-fallback option, used during build phase only -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.32</version>
         </dependency>
     </dependencies>
 
@@ -179,6 +193,7 @@
                                 <exclude>META-INF/MANIFEST.MF</exclude>
                                 <exclude>module-info.class</exclude>
                                 <exclude>META-INF/versions/**</exclude>
+                                <exclude>META-INF/native-image/org.graalvm.*/**</exclude>
                             </excludes>
                         </filter>
                         <filter>
@@ -220,17 +235,27 @@
                     <skip>${skip.native}</skip>
                     <imageName>${project.artifactId}</imageName>
                     <mainClass>com.trivadis.plsql.formatter.TvdFormat</mainClass>
-                    <!-- Creating a native image with "-language:js -no-fallback -H:ReflectionConfigurationFiles=..."
-                         was e dead end. There were various issues, such as
-                             - different behavior between JS/Java Strings and their methods
-                             - laborious identification of classes used via reflection
-                             - long build times (~280 seconds)
-                             - very large image size (437MB)
-                         Therefore, creating a native image which requires a JDK was much simpler.
-                         The drawback is a slower startup time. However, loading 437MB is not fast ether, at least the first time.
+                    <!-- There are basically two options to create a native image
+
+                         a) with "force-fallback" option (stable)
+                            The resulting image is relatively small (14 MB) and works.
+                            The executable requires a JDK 8 or higher. The distribution does not matter.
+
+                         b) with "no-fallback" option (experimental)
+                            The resulting image is large (almost 500 MB).
+                            The executable does not require a JDK.
+                            Must be build for every target platform/architecture combination.
+                            It should work with the default Arbori program and the trivadis_custom_format.arbori.
+                            However, runtime errors are possible when using unconfigured Java classes.
 	                -->
                     <buildArgs>
-                        -H:IncludeResources=.* --force-fallback
+                        -H:IncludeResources=.*
+                        -H:DynamicProxyConfigurationFiles=${project.basedir}/src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/proxy-config.json
+                        -H:ReflectionConfigurationFiles=${project.basedir}/src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/reflect-config.json
+                        -H:+ReportExceptionStackTraces
+                        --language:js
+                        --features=com.trivadis.plsql.formatter.RuntimeReflectionRegistrationFeature
+                        --${native.image.fallback}-fallback
                     </buildArgs>
                 </configuration>
             </plugin>
@@ -243,6 +268,9 @@
                     <includes>
                         <include>**/*.java</include>
                     </includes>
+                    <systemPropertyVariables>
+                        <disable.logging>${disable.logging}</disable.logging>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>

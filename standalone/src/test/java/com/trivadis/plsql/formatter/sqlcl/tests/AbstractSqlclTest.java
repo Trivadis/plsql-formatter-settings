@@ -31,11 +31,15 @@ public abstract class AbstractSqlclTest {
     }
 
     private void loadLoggingConf() {
+        var disableLogging = System.getProperty("disable.logging");
         var manager = LogManager.getLogManager();
-        try {
-            manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
+        manager.reset();
+        if (disableLogging != null && !disableLogging.trim().equalsIgnoreCase("true")) {
+            try {
+                manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
+            } catch (SecurityException | IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -51,14 +55,8 @@ public abstract class AbstractSqlclTest {
         var bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         var wrapListenBufferOutputStream = new WrapListenBufferOutputStream(bufferedOutputStream);
         var bindings = new SimpleBindings();
-        bindings.put("polyglot.js.nashorn-compat", true);
-        bindings.put("polyglot.js.allowHostAccess", Boolean.TRUE);
-        bindings.put("polyglot.js.allowNativeAccess", Boolean.TRUE);
-        bindings.put("polyglot.js.allowCreateThread", Boolean.TRUE);
-        bindings.put("polyglot.js.allowIO", Boolean.TRUE);
-        bindings.put("polyglot.js.allowHostClassLoading", Boolean.TRUE);
+        bindings.put("polyglot.js.allowHostAccess", true);
         bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
-        bindings.put("polyglot.js.allowAllAccess", Boolean.TRUE);
         scriptContext.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
         sqlcl.setOut(bufferedOutputStream);
         ctx.setOutputStreamWrapper(wrapListenBufferOutputStream);

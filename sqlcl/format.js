@@ -16,20 +16,35 @@
 
 "use strict";
 
+// SQLcl uses the Nashorn JS engine of the JDK 8/11 by default.
+// As a result, this JS file must comply with ECMAScript 5.1.
+
+// java.lang
 var javaString = Java.type("java.lang.String");
-var javaArrays = Java.type("java.util.Arrays");
-var javaPaths = Java.type("java.nio.file.Paths");
-var javaFile = Java.type("java.io.File");
+var javaSystem = Java.type("java.lang.System");
+// java.nio
 var javaFiles = Java.type("java.nio.file.Files");
 var javaFileSystems = Java.type("java.nio.file.FileSystems");
-var javaCollectors = Java.type("java.util.stream.Collectors");
-var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
+var javaPaths = Java.type("java.nio.file.Paths");
+// java.io
+var javaFile = Java.type("java.io.File");
+// java.util
+var javaArrays = Java.type("java.util.Arrays");
 var javaPattern = Java.type("java.util.regex.Pattern");
+var javaCollectors = Java.type("java.util.stream.Collectors");
+// oracle.dbtools.app
 var javaFormat = Java.type("oracle.dbtools.app.Format");
+var javaFormat$Breaks = Java.type("oracle.dbtools.app.Format$Breaks");
+var javaFormat$BreaksX2 = Java.type("oracle.dbtools.app.Format$BreaksX2");
+var javaFormat$Case = Java.type("oracle.dbtools.app.Format$Case");
+var javaFormat$FlowControl = Java.type("oracle.dbtools.app.Format$FlowControl");
+var javaFormat$InlineComments = Java.type("oracle.dbtools.app.Format$InlineComments");
+var javaFormat$Space = Java.type("oracle.dbtools.app.Format$Space");
+var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
+// oracle.dbtools.parser
 var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
-var javaSystem = Java.type("java.lang.System");
 
 var getFiles = function (rootPath, extensions, ignoreMatcher) {
     var files;
@@ -41,7 +56,7 @@ var getFiles = function (rootPath, extensions, ignoreMatcher) {
         }
     } else {
         files = javaFiles.walk(javaPaths.get(rootPath.toString()))
-            .filter(function (f) javaFiles.isRegularFile(f) && isRelevantFile(f, extensions, ignoreMatcher))
+            .filter(function (f) {return javaFiles.isRegularFile(f) && isRelevantFile(f, extensions, ignoreMatcher)})
             .sorted()
             .collect(javaCollectors.toList());
     }
@@ -55,7 +70,8 @@ var isRelevantFile = function (file, extensions, ignoreMatcher) {
         }
     }
     for (var i in extensions) {
-        if (file.toString().toLowerCase().endsWith(extensions[i])) {
+        var fileName = file.toString().toLowerCase();
+        if (fileName.lastIndexOf(extensions[i]) + extensions[i].length === fileName.length) {
             return true;
         }
     }
@@ -75,20 +91,20 @@ var getRelevantFiles = function (files, extensions, ignoreMatcher) {
 }
 
 var configure = function (formatter, xmlPath, arboriPath) {
-    if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath) && xmlPath != null) {
+    if ("default" !==  xmlPath && "embedded" !== xmlPath && xmlPath != null) {
         var url = new javaFile(xmlPath).toURI().toURL();
         var options = javaPersist2XML.read(url);
         var keySet = options.keySet().stream().collect(javaCollectors.toList());
         for (var j in keySet) {
             formatter.options.put(keySet[j], options.get(keySet[j]));
         }
-    } else if ("embedded".equals(xmlPath)) {
+    } else if ("embedded" === xmlPath) {
         // Code Editor: Format
         formatter.options.put(formatter.adjustCaseOnly, false);                                             // default: false (set true to skip formatting)
         // Advanced Format: General
-        formatter.options.put(formatter.kwCase, javaFormat.Case.lower);                                     // default: javaFormat.Case.UPPER
-        formatter.options.put(formatter.idCase, javaFormat.Case.NoCaseChange);                              // default: javaFormat.Case.lower
-        formatter.options.put(formatter.singleLineComments, javaFormat.InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
+        formatter.options.put(formatter.kwCase, javaFormat$Case.lower);                                     // default: javaFormat.Case.UPPER
+        formatter.options.put(formatter.idCase, javaFormat$Case.NoCaseChange);                              // default: javaFormat.Case.lower
+        formatter.options.put(formatter.singleLineComments, javaFormat$InlineComments.CommentsUnchanged);   // default: javaFormat.InlineComments.CommentsUnchanged
         // Advanced Format: Alignment
         formatter.options.put(formatter.alignTabColAliases, false);                                         // default: true
         formatter.options.put(formatter.alignTypeDecl, true);                                               // default: true
@@ -100,28 +116,28 @@ var configure = function (formatter, xmlPath, arboriPath) {
         formatter.options.put(formatter.identSpaces, 3);                                                    // default: 3
         formatter.options.put(formatter.useTab, false);                                                     // default: false
         // Advanced Format: Line Breaks
-        formatter.options.put(formatter.breaksComma, javaFormat.Breaks.After);                              // default: javaFormat.Breaks.After
+        formatter.options.put(formatter.breaksComma, javaFormat$Breaks.After);                              // default: javaFormat.Breaks.After
         formatter.options.put("commasPerLine", 1);                                                          // default: 5
-        formatter.options.put(formatter.breaksConcat, javaFormat.Breaks.Before);                            // default: javaFormat.Breaks.Before
-        formatter.options.put(formatter.breaksAroundLogicalConjunctions, javaFormat.Breaks.Before);         // default: javaFormat.Breaks.Before
+        formatter.options.put(formatter.breaksConcat, javaFormat$Breaks.Before);                            // default: javaFormat.Breaks.Before
+        formatter.options.put(formatter.breaksAroundLogicalConjunctions, javaFormat$Breaks.Before);         // default: javaFormat.Breaks.Before
         formatter.options.put(formatter.breakAnsiiJoin, true);                                              // default: false
         formatter.options.put(formatter.breakParenCondition, true);                                         // default: false
         formatter.options.put(formatter.breakOnSubqueries, true);                                           // default: true
         formatter.options.put(formatter.maxCharLineSize, 120);                                              // default: 128
         formatter.options.put(formatter.forceLinebreaksBeforeComment, false);                               // default: false
-        formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat.BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
+        formatter.options.put(formatter.extraLinesAfterSignificantStatements, javaFormat$BreaksX2.Keep);    // default: javaFormat.BreaksX2.X2
         formatter.options.put(formatter.breaksAfterSelect, false);                                          // default: true
-        formatter.options.put(formatter.flowControl, javaFormat.FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
+        formatter.options.put(formatter.flowControl, javaFormat$FlowControl.IndentedActions);               // default: javaFormat.FlowControl.IndentedActions
         // Advanced Format: White Space
         formatter.options.put(formatter.spaceAroundOperators, true);                                        // default: true
         formatter.options.put(formatter.spaceAfterCommas, true);                                            // default: true
-        formatter.options.put(formatter.spaceAroundBrackets, javaFormat.Space.Default);                     // default: javaFormat.Space.Default
+        formatter.options.put(formatter.spaceAroundBrackets, javaFormat$Space.Default);                     // default: javaFormat.Space.Default
         // Advanced Format: Hidden, not configurable in the GUI preferences dialog of SQLDev 20.4.1
         formatter.options.put(formatter.breaksProcArgs, false);                                             // default: false (overridden in Arbori program based on other settings)
         formatter.options.put(formatter.formatThreshold, 1);                                                // default: 1 (disables deprecated post-processing logic)
     }
     var arboriFileName = arboriPath;
-    if (!"default".equals(arboriPath)) {
+    if ("default" !== arboriPath) {
         arboriFileName = new javaFile(arboriPath).getAbsolutePath();
     }
     formatter.options.put(formatter.formatProgramURL, arboriFileName);                                      // default: "default" (= provided by SQLDev / SQLcl)
@@ -129,7 +145,7 @@ var configure = function (formatter, xmlPath, arboriPath) {
 
 var getConfiguredFormatter = function (xmlPath, arboriPath) {
     // set relative path for include directive in Arbori program to the directory of the main Arbori program
-    if (arboriPath != "default") {
+    if (arboriPath !== "default") {
         javaSystem.setProperty("dbtools.arbori.home", new javaFile(arboriPath).getParentFile().getAbsolutePath());
     }
     // now instantiate and configure the formatter
@@ -158,14 +174,14 @@ var readFile = function (file) {
 }
 
 var writeFile = function (file, content) {
-    var contentString = new javaString(content);
-    javaFiles.write(file, contentString.getBytes());
+    var writer = javaFiles.newBufferedWriter(file);
+    writer.write(content);
+    writer.close();
 }
 
 var existsDirectory = function (dir) {
     var f = new javaFile(dir.toString());
     return f.isDirectory();
-    return true;
 }
 
 var existsFile = function (file) {
@@ -207,17 +223,17 @@ var getJsPath = function () {
 }
 
 var getCdPath = function (path) {
-    if (path.startsWith("/")) {
+    if (path.indexOf("/") === 0) {
         return path; // Unix, fully qualified
-    } else if (path.length > 1 && path.substring(1, 2) == ":") {
+    } else if (path.length > 1 && path.substring(1, 2) === ":") {
         return path; // Windows, fully qualified, e.g. C:\mydir
     }
     var currentDir = ctx.getProperty("script.runner.cd_command");
     if (currentDir == null) {
         return path;
     } else {
-        if (path.endsWith(javaFile.separator)) {
-            return currentdir + path;
+        if (path.lastIndexOf(javaFile.separator) + javaFile.separator.length === path.length) {
+            return currentDir + path;
         } else {
             return currentDir + javaFile.separator + path;
         }
@@ -229,7 +245,7 @@ var createIgnoreMatcher = function (ignorePath) {
     var lines = javaFiles.readAllLines(javaPaths.get(ignorePath));
     for (var i=0; i < lines.size(); i++) {
         var line = lines[i].trim();
-        if (line.length > 0 && !line.startsWith('#')) {
+        if (line.length > 0 && line.indexOf('#') === -1) {
             if (globPattern.length > 6) {
                 globPattern += ",";
             }
@@ -269,14 +285,14 @@ var processAndValidateArgs = function (args) {
         return result(false);
     }
     rootPath = getCdPath(args[1]);
-    if (rootPath != "*" && !existsFile(rootPath) && !existsDirectory(rootPath)) {
+    if (rootPath !== "*" && !existsFile(rootPath) && !existsDirectory(rootPath)) {
         ctx.write("file or directory " + rootPath + " does not exist.\n\n");
         return result(false);
     }
 
     // If the rootPath ends with '.json', then the file is assumed to be a 
-    // <config.json> instead. 
-    if (rootPath.endsWith('.json')) {
+    // <config.json> instead.
+    if ((rootPath.lastIndexOf('.json') + 5) === rootPath.length) {
         var configJson = readFile(javaPaths.get(rootPath));
         try {
             configJson = JSON.parse(configJson);
@@ -347,7 +363,7 @@ var processAndValidateArgs = function (args) {
     }
 
     for (var i = 2; i < args.length; i++) {
-        if (args[i].toLowerCase().startsWith("ext=")) {
+        if (args[i].toLowerCase().indexOf("ext=") === 0) {
             extArgFound = true;
             if (args[i].length > 4) {
                 var values = args[i].substring(4).split(",");
@@ -357,7 +373,7 @@ var processAndValidateArgs = function (args) {
             }
             continue;
         }
-        if (args[i].toLowerCase().startsWith("mext=")) {
+        if (args[i].toLowerCase().indexOf("mext=") === 0) {
             mextArgFound = true;
             if (args[i].length > 5) {
                 var values = args[i].substring(5).split(",");
@@ -367,15 +383,15 @@ var processAndValidateArgs = function (args) {
             }
             continue;
         }
-        if (args[i].toLowerCase().startsWith("xml=")) {
+        if (args[i].toLowerCase().indexOf("xml=") === 0) {
             xmlPath = args[i].substring(4);
             continue;
         }
-        if (args[i].toLowerCase().startsWith("arbori=")) {
+        if (args[i].toLowerCase().indexOf("arbori=") === 0) {
             arboriPath = args[i].substring(7);
             continue;
         }
-        if (args[i].toLowerCase().startsWith("ignore=")) {
+        if (args[i].toLowerCase().indexOf("ignore=") === 0) {
             ignorePath = args[i].substring(7);
             continue;
         }
@@ -399,7 +415,7 @@ var processAndValidateArgs = function (args) {
             xmlPath = "embedded";
         }
     } else {
-        if (!"default".equals(xmlPath) && !"embedded".equals(xmlPath)) {
+        if ("default" !== xmlPath && "embedded" !== xmlPath) {
             xmlPath = getCdPath(xmlPath);
             if (!existsFile(xmlPath)) {
                 ctx.write("XML file " + xmlPath + " does not exist.\n\n");
@@ -414,7 +430,7 @@ var processAndValidateArgs = function (args) {
             arboriPath = "default";
         }
     } else {
-        if (!"default".equals(arboriPath)) {
+        if ("default" !== arboriPath) {
             arboriPath = getCdPath(arboriPath);
             if (!existsFile(arboriPath)) {
                 ctx.write("Arbori file " + arboriPath + " does not exist.\n\n");
@@ -451,7 +467,8 @@ var formatBuffer = function (formatter) {
 
 var isMarkdownFile = function (file, markdownExtensions) {
     for (var j in markdownExtensions) {
-        if (file.toString().toLowerCase().endsWith(markdownExtensions[j])) {
+        var fileName = file.toString().toLowerCase();
+        if (fileName.lastIndexOf(markdownExtensions[j]) + markdownExtensions[j].length === fileName.length) {
             return true;
         }
     }
@@ -483,9 +500,9 @@ var formatMarkdownFile = function (file, formatter) {
 
 var getLineSeparator = function (input) {
     var lineSep;
-    if (input.indexOf("\r\n") != -1) {
+    if (input.indexOf("\r\n") !== -1) {
         lineSep = "\r\n";
-    } else if (input.indexOf("\n") != -1) {
+    } else if (input.indexOf("\n") !== -1) {
         lineSep = "\n";
     } else {
         lineSep = javaSystem.lineSeparator();
@@ -520,10 +537,10 @@ var run = function (args) {
     ctx.write("\n");
     var options = processAndValidateArgs(args);
     if (!options.valid) {
-        printUsage(args[0].equalsIgnoreCase("tvdformat"), javaSystem.getProperty('tvdformat.standalone') != null);
+        printUsage(args[0].toLowerCase() === "tvdformat", javaSystem.getProperty('tvdformat.standalone') != null);
     } else {
         var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
-        if (options.rootPath == "*") {
+        if (options.rootPath === "*") {
             formatBuffer(formatter);
         } else {
             var files;
@@ -553,10 +570,10 @@ var unregisterTvdFormat = function () {
     javaCommandRegistry.removeListener(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE);
     javaCommandRegistry.clearCaches(ctx.getBaseConnection(), ctx);
     var remainingListeners = javaCommandRegistry.getListeners(ctx.getBaseConnection(), ctx).get(javaSQLCommand.StmtSubType.G_S_FORALLSTMTS_STMTSUBTYPE)
-        .stream().map(function(l) l.getClass()).collect(javaCollectors.toSet());
+        .stream().map(function(l) {return l.getClass()}).collect(javaCollectors.toSet());
     // re-register all commands except for class TvdFormat and remaining (not removed) listener classes
     for (var i in listeners) {
-        if (!listeners.get(i).toString().equals("TvdFormat") && !remainingListeners.contains(listeners.get(i).getClass())) {
+        if (listeners.get(i).toString() !== "TvdFormat" && !remainingListeners.contains(listeners.get(i).getClass())) {
             javaCommandRegistry.addForAllStmtsListener(listeners.get(i).getClass());
         }
     }
@@ -565,7 +582,7 @@ var unregisterTvdFormat = function () {
 var registerTvdFormat = function () {
     var handleEvent = function (conn, ctx, cmd) {
         var args = getArgs(cmd.getSql());
-        if (args != null && typeof args[0] != "undefined" && args[0].equalsIgnoreCase("tvdformat")) {
+        if (args != null && typeof args[0] != "undefined" && args[0].toLowerCase() === "tvdformat") {
             run(args);
             return true;
         }
@@ -591,7 +608,7 @@ var registerTvdFormat = function () {
 }
 
 // main
-if (args.length >= 2 && (args[1].equalsIgnoreCase("-r") || args[1].equalsIgnoreCase("--register"))) {
+if (args.length >= 2 && (args[1].toLowerCase() === "-r" || args[1].toLowerCase() === "--register")) {
     var javaSQLCommand = Java.type("oracle.dbtools.raptor.newscriptrunner.SQLCommand");
     var javaCommandRegistry = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandRegistry");
     var javaCommandListener = Java.type("oracle.dbtools.raptor.newscriptrunner.CommandListener");

@@ -1,12 +1,13 @@
 package com.trivadis.plsql.formatter;
 
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+import oracle.dbtools.arbori.Program;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.HostAccess;
 
 import javax.script.*;
 import java.io.*;
 import java.net.URL;
-import java.util.function.Predicate;
 import java.util.logging.LogManager;
 
 public class TvdFormat {
@@ -16,8 +17,8 @@ public class TvdFormat {
     TvdFormat() {
         scriptEngine = GraalJSScriptEngine.create(null,
                 Context.newBuilder("js")
-                        .option("js.nashorn-compat", "true")
-                        .allowAllAccess(true));
+                        .allowHostAccess(HostAccess.ALL)
+                        .allowHostClassLookup(s -> true));
         ctx = new ScriptRunnerContext();
         ctx.setOutputStream(System.out);
         scriptEngine.getContext().setAttribute("ctx", ctx, ScriptContext.ENGINE_SCOPE);
@@ -35,9 +36,33 @@ public class TvdFormat {
     }
 
     public static void main(String[] args) throws IOException, ScriptException {
+        // configure logging
         LogManager.getLogManager().reset();
+        String loggingConfFile = System.getenv("TVDFORMAT_LOGGING_CONF_FILE");
+        if (loggingConfFile != null) {
+            // enable logging according java.util.logging configuration file
+            try {
+                LogManager.getLogManager().readConfiguration(new FileInputStream(loggingConfFile));
+            } catch (FileNotFoundException e) {
+                System.out.println("\nWarning: The file '" + loggingConfFile +
+                        "' does not exist. Please update the environment variable TVDFORMAT_LOGGING_CONF_FILE.\n");
+            }
+        }
+        // enable Arbori program debug
+        String debug = System.getenv("TVDFORMAT_DEBUG");
+        if (debug != null && debug.trim().equalsIgnoreCase("true")) {
+            Program.debug = true;
+        }
+        // enable Arbori program timing
+        String timing = System.getenv("TVDFORMAT_TIMING");
+        if (timing != null && timing.trim().equalsIgnoreCase("true")) {
+            Program.timing = true;
+        }
+        // amend usage help in format.js for standalone tvdformat
         System.setProperty("tvdformat.standalone", "true");
+        // format.js is compiled at runtime with a GraalVM JDK but interpreted with other JDKs
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+        // run formatter with command line parameters
         TvdFormat formatter = new TvdFormat();
         formatter.run(args);
     }
