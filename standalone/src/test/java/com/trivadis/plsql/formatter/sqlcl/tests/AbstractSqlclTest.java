@@ -31,11 +31,15 @@ public abstract class AbstractSqlclTest {
     }
 
     private void loadLoggingConf() {
+        var disableLogging = System.getProperty("disable.logging");
         var manager = LogManager.getLogManager();
-        try {
-            manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
+        manager.reset();
+        if (disableLogging != null && !disableLogging.trim().equalsIgnoreCase("true")) {
+            try {
+                manager.readConfiguration(Thread.currentThread().getContextClassLoader().getResourceAsStream("logging.conf"));
+            } catch (SecurityException | IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

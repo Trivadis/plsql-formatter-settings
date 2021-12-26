@@ -19,6 +19,7 @@
         <skip.native>true</skip.native>
         <!-- relevant when skip.native is false, valid: "no", "force" -->
         <native.image.fallback>force</native.image.fallback>
+        <disable.logging>true</disable.logging>
     </properties>
     <dependencies>
         <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
@@ -267,6 +268,9 @@
                     <includes>
                         <include>**/*.java</include>
                     </includes>
+                    <systemPropertyVariables>
+                        <disable.logging>${disable.logging}</disable.logging>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
