@@ -43,17 +43,15 @@ The parameters are the same as for the [SQLcl command `tvdformat`](../sqlcl/READ
 
 A native image is a platform specific executable. The following images can be produced with a GraalVM JDK 17:
 
-OS      | amd64)? | aarch64? | Requires JDK 8+? | No JDK required?
-------- | ------- | -------- | ---------------- | ---------------- 
-macOS   | yes     | no       | yes              | yes
-Linux   | yes     | yes      | yes              | yes
-Windows | yes     | no       | yes              | yes
+OS      | amd64 (Intel))? | aarch64 (ARM)? |
+------- | :-------------: | :------------: |
+macOS   | yes             | -              |
+Linux   | yes             | yes            |
+Windows | yes             | -              |
 
-Currently there is no way to produce an ARM based (aarch64) native image for macOS and Windows. This reduces the possible combinations from 12 to 8 native images. Native images are not part of a release. You have to build them yourself as described [below](#how-to-build). 
+Currently there is no way to produce an ARM based (aarch64) native image for macOS and Windows. 
 
-Native images produced with the `--force-fallback` option have a size of around 14 MB. They require a JDK 8+ at runtime and are considered stable. 
-
-Native images produced with the `--no-fallback` option have a size of around 500 MB. They do not require a JDK at runtime. Due to the absence of automatic tests, these images are considered experimental.
+Native images are not part of a release. You have to build them yourself as described [below](#how-to-build).
 
 To run a native image open a terminal window and type
 
@@ -91,15 +89,13 @@ The parameters are the same as for the [executable JAR](#executable-jar).
     | -------------------------- | ------- | ------- |
     | `skip.native`              | `true`  | Do not produce a native image (default) |
     |                            | `false` | Produce a native image |
-    | `native.image.fallback`    | `no`    | Produce a native image of about 14 MB which requires a JDK at runtime (default) |
-    |                            | `force` | Produce a native image of about 500 MB that runs without JDK |
     | `skipTests`                | `true`  | Run tests (default) |
     |                            | `false` | Do not run tests |
     | `disable.logging`          | `true`  | Disable logging message during test run (default) |
     |                            | `false` | Enable logging message during test run |
 
-    Here's a fully qualified example to produce a native image:
+    Here's a fully qualified example to produce a native image and run all integration tests:
 
     ```
-    mvn -Dsqlcl.libdir=/usr/local/bin/sqlcl/lib -Dskip.native=false -Dnative.image.fallback=no -DskipTests=true -Ddisable.logging=true clean package
+    mvn -Dsqlcl.libdir=/usr/local/bin/sqlcl/lib -Dskip.native=false -DskipTests=false -Ddisable.logging=true clean integration-test
     ```
