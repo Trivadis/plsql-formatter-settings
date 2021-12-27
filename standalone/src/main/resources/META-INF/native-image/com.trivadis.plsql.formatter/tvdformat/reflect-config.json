@@ -11,7 +11,148 @@
     "allPublicClasses": true
   },
   {
+    "name" : "java.io.BufferedWriter",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.io.File",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.io.PrintStream",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.Class",
+    "methods" : [
+      {"name" : "getDeclaredField"}
+    ]
+  },
+  {
+    "name" : "java.lang.Integer",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.reflect.Field",
+    "methods" : [
+      { "name" : "setAccessible"},
+      { "name" : "get"}
+    ]
+  },
+  {
+    "name" : "java.lang.String",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.StringBuilder",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.lang.System",
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
     "name" : "java.net.URI",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.nio.file.Files",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.nio.file.FileSystems",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.nio.file.Paths",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.ArrayList",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.Arrays",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -55,140 +196,6 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.TreeSet",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.lang.Class",
-    "methods" : [
-      {"name" : "getDeclaredField"}
-    ]
-  },
-  {
-    "name" : "java.lang.String",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.lang.StringBuilder",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.lang.reflect.Field",
-    "methods" : [
-      { "name" : "setAccessible"},
-      { "name" : "get"}
-    ]
-  },
-  {
-    "name" : "java.util.Arrays",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.nio.file.Paths",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.io.BufferedWriter",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.io.File",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.nio.file.Files",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.nio.file.FileSystems",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.util.ArrayList",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.util.HashMap",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
     "name" : "java.util.HashSet",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
@@ -212,6 +219,17 @@
   },
   {
     "name" : "java.util.regex.Matcher",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.regex.Pattern",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -255,36 +273,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.lang.Integer",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.lang.System",
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.io.PrintStream",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "java.util.regex.Pattern",
+    "name" : "java.util.TreeSet",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -449,28 +438,6 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.Substitutions",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name" : "oracle.dbtools.parser.Token",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
     "name" : "oracle.dbtools.parser.plsql.SqlEarley",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
@@ -483,6 +450,28 @@
   },
   {
     "name" : "oracle.dbtools.parser.plsql.SyntaxError",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.Substitutions",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "oracle.dbtools.parser.Token",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
