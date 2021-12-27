@@ -27,13 +27,6 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
              order by d.department_name, v.employee_id;
             """;
 
-    private final String XML = Objects.requireNonNull(
-            Thread.currentThread().getContextClassLoader().getResource("trivadis_advanced_format.xml")).getPath();
-
-    private final String ARBORI = Objects.requireNonNull(
-            Thread.currentThread().getContextClassLoader().getResource("trivadis_custom_format.arbori")).getPath();
-
-
     @Test
     public void jsonArrayDirTest() throws ScriptException, IOException {
         var configFileContent = """
@@ -43,7 +36,7 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
                 """.replace("#TEMP_DIR#", tempDir.toString());
         var configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var args = new String[]{tempDir + File.separator + "config.json", "xml=" + XML, "arbori=" + ARBORI};
+        var args = new String[]{tempDir + File.separator + "config.json", "xml=" + getXML(), "arbori=" + getArbori()};
         TvdFormat.main(args);
         var actual = getFormattedContent("query.sql");
         Assertions.assertEquals(EXPECTED_QUERY_SQL, actual);
@@ -59,7 +52,7 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var args = new String[]{tempDir + File.separator + "config.json", "xml=" + XML, "arbori=" + ARBORI};
+        var args = new String[]{tempDir + File.separator + "config.json", "xml=" + getXML(), "arbori=" + getArbori()};
         TvdFormat.main(args);
         var actual = getFormattedContent("query.sql");
         Assertions.assertEquals(EXPECTED_QUERY_SQL, actual);
@@ -77,8 +70,8 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
                         "#TEMP_DIR##FILE_SEP#package_body.pkb"
                     ]
                 }
-                """.replace("#XML#", XML)
-                .replace("#ARBORI#", ARBORI)
+                """.replace("#XML#", getXML())
+                .replace("#ARBORI#", getArbori())
                 .replace("#TEMP_DIR#", tempDir.toString())
                 .replace("#FILE_SEP#", File.separator);
         var configFile = Paths.get(tempDir + File.separator + "config.json");

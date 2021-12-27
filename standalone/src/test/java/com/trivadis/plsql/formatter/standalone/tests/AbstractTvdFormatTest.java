@@ -3,41 +3,32 @@ package com.trivadis.plsql.formatter.standalone.tests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public abstract class AbstractTvdFormatTest {
+    static final String[] TEST_FILES = new String[]
+            {"unformatted/dont_format.txt", "unformatted/markdown.md", "unformatted/package_body.pkb",
+                    "unformatted/query.sql", "unformatted/sql.txt", "unformatted/syntax_error.sql",
+                    "trivadis_advanced_format.xml", "trivadis_custom_format.arbori"};
     static final PrintStream originalPrintStream = System.out;
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
     Path tempDir;
 
     @BeforeEach
-    public void setup() {
-        try {
-            tempDir = Files.createTempDirectory("tvdformat-test-");
-            var url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
+    public void setup() throws IOException {
+        tempDir = Files.createTempDirectory("tvdformat-test-");
+        for (String fileName : TEST_FILES) {
+            var url = Thread.currentThread().getContextClassLoader().getResource(fileName);
             assert url != null;
-            var resourceDir = Paths.get(url.getPath());
-            var sources = Files.walk(resourceDir)
-                    .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-            for (Path source : sources) {
-                var target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
-                Files.copy(source, target);
-            }
-            System.setOut(printStream);
-            outputStream.reset();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            var target = Paths.get(tempDir.toString() + File.separator + Paths.get(url.getPath()).getFileName());
+            Files.copy(url.openStream(), target);
         }
+        System.setOut(printStream);
+        outputStream.reset();
     }
 
     @AfterEach
@@ -47,15 +38,11 @@ public abstract class AbstractTvdFormatTest {
         System.setOut(originalPrintStream);
     }
 
-    private String getFileContent(Path file) {
-        try {
-            return new String(Files.readAllBytes(file));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private String getFileContent(Path file) throws IOException {
+        return new String(Files.readAllBytes(file));
     }
 
-    public String getFormattedContent(String fileName) {
+    public String getFormattedContent(String fileName) throws IOException {
         var file = Paths.get(tempDir.toString() + File.separator + fileName);
         return getFileContent(file);
     }
@@ -63,4 +50,13 @@ public abstract class AbstractTvdFormatTest {
     public String getConsoleOutput() {
         return outputStream.toString();
     }
+
+    public String getXML() {
+        return tempDir + File.separator + "trivadis_advanced_format.xml";
+    }
+
+    public String getArbori() {
+        return tempDir + File.separator + "trivadis_custom_format.arbori";
+    }
+
 }
