@@ -8,7 +8,9 @@ import org.reflections.scanners.Scanners;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class RuntimeReflectionRegistrationFeature implements Feature {
@@ -16,7 +18,11 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
             "oracle.dbtools.util.Closeables",
     };
 
-    private static void register(String packageName, boolean includeSubPackages, ClassLoader classLoader) {
+    private static final String PRINT_REFLECT_OBJECT = System.getenv("TVDFORMAT_PRINT_REFLECT_OBJECT");
+
+    private HashSet<String> registeredClassNames = new HashSet<>();
+
+    private void register(String packageName, boolean includeSubPackages, ClassLoader classLoader) {
         Reflections reflections = new Reflections(packageName);
         Set<String> allClassNames = reflections.getAll(Scanners.SubTypes);
         // allClassNames contains also inner classes
@@ -31,7 +37,7 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
         }
     }
 
-    private static boolean validClass(String className) {
+    private boolean validClass(String className) {
         for (String skipClassName : SKIP_CLASS_NAMES) {
             if (className.startsWith(skipClassName)) {
                 return false;
@@ -40,7 +46,7 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
         return true;
     }
 
-    private static void registerClass(String className, ClassLoader classLoader) {
+    private void registerClass(String className, ClassLoader classLoader) {
         try {
             Class<?> clazz = Class.forName(className, false, classLoader);
             // calling getClass() on a clazz throws an Exception when not found on the classpath
@@ -54,8 +60,34 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
             for (Field field : clazz.getDeclaredFields()) {
                 RuntimeReflection.register(field);
             }
+            registeredClassNames.add(className);
         } catch (Throwable t) {
             // ignore
+        }
+    }
+
+    private void printReflectObjects() {
+        if (PRINT_REFLECT_OBJECT != null && PRINT_REFLECT_OBJECT.trim().equalsIgnoreCase("true")) {
+            System.out.println("[");
+            String template = "  {\n" +
+                    "    \"name\" : \"#CLASS_NAME#\",\n" +
+                    "    \"allDeclaredConstructors\": true,\n" +
+                    "    \"allDeclaredMethods\": true,\n" +
+                    "    \"allDeclaredFields\": true,\n" +
+                    "    \"allPublicConstructors\": true,\n" +
+                    "    \"allPublicMethods\": true,\n" +
+                    "    \"allPublicFields\": true\n" +
+                    "  }";
+            boolean first = true;
+            for (String registeredClassName : registeredClassNames.stream().sorted().collect(Collectors.toList())) {
+                if (first) {
+                    first = false;
+                } else {
+                    System.out.println(",");
+                }
+                System.out.print(template.replace("#CLASS_NAME#", registeredClassName));
+            }
+            System.out.println("]");
         }
     }
 
@@ -67,5 +99,11 @@ public class RuntimeReflectionRegistrationFeature implements Feature {
         register("oracle.dbtools.parser", true, classLoader);
         register("oracle.dbtools.raptor", false, classLoader);
         register("oracle.dbtools.util", true, classLoader);
+    }
+
+    @Override
+    public void afterAnalysis(AfterAnalysisAccess access) {
+        Feature.super.afterAnalysis(access);
+        printReflectObjects();
     }
 }
