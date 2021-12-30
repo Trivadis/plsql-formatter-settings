@@ -12,7 +12,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>8</jdk.version>
         <jdk.test.version>17</jdk.test.version>
-        <sqlcl.libdir>/usr/local/bin/sqlcl/lib</sqlcl.libdir>
         <sqlcl.version>21.4.0</sqlcl.version>
         <graalvm.version>21.3.0</graalvm.version>
         <native.maven.plugin.version>0.9.9</native.maven.plugin.version>
@@ -46,37 +45,32 @@
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-common</artifactId>
             <version>${sqlcl.version}</version>
-            <scope>system</scope>
-            <systemPath>${sqlcl.libdir}/dbtools-common.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <!-- SQLcl dependencies not available in public Maven repositories (test) -->
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-sqlcl</artifactId>
             <version>${sqlcl.version}</version>
-            <scope>system</scope>
-            <systemPath>${sqlcl.libdir}/dbtools-sqlcl.jar</systemPath>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>oracle.xml</groupId>
             <artifactId>xmlparserv2-sans-jaxp-services</artifactId>
             <version>${sqlcl.version}</version>
-            <scope>system</scope>
-            <systemPath>${sqlcl.libdir}/xmlparserv2_sans_jaxp_services.jar</systemPath>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>oracle.i18n</groupId>
             <artifactId>orai18n</artifactId>
             <version>${sqlcl.version}</version>
-            <scope>system</scope>
-            <systemPath>${sqlcl.libdir}/orai18n.jar</systemPath>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>oracle.soda</groupId>
             <artifactId>orajsoda</artifactId>
             <version>${sqlcl.version}</version>
-            <scope>system</scope>
-            <systemPath>${sqlcl.libdir}/orajsoda.jar</systemPath>
+            <scope>test</scope>
         </dependency>
         <!-- GraalVM native image and Context -->
         <dependency>
@@ -102,11 +96,13 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.32</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -142,28 +138,6 @@
             </testResource>
         </testResources>
         <plugins>
-            <plugin>
-                <groupId>com.googlecode.addjars-maven-plugin</groupId>
-                <artifactId>addjars-maven-plugin</artifactId>
-                <version>1.0.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>add-jars</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>${sqlcl.libdir}</directory>
-                                    <includes>
-                                        <include>**/dbtools-common.jar</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

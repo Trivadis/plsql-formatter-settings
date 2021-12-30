@@ -74,15 +74,20 @@ The parameters are the same as for the [executable JAR](#executable-jar).
     ```
     cd standalone
     ```
-
-8. Run Maven build by the following command
+8. Install the required SQLcl libraries which are not available in public Maven repositories into your local Maven repository. Run the following shell script
 
     ```
-    mvn -Dsqlcl.libdir=/usr/local/bin/sqlcl/lib clean package
+    ./install_sqlcl_libs.sh
     ```
 
-    Amend the parameter `sqlcl.libdir` to match the path of the lib directory of your SQLcl installation. This folder is used to reference libraries such as `dbtools-common.jar` which contains the formatter and its dependencies. These libraries are not available in public Maven repositories.
-    
+    The shell script expects to find the libraries such as `dbtools-common.jar` in `/usr/local/bin/sqlcl/lib`. If they are not there, pass the path to the directory as paramter to this script.
+
+9. Run Maven build by the following command
+
+    ```
+    mvn clean package
+    ```
+
     You can define the following optional parameters: 
 
     | Parameter                  | Value   | Meaning |
@@ -97,5 +102,5 @@ The parameters are the same as for the [executable JAR](#executable-jar).
     Here's a fully qualified example to produce a native image and run all integration tests:
 
     ```
-    mvn -Dsqlcl.libdir=/usr/local/bin/sqlcl/lib -Dskip.native=false -DskipTests=false -Ddisable.logging=true clean integration-test
+    mvn -Dskip.native=false -DskipTests=false -Ddisable.logging=true clean integration-test
     ```
