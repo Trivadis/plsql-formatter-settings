@@ -40,14 +40,13 @@
             <version>31.0.1-jre</version>
             <scope>test</scope>
         </dependency>
-        <!-- SQLcl dependencies not available in public Maven repositories (compile) -->
+        <!-- SQLcl dependencies not available in public Maven repositories -->
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-common</artifactId>
             <version>${sqlcl.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!-- SQLcl dependencies not available in public Maven repositories (test) -->
         <dependency>
             <groupId>oracle.dbtools</groupId>
             <artifactId>dbtools-sqlcl</artifactId>
@@ -209,6 +208,7 @@
                     <systemPropertyVariables>
                         <disable.logging>${disable.logging}</disable.logging>
                     </systemPropertyVariables>
+                    <!--argLine>-agentlib:native-image-agent=config-output-dir=${project.build.directory}/test-classes/META-INF/native-image</argLine-->
                 </configuration>
             </plugin>
         </plugins>
@@ -360,6 +360,7 @@
                                 <buildArg>--language:js</buildArg>
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                                <!--buildArg>-H:+PrintAnalysisCallTree</buildArg-->
                             </buildArgs>
                         </configuration>
                     </plugin>
