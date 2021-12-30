@@ -80,7 +80,11 @@ The parameters are the same as for the [executable JAR](#executable-jar).
     ./install_sqlcl_libs.sh
     ```
 
-    The shell script expects to find the libraries such as `dbtools-common.jar` in `/usr/local/bin/sqlcl/lib`. If they are not there, pass the path to the directory as paramter to this script.
+    The shell script expects to find the libraries such as `dbtools-common.jar` in `/usr/local/bin/sqlcl/lib`. If they are not there, pass the path to the directory as parameter to this script. For example
+
+    ```
+    ./install_sqlcl_libs.sh /opt/homebrew/Caskroom/sqlcl/21.4.0.348.1716/sqlcl/lib
+    ```
 
 9. Run Maven build by the following command
 
