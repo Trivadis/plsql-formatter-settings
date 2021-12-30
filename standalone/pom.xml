@@ -315,7 +315,6 @@
                 </property>
             </activation>
             <properties>
-                <config.dir>${project.basedir}/src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}</config.dir>
                 <test>com.trivadis.plsql.formatter.standalone.tests.TvdFormatTest</test>
             </properties>
             <build>
