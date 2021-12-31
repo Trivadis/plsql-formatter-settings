@@ -28,11 +28,13 @@ var javaFileSystems = Java.type("java.nio.file.FileSystems");
 var javaPaths = Java.type("java.nio.file.Paths");
 // java.io
 var javaFile = Java.type("java.io.File");
+var javaFileInputStream = Java.type("java.io.FileInputStream");
 // java.util
 var javaArrays = Java.type("java.util.Arrays");
+var javaLogManager = Java.type("java.util.logging.LogManager");
 var javaPattern = Java.type("java.util.regex.Pattern");
 var javaCollectors = Java.type("java.util.stream.Collectors");
-// oracle.dbtools.app
+// oracle.dbtools
 var javaFormat = Java.type("oracle.dbtools.app.Format");
 var javaFormat$Breaks = Java.type("oracle.dbtools.app.Format$Breaks");
 var javaFormat$BreaksX2 = Java.type("oracle.dbtools.app.Format$BreaksX2");
@@ -41,10 +43,10 @@ var javaFormat$FlowControl = Java.type("oracle.dbtools.app.Format$FlowControl");
 var javaFormat$InlineComments = Java.type("oracle.dbtools.app.Format$InlineComments");
 var javaFormat$Space = Java.type("oracle.dbtools.app.Format$Space");
 var javaPersist2XML = Java.type("oracle.dbtools.app.Persist2XML");
-// oracle.dbtools.parser
 var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
+var javaProgram = Java.type("oracle.dbtools.arbori.Program");
 
 var getVersion = function() {
     return "24.4.2-SNAPSHOT";
@@ -551,7 +553,32 @@ var formatFiles = function (files, formatter, markdownExtensions) {
     }
 }
 
+var enableLogging = function() {
+    // enable Logging, it's disabled by default in SQLcl and standalone executable
+    var loggingConfFile = javaSystem.getenv("TVDFORMAT_LOGGING_CONF_FILE");
+    if (loggingConfFile != null) {
+        // enable logging according java.util.logging configuration file
+        if ((new javaFile(loggingConfFile)).exists()) {
+            javaLogManager.getLogManager().readConfiguration(new javaFileInputStream(loggingConfFile));
+        } else {
+            ctx.write("\nWarning: The file '" + loggingConfFile +
+                "' does not exist. Please update the environment variable TVDFORMAT_LOGGING_CONF_FILE.\n\n");
+        }
+    }
+    // enable Arbori program debug
+    var debug = javaSystem.getenv("TVDFORMAT_DEBUG");
+    if (debug != null && debug.trim() === "true") {
+        javaProgram.debug = true;
+    }
+    // enable Arbori program timing
+    var timing = javaSystem.getenv("TVDFORMAT_TIMING");
+    if (timing != null && timing.trim() === "true") {
+        javaProgram.timing = true;
+    }
+}
+
 var run = function (args) {
+    enableLogging();
     var asCommand = args[0].toLowerCase() === "tvdformat";
     var standalone = javaSystem.getProperty('tvdformat.standalone') != null;
     ctx.write("\n");

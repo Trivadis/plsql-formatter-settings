@@ -33,6 +33,17 @@
     "allPublicClasses": true
   },
   {
+    "name" : "java.io.FileInputStream",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
     "name" : "java.io.PrintStream",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
@@ -208,6 +219,17 @@
   },
   {
     "name" : "java.util.Iterator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name" : "java.util.logging.LogManager",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,

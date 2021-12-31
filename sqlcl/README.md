@@ -129,3 +129,15 @@ An ignore file contains file patterns. It's similar to `.gitignore`. Here's an e
 The [glob](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-) patterns are applied on the complete file including the path. All patterns are supported except subpatterns (`{}`).
 
 Please note that defining file name patterns such as `*.?` will not work because they do not match the path of the file. Use `**/*.?` instead. This ensures consistent results for complete and relative path names.
+
+## Configure Logging
+
+Optionally, you can define the following environment variables before starting SQLcl or running the standalone formatter:
+
+Variable | Description
+-------- | -----------
+`TVDFORMAT_LOGGING_CONF_FILE` | Path to a [java.util.logging](https://docs.oracle.com/en/java/javase/17/core/java-logging-overview.html#GUID-B83B652C-17EA-48D9-93D2-563AE1FF8EDA) configuration file. Fully qualified or relative paths are supported. [This file](../standalone/src/test/resources/logging.conf) is used for tests.
+`TVDFORMAT_DEBUG` | `true` enables Arbori debug messages.
+`TVDFORMAT_TIMING` |`true` enables Arbori query/callback timing messages.
+
+Please note, that configuring `TVDFORMAT_LOGGING_CONF_FILE` can cause your SQLcl session to become unresponsive.

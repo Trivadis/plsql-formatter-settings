@@ -24,5 +24,7 @@ mvn install:install-file -Dfile=$SQLCL_LIBDIR/xmlparserv2_sans_jaxp_services.jar
         -DgroupId=oracle.xml -DartifactId=xmlparserv2-sans-jaxp-services -Dversion=$SQLCL_VERSION -Dpackaging=jar
 mvn install:install-file -Dfile=$SQLCL_LIBDIR/orai18n.jar \
         -DgroupId=oracle.i18n -DartifactId=orai18n -Dversion=$SQLCL_VERSION -Dpackaging=jar
+mvn install:install-file -Dfile=$SQLCL_LIBDIR/orai18n-mapping.jar \
+        -DgroupId=oracle.i18n -DartifactId=orai18n-mapping -Dversion=$SQLCL_VERSION -Dpackaging=jar
 mvn install:install-file -Dfile=$SQLCL_LIBDIR/orajsoda.jar \
         -DgroupId=oracle.soda -DartifactId=orajsoda -Dversion=$SQLCL_VERSION -Dpackaging=jar

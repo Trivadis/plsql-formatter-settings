@@ -19,8 +19,7 @@
         <disable.logging>true</disable.logging>
     </properties>
     <dependencies>
-        <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
-        <!-- It's the default script engine also for Arbori callback functions since SQLcl 21.2.0 -->
+        <!-- GraalVM JavaScript engine -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
@@ -66,17 +65,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>oracle.i18n</groupId>
+            <artifactId>orai18n-mapping</artifactId>
+            <version>${sqlcl.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>oracle.soda</groupId>
             <artifactId>orajsoda</artifactId>
             <version>${sqlcl.version}</version>
             <scope>test</scope>
-        </dependency>
-        <!-- GraalVM native image and Context -->
-        <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -90,7 +88,7 @@
             <version>${native.maven.plugin.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- For native image with no-fallback option, used during build phase only -->
+        <!-- For native image, used during build phase only -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
@@ -164,13 +162,20 @@
                     </transformers>
                     <filters>
                         <filter>
-                            <!-- remove conflicting resources (not required) -->
+                            <!-- remove conflicting or not required resources -->
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/MANIFEST.MF</exclude>
                                 <exclude>module-info.class</exclude>
                                 <exclude>META-INF/versions/**</exclude>
-                                <exclude>META-INF/native-image/org.graalvm.*/**</exclude>
+                                <exclude>META-INF/native-image/**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove RuntimeReflectionRegistrationFeature -->
+                            <artifact>*:*tvdformat*</artifact>
+                            <excludes>
+                                <exclude>**/RuntimeReflectionRegistrationFeature.class</exclude>
                             </excludes>
                         </filter>
                         <filter>
@@ -187,11 +192,25 @@
                             </includes>
                         </filter>
                         <filter>
-                            <!-- include all classes and resources from this project -->
-                            <artifact>*:tvdformat</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
+                            <!-- remove reflections -->
+                            <artifact>*:*reflections*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove slf4j-jdk14, slf4j-api (transitive) -->
+                            <artifact>*:*slf4j*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove javassist (transitive) -->
+                            <artifact>*:*javassist*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
                         </filter>
                     </filters>
                 </configuration>
@@ -208,7 +227,6 @@
                     <systemPropertyVariables>
                         <disable.logging>${disable.logging}</disable.logging>
                     </systemPropertyVariables>
-                    <!--argLine>-agentlib:native-image-agent=config-output-dir=${project.build.directory}/test-classes/META-INF/native-image</argLine-->
                 </configuration>
             </plugin>
         </plugins>
@@ -332,12 +350,9 @@
                                     <goal>test</goal>
                                 </goals>
                                 <phase>integration-test</phase>
+                                <!-- additional configuration for test image -->
                                 <configuration>
                                     <buildArgs combine.children="append">
-                                        <buildArg>--features=com.trivadis.plsql.formatter.RuntimeReflectionRegistrationFeature</buildArg>
-                                        <buildArg>--language:js</buildArg>
-                                        <buildArg>--no-fallback</buildArg>
-                                        <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                                         <buildArg>-H:IncludeResources=.*</buildArg>
                                         <buildArg>--allow-incomplete-classpath</buildArg>
                                     </buildArgs>
@@ -351,6 +366,7 @@
                                 <phase>package</phase>
                             </execution>
                         </executions>
+                        <!-- common configuration for test-native and build-native -->
                         <configuration>
                             <imageName>${project.artifactId}</imageName>
                             <mainClass>com.trivadis.plsql.formatter.TvdFormat</mainClass>
@@ -360,7 +376,6 @@
                                 <buildArg>--language:js</buildArg>
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                                <!--buildArg>-H:+PrintAnalysisCallTree</buildArg-->
                             </buildArgs>
                         </configuration>
                     </plugin>
