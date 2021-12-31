@@ -156,13 +156,20 @@
                     </transformers>
                     <filters>
                         <filter>
-                            <!-- remove conflicting resources (not required) -->
+                            <!-- remove conflicting or not required resources -->
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/MANIFEST.MF</exclude>
                                 <exclude>module-info.class</exclude>
                                 <exclude>META-INF/versions/**</exclude>
-                                <exclude>META-INF/native-image/org.graalvm.*/**</exclude>
+                                <exclude>META-INF/native-image/**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove RuntimeReflectionRegistrationFeature -->
+                            <artifact>*:*tvdformat*</artifact>
+                            <excludes>
+                                <exclude>**/RuntimeReflectionRegistrationFeature.class</exclude>
                             </excludes>
                         </filter>
                         <filter>
@@ -179,11 +186,25 @@
                             </includes>
                         </filter>
                         <filter>
-                            <!-- include all classes and resources from this project -->
-                            <artifact>*:tvdformat</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
+                            <!-- remove reflections -->
+                            <artifact>*:*reflections*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove slf4j-jdk14, slf4j-api (transitive) -->
+                            <artifact>*:*slf4j*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove javassist (transitive) -->
+                            <artifact>*:*javassist*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
                         </filter>
                     </filters>
                 </configuration>
