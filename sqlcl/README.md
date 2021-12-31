@@ -28,15 +28,16 @@ We recommend you download, clone, or fork this repository when you plan to use [
 However, [`format.js`](format.js) also works as a standalone script. Here's the usage:
 
 ```
+Trivadis PL/SQL & SQL Formatter (format.js), version 24.4.2-SNAPSHOT
+
 usage: script format.js <rootPath> [options]
 
-mandatory argument (one of the following):
+mandatory argument: (one of the following)
   <rootPath>      file or path to directory containing files to format (content will be replaced!)
   <config.json>   configuration file in JSON format (must end with .json)
   *               use * to format the SQLcl buffer
 
 options:
-  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required
   ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
   mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown
   xml=<file>      path to the file containing the xml file for advanced format settings
@@ -44,9 +45,12 @@ options:
                   xml=embedded uses advanced settings defined in format.js
   arbori=<file>   path to the file containing the Arbori program for custom format settings
                   arbori=default uses default Arbori program included in sqlcl
-  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined 
+  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined
                   per line. Each line represent a glob pattern. Empty lines and lines starting
-                  with a hash sign (#) are ignored. 
+                  with a hash sign (#) are ignored.
+  --help, -h,     print this help screen and exit
+  --version, -v   print version and exit
+  --register, -r  register SQLcl command tvdformat and exit
 ```
 
 ## Register Script `format.js` as SQLcl Command `tvdformat`
@@ -60,9 +64,11 @@ script (...)/plsql-formatter-settings/sqlcl/format.js --register
 Afterwards you can type `tvdformat` to get this usage help:
 
 ```
+Trivadis PL/SQL & SQL Formatter (tvdformat), version 24.4.2-SNAPSHOT
+
 usage: tvdformat <rootPath> [options]
 
-mandatory argument (one of the following):
+mandatory argument: (one of the following)
   <rootPath>      file or path to directory containing files to format (content will be replaced!)
   <config.json>   configuration file in JSON format (must end with .json)
   *               use * to format the SQLcl buffer
@@ -75,9 +81,11 @@ options:
                   xml=embedded uses advanced settings defined in format.js
   arbori=<file>   path to the file containing the Arbori program for custom format settings
                   arbori=default uses default Arbori program included in sqlcl
-  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined 
+  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined
                   per line. Each line represent a glob pattern. Empty lines and lines starting
-                  with a hash sign (#) are ignored. 
+                  with a hash sign (#) are ignored.
+  --help, -h,     print this help screen and exit
+  --version, -v   print version and exit
 ```
 
 It's very similar to `script format.js`. The advantage is, that you do not need to know where [`format.js`](format.js) is stored. You may pass relative paths for `rootPath` and `file`. The SQLcl `CD` command is honored.
