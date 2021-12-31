@@ -323,12 +323,9 @@
                                     <goal>test</goal>
                                 </goals>
                                 <phase>integration-test</phase>
+                                <!-- additional configuration for test image -->
                                 <configuration>
                                     <buildArgs combine.children="append">
-                                        <buildArg>--features=com.trivadis.plsql.formatter.RuntimeReflectionRegistrationFeature</buildArg>
-                                        <buildArg>--language:js</buildArg>
-                                        <buildArg>--no-fallback</buildArg>
-                                        <buildArg>-H:+ReportExceptionStackTraces</buildArg>
                                         <buildArg>-H:IncludeResources=.*</buildArg>
                                         <buildArg>--allow-incomplete-classpath</buildArg>
                                     </buildArgs>
