@@ -19,8 +19,7 @@
         <disable.logging>true</disable.logging>
     </properties>
     <dependencies>
-        <!-- GraalVM JavaScript engine used for testing format.js as if executed via SQLcl -->
-        <!-- It's the default script engine also for Arbori callback functions since SQLcl 21.2.0 -->
+        <!-- GraalVM JavaScript engine -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
@@ -83,7 +82,7 @@
             <version>${native.maven.plugin.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- For native image with no-fallback option, used during build phase only -->
+        <!-- For native image, used during build phase only -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
@@ -201,7 +200,6 @@
                     <systemPropertyVariables>
                         <disable.logging>${disable.logging}</disable.logging>
                     </systemPropertyVariables>
-                    <!--argLine>-agentlib:native-image-agent=config-output-dir=${project.build.directory}/test-classes/META-INF/native-image</argLine-->
                 </configuration>
             </plugin>
         </plugins>
@@ -344,6 +342,7 @@
                                 <phase>package</phase>
                             </execution>
                         </executions>
+                        <!-- common configuration for test-native and build-native -->
                         <configuration>
                             <imageName>${project.artifactId}</imageName>
                             <mainClass>com.trivadis.plsql.formatter.TvdFormat</mainClass>
@@ -353,7 +352,6 @@
                                 <buildArg>--language:js</buildArg>
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                                <!--buildArg>-H:+PrintAnalysisCallTree</buildArg-->
                             </buildArgs>
                         </configuration>
                     </plugin>
