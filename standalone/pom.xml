@@ -71,13 +71,6 @@
             <version>${sqlcl.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- GraalVM native image and Context -->
-        <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
