@@ -46,6 +46,10 @@ var javaLexer = Java.type("oracle.dbtools.parser.Lexer");
 var javaParsed = Java.type("oracle.dbtools.parser.Parsed");
 var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
 
+var getVersion = function() {
+    return "24.4.2-SNAPSHOT";
+}
+
 var getFiles = function (rootPath, extensions, ignoreMatcher) {
     var files;
     if (existsFile(rootPath)) {
@@ -189,7 +193,18 @@ var existsFile = function (file) {
     return f.isFile();
 }
 
+var printVersion = function(asCommand, standalone) {
+    ctx.write("Trivadis PL/SQL & SQL Formatter ");
+    if (asCommand || standalone) {
+        ctx.write("(tvdformat)");
+    } else {
+        ctx.write("(format.js)");
+    }
+    ctx.write(", version " + getVersion() + "\n\n");
+}
+
 var printUsage = function (asCommand, standalone) {
+    printVersion(asCommand, standalone);
     if (asCommand || standalone) {
         ctx.write("usage: tvdformat <rootPath> [options]\n\n");
     } else {
@@ -202,9 +217,6 @@ var printUsage = function (asCommand, standalone) {
         ctx.write("  *               use * to format the SQLcl buffer\n");
     }
     ctx.write("\noptions:\n");
-    if (!asCommand && !standalone) {
-        ctx.write("  --register, -r  register SQLcl command tvdformat, without processing, no <rootPath> required\n")
-    }
     ctx.write("  ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb\n");
     ctx.write("  mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown\n");
     ctx.write("  xml=<file>      path to the file containing the xml file for advanced format settings\n");
@@ -214,7 +226,13 @@ var printUsage = function (asCommand, standalone) {
     ctx.write("                  arbori=default uses default Arbori program included in sqlcl\n");
     ctx.write("  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined\n");
     ctx.write("                  per line. Each line represent a glob pattern. Empty lines and lines starting\n");
-    ctx.write("                  with a hash sign (#) are ignored.\n\n");
+    ctx.write("                  with a hash sign (#) are ignored.\n");
+    ctx.write("  --help, -h,     print this help screen and exit\n")
+    ctx.write("  --version, -v   print version and exit\n")
+    if (!asCommand && !standalone) {
+        ctx.write("  --register, -r  register SQLcl command tvdformat and exit\n")
+    }
+    ctx.write("\n");
 }
 
 var getJsPath = function () {
@@ -534,22 +552,30 @@ var formatFiles = function (files, formatter, markdownExtensions) {
 }
 
 var run = function (args) {
+    var asCommand = args[0].toLowerCase() === "tvdformat";
+    var standalone = javaSystem.getProperty('tvdformat.standalone') != null;
     ctx.write("\n");
-    var options = processAndValidateArgs(args);
-    if (!options.valid) {
-        printUsage(args[0].toLowerCase() === "tvdformat", javaSystem.getProperty('tvdformat.standalone') != null);
+    if (args.length === 2 && (args[1].toLowerCase() === '-h' || args[1].toLowerCase() === '--help')) {
+        printUsage(asCommand, standalone);
+    } else if (args.length == 2 && (args[1].toLowerCase() === '-v' || args[1].toLowerCase() === "--version")) {
+        printVersion(asCommand, standalone);
     } else {
-        var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
-        if (options.rootPath === "*") {
-            formatBuffer(formatter);
+        var options = processAndValidateArgs(args);
+        if (!options.valid) {
+            printUsage(asCommand, standalone);
         } else {
-            var files;
-            if (options.files.length > 0) {
-                files = getRelevantFiles(options.files, options.extensions, options.ignoreMatcher);
+            var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
+            if (options.rootPath === "*") {
+                formatBuffer(formatter);
             } else {
-                files = getFiles(options.rootPath, options.extensions, options.ignoreMatcher);
+                var files;
+                if (options.files.length > 0) {
+                    files = getRelevantFiles(options.files, options.extensions, options.ignoreMatcher);
+                } else {
+                    files = getFiles(options.rootPath, options.extensions, options.ignoreMatcher);
+                }
+                formatFiles(files, formatter, options.markdownExtensions);
             }
-            formatFiles(files, formatter, options.markdownExtensions);
         }
     }
 }
