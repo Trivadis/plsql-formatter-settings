@@ -31,6 +31,10 @@ Clone this repository or download the ZIP file and extract it.
 
 See [sqlcl/README.md](sqlcl/README.md).
 
+### Standalone Formatter
+
+See [standalone/README.md](standalone/README.md)
+
 ### SQL Developer
 
 1. Start SQL Developer
