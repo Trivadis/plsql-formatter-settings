@@ -65,6 +65,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>oracle.i18n</groupId>
+            <artifactId>orai18n-mapping</artifactId>
+            <version>${sqlcl.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>oracle.soda</groupId>
             <artifactId>orajsoda</artifactId>
             <version>${sqlcl.version}</version>
