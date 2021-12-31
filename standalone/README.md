@@ -4,8 +4,6 @@
 
 This Maven project produces a standalone command line executable `tvdformat.jar` for the SQLcl script [`format.js`](../sqlcl/format.js). Optionally it produces also a GraalVM [native image](https://www.graalvm.org/reference-manual/native-image/) `tvdformat`.
 
-The startup time of standalone JAR file and the native image are similar since the image still requires a JDK to execute. However, it is faster than running `format.js` from SQLcl.
-
 This project contains JUnit tests for
 
 - the SQLDev/SQLcl formatter settings `trivadis_advanced_format.xml` and `trivadis_custom_format.arbori`
@@ -29,7 +27,7 @@ Variable | Description
 
 ### Executable JAR
 
-The `tvdformat.jar` is a shaded, executable JAR. This means it contains all dependent Java classes. However, it still needs a JDK 8 or higher.
+The `tvdformat.jar` is a shaded, executable JAR that is part of a [release](https://github.com/Trivadis/plsql-formatter-settings/releases). It contains all dependent Java classes and needs a JDK 8 or higher at runtime.
 
 To run it, open a terminal window and type
 
@@ -41,7 +39,7 @@ The parameters are the same as for the [SQLcl command `tvdformat`](../sqlcl/READ
 
 ### Native Image
 
-A native image is a platform specific executable. The following images can be produced with a GraalVM JDK 17:
+A native image is a platform specific executable. It does not require a JDK at runtime. A native image uses less resources and is faster. The following images can be produced with a GraalVM JDK 17:
 
 OS      | amd64 (Intel))? | aarch64 (ARM)? |
 ------- | :-------------: | :------------: |
