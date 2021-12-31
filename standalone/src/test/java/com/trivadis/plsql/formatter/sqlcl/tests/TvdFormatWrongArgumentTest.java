@@ -17,14 +17,16 @@ public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
         var expected = """
 
                 missing mandatory <rootPath> argument.
-                            
+                                
+                Trivadis PL/SQL & SQL Formatter (tvdformat), version XYZ
+                                
                 usage: tvdformat <rootPath> [options]
-                            
+                                
                 mandatory argument: (one of the following)
                   <rootPath>      file or path to directory containing files to format (content will be replaced!)
                   <config.json>   configuration file in JSON format (must end with .json)
                   *               use * to format the SQLcl buffer
-                            
+                                
                 options:
                   ext=<ext>       comma separated list of file extensions to process, e.g. ext=sql,pks,pkb
                   mext=<ext>      comma separated list of markdown file extensions to process, e.g. ext=md,mdown
@@ -36,10 +38,12 @@ public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
                   ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined
                                   per line. Each line represent a glob pattern. Empty lines and lines starting
                                   with a hash sign (#) are ignored.
+                  --help, -h,     print this help screen and exit
+                  --version, -v   print version and exit
 
                 """;
         var actual = runCommand("Tvdformat");
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual.replaceAll(", version [^\\s]+", ", version XYZ"));
     }
 
     @Test
