@@ -15,16 +15,6 @@ The project requires a JDK 17, but it produces a Java 8 executable JAR file. A G
 
 ## Running the Standalone Formatter
 
-### Configure Logging
-
-Optionally, you can define the following environment variables:
-
-Variable | Description
--------- | -----------
-`TVDFORMAT_LOGGING_CONF_FILE` | Path to a [java.util.logging](https://docs.oracle.com/en/java/javase/17/core/java-logging-overview.html#GUID-B83B652C-17EA-48D9-93D2-563AE1FF8EDA) configuration file. Fully qualified or relative paths are supported. [This file](src/test/resources/logging.conf) is used for tests.
-`TVDFORMAT_DEBUG` | `true` enables Arbori debug messages.
-`TVDFORMAT_TIMING` |`true` enables Arbori query/callback timing messages.
-
 ### Executable JAR
 
 The `tvdformat.jar` is a shaded, executable JAR that is part of a [release](https://github.com/Trivadis/plsql-formatter-settings/releases). It contains all dependent Java classes and needs a JDK 8 or higher at runtime.
