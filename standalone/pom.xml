@@ -364,6 +364,12 @@
                                     <goal>build</goal>
                                 </goals>
                                 <phase>package</phase>
+                                <!-- additional configuration, because the plugin adds test dependencies to classpath -->
+                                <configuration>
+                                    <classpath>
+                                        ${project.build.directory}/${project.build.finalName}.jar:${settings.localRepository}/oracle/dbtools/dbtools-common/${sqlcl.version}/dbtools-common-${sqlcl.version}.jar:${settings.localRepository}/org/reflections/reflections/0.10.2/reflections-0.10.2.jar:${settings.localRepository}/org/javassist/javassist/3.28.0-GA/javassist-3.28.0-GA.jar:${settings.localRepository}/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar:${settings.localRepository}/org/slf4j/slf4j-jdk14/1.7.32/slf4j-jdk14-1.7.32.jar
+                                    </classpath>
+                                </configuration>
                             </execution>
                         </executions>
                         <!-- common configuration for test-native and build-native -->
