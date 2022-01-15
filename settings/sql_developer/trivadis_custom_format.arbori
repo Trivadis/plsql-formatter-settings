@@ -2738,6 +2738,7 @@ r2_common:
     | [node^) bulk_loop_stmt & ![node) 'FORALL'
     | [node) analytic_clause & ![node^) over_clause
     | [node) 'RETURN' & [node^) subprg_spec
+    | [node) plsql_declarations & ([node^) with_clause | [node^) with_clause[12,20))
 ;
 
 r2_flowcontrol_condition:
