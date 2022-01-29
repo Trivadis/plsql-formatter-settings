@@ -11,7 +11,7 @@ This project contains JUnit tests for
 - the SQLcl command `tvdformat`
 - the standalone exectable `tvdformat` 
 
-The project requires a JDK 17, but it produces a Java 8 executable JAR file. A GraalVM JDK is required only if you want to build a [native image](https://www.graalvm.org/reference-manual/native-image/).
+The project requires a JDK 17, but it produces a Java 8 executable JAR file. A GraalVM JDK is required only if you want to build a [native image](https://www.graalvm.org/reference-manual/native-image/). GraalVM 22.0.0.2 does not work in with the libraries from SQLcl 21.4.1 (throws `org.graalvm.polyglot.PolyglotException: java.lang.AssertionError`). Please use GraalVM 21.3.0 instead. 
 
 ## Running the Standalone Formatter
 
@@ -71,7 +71,7 @@ The parameters are the same as for the [executable JAR](#executable-jar).
     The shell script expects to find the libraries such as `dbtools-common.jar` in `/usr/local/bin/sqlcl/lib`. If they are not there, pass the path to the directory as parameter to this script. For example
 
     ```
-    ./install_sqlcl_libs.sh /opt/homebrew/Caskroom/sqlcl/21.4.0.348.1716/sqlcl/lib
+    ./install_sqlcl_libs.sh /usr/local/bin/sqlcl/lib
     ```
 
 9. Run Maven build by the following command
