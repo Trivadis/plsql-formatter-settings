@@ -6,12 +6,12 @@ This repository provides formatter settings for the [coding style rules](https:/
 
 Settings are primarily provided for
 
-- [Oracle SQLcl, Version 21.4.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
-- [Oracle SQL Developer, Version 21.4.1](https://www.oracle.com/tools/downloads/sqldev-downloads.html)
+- [Oracle SQLcl, Version 21.4.1](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQL Developer, Version 21.4.2](https://www.oracle.com/tools/downloads/sqldev-downloads.html)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
-JDK 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar works with JDK 8, 11, 17.
+JDK 8 or 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar works with JDK 8, 11, 17.
 
 See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) for settings supporting older versions.
 
