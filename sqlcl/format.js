@@ -49,7 +49,7 @@ var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
 var javaProgram = Java.type("oracle.dbtools.arbori.Program");
 
 var getVersion = function() {
-    return "24.4.2-SNAPSHOT";
+    return "21.4.2";
 }
 
 var getFiles = function (rootPath, extensions, ignoreMatcher) {
