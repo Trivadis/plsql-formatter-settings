@@ -12,8 +12,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>8</jdk.version>
         <jdk.test.version>17</jdk.test.version>
-        <sqlcl.version>21.4.0</sqlcl.version>
-        <graalvm.version>21.3.0</graalvm.version>
+        <sqlcl.version>21.4.1</sqlcl.version>
+        <graalvm.version>22.0.0.2</graalvm.version>
         <native.maven.plugin.version>0.9.9</native.maven.plugin.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
