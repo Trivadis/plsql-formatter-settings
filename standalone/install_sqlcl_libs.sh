@@ -15,7 +15,7 @@ if ! test -f "${SQLCL_LIBDIR}/dbtools-common.jar"; then
 fi
 
 # define common Maven properties
-SQLCL_VERSION="21.4.0"
+SQLCL_VERSION="21.4.1"
 
 # install JAR files in local Maven repository, these libs are not available in public Maven repositories
 mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=$SQLCL_LIBDIR/dbtools-common.jar
