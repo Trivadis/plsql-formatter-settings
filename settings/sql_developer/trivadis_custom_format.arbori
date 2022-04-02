@@ -885,6 +885,7 @@ i9_remove_duplicate_spaces_in_scope:
 -- - O11: Line Breaks: On subqueries. Options: true; false. (breakOnSubqueries).
 -- - A16: Line break if the parent element uses multiple lines.
 -- - R5: Commas in front of separated elements.
+-- - A23: Enforce line break after single line comments.
 -- - R2: 3 space indention.
 -- - R7: SQL keywords are right aligned within a SQL command.
 -- - A11: Align parameter names.
@@ -2591,6 +2592,28 @@ r5_commas:
         addBreakBeforeComma(node);
     }
     addSpacesAroundComma(node);
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A23: Enforce line break after single line comments.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a23_enforce_line_break_after_single_line_comment:
+    runOnce
+-> {
+    var keys = newlinePositions.keySet().stream().collect(Collectors.toList()).toArray();
+    for (var i in keys) {
+        var key = keys[i];
+        if (key > 0) {
+            var comment = getLastCommentBetweenPos(key-1, key);
+            if (comment != null && comment.indexOf("--") == 0) {
+                if (value.indexOf("\n") == -1) {
+                    struct.putNewline(key, theLineSeparator);
+                    logger.fine(struct.getClass(), "a23_enforce_line_break_after_single_line_comment" + ": at " + key + ".");
+                }
+            }
+        }
+    }
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
