@@ -862,6 +862,7 @@ i9_remove_duplicate_spaces_in_scope:
 -- - A2: Remove trailing spaces.
 -- - A3: Do not format code between @formatter:off and @formatter:on comments.
 -- - O2: White Space: Around operators. Options: true; false. (spaceAroundOperators).
+-- - A22: No space between sign and digits.
 -- - A13: Keep short nodes on the same line.
 -- - A5: No space before node.
 -- - A6: No space after node.
@@ -1011,6 +1012,21 @@ o2_whitespace_around_operators:
         struct.putNewline(node.to, space);
         logger.fine(struct.getClass(), "o2_whitespace_around_operators: after at " + node.to + ".");
     }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- A22: No space between sign and digits.
+-- --------------------------------------------------------------------------------------------------------------------
+
+a22_no_space_between_sign_and_digits:
+       ([node) '-' | [node) '+')
+     & ![node) binary_add_op
+     & [node+1) digits
+     & ![node-1) digits
+     & ![node-1) expr
+-> {
+    struct.putNewline(node.to, "");
+    logger.fine(struct.getClass(), "a22_no_space_between_sign_and_digits: at " + node.to + ".");
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
