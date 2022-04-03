@@ -54,7 +54,7 @@ public class Sqlcode_function extends ConfiguredTestFormatter {
                 begin
                    select last_name into name
                      from employees
-                    where employee_id = - 1;
+                    where employee_id = -1;
                 exception
                    when others then
                       v_code := sqlcode;
