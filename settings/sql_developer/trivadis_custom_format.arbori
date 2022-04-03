@@ -1028,6 +1028,7 @@ a22_no_space_between_sign_and_digits:
      & ![node-1) digits
      & ![node-1) expr
 -> {
+    var node = tuple.get("node");
     struct.putNewline(node.to, "");
     logger.fine(struct.getClass(), "a22_no_space_between_sign_and_digits: at " + node.to + ".");
 }
