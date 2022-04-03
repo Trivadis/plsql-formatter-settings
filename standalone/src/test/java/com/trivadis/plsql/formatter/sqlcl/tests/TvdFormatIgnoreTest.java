@@ -57,11 +57,11 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
     public void ignore_two_files_windows_separator() throws IOException {
         // must run in an own test class, reason is not clear
         var ignoreFileContent = """
-                # ignore package bodies
-                **\\\\*.pkb
+                # ignore package bodies (single backslash)
+                **\\*.pkb
                 
-                # Ignore files with syntax errors
-                **\\\\*syntax*
+                # Ignore files with syntax errors (single backslash)
+                **\\*syntax*
                 """;
         final Path ignoreFile = Paths.get(tempDir + File.separator + "ignore2.txt");
         Files.write(ignoreFile, ignoreFileContent.getBytes());
