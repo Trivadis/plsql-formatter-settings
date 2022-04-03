@@ -3171,6 +3171,22 @@ r2_fix_indent_for_subquery_in_paren:
     }
 }
 
+r2_fix_indent_for_case_expr:
+     ([parent) case_expr | [parent) case_expression)
+   & [endcase) 'END'
+   & endcase^ = parent
+-> {
+    var parent = tuple.get("parent");
+    if (getIndent(parent.from).indexOf("\n") == -1) {
+        var endcase = tuple.get("endcase");
+        var marginDiff = getColumn(parent.from) - getColumn(endcase.from);
+        if (marginDiff > 0) {
+            addIndent(parent, marginDiff);
+            logger.fine(struct.getClass(), "r2_fix_indent_for_case_expr: at " + parent.from + ".");
+        }
+    }
+}
+
 -- --------------------------------------------------------------------------------------------------------------------
 -- R7: SQL keywords are right aligned within a SQL command.
 -- --------------------------------------------------------------------------------------------------------------------
