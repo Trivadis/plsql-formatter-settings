@@ -280,7 +280,7 @@ var createIgnoreMatcher = function (ignorePath) {
     var globPattern = "glob:{"
     var lines = javaFiles.readAllLines(javaPaths.get(ignorePath));
     for (var i=0; i < lines.size(); i++) {
-        var line = replaceAll(replaceAll(lines[i].trim(), "\\/", javaFile.separator), "(\\\\){2}", javaFile.separator);
+        var line = replaceAll(lines[i].trim(), "(\\\\)", "/");
         if (line.length > 0 && line.indexOf('#') === -1) {
             if (globPattern.length > 6) {
                 globPattern += ",";
