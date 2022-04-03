@@ -550,7 +550,8 @@ i5_define_global_functions:
            "merge",
            "block_stmt",
            "pkg_body",
-           "create_plsql"
+           "create_plsql",
+           "stmt"
         ]);
     }
 
