@@ -52,4 +52,20 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
         var actual = runCommand( "tvdformat " + tempDir.toString() + " ignore=" + tempDir + File.separator + "ignore.txt");
         Assertions.assertTrue(actual.contains("2 of 2"));
     }
+
+    @Test
+    public void ignore_two_files_windows_separator() throws IOException {
+        // must run in an own test class, reason is not clear
+        var ignoreFileContent = """
+                # ignore package bodies (single backslash)
+                **\\*.pkb
+                
+                # Ignore files with syntax errors (single backslash)
+                **\\*syntax*
+                """;
+        final Path ignoreFile = Paths.get(tempDir + File.separator + "ignore2.txt");
+        Files.write(ignoreFile, ignoreFileContent.getBytes());
+        var actual = runCommand( "tvdformat " + tempDir.toString() + " ignore=" + tempDir + File.separator + "ignore2.txt");
+        Assertions.assertTrue(actual.contains("2 of 2"));
+    }
 }

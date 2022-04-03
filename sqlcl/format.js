@@ -260,11 +260,27 @@ var getCdPath = function (path) {
     }
 }
 
+var replaceAll = function(input, pattern, replacement) {
+    var p = javaPattern.compile(pattern);
+    var m = p.matcher(input);
+    var result = "";
+    var pos = 0;
+    while (m.find()) {
+        result += input.substring(pos, m.start());
+        result += replacement;
+        pos = m.end();
+    }
+    if (input.length > pos) {
+        result += input.substring(pos);
+    }
+    return result;
+}
+
 var createIgnoreMatcher = function (ignorePath) {
     var globPattern = "glob:{"
     var lines = javaFiles.readAllLines(javaPaths.get(ignorePath));
     for (var i=0; i < lines.size(); i++) {
-        var line = lines[i].trim();
+        var line = replaceAll(lines[i].trim(), "(\\\\)", "/");
         if (line.length > 0 && line.indexOf('#') === -1) {
             if (globPattern.length > 6) {
                 globPattern += ",";
