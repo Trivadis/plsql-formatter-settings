@@ -6,15 +6,15 @@
     <!-- The Basics -->
     <groupId>com.trivadis.plsql.formatter</groupId>
     <artifactId>tvdformat</artifactId>
-    <version>22.1.0-SNAPSHOT</version>
+    <version>22.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>8</jdk.version>
+        <jdk.version>11</jdk.version>
         <jdk.test.version>17</jdk.test.version>
-        <sqlcl.version>21.4.1</sqlcl.version>
-        <graalvm.version>22.0.0.2</graalvm.version>
-        <native.maven.plugin.version>0.9.9</native.maven.plugin.version>
+        <sqlcl.version>22.2.0</sqlcl.version>
+        <graalvm.version>22.1.0.1</graalvm.version>
+        <native.maven.plugin.version>0.9.12</native.maven.plugin.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
     </properties>
@@ -98,7 +98,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.32</version>
+            <version>1.7.36</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -138,7 +138,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -288,7 +288,7 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <version>3.8.1</version>
+                        <version>3.10.1</version>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <!-- different Java version for main and test -->
@@ -312,7 +312,7 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <version>3.8.1</version>
+                        <version>3.10.1</version>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <!-- IDEA requires same Java version for main and test -->
