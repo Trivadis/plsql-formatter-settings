@@ -39,3 +39,6 @@ Thumbs.db
 # Targets
 **/target
 **/bin
+
+# maven-shade-plugin
+dependency-reduced-pom.xml
