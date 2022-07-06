@@ -1231,8 +1231,11 @@ a5_brackets:
 ;
 
 a5_indicator_variable:
-      [node) bind_var
-    & [node-1) bind_var
+      [node) identifier
+    & [node-1) ':'
+    & [node-2) identifier
+    & [node-3) ':'
+    & [node^) bind_var
 ;
 
 a5_star_star:
@@ -1300,8 +1303,7 @@ a6_brackets:
 ;
 
 a6_host_variable:
-      [node) ':'
-    & [node^) bind_var
+    [node^) bind_var
 ;
 
 a6_pragma_exception_init:
