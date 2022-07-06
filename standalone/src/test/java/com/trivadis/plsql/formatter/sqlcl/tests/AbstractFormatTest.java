@@ -23,7 +23,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^                                         \s
                             
-                Expected: constraint,':',"aggr_name",'COUNT',"expr_list",'JS... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var actual = run(runType, tempDir.toString(), "mext=");
         Assertions.assertEquals(expected, actual);
@@ -134,12 +134,12 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                       l_int    integer;
                    begin
                       << integer_tokens >> loop
-                         l_int           := to_number(regexp_substr(
-                                                         in_integers,
-                                                         in_pattern,
-                                                         1,
-                                                         l_pos
-                                            ));
+                         l_int           := to_number ( regexp_substr(
+                            in_integers,
+                            in_pattern,
+                            1,
+                            l_pos
+                         ) );
                          exit integer_tokens when l_int is null;
                          l_result.extend;
                          l_result(l_pos) := l_int;
@@ -197,7 +197,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    BEGIN
                       <<integer_tokens>>
                       LOOP
-                         l_int           := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                         l_int           := TO_NUMBER(regexp_substr(in_integers, in_pattern, 1, l_pos));
                          EXIT integer_tokens WHEN l_int IS NULL;
                          l_result.extend;
                          l_result(l_pos) := l_int;
@@ -252,7 +252,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                         l_int    INTEGER;
                     BEGIN
                         << integer_tokens >> LOOP
-                            l_int := to_number(regexp_substr(in_integers, in_pattern, 1, l_pos));
+                            l_int := TO_NUMBER ( regexp_substr(in_integers, in_pattern, 1, l_pos) );
                             EXIT integer_tokens WHEN l_int IS NULL;
                             l_result.extend;
                             l_result(l_pos) := l_int;
@@ -317,12 +317,12 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                       l_int    integer;
                    begin
                       << integer_tokens >> loop
-                         l_int           := to_number(regexp_substr(
-                                                         in_integers,
-                                                         in_pattern,
-                                                         1,
-                                                         l_pos
-                                            ));
+                         l_int           := to_number ( regexp_substr(
+                            in_integers,
+                            in_pattern,
+                            1,
+                            l_pos
+                         ) );
                          exit integer_tokens when l_int is null;
                          l_result.extend;
                          l_result(l_pos) := l_int;
@@ -553,7 +553,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^                                         \s
                                                                                      
-                Expected: constraint,':',"aggr_name",'COUNT',"expr_list",'JS... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var configFileContent = """
                 [

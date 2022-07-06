@@ -149,8 +149,8 @@ public class Record_variable_declaration extends ConfiguredTestFormatter {
                    type full_name is varray(2) of varchar2(20);
                                 
                    type contact is record(
-                         name full_name := full_name('John', 'Smith'),  -- varray field
-                         phone          employees.phone_number%type
+                         name  full_name := full_name('John', 'Smith'),  -- varray field
+                         phone employees.phone_number%type
                       );
                                 
                    friend contact;
