@@ -6,7 +6,7 @@
     <!-- The Basics -->
     <groupId>com.trivadis.plsql.formatter</groupId>
     <artifactId>tvdformat</artifactId>
-    <version>22.2.0</version>
+    <version>22.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
