@@ -3555,9 +3555,12 @@ o8_variables:
 
 o8_records:
       [scope) ty_def
-    & [node-1) identifier
-    & [node^) field
+    & [first) identifier
+    & first = node-1
+    & [parent) field
+    & parent = node^
     & scope < node^
+    & [first = [parent
 ;
 
 o8_attributes:
