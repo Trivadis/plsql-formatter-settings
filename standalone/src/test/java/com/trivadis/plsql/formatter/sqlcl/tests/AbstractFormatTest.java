@@ -23,7 +23,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^                                         \s
                             
-                Expected: constraint,':',"aggr_name",'COUNT',"expr_list",'JS... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var actual = run(runType, tempDir.toString(), "mext=");
         Assertions.assertEquals(expected, actual);
@@ -553,7 +553,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^                                         \s
                                                                                      
-                Expected: constraint,':',"aggr_name",'COUNT',"expr_list",'JS... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var configFileContent = """
                 [
