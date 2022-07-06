@@ -26,6 +26,9 @@
         "pattern": "\\QMETA-INF/services/org.graalvm.polyglot.impl.AbstractPolyglotImpl\\E"
       },
       {
+        "pattern": "\\Qcom/oracle/truffle/llvm/nfi/SulongNFI.class\\E"
+      },
+      {
         "pattern": "\\Qcom/oracle/truffle/nfi/backend/libffi/LibFFILanguage.class\\E"
       },
       {
@@ -59,7 +62,10 @@
   },
   "bundles": [
     {
-      "name": "oracle.dbtools.util.Messages"
+      "name": "oracle.dbtools.util.Messages",
+      "locales": [
+        ""
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 [
   {
-    "name" : "com.trivadis.plsql.formatter.ScriptRunnerContext",
+    "name": "com.trivadis.plsql.formatter.ScriptRunnerContext",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -11,7 +11,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.io.BufferedWriter",
+    "name": "java.io.BufferedWriter",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -22,7 +22,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.io.File",
+    "name": "java.io.File",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -33,7 +33,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.io.FileInputStream",
+    "name": "java.io.FileInputStream",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -44,7 +44,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.io.PrintStream",
+    "name": "java.io.PrintStream",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -55,13 +55,15 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.lang.Class",
-    "methods" : [
-      {"name" : "getDeclaredField"}
+    "name": "java.lang.Class",
+    "methods": [
+      {
+        "name": "getDeclaredField"
+      }
     ]
   },
   {
-    "name" : "java.lang.Integer",
+    "name": "java.lang.Integer",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -72,14 +74,18 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.lang.reflect.Field",
-    "methods" : [
-      { "name" : "setAccessible"},
-      { "name" : "get"}
+    "name": "java.lang.reflect.Field",
+    "methods": [
+      {
+        "name": "setAccessible"
+      },
+      {
+        "name": "get"
+      }
     ]
   },
   {
-    "name" : "java.lang.String",
+    "name": "java.lang.String",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -90,7 +96,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.lang.StringBuilder",
+    "name": "java.lang.StringBuilder",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -101,14 +107,14 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.lang.System",
+    "name": "java.lang.System",
     "allPublicConstructors": true,
     "allPublicMethods": true,
     "allPublicFields": true,
     "allPublicClasses": true
   },
   {
-    "name" : "java.net.URI",
+    "name": "java.net.URI",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -119,7 +125,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.nio.file.Files",
+    "name": "java.nio.file.Files",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -130,7 +136,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.nio.file.FileSystems",
+    "name": "java.nio.file.FileSystems",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -141,7 +147,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.nio.file.Paths",
+    "name": "java.nio.file.Paths",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -152,7 +158,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.ArrayList",
+    "name": "java.util.ArrayList",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -163,7 +169,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.Arrays",
+    "name": "java.util.Arrays",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -174,7 +180,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.Collection",
+    "name": "java.util.Collection",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -185,7 +191,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.HashMap",
+    "name": "java.util.HashMap",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -196,7 +202,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.HashMap$KeySet",
+    "name": "java.util.HashMap$KeySet",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -207,7 +213,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.HashSet",
+    "name": "java.util.HashSet",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -218,7 +224,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.Iterator",
+    "name": "java.util.Iterator",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -229,7 +235,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.logging.LogManager",
+    "name": "java.util.logging.LogManager",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -240,7 +246,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.regex.Matcher",
+    "name": "java.util.regex.Matcher",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -251,7 +257,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.regex.Pattern",
+    "name": "java.util.regex.Pattern",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -262,7 +268,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.stream.Collectors",
+    "name": "java.util.stream.Collectors",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -273,7 +279,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.stream.ReferencePipeline$Head",
+    "name": "java.util.stream.ReferencePipeline$Head",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -284,7 +290,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.stream.Stream",
+    "name": "java.util.stream.Stream",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -295,7 +301,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "java.util.TreeSet",
+    "name": "java.util.TreeSet",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -306,7 +312,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format",
+    "name": "oracle.dbtools.app.Format",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -317,7 +323,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format$Breaks",
+    "name": "oracle.dbtools.app.Format$Breaks",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -328,7 +334,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format$BreaksX2",
+    "name": "oracle.dbtools.app.Format$BreaksX2",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -339,7 +345,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format$Case",
+    "name": "oracle.dbtools.app.Format$Case",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -350,7 +356,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format$FlowControl",
+    "name": "oracle.dbtools.app.Format$FlowControl",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -361,7 +367,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format$InlineComments",
+    "name": "oracle.dbtools.app.Format$InlineComments",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -372,7 +378,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Format$Space",
+    "name": "oracle.dbtools.app.Format$Space",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -383,7 +389,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.app.Persist2XML",
+    "name": "oracle.dbtools.app.Persist2XML",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -394,7 +400,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.arbori.Program",
+    "name": "oracle.dbtools.arbori.Program",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -405,7 +411,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.arbori.SqlProgram",
+    "name": "oracle.dbtools.arbori.SqlProgram",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -416,7 +422,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.Lexer",
+    "name": "oracle.dbtools.parser.Lexer",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -427,7 +433,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.LexerToken",
+    "name": "oracle.dbtools.parser.LexerToken",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -438,7 +444,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.Parsed",
+    "name": "oracle.dbtools.parser.Parsed",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -449,7 +455,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.ParseNode",
+    "name": "oracle.dbtools.parser.ParseNode",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -460,7 +466,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.plsql.SqlEarley",
+    "name": "oracle.dbtools.parser.plsql.SqlEarley",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -471,7 +477,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.plsql.SyntaxError",
+    "name": "oracle.dbtools.parser.plsql.SyntaxError",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -482,7 +488,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.Substitutions",
+    "name": "oracle.dbtools.parser.Substitutions",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -493,7 +499,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.parser.Token",
+    "name": "oracle.dbtools.parser.Token",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -504,7 +510,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.util.Logger",
+    "name": "oracle.dbtools.util.Logger",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -515,7 +521,7 @@
     "allPublicClasses": true
   },
   {
-    "name" : "oracle.dbtools.util.Service",
+    "name": "oracle.dbtools.util.Service",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -524,5 +530,17 @@
     "allPublicMethods": true,
     "allPublicFields": true,
     "allPublicClasses": true
+  },
+  {
+    "name": "org.graalvm.polyglot.Engine",
+    "methods": [
+      {
+        "name": "getImpl",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "org.graalvm.polyglot.management.Management"
   }
 ]
