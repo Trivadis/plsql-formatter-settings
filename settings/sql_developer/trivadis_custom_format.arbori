@@ -1299,7 +1299,7 @@ a6_percent:
 ;
 
 a6_brackets:
-      [node) '['
+    [node) '['
 ;
 
 a6_host_variable:
