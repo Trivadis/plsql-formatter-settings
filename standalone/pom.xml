@@ -354,7 +354,6 @@
                                 <configuration>
                                     <buildArgs combine.children="append">
                                         <buildArg>-H:IncludeResources=.*</buildArg>
-                                        <buildArg>--allow-incomplete-classpath</buildArg>
                                     </buildArgs>
                                 </configuration>
                             </execution>

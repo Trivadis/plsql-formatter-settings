@@ -11,13 +11,13 @@ This project contains JUnit tests for
 - the SQLcl command `tvdformat`
 - the standalone exectable `tvdformat` 
 
-The project requires a JDK 17, but it produces a Java 8 executable JAR file. A GraalVM JDK is required only if you want to build a [native image](https://www.graalvm.org/reference-manual/native-image/). GraalVM 22.0.0.2 does not work in with the libraries from SQLcl 21.4.1 (throws `org.graalvm.polyglot.PolyglotException: java.lang.AssertionError`). Please use GraalVM 21.3.0 instead. 
+The project requires a JDK 17, but it produces a Java 11 executable JAR file. A GraalVM JDK is required only if you want to build a [native image](https://www.graalvm.org/reference-manual/native-image/).
 
 ## Running the Standalone Formatter
 
 ### Executable JAR
 
-The `tvdformat.jar` is a shaded, executable JAR that is part of a [release](https://github.com/Trivadis/plsql-formatter-settings/releases). It contains all dependent Java classes and needs a JDK 8 or higher at runtime.
+The `tvdformat.jar` is a shaded, executable JAR that is part of a [release](https://github.com/Trivadis/plsql-formatter-settings/releases). It contains all dependent Java classes and needs a JDK 11 or higher at runtime.
 
 To run it, open a terminal window and type
 
@@ -33,11 +33,11 @@ A native image is a platform specific executable. It does not require a JDK at r
 
 OS      | amd64 (Intel))? | aarch64 (ARM)? |
 ------- | :-------------: | :------------: |
-macOS   | yes             | -              |
+macOS   | yes             | yes            |
 Linux   | yes             | yes            |
 Windows | yes             | -              |
 
-Currently there is no way to produce an ARM based (aarch64) native image for macOS and Windows. 
+Currently there is no way to produce an ARM based (aarch64) native image for Windows. 
 
 Native images are not part of a release. You have to build them yourself as described [below](#how-to-build).
 
@@ -51,10 +51,10 @@ The parameters are the same as for the [executable JAR](#executable-jar).
 
 ## How to Build
 
-1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 21.4.0
-2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases) and install the GraalVM JDK 17 21.3.0
+1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 22.2.0
+2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases) and install the GraalVM JDK 17 22.1.0
 3. Go to the `bin` directory of the GraalVM JDK and run `./gu install native-image`, if you want to produce a native image
-4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.4
+4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.6
 5. [Download](https://git-scm.com/downloads) and install a git command line client
 6. Clone the plsql-formatter-settings repository
 7. Open a terminal window in the plsql-formatter-settings root folder and type
