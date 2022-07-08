@@ -1958,11 +1958,6 @@ r3_commands:
         if (indent.indexOf("\n") == -1) {
             struct.putNewline(node.from, theLineSeparator);
             logger.fine(struct.getClass(), "r3_commands: add line break at " + node.from + ".");
-        } else {
-            // remove existing indentation; enforce conformity in these cases
-            var newIndent = getLeadingNewLines(node.from);
-            struct.putNewline(node.from, newIndent);
-            logger.fine(struct.getClass(), "r3_commands: remove indentation at " + node.from + ".");
         }
     }
 }
