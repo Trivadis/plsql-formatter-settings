@@ -4123,7 +4123,6 @@ a18_indent_comment:
         while (i > 0) {
             i--;
             var content = target.src.get(i).content.toLowerCase();
-            print(content);
             if (content == "when") {
                 return false;
             } else if (content == "case") {
