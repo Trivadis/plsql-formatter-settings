@@ -4118,6 +4118,21 @@ a18_indent_comment:
         return tokens[pos].begin - tokens[nlpos].end;
     }
 
+    var isFirstWhen = function(pos) {
+        var i = pos;
+        while (i > 0) {
+            i--;
+            var content = target.src.get(i).content.toLowerCase();
+            print(content);
+            if (content == "when") {
+                return false;
+            } else if (content == "case") {
+                return true;
+            }
+        }
+        return false;
+    }
+
     var getIndentBefore = function(pos) {
         var indent = getIndent(pos);
         var content = target.src.get(pos).content.toLowerCase();
@@ -4126,7 +4141,9 @@ a18_indent_comment:
             if (target.src.get(pos+1).content.toLowerCase() == "case") {
                 indent += getSpaces(indentSpaces);
             }
-        } else if (content == "elsif" || content == "else" || content == "when") {
+        } else if (content == "elsif" || content == "else") {
+            indent += getSpaces(indentSpaces);
+        } else if (content == "when" && !isFirstWhen(pos)) {
             indent += getSpaces(indentSpaces);
         }
         return indent;
