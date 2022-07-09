@@ -257,7 +257,7 @@ The [standalone](../standalone) executable `tvdformat.jar` combines the formatte
 
     - Works with Java > 11
 
-      SQLcl requires Java 8 or Java 11. It currently does not work with new Java versions. The standalone `tvdformat.jar` works with any Java version >= 8. Using Java 17 improves the runtime performance further.
+      SQLcl requires Java 11. It currently does not work with newer Java versions. The standalone `tvdformat.jar` works with any Java version >= 11. Using Java 17 improves the runtime performance further.
 
 ### Disadvantages
 
@@ -267,4 +267,4 @@ The [standalone](../standalone) executable `tvdformat.jar` combines the formatte
 
 - Licensing questions
   
-  SQLcl is licensed under the [Oracle Free Use Terms and Conditions license](https://www.oracle.com/downloads/licenses/oracle-free-license.html) since May, 4 2021. See [this blog post](https://blogs.oracle.com/database/post/sqlcl-now-under-the-oracle-free-use-terms-and-conditions-license). Redistribution is allowed under certain conditions. The standalone formatter uses SQLcl as a library like GraalVM's js-scriptengine, which is available on [Maven Central](https://search.maven.org/artifact/org.graalvm.js/js-scriptengine/21.2.0/jar). Using `tvdformat.jar` might raise some questions about licensing. If you want to avoid this, you should use SQLcl.
+  SQLcl is licensed under the [Oracle Free Use Terms and Conditions license](https://www.oracle.com/downloads/licenses/oracle-free-license.html) since May, 4 2021. See [this blog post](https://blogs.oracle.com/database/post/sqlcl-now-under-the-oracle-free-use-terms-and-conditions-license). Redistribution is allowed under certain conditions. The standalone formatter uses SQLcl as a library like GraalVM's js-scriptengine, which is available on [Maven Central](https://search.maven.org/artifact/org.graalvm.js/js-scriptengine/22.1.0.1/jar). Using `tvdformat.jar` might raise some questions about licensing. If you want to avoid this, you should use SQLcl.
