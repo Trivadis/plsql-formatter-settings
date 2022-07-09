@@ -59,7 +59,25 @@ See [hook/README.md](hook/README.md).
 
 ### Lightweight Formatter
 
-The Arbori program implements a [lightweight formatter](https://www.salvis.com/blog/2021/07/18/lightweight-formatter-for-pl-sql-sql/) which accepts different coding styles. If you need a heavyweight formatter to enforce the conformity of your code, you will need to use the default Arbori program provided by the SQL Developer team. 
+The Arbori program implements a [lightweight formatter](https://www.salvis.com/blog/2021/07/18/lightweight-formatter-for-pl-sql-sql/) which accepts different coding styles. The primary scope of the formatter is the following SQL statements:
+
+- `create function`
+- `create package`
+- `create package body`
+- `create procedure`
+- `create trigger`
+- `create type`
+- `create type body`
+- `create view` (including the `subquery` part of `create materialized view`)
+- `delete`
+- `insert`
+- `merge`
+- `select`
+- `update`
+
+Other statements like `create table` or `create tablespace` are basically left as is. There are some exceptions like adding line breaks after reaching the maximum line length and changing the case of keywords and identifiers. But that's it. 
+
+If you need a heavyweight formatter to enforce the conformity of your code, you will need to use the default Arbori program provided by the SQL Developer team.
 
 In any case, you can use our SQLcl JavaScript [`format.js`](sqlcl/README.md), the [standalone formatter](standalone/README.md) or the [Git `pre-commit` hook](hook/README.md) to format your code.
 
