@@ -13,8 +13,11 @@
         <jdk.version>11</jdk.version>
         <jdk.test.version>17</jdk.test.version>
         <sqlcl.version>22.2.0</sqlcl.version>
-        <graalvm.version>22.1.0.1</graalvm.version>
-        <native.maven.plugin.version>0.9.12</native.maven.plugin.version>
+        <graalvm.version>22.2.0</graalvm.version>
+        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
+        <reflections.version>0.10.2</reflections.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <javassist.version>3.29.0-GA</javassist.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
     </properties>
@@ -92,13 +95,27 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
+            <version>${reflections.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.36</version>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!-- transitive dependendency, added to control version -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!-- transitive dependendency, added to control version -->
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
