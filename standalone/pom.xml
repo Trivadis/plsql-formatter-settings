@@ -13,8 +13,11 @@
         <jdk.version>11</jdk.version>
         <jdk.test.version>17</jdk.test.version>
         <sqlcl.version>22.2.0</sqlcl.version>
-        <graalvm.version>22.1.0.1</graalvm.version>
-        <native.maven.plugin.version>0.9.12</native.maven.plugin.version>
+        <graalvm.version>22.2.0</graalvm.version>
+        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
+        <reflections.version>0.10.2</reflections.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <javassist.version>3.29.0-GA</javassist.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
     </properties>
@@ -92,13 +95,27 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
+            <version>${reflections.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.36</version>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!-- transitive dependendency, added to control version -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <!-- transitive dependendency, added to control version -->
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -363,11 +380,11 @@
                                     <goal>build</goal>
                                 </goals>
                                 <phase>package</phase>
-                                <!-- Override classpath to ensure js and js-scriptengine are not added to the classpath.
-                                     This reduces resuting image size by 22 MB (143 MB instead of 165 MB). -->
+                                <!-- Override classpath to ensure js is not added to the classpath.
+                                     This reduces resuting image size by 24 MB (162 MB instead of 186 MB). -->
                                 <configuration>
                                     <classpath>
-                                        ${project.build.directory}/${project.build.finalName}.jar:${settings.localRepository}/oracle/dbtools/dbtools-common/${sqlcl.version}/dbtools-common-${sqlcl.version}.jar:${settings.localRepository}/org/reflections/reflections/0.10.2/reflections-0.10.2.jar:${settings.localRepository}/org/javassist/javassist/3.28.0-GA/javassist-3.28.0-GA.jar:${settings.localRepository}/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar:${settings.localRepository}/org/slf4j/slf4j-jdk14/1.7.32/slf4j-jdk14-1.7.32.jar
+                                        ${project.build.directory}/${project.build.finalName}.jar:${settings.localRepository}/oracle/dbtools/dbtools-common/${sqlcl.version}/dbtools-common-${sqlcl.version}.jar:${settings.localRepository}/org/reflections/reflections/${reflections.version}/reflections-${reflections.version}.jar:${settings.localRepository}/org/javassist/javassist/${javassist.version}/javassist-${javassist.version}.jar:${settings.localRepository}/org/slf4j/slf4j-api/${slf4j.version}/slf4j-api-${slf4j.version}.jar:${settings.localRepository}/org/slf4j/slf4j-jdk14/${slf4j.version}/slf4j-jdk14-${slf4j.version}.jar:${settings.localRepository}/org/graalvm/js/js-scriptengine/${graalvm.version}/js-scriptengine-${graalvm.version}.jar
                                     </classpath>
                                 </configuration>
                             </execution>
