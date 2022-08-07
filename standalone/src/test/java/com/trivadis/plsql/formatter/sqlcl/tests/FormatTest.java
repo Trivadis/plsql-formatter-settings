@@ -62,12 +62,33 @@ public class FormatTest extends AbstractFormatTest {
     }
 
     @Test
-    public void process_sql_txt_default() throws IOException {
+    public void process_sql_txt_default() {
         process_sql_txt_default(RunType.FormatJS);
     }
 
     @Test
-    public void process_sql_txt_force() throws IOException {
+    public void process_sql_txt_force() {
         process_sql_txt_force(RunType.FormatJS);
     }
+
+    @Test
+    public void process_dir_all_errors() {
+        process_dir_all_errors(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_dir_mext_errors() {
+        process_dir_mext_errors(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_dir_ext_errors() {
+        process_dir_ext_errors(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_dir_no_errors() {
+        process_dir_no_errors(RunType.FormatJS);
+    }
+
 }
