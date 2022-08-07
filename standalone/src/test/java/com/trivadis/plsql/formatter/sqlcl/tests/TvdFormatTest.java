@@ -99,12 +99,12 @@ public class TvdFormatTest extends AbstractFormatTest {
     }
 
     @Test
-    public void process_sql_txt_default() throws IOException {
+    public void process_sql_txt_default() {
         process_sql_txt_default(RunType.TvdFormatCommand);
     }
 
     @Test
-    public void process_sql_txt_force() throws IOException {
+    public void process_sql_txt_force() {
         process_sql_txt_force(RunType.TvdFormatCommand);
     }
 }

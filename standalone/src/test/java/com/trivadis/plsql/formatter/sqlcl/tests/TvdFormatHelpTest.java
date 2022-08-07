@@ -27,6 +27,11 @@ public class TvdFormatHelpTest extends AbstractSqlclTest {
               ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined
                               per line. Each line represent a glob pattern. Empty lines and lines starting
                               with a hash sign (#) are ignored.
+              serr=<scope>    scope of syntax errors to be reported. By default all errors are reported.
+                              serr=none reports no syntax errors
+                              serr=all reports all syntax errors
+                              serr=ext reports syntax errors for files defined with ext option
+                              serr=mext reports syntax errors for files defined with mext option
               --help, -h,     print this help screen and exit
               --version, -v   print version and exit
 

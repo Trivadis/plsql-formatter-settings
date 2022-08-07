@@ -361,8 +361,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_markdown_only(final RunType runType) {
         // run
-        var actualConsole = run(runType, tempDir.toString(), "ext=");
-        Assertions.assertTrue(actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... done."));
+        var actualConsole = run(runType, tempDir.toString(), "ext=none", "serr=ext");
+        Assertions.assertTrue(actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... #1... done... #2... skipped... #3... done... done."));
 
         // markdown.md
         var actualMarkdown = getFormattedContent("markdown.md");
@@ -469,7 +469,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var expected = """
                                 
                 Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         var configFileContent = """
                 [
@@ -480,7 +480,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var actual = run(runType, configFile.toString());
+        var actual = run(runType, configFile.toString(), "serr=ext");
         Assertions.assertEquals(expected, actual);
     }
 
@@ -488,7 +488,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         var expected = """
                                 
                 Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md2... done.
+                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md2... #1... done... #2... skipped... #3... done... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         Files.move(Paths.get(tempDir + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
         var configFileContent = """
@@ -506,7 +506,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var actual = run(runType, configFile.toString());
+        var actual = run(runType, configFile.toString(), "serr=ext");
         Assertions.assertEquals(expected, actual);
         var original = getOriginalContent("markdown.md");
         var processed = getFormattedContent("markdown.md2");
@@ -537,14 +537,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var actual = run(runType, configFile.toString(), "mext=md2");
+        var actual = run(runType, configFile.toString(), "mext=md2, serr=ext");
         Assertions.assertEquals(expected, actual);
     }
 
     public void process_config_dir_array(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... done.
+                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
                 Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
                 Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
@@ -562,14 +562,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
         final Path configFile = Paths.get(tempDir + File.separator + "config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var actual = run(runType, configFile.toString());
+        var actual = run(runType, configFile.toString(), "serr=ext");
         Assertions.assertEquals(expected, actual);
     }
 
-    public void process_sql_txt_default(final RunType runType) throws IOException {
+    public void process_sql_txt_default(final RunType runType) {
         var expected = """
                             
-                """.toString();
+                """;
         final Path file = Paths.get(tempDir.toString() + File.separator + "sql.txt");
         var actual = run(runType, file.toString());
         Assertions.assertEquals(expected, actual);
@@ -580,24 +580,24 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 from
                 dual
                 ;
-                """.toString();
+                """;
         var actualContent = getFormattedContent("sql.txt");
         Assertions.assertEquals(expectedContent, actualContent);
     }
 
-    public void process_sql_txt_force(final RunType runType) throws IOException {
+    public void process_sql_txt_force(final RunType runType) {
         var expected = """
                 
                 Formatting file 1 of 1: #TEMP_DIR##FILE_SEP#sql.txt... done.
                 """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path file = Paths.get(tempDir.toString() + File.separator + "sql.txt");
+        final Path file = Paths.get(tempDir + File.separator + "sql.txt");
         var actual = run(runType, file.toString(), "ext=txt");
         Assertions.assertEquals(expected, actual);
 
         var expectedContent = """
                 select *
                   from dual;
-                """.toString();
+                """;
         var actualContent = getFormattedContent("sql.txt");
         Assertions.assertEquals(expectedContent, actualContent);
     }
