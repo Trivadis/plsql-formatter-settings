@@ -602,4 +602,79 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         Assertions.assertEquals(expectedContent, actualContent);
     }
 
+    public void process_dir_all_errors(final RunType runType) {
+        // console output
+        var expected = """
+                                
+                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... Syntax Error at line 6, column 13
+                                
+                                
+                    for r in /*(*/ select x.* from x join y on y.a = x.a)
+                             ^^^                                         \s
+                                
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+                                
+                                
+                   for r in /*(*/ select x.* from x join y on y.a = x.a)
+                            ^^^                                         \s
+                                
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        var actual = run(runType, tempDir.toString());
+        Assertions.assertEquals(expected, actual);
+    }
+
+    public void process_dir_mext_errors(final RunType runType) {
+        // console output
+        var expected = """
+                                
+                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... Syntax Error at line 6, column 13
+                                
+                                
+                    for r in /*(*/ select x.* from x join y on y.a = x.a)
+                             ^^^                                         \s
+                                
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... skipped.
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        var actual = run(runType, tempDir.toString(), "serr=mext");
+        Assertions.assertEquals(expected, actual);
+    }
+
+    public void process_dir_ext_errors(final RunType runType) {
+        // console output
+        var expected = """
+                                
+                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+                                
+                                
+                   for r in /*(*/ select x.* from x join y on y.a = x.a)
+                            ^^^                                         \s
+                                
+                Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        var actual = run(runType, tempDir.toString(), "serr=ext");
+        Assertions.assertEquals(expected, actual);
+    }
+
+    public void process_dir_no_errors(final RunType runType) {
+        // console output
+        var expected = """
+                                
+                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... skipped.
+                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+        var actual = run(runType, tempDir.toString(), "serr=none");
+        Assertions.assertEquals(expected, actual);
+    }
 }

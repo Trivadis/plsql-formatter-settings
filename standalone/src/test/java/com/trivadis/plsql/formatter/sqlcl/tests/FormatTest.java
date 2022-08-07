@@ -70,4 +70,25 @@ public class FormatTest extends AbstractFormatTest {
     public void process_sql_txt_force() {
         process_sql_txt_force(RunType.FormatJS);
     }
+
+    @Test
+    public void process_dir_all_errors() {
+        process_dir_all_errors(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_dir_mext_errors() {
+        process_dir_mext_errors(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_dir_ext_errors() {
+        process_dir_ext_errors(RunType.FormatJS);
+    }
+
+    @Test
+    public void process_dir_no_errors() {
+        process_dir_no_errors(RunType.FormatJS);
+    }
+
 }
