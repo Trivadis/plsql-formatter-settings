@@ -229,6 +229,11 @@ var printUsage = function (asCommand, standalone) {
     ctx.write("  ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined\n");
     ctx.write("                  per line. Each line represent a glob pattern. Empty lines and lines starting\n");
     ctx.write("                  with a hash sign (#) are ignored.\n");
+    ctx.write("  serr=<scope>    scope of syntax errors to be reported. By default all errors are reported.\n");
+    ctx.write("                  serr=none reports no syntax errors\n");
+    ctx.write("                  serr=all reports all syntax errors\n");
+    ctx.write("                  serr=ext reports syntax errors for files defined with ext option\n");
+    ctx.write("                  serr=mext reports syntax errors for files defined with mext option\n");
     ctx.write("  --help, -h,     print this help screen and exit\n")
     ctx.write("  --version, -v   print version and exit\n")
     if (!asCommand && !standalone) {
@@ -302,6 +307,7 @@ var processAndValidateArgs = function (args) {
     var arboriPath = null;
     var ignorePath = null;
     var ignoreMatcher = null;
+    var serr = null;
     var files = [];
     var result = function (valid) {
         return {
@@ -312,6 +318,7 @@ var processAndValidateArgs = function (args) {
             xmlPath: xmlPath,
             arboriPath: arboriPath,
             ignoreMatcher: ignoreMatcher,
+            serr: serr,
             valid: valid
         };
     }
@@ -370,6 +377,9 @@ var processAndValidateArgs = function (args) {
             }
             if (typeof configJson.ignore !== 'undefined') {
                 ignorePath = configJson.ignore;
+            }
+            if (typeof configJson.serr !== 'undefined') {
+                serr = configJson.serr.toLowerCase();
             }
             if (typeof configJson.files !== 'undefined') {
                 if (!Array.isArray(configJson.files)) {
@@ -431,6 +441,10 @@ var processAndValidateArgs = function (args) {
             ignorePath = args[i].substring(7);
             continue;
         }
+        if (args[i].toLowerCase().indexOf("serr=") === 0) {
+            serr = args[i].substring(5).toLowerCase();
+            continue;
+        }
         ctx.write("invalid argument " + args[i] + ".\n\n");
         return result(false);
     }
@@ -482,6 +496,14 @@ var processAndValidateArgs = function (args) {
         }
         ignoreMatcher = createIgnoreMatcher(ignorePath);
     }
+    if (serr == null) {
+        serr = "all";
+    } else {
+        if (serr !== "all" && serr !== "none" && serr !== "ext" && serr != "mext") {
+            ctx.write("invalid scope '" + serr + "' for serr. Valid are: all, none, ext, mext.\n\n");
+            return result(false);
+        }
+    }
     return result(true);
 }
 
@@ -511,17 +533,26 @@ var isMarkdownFile = function (file, markdownExtensions) {
     return false;
 }
 
-var formatMarkdownFile = function (file, formatter) {
+var formatMarkdownFile = function (file, formatter, serr) {
     var original = readFile(file)
     var p = javaPattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
     var m = p.matcher(original);
     var result = "";
     var pos = 0;
+    var consoleOutput = false;
+    if (serr == "all" || serr == "mext") {
+        consoleOutput = true;
+    }
+    var sqlBlock = 0;
     while (m.find()) {
+        sqlBlock++;
+        ctx.write("#" + sqlBlock + "... ");
         result += original.substring(pos, m.end(1));
-        if (hasParseErrors(m.group(2), false)) {
+        if (hasParseErrors(m.group(2), consoleOutput)) {
+            ctx.write("skipped... ")
             result += original.substring(m.start(2), m.end(3));
         } else {
+            ctx.write("done... ")
             result += formatter.format(m.group(2));
             result += original.substring(m.end(2), m.end(3));
         }
@@ -546,9 +577,13 @@ var getLineSeparator = function (input) {
     return lineSep;
 }
 
-var formatFile = function (file, formatter) {
+var formatFile = function (file, formatter, serr) {
     var original = readFile(file)
-    if (hasParseErrors(original, true)) {
+    var consoleOutput = false;
+    if (serr == "all" || serr == "ext") {
+        consoleOutput = true;
+    }
+    if (hasParseErrors(original, consoleOutput)) {
         ctx.write("skipped.\n");
     } else {
         writeFile(file, formatter.format(original) + getLineSeparator(original));
@@ -556,14 +591,14 @@ var formatFile = function (file, formatter) {
     }
 }
 
-var formatFiles = function (files, formatter, markdownExtensions) {
+var formatFiles = function (files, formatter, markdownExtensions, serr) {
     for (var i = 0; i < files.length; i++) {
         ctx.write("Formatting file " + (i + 1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
         if (isMarkdownFile(files[i], markdownExtensions)) {
-            formatMarkdownFile(files[i], formatter);
+            formatMarkdownFile(files[i], formatter, serr);
         } else {
-            formatFile(files[i], formatter);
+            formatFile(files[i], formatter, serr);
         }
         ctx.getOutputStream().flush();
     }
@@ -617,7 +652,7 @@ var run = function (args) {
                 } else {
                     files = getFiles(options.rootPath, options.extensions, options.ignoreMatcher);
                 }
-                formatFiles(files, formatter, options.markdownExtensions);
+                formatFiles(files, formatter, options.markdownExtensions, options.serr);
             }
         }
     }
