@@ -28,7 +28,7 @@ We recommend you download, clone, or fork this repository when you plan to use [
 However, [`format.js`](format.js) also works as a standalone script. Here's the usage:
 
 ```
-Trivadis PL/SQL & SQL Formatter (format.js), version 22.2.0
+Trivadis PL/SQL & SQL Formatter (format.js), version 22.2.1
 
 usage: script format.js <rootPath> [options]
 
@@ -48,6 +48,11 @@ options:
   ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined
                   per line. Each line represent a glob pattern. Empty lines and lines starting
                   with a hash sign (#) are ignored.
+  serr=<scope>    scope of syntax errors to be reported. By default all errors are reported.
+                  serr=none reports no syntax errors
+                  serr=all reports all syntax errors
+                  serr=ext reports syntax errors for files defined with ext option
+                  serr=mext reports syntax errors for files defined with mext option
   --help, -h,     print this help screen and exit
   --version, -v   print version and exit
   --register, -r  register SQLcl command tvdformat and exit
@@ -64,7 +69,7 @@ script (...)/plsql-formatter-settings/sqlcl/format.js --register
 Afterwards you can type `tvdformat` to get this usage help:
 
 ```
-Trivadis PL/SQL & SQL Formatter (tvdformat), version 22.2.0
+Trivadis PL/SQL & SQL Formatter (tvdformat), version 22.2.1
 
 usage: tvdformat <rootPath> [options]
 
@@ -84,6 +89,11 @@ options:
   ignore=<file>   path to the file containing file patterns to ignore. Patterns are defined
                   per line. Each line represent a glob pattern. Empty lines and lines starting
                   with a hash sign (#) are ignored.
+  serr=<scope>    scope of syntax errors to be reported. By default all errors are reported.
+                  serr=none reports no syntax errors
+                  serr=all reports all syntax errors
+                  serr=ext reports syntax errors for files defined with ext option
+                  serr=mext reports syntax errors for files defined with mext option
   --help, -h,     print this help screen and exit
   --version, -v   print version and exit
 ```
