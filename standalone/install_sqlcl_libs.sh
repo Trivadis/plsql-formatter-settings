@@ -15,11 +15,13 @@ if ! test -f "${SQLCL_LIBDIR}/dbtools-common.jar"; then
 fi
 
 # define common Maven properties
-SQLCL_VERSION="22.2.0"
+SQLCL_VERSION="22.2.1"
 
 # install JAR files in local Maven repository, these libs are not available in public Maven repositories
-mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=$SQLCL_LIBDIR/dbtools-common.jar
-mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=$SQLCL_LIBDIR/dbtools-sqlcl.jar
+mvn install:install-file -Dfile=$SQLCL_LIBDIR/dbtools-common.jar \
+        -DgroupId=oracle.dbtools -DartifactId=dbtools-common -Dversion=$SQLCL_VERSION -Dpackaging=jar
+mvn install:install-file -Dfile=$SQLCL_LIBDIR/dbtools-sqlcl.jar \
+        -DgroupId=oracle.dbtools -DartifactId=dbtools-sqlcl -Dversion=$SQLCL_VERSION -Dpackaging=jar
 mvn install:install-file -Dfile=$SQLCL_LIBDIR/xmlparserv2_sans_jaxp_services.jar \
         -DgroupId=oracle.xml -DartifactId=xmlparserv2-sans-jaxp-services -Dversion=$SQLCL_VERSION -Dpackaging=jar
 mvn install:install-file -Dfile=$SQLCL_LIBDIR/orai18n.jar \
