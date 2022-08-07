@@ -23,6 +23,8 @@
 var javaString = Java.type("java.lang.String");
 var javaSystem = Java.type("java.lang.System");
 // java.nio
+var javaByteBuffer = Java.type("java.nio.ByteBuffer");
+var javaCharset = Java.type("java.nio.charset.Charset");
 var javaFiles = Java.type("java.nio.file.Files");
 var javaFileSystems = Java.type("java.nio.file.FileSystems");
 var javaPaths = Java.type("java.nio.file.Paths");
@@ -179,8 +181,8 @@ var readFile = function (file) {
     return new javaString(javaFiles.readAllBytes(file));
 }
 
-var writeFile = function (file, content) {
-    var writer = javaFiles.newBufferedWriter(file);
+var writeFile = function (file, content, charset) {
+    var writer = javaFiles.newBufferedWriter(file, charset);
     writer.write(content);
     writer.close();
 }
@@ -533,36 +535,59 @@ var isMarkdownFile = function (file, markdownExtensions) {
     return false;
 }
 
-var formatMarkdownFile = function (file, formatter, serr) {
-    var original = readFile(file)
-    var p = javaPattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
-    var m = p.matcher(original);
-    var result = "";
-    var pos = 0;
-    var consoleOutput = false;
-    if (serr == "all" || serr == "mext") {
-        consoleOutput = true;
-    }
-    var sqlBlock = 0;
-    while (m.find()) {
-        sqlBlock++;
-        ctx.write("#" + sqlBlock + "... ");
-        result += original.substring(pos, m.end(1));
-        if (hasParseErrors(m.group(2), consoleOutput)) {
-            ctx.write("skipped... ")
-            result += original.substring(m.start(2), m.end(3));
-        } else {
-            ctx.write("done... ")
-            result += formatter.format(m.group(2));
-            result += original.substring(m.end(2), m.end(3));
+var detectCharset = function(content) {
+    // rudimentary solution since Apache Tika cannot be used in SQLcl
+    // try default character set of the OS (can be overridden via -Dfile.encoding), then UTF-8, then windows-1252
+    var defaultCharsetName = javaCharset.defaultCharset().name();
+    var charsetNames = [defaultCharsetName, "UTF-8", "windows-1252"];
+    for (var i = 0; i < charsetNames.length; i++) {
+        var cs = javaCharset.forName(charsetNames[i]);
+        try {
+            cs.newDecoder().decode(javaByteBuffer.wrap(content));
+            return cs;
+        } catch(e) {
+            // ignore exception
         }
-        pos = m.end(3);
     }
-    if (original.length > pos) {
-        result += original.substring(pos);
+    return null;
+}
+
+var formatMarkdownFile = function (file, formatter, serr) {
+    var bytes = javaFiles.readAllBytes(file);
+    var charset = detectCharset(bytes);
+    if (charset == null) {
+        ctx.write("skipped due to unknown character set.\n");
+    } else {
+        var original = new javaString(bytes, charset);
+        var p = javaPattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
+        var m = p.matcher(original);
+        var result = "";
+        var pos = 0;
+        var consoleOutput = false;
+        if (serr == "all" || serr == "mext") {
+            consoleOutput = true;
+        }
+        var sqlBlock = 0;
+        while (m.find()) {
+            sqlBlock++;
+            ctx.write("#" + sqlBlock + "... ");
+            result += original.substring(pos, m.end(1));
+            if (hasParseErrors(m.group(2), consoleOutput)) {
+                ctx.write("skipped... ")
+                result += original.substring(m.start(2), m.end(3));
+            } else {
+                ctx.write("done... ")
+                result += formatter.format(m.group(2));
+                result += original.substring(m.end(2), m.end(3));
+            }
+            pos = m.end(3);
+        }
+        if (original.length > pos) {
+            result += original.substring(pos);
+        }
+        writeFile(file, result, charset);
+        ctx.write("done.\n");
     }
-    writeFile(file, result);
-    ctx.write("done.\n");
 }
 
 var getLineSeparator = function (input) {
@@ -578,16 +603,22 @@ var getLineSeparator = function (input) {
 }
 
 var formatFile = function (file, formatter, serr) {
-    var original = readFile(file)
-    var consoleOutput = false;
-    if (serr == "all" || serr == "ext") {
-        consoleOutput = true;
-    }
-    if (hasParseErrors(original, consoleOutput)) {
-        ctx.write("skipped.\n");
+    var bytes = javaFiles.readAllBytes(file);
+    var charset = detectCharset(bytes);
+    if (charset == null) {
+         ctx.write("skipped due to unknown character set.\n");
     } else {
-        writeFile(file, formatter.format(original) + getLineSeparator(original));
-        ctx.write("done.\n");
+        var original = new javaString(bytes, charset);
+        var consoleOutput = false;
+        if (serr == "all" || serr == "ext") {
+            consoleOutput = true;
+        }
+        if (hasParseErrors(original, consoleOutput)) {
+            ctx.write("skipped.\n");
+        } else {
+            writeFile(file, formatter.format(original) + getLineSeparator(original), charset);
+            ctx.write("done.\n");
+        }
     }
 }
 

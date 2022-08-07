@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Predicate;
 import java.util.logging.LogManager;
-import java.util.stream.Collectors;
 
 public abstract class AbstractSqlclTest {
     static {
@@ -49,6 +48,7 @@ public abstract class AbstractSqlclTest {
         setup();
     }
 
+    @SuppressWarnings("resource")
     @BeforeEach
     public void setup() {
         byteArrayOutputStream.reset();
@@ -68,8 +68,7 @@ public abstract class AbstractSqlclTest {
             var url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
             assert url != null;
             var unformattedDir = Paths.get(url.getPath());
-            var sources = Files.walk(unformattedDir).filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
+            var sources = Files.walk(unformattedDir).filter(Files::isRegularFile).toList();
             for (Path source : sources) {
                 Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
                 Files.copy(source, target);
