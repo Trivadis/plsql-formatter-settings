@@ -539,7 +539,7 @@ var detectCharset = function(content) {
     // rudimentary solution since Apache Tika cannot be used in SQLcl
     // try default character set of the OS (can be overridden via -Dfile.encoding), then UTF-8, then windows-1252
     var defaultCharsetName = javaCharset.defaultCharset().name();
-    var charsetNames = [defaultCharsetName, "UTF-8", "windows-1252"];
+    var charsetNames = ["UTF-8", defaultCharsetName, "windows-1252"];
     for (var i = 0; i < charsetNames.length; i++) {
         var cs = javaCharset.forName(charsetNames[i]);
         try {
