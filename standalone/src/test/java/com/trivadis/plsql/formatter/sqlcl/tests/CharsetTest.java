@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class CharsetTest extends AbstractSqlclTest {
 
@@ -73,32 +74,24 @@ public class CharsetTest extends AbstractSqlclTest {
     class DetectCharsetJava {
 
         private Charset detectCharset(byte[] content) {
-            try {
-                // try default character set of the OS (can be overridden via -Dfile.encoding)
-                var cs = Charset.defaultCharset();
-                cs.newDecoder().decode(ByteBuffer.wrap(content));
-                return cs;
-            } catch (CharacterCodingException e) {
-                // default is not working, try another character set
-                // rudimentary solution since Apache Tika cannot be used in SQLcl
-                for (Charset cs : Charset.availableCharsets().values().stream().filter(
-                        it -> !it.name().equals(Charset.defaultCharset().name())
-                                && (it.name().equals("UTF-8") || it.name().equals("windows-1252")
-                        )).toList()) {
-                    try {
-                        cs.newDecoder().decode(ByteBuffer.wrap(content));
-                        return cs;
-                    } catch (CharacterCodingException ex) {
-                        return null;
-                    }
+            // rudimentary solution since Apache Tika cannot be used in SQLcl
+            // try default character set of the OS (can be overridden via -Dfile.encoding), then UTF-8, then windows-1252
+            var defaultCharsetName = Charset.defaultCharset().name();
+            var charsetNames = Arrays.asList("UTF-8", defaultCharsetName, "windows-1252");
+            for (var charsetName : charsetNames) {
+                var cs = Charset.forName(charsetName);
+                try {
+                    cs.newDecoder().decode(ByteBuffer.wrap(content));
+                    return cs;
+                } catch (CharacterCodingException e) {
+                    // ignore exception
                 }
-                return null;
             }
+            return null;
         }
 
         @Test
         public void detect_windows_1252() throws IOException {
-            Charset.forName("windows-1252");
             var file = sourceFile("windows-1252.sql");
             var content = Files.readAllBytes(file);
             var actual = detectCharset(content);
@@ -108,7 +101,6 @@ public class CharsetTest extends AbstractSqlclTest {
 
         @Test
         public void detect_utf_8() throws IOException {
-            Charset.forName("UTF-8");
             var file = sourceFile("utf8.sql");
             var content = Files.readAllBytes(file);
             var actual = detectCharset(content);
