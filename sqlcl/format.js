@@ -559,7 +559,7 @@ var formatMarkdownFile = function (file, formatter, serr) {
         ctx.write("skipped due to unknown character set.\n");
     } else {
         var original = new javaString(bytes, charset);
-        var p = javaPattern.compile("(```\\s*sql\\s*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
+        var p = javaPattern.compile("(\\n```[ \\t]*sql[ \\t]*[^\\n]*\\n)(.+?)(\\n```)", javaPattern.DOTALL);
         var m = p.matcher(original);
         var result = "";
         var pos = 0;
