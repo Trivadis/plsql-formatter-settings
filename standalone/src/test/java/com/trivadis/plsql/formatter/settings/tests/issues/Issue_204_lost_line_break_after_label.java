@@ -3,8 +3,6 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 public class Issue_204_lost_line_break_after_label extends ConfiguredTestFormatter {
 
     @Test

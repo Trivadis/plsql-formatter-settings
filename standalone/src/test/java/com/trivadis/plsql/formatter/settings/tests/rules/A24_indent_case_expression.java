@@ -1,7 +1,6 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 public class A24_indent_case_expression extends ConfiguredTestFormatter {
