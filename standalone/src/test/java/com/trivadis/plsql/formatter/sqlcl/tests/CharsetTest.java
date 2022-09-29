@@ -25,7 +25,7 @@ public class CharsetTest extends AbstractSqlclTest {
             Files.walk(tempDir).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
             var url = Thread.currentThread().getContextClassLoader().getResource("charset");
             assert url != null;
-            var dir = Paths.get(url.getPath());
+            var dir = new File(url.getFile()).toPath();
             var sources = Files.walk(dir).filter(Files::isRegularFile).toList();
             for (Path source : sources) {
                 Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
@@ -39,7 +39,7 @@ public class CharsetTest extends AbstractSqlclTest {
     public Path sourceFile(String fileName) {
         var url = Thread.currentThread().getContextClassLoader().getResource("charset/" + fileName);
         assert url != null;
-        return Paths.get(url.getPath());
+        return new File(url.getFile()).toPath();
     }
 
     @Nested

@@ -67,7 +67,7 @@ public abstract class AbstractSqlclTest {
             tempDir = Files.createTempDirectory("plsql-formatter-test-");
             var url = Thread.currentThread().getContextClassLoader().getResource("unformatted");
             assert url != null;
-            var unformattedDir = Paths.get(url.getPath());
+            var unformattedDir = new File(url.getFile()).toPath();
             var sources = Files.walk(unformattedDir).filter(Files::isRegularFile).toList();
             for (Path source : sources) {
                 Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
@@ -129,7 +129,7 @@ public abstract class AbstractSqlclTest {
     public String getOriginalContent(String fileName) {
         var url = Thread.currentThread().getContextClassLoader().getResource("unformatted/" + fileName);
         assert url != null;
-        var file = Paths.get(url.getPath());
+        var file = new File(url.getFile()).toPath();
         return getFileContent(file);
     }
 

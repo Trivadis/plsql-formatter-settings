@@ -24,7 +24,7 @@ public abstract class AbstractTvdFormatTest {
         for (String fileName : TEST_FILES) {
             var url = Thread.currentThread().getContextClassLoader().getResource(fileName);
             assert url != null;
-            var target = Paths.get(tempDir.toString() + File.separator + Paths.get(url.getPath()).getFileName());
+            var target = Paths.get(tempDir.toString() + File.separator + new File(url.getFile()).toPath().getFileName());
             Files.copy(url.openStream(), target);
         }
         System.setOut(printStream);
