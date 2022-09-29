@@ -381,7 +381,7 @@
                                 </goals>
                                 <phase>package</phase>
                                 <!-- Override classpath to ensure js is not added to the classpath.
-                                     This reduces resuting image size by 24 MB (162 MB instead of 186 MB). -->
+                                     This reduces resuting image size by 25 MB (168 MB instead of 193 MB). -->
                                 <configuration>
                                     <classpath>
                                         ${project.build.directory}/${project.build.finalName}.jar,${settings.localRepository}/oracle/dbtools/dbtools-common/${sqlcl.version}/dbtools-common-${sqlcl.version}.jar,${settings.localRepository}/org/reflections/reflections/${reflections.version}/reflections-${reflections.version}.jar,${settings.localRepository}/org/javassist/javassist/${javassist.version}/javassist-${javassist.version}.jar,${settings.localRepository}/org/slf4j/slf4j-api/${slf4j.version}/slf4j-api-${slf4j.version}.jar,${settings.localRepository}/org/slf4j/slf4j-jdk14/${slf4j.version}/slf4j-jdk14-${slf4j.version}.jar,${settings.localRepository}/org/graalvm/js/js-scriptengine/${graalvm.version}/js-scriptengine-${graalvm.version}.jar
