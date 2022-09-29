@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +19,7 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
 
     @Test
     public void ignore_as_as_parameter_file_does_not_exist() {
-        var actual = runCommand( "tvdformat " + tempDir.toString() + " ignore=does_not_exist.txt");
+        var actual = runCommand( "tvdformat " + getTempDir() + " ignore=does_not_exist.txt");
         Assertions.assertTrue(actual.contains("Ignore file does_not_exist.txt does not exist."));
     }
 
@@ -31,10 +30,10 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
                     "files":["#TEMP_DIR#"],
                     "ignore":"does_not_exist.txt"
                 }
-                """.replace("#TEMP_DIR#", tempDir.toString());
-        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir().replace("\\","/"));
+        final Path configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var actual = runCommand( "tvdformat " + tempDir + File.separator + "config.json ignore=does_not_exist.txt");
+        var actual = runCommand( "tvdformat " + getTempDir() + "/config.json ignore=does_not_exist.txt");
         Assertions.assertTrue(actual.contains("Ignore file does_not_exist.txt does not exist."));
     }
 
@@ -47,9 +46,9 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
                 # Ignore files with syntax errors
                 **/*syntax*
                 """;
-        final Path ignoreFile = Paths.get(tempDir + File.separator + "ignore.txt");
+        final Path ignoreFile = Paths.get(getTempDir() + "/ignore.txt");
         Files.write(ignoreFile, ignoreFileContent.getBytes());
-        var actual = runCommand( "tvdformat " + tempDir.toString() + " ignore=" + tempDir + File.separator + "ignore.txt");
+        var actual = runCommand( "tvdformat " + getTempDir() + " ignore=" + getTempDir() + "/ignore.txt");
         Assertions.assertTrue(actual.contains("2 of 2"));
     }
 
@@ -63,9 +62,9 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
                 # Ignore files with syntax errors (single backslash)
                 **\\*syntax*
                 """;
-        final Path ignoreFile = Paths.get(tempDir + File.separator + "ignore2.txt");
+        final Path ignoreFile = Paths.get(getTempDir() + "/ignore2.txt");
         Files.write(ignoreFile, ignoreFileContent.getBytes());
-        var actual = runCommand( "tvdformat " + tempDir.toString() + " ignore=" + tempDir + File.separator + "ignore2.txt");
+        var actual = runCommand( "tvdformat " + getTempDir() + " ignore=" + getTempDir() + "/ignore2.txt");
         Assertions.assertTrue(actual.contains("2 of 2"));
     }
 }

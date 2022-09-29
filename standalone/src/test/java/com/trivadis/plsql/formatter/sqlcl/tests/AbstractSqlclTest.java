@@ -22,11 +22,19 @@ public abstract class AbstractSqlclTest {
     protected final ScriptRunnerContext ctx = new ScriptRunnerContext();
     protected final ScriptExecutor sqlcl = new ScriptExecutor(null);
     protected final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    Path tempDir;
+    private Path tempDir;
 
     AbstractSqlclTest() {
         reset();
         loadLoggingConf();
+    }
+
+    public String getTempDir() {
+        return tempDir.toString().replace("\\", "/");
+    }
+
+    public Path getTempDirPath() {
+        return tempDir;
     }
 
     private void loadLoggingConf() {
@@ -70,7 +78,7 @@ public abstract class AbstractSqlclTest {
             var unformattedDir = new File(url.getFile()).toPath();
             var sources = Files.walk(unformattedDir).filter(Files::isRegularFile).toList();
             for (Path source : sources) {
-                Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
+                Path target = Paths.get(tempDir.toString() + "/" + source.getFileName());
                 Files.copy(source, target);
             }
         } catch (IOException e) {
@@ -123,7 +131,7 @@ public abstract class AbstractSqlclTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return byteArrayOutputStream.toString();
+        return byteArrayOutputStream.toString().replace("\r", "").replace("\\", "/");
     }
 
     public String getOriginalContent(String fileName) {
@@ -135,14 +143,14 @@ public abstract class AbstractSqlclTest {
 
     private String getFileContent(Path file) {
         try {
-            return new String(Files.readAllBytes(file));
+            return new String(Files.readAllBytes(file)).replace("\r", "");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public String getFormattedContent(String fileName) {
-        var file = Paths.get(tempDir.toString() + File.separator + fileName);
+        var file = Paths.get(tempDir.toString() + "/" + fileName);
         return getFileContent(file);
     }
 }

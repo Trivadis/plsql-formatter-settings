@@ -16,7 +16,15 @@ public abstract class AbstractTvdFormatTest {
     static final PrintStream originalPrintStream = System.out;
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
-    Path tempDir;
+    private Path tempDir;
+
+    public String getTempDir() {
+        return tempDir.toString().replace("\\", "/");
+    }
+
+    public Path getTempDirPath() {
+        return tempDir;
+    }
 
     @BeforeEach
     public void setup() throws IOException {
@@ -52,11 +60,11 @@ public abstract class AbstractTvdFormatTest {
     }
 
     public String getXML() {
-        return tempDir + File.separator + "trivadis_advanced_format.xml";
+        return getTempDir() + "/trivadis_advanced_format.xml";
     }
 
     public String getArbori() {
-        return tempDir + File.separator + "trivadis_custom_format.arbori";
+        return getTempDir() + "/trivadis_custom_format.arbori";
     }
 
 }
