@@ -20,12 +20,12 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                             
                             
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                          \s
+                            ^^^
                             
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "mext=");
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         // package_body.pkb
         var expectedPackageBody = """
@@ -550,7 +550,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                          \s
+                            ^^^
                                                                                      
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
@@ -562,7 +562,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         final Path configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "serr=ext");
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     public void process_sql_txt_default(final RunType runType) {
@@ -609,7 +609,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                                 
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
-                             ^^^                                          \s
+                             ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
@@ -618,12 +618,12 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                                 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                          \s
+                            ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     public void process_dir_mext_errors(final RunType runType) {
@@ -634,7 +634,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                                 
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
-                             ^^^                                          \s
+                             ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
@@ -642,7 +642,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                 Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "serr=mext");
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     public void process_dir_ext_errors(final RunType runType) {
@@ -656,12 +656,12 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                                 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                          \s
+                            ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "serr=ext");
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     public void process_dir_no_errors(final RunType runType) {

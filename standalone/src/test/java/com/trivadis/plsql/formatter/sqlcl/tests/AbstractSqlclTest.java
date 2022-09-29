@@ -1,6 +1,7 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
 import oracle.dbtools.raptor.newscriptrunner.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
 import javax.script.*;
@@ -152,5 +153,13 @@ public abstract class AbstractSqlclTest {
     public String getFormattedContent(String fileName) {
         var file = Paths.get(tempDir.toString() + "/" + fileName);
         return getFileContent(file);
+    }
+
+    private String normalize(CharSequence string) {
+        return string.toString().replaceAll("\\^\\^\\^[ ]*\n", "^^^\n");
+    }
+
+    public void assertEquals(CharSequence expected, CharSequence actual) {
+        Assertions.assertEquals(normalize(expected), normalize(actual));
     }
 }
