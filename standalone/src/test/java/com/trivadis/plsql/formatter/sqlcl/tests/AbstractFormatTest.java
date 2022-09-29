@@ -2,7 +2,6 @@ package com.trivadis.plsql.formatter.sqlcl.tests;
 
 import org.junit.jupiter.api.Assertions;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,18 +14,18 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // console output
         var expected = """
                             
-                Formatting file 1 of 3: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
-                Formatting file 2 of 3: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 3 of 3: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+                Formatting file 1 of 3: #TEMP_DIR#/package_body.pkb... done.
+                Formatting file 2 of 3: #TEMP_DIR#/query.sql... done.
+                Formatting file 3 of 3: #TEMP_DIR#/syntax_error.sql... Syntax Error at line 6, column 12
                             
                             
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                         \s
+                            ^^^
                             
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        var actual = run(runType, tempDir.toString(), "mext=");
-        Assertions.assertEquals(expected, actual);
+                """.replace("#TEMP_DIR#", getTempDir());
+        var actual = run(runType, getTempDir(), "mext=");
+        assertEquals(expected, actual);
 
         // package_body.pkb
         var expectedPackageBody = """
@@ -79,7 +78,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_pkb_only(final RunType runType) {
         // run
-        var actual = run(runType, tempDir.toString(), "ext=pkb", "mext=");
+        var actual = run(runType, getTempDir(), "ext=pkb", "mext=");
         Assertions.assertTrue(actual.contains("file 1 of 1"));
 
         // package_body.pkb
@@ -113,7 +112,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_with_default_arbori(final RunType runType) {
         // run
-        var actual = run(runType, tempDir.toString(), "arbori=default");
+        var actual = run(runType, getTempDir(), "arbori=default");
         Assertions.assertTrue(actual.contains("package_body.pkb"));
         Assertions.assertTrue(actual.contains("query.sql"));
 
@@ -178,7 +177,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_with_xml(final RunType runType) {
         // run
-        var actual = run(runType, tempDir.toString(), "xml=" +
+        var actual = run(runType, getTempDir(), "xml=" +
                 Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("advanced_format.xml")).getPath());
         Assertions.assertTrue(actual.contains("package_body.pkb"));
         Assertions.assertTrue(actual.contains("query.sql"));
@@ -231,7 +230,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_with_default_xml_default_arbori(final RunType runType) {
         // run
-        var actual = run(runType, tempDir.toString(), "xml=default", "arbori=default");
+        var actual = run(runType, getTempDir(), "xml=default", "arbori=default");
         Assertions.assertTrue(actual.contains("package_body.pkb"));
         Assertions.assertTrue(actual.contains("query.sql"));
 
@@ -296,7 +295,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_with_embedded_xml_default_arbori(final RunType runType) {
         // run
-        var actual = run(runType, tempDir.toString(), "xml=embedded", "arbori=default");
+        var actual = run(runType, getTempDir(), "xml=embedded", "arbori=default");
         Assertions.assertTrue(actual.contains("package_body.pkb"));
         Assertions.assertTrue(actual.contains("query.sql"));
 
@@ -361,8 +360,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
     public void process_markdown_only(final RunType runType) {
         // run
-        var actualConsole = run(runType, tempDir.toString(), "ext=none", "serr=ext");
-        Assertions.assertTrue(actualConsole.contains("Formatting file 1 of 1: " + tempDir.toString() + File.separator + "markdown.md... #1... done... #2... skipped... #3... done... done."));
+        var actualConsole = run(runType, getTempDir(), "ext=none", "serr=ext");
+        Assertions.assertTrue(actualConsole.contains("Formatting file 1 of 1: " + getTempDir() + "/markdown.md... #1... done... #2... skipped... #3... done... done."));
 
         // markdown.md
         var actualMarkdown = getFormattedContent("markdown.md");
@@ -468,17 +467,17 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_config_file_array(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+                Formatting file 1 of 2: #TEMP_DIR#/query.sql... done.
+                Formatting file 2 of 2: #TEMP_DIR#/markdown.md... #1... done... #2... skipped... #3... done... done.
+                """.replace("#TEMP_DIR#", getTempDir());
         var configFileContent = """
                 [
-                    "#TEMP_DIR##FILE_SEP#query.sql",
-                    "#TEMP_DIR##FILE_SEP#markdown.md",
-                    "#TEMP_DIR##FILE_SEP#dont_format.txt"
+                    "#TEMP_DIR#/query.sql",
+                    "#TEMP_DIR#/markdown.md",
+                    "#TEMP_DIR#/dont_format.txt"
                 ]
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir());
+        final Path configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "serr=ext");
         Assertions.assertEquals(expected, actual);
@@ -487,24 +486,24 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_config_file_object(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 2: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 2 of 2: #TEMP_DIR##FILE_SEP#markdown.md2... #1... done... #2... skipped... #3... done... done.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        Files.move(Paths.get(tempDir + File.separator + "markdown.md"), Paths.get(tempDir.toString() + File.separator + "markdown.md2"));
+                Formatting file 1 of 2: #TEMP_DIR#/query.sql... done.
+                Formatting file 2 of 2: #TEMP_DIR#/markdown.md2... #1... done... #2... skipped... #3... done... done.
+                """.replace("#TEMP_DIR#", getTempDir());
+        Files.move(Paths.get(getTempDir() + "/markdown.md"), Paths.get(getTempDir() + "/markdown.md2"));
         var configFileContent = """
                 {
                     "files": [
-                        "#TEMP_DIR##FILE_SEP#query.sql",
-                        "#TEMP_DIR##FILE_SEP#markdown.md2",
-                        "#TEMP_DIR##FILE_SEP#dont_format.txt"
+                        "#TEMP_DIR#/query.sql",
+                        "#TEMP_DIR#/markdown.md2",
+                        "#TEMP_DIR#/dont_format.txt"
                     ],
                     "ext": ["sql"],
                     "mext": ["md2", "md3", "md4"],
                     "xml": "default",
                     "arbori": "default"
                 }
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir());
+        final Path configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "serr=ext");
         Assertions.assertEquals(expected, actual);
@@ -525,17 +524,17 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_config_file_object_and_param(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 1: #TEMP_DIR##FILE_SEP#query.sql... done.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+                Formatting file 1 of 1: #TEMP_DIR#/query.sql... done.
+                """.replace("#TEMP_DIR#", getTempDir());
         var configFileContent = """
                 {
                     "files": [
-                        "#TEMP_DIR##FILE_SEP#query.sql",
-                        "#TEMP_DIR##FILE_SEP#markdown.md"
+                        "#TEMP_DIR#/query.sql",
+                        "#TEMP_DIR#/markdown.md"
                     ]
                 }
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir());
+        final Path configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "mext=md2, serr=ext");
         Assertions.assertEquals(expected, actual);
@@ -544,33 +543,33 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_config_dir_array(final RunType runType) throws IOException {
         var expected = """
                                 
-                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
-                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
-                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+                Formatting file 1 of 4: #TEMP_DIR#/markdown.md... #1... done... #2... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... Syntax Error at line 6, column 12
 
 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                         \s
+                            ^^^
                                                                                      
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
+                """.replace("#TEMP_DIR#", getTempDir());
         var configFileContent = """
                 [
                     "#TEMP_DIR#"
                 ]
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir());
+        final Path configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
         var actual = run(runType, configFile.toString(), "serr=ext");
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     public void process_sql_txt_default(final RunType runType) {
         var expected = """
                             
                 """;
-        final Path file = Paths.get(tempDir.toString() + File.separator + "sql.txt");
+        final Path file = Paths.get(getTempDir() + "/sql.txt");
         var actual = run(runType, file.toString());
         Assertions.assertEquals(expected, actual);
 
@@ -588,9 +587,9 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_sql_txt_force(final RunType runType) {
         var expected = """
                 
-                Formatting file 1 of 1: #TEMP_DIR##FILE_SEP#sql.txt... done.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        final Path file = Paths.get(tempDir + File.separator + "sql.txt");
+                Formatting file 1 of 1: #TEMP_DIR#/sql.txt... done.
+                """.replace("#TEMP_DIR#", getTempDir());
+        final Path file = Paths.get(getTempDir() + "/sql.txt");
         var actual = run(runType, file.toString(), "ext=txt");
         Assertions.assertEquals(expected, actual);
 
@@ -606,75 +605,75 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
         // console output
         var expected = """
                                 
-                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... Syntax Error at line 6, column 13
+                Formatting file 1 of 4: #TEMP_DIR#/markdown.md... #1... done... #2... Syntax Error at line 6, column 13
                                 
                                 
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
-                             ^^^                                         \s
+                             ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped... #3... done... done.
-                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
-                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+                Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... Syntax Error at line 6, column 12
                                 
                                 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                         \s
+                            ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        var actual = run(runType, tempDir.toString());
-        Assertions.assertEquals(expected, actual);
+                """.replace("#TEMP_DIR#", getTempDir());
+        var actual = run(runType, getTempDir());
+        assertEquals(expected, actual);
     }
 
     public void process_dir_mext_errors(final RunType runType) {
         // console output
         var expected = """
                                 
-                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... Syntax Error at line 6, column 13
+                Formatting file 1 of 4: #TEMP_DIR#/markdown.md... #1... done... #2... Syntax Error at line 6, column 13
                                 
                                 
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
-                             ^^^                                         \s
+                             ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped... #3... done... done.
-                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
-                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... skipped.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        var actual = run(runType, tempDir.toString(), "serr=mext");
-        Assertions.assertEquals(expected, actual);
+                Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... skipped.
+                """.replace("#TEMP_DIR#", getTempDir());
+        var actual = run(runType, getTempDir(), "serr=mext");
+        assertEquals(expected, actual);
     }
 
     public void process_dir_ext_errors(final RunType runType) {
         // console output
         var expected = """
                                 
-                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
-                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
-                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... Syntax Error at line 6, column 12
+                Formatting file 1 of 4: #TEMP_DIR#/markdown.md... #1... done... #2... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... Syntax Error at line 6, column 12
                                 
                                 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
-                            ^^^                                         \s
+                            ^^^
                                 
                 Expected: constraint,':',"aggr_name",'COUNT','-','(','JSON_T... skipped.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        var actual = run(runType, tempDir.toString(), "serr=ext");
-        Assertions.assertEquals(expected, actual);
+                """.replace("#TEMP_DIR#", getTempDir());
+        var actual = run(runType, getTempDir(), "serr=ext");
+        assertEquals(expected, actual);
     }
 
     public void process_dir_no_errors(final RunType runType) {
         // console output
         var expected = """
                                 
-                Formatting file 1 of 4: #TEMP_DIR##FILE_SEP#markdown.md... #1... done... #2... skipped... #3... done... done.
-                Formatting file 2 of 4: #TEMP_DIR##FILE_SEP#package_body.pkb... done.
-                Formatting file 3 of 4: #TEMP_DIR##FILE_SEP#query.sql... done.
-                Formatting file 4 of 4: #TEMP_DIR##FILE_SEP#syntax_error.sql... skipped.
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        var actual = run(runType, tempDir.toString(), "serr=none");
+                Formatting file 1 of 4: #TEMP_DIR#/markdown.md... #1... done... #2... skipped... #3... done... done.
+                Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
+                Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
+                Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... skipped.
+                """.replace("#TEMP_DIR#", getTempDir());
+        var actual = run(runType, getTempDir(), "serr=none");
         Assertions.assertEquals(expected, actual);
     }
 }

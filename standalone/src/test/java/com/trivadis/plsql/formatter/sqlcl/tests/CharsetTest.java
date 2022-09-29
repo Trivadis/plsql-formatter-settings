@@ -22,13 +22,13 @@ public class CharsetTest extends AbstractSqlclTest {
     public void setup() {
         try {
             super.setup();
-            Files.walk(tempDir).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
+            Files.walk(getTempDirPath()).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
             var url = Thread.currentThread().getContextClassLoader().getResource("charset");
             assert url != null;
-            var dir = Paths.get(url.getPath());
+            var dir = new File(url.getFile()).toPath();
             var sources = Files.walk(dir).filter(Files::isRegularFile).toList();
             for (Path source : sources) {
-                Path target = Paths.get(tempDir.toString() + File.separator + source.getFileName());
+                Path target = Paths.get(getTempDir() + "/" + source.getFileName());
                 Files.copy(source, target);
             }
         } catch (IOException e) {
@@ -39,7 +39,7 @@ public class CharsetTest extends AbstractSqlclTest {
     public Path sourceFile(String fileName) {
         var url = Thread.currentThread().getContextClassLoader().getResource("charset/" + fileName);
         assert url != null;
-        return Paths.get(url.getPath());
+        return new File(url.getFile()).toPath();
     }
 
     @Nested
@@ -47,7 +47,7 @@ public class CharsetTest extends AbstractSqlclTest {
 
         public boolean isSameAsOriginalContent(String fileName) {
             var sourceFile = sourceFile(fileName);
-            var targetFile = Paths.get(tempDir.toString() + File.separator + fileName);
+            var targetFile = Paths.get(getTempDir() + "/" + fileName);
             try {
                 return Files.mismatch(sourceFile, targetFile) == -1;
             } catch (IOException e) {
@@ -57,14 +57,14 @@ public class CharsetTest extends AbstractSqlclTest {
 
         @Test
         public void formatUtf8() {
-            var actual = runScript(tempDir.toString() + File.separator + "utf8.sql");
+            var actual = runScript(getTempDir() + "/utf8.sql");
             Assertions.assertNotNull(actual);
             Assertions.assertTrue(isSameAsOriginalContent("utf8.sql"));
         }
 
         @Test
         public void formatWindows1252() {
-            var actual = runScript(tempDir.toString() + File.separator + "windows-1252.sql");
+            var actual = runScript(getTempDir() + "/windows-1252.sql");
             Assertions.assertNotNull(actual);
             Assertions.assertTrue(isSameAsOriginalContent("windows-1252.sql"));
         }

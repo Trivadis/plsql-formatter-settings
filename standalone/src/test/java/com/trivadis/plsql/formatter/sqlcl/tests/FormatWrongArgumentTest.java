@@ -53,7 +53,7 @@ public class FormatWrongArgumentTest extends AbstractSqlclTest {
 
     @Test
     public void wrong_argument() {
-        var actual = this.runScript(this.tempDir.toString(), "xyz=10");
+        var actual = this.runScript(getTempDir(), "xyz=10");
         Assertions.assertTrue(actual.contains("invalid argument xyz=10."));
     }
 }

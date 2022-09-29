@@ -59,7 +59,7 @@ public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
 
     @Test
     public void wrong_argument() {
-        var actual = runCommand("tvdformat " + tempDir.toString() + " xyz=10");
+        var actual = runCommand("tvdformat " + getTempDir() + " xyz=10");
         Assertions.assertTrue(actual.contains("invalid argument xyz=10."));
     }
 }

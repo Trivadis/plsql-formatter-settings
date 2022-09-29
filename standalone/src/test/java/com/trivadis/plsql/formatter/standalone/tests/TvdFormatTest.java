@@ -5,11 +5,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.script.ScriptException;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 public class TvdFormatTest extends AbstractTvdFormatTest {
 
@@ -33,12 +31,12 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
                 [
                     "#TEMP_DIR#"
                 ]
-                """.replace("#TEMP_DIR#", tempDir.toString());
-        var configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir());
+        var configFile = Paths.get(getTempDir() +  "/config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var args = new String[]{tempDir + File.separator + "config.json", "xml=" + getXML(), "arbori=" + getArbori()};
+        var args = new String[]{getTempDir() + "/config.json", "xml=" + getXML(), "arbori=" + getArbori()};
         TvdFormat.main(args);
-        var actual = getFormattedContent("query.sql");
+        var actual = getFormattedContent("query.sql").replace("\r", "");
         Assertions.assertEquals(EXPECTED_QUERY_SQL, actual);
         Assertions.assertTrue(getConsoleOutput().contains("1 of 4"));
     }
@@ -47,14 +45,14 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
     public void jsonArrayFileTest() throws ScriptException, IOException {
         var configFileContent = """
                 [
-                    "#TEMP_DIR##FILE_SEP#query.sql"
+                    "#TEMP_DIR#/query.sql"
                 ]
-                """.replace("#TEMP_DIR#", tempDir.toString()).replace("#FILE_SEP#", File.separator);
-        var configFile = Paths.get(tempDir + File.separator + "config.json");
+                """.replace("#TEMP_DIR#", getTempDir());
+        var configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var args = new String[]{tempDir + File.separator + "config.json", "xml=" + getXML(), "arbori=" + getArbori()};
+        var args = new String[]{getTempDir() + "/config.json", "xml=" + getXML(), "arbori=" + getArbori()};
         TvdFormat.main(args);
-        var actual = getFormattedContent("query.sql");
+        var actual = getFormattedContent("query.sql").replace("\r", "");
         Assertions.assertEquals(EXPECTED_QUERY_SQL, actual);
         Assertions.assertTrue(getConsoleOutput().contains("1 of 1"));
     }
@@ -66,19 +64,19 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
                     "xml": "#XML#",
                     "arbori": "#ARBORI#",
                     "files": [
-                        "#TEMP_DIR##FILE_SEP#query.sql",
-                        "#TEMP_DIR##FILE_SEP#package_body.pkb"
+                        "#TEMP_DIR#/query.sql",
+                        "#TEMP_DIR#/package_body.pkb"
                     ]
                 }
                 """.replace("#XML#", getXML())
                 .replace("#ARBORI#", getArbori())
-                .replace("#TEMP_DIR#", tempDir.toString())
-                .replace("#FILE_SEP#", File.separator);
-        var configFile = Paths.get(tempDir + File.separator + "config.json");
+                .replace("#TEMP_DIR#", getTempDir().toString())
+                .replace("\\", "/");
+        var configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
-        var args = new String[]{tempDir + File.separator + "config.json"};
+        var args = new String[]{getTempDir() + "/config.json"};
         TvdFormat.main(args);
-        var actual = getFormattedContent("query.sql");
+        var actual = getFormattedContent("query.sql").replace("\r", "");
         Assertions.assertEquals(EXPECTED_QUERY_SQL, actual);
         Assertions.assertTrue(getConsoleOutput().contains("1 of 2"));
     }

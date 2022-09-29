@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,13 +53,13 @@ public class TvdFormatIssue232Test extends AbstractSqlclTest {
                 dual;
                 ```
                 """;
-        final Path markdownFile = Paths.get(tempDir + File.separator + "issue-232.md");
+        final Path markdownFile = Paths.get(getTempDir() + "/issue-232.md");
         Files.write(markdownFile, markdownContent.getBytes());
     }
 
     @Test
     public void format_markdown() throws IOException {
-        var actual = runCommand( "tvdformat " + tempDir + File.separator + "issue-232.md");
+        var actual = runCommand( "tvdformat " + getTempDir() + "/issue-232.md");
         Assertions.assertTrue(actual.contains("issue-232.md"));
         var actualContent = getFormattedContent("issue-232.md");
         var expectedContent = """
