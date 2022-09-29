@@ -53,7 +53,7 @@ The parameters are the same as for the [executable JAR](#executable-jar).
 
 1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 22.2.1
 2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases) and install the GraalVM JDK 17 22.2.0
-3. Go to the `bin` directory of the GraalVM JDK and run `./gu install js native-image`, if you want to produce a native image
+3. Go to the `bin` directory of the GraalVM JDK and run `./gu install js native-image`, if you want to produce a native image. For native image on Windows you need als to [download](https://visualstudio.microsoft.com/downloads/) Visual Studio Community 2022 and install the C++ compiler. Use the `x64 Native Tools Command Prompt for VS 2022` to get a terminal window with the correct environment.
 4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.8.6
 5. [Download](https://git-scm.com/downloads) and install a git command line client
 6. Clone the plsql-formatter-settings repository
