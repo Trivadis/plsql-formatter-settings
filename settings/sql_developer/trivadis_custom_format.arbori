@@ -127,10 +127,11 @@ skipWhiteSpaceBeforeNode:
 -- Sections:
 -- - D1: Initialize timer.
 -- - I3: Do not format nodes.
--- - I4: Define identifiers.
 -- - I5: Define global variables and functions.
 -- - I10: Determine and normalize line separators.
+-- - I11: Enforce unquoted identifiers.
 -- - I6: Remove duplicate empty lines.
+-- - I4: Define identifiers.
 -- - I7: Keep existing whitespace.
 -- - I8: Save indentations of parser node positions in first selection directive.
 -- - I9: Remove duplicate spaces in scope.
@@ -160,29 +161,6 @@ dontFormatNode:
 ;
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I4: Define identifiers
--- --------------------------------------------------------------------------------------------------------------------
-
--- analytic functions, to be treated as keywords
-i4_analytics:
-      [identifier) identifier
-    & [call) analytic_function
-    & [call = [identifier
-;
-
--- all identifiers
-i4_ids:
-    [identifier) identifier
-;
-
--- Callback function to reduce the list of keywords by the identifiers provided here
--- This is relevant for general options "Keyword case" and "Indentifier case".
-identifiers:
-    i4_ids - i4_analytics
-->
-;
-
--- --------------------------------------------------------------------------------------------------------------------
 -- I5: Define global variables and functions.
 -- --------------------------------------------------------------------------------------------------------------------
 
@@ -193,6 +171,7 @@ i5_define_global_variables:
     // java.lang classes
     var Integer = Java.type('java.lang.Integer');
     var System = Java.type('java.lang.System');
+    var StringBuilder = Java.type('java.lang.StringBuilder');
 
     // java.util classes
     var ArrayList = Java.type('java.util.ArrayList');
@@ -200,6 +179,7 @@ i5_define_global_variables:
     var HashSet = Java.type('java.util.HashSet');
     var Pattern = Java.type("java.util.regex.Pattern");
     var Collectors = Java.type('java.util.stream.Collectors');
+    var Arrays = Java.type('java.util.Arrays');
 
     // oracle.dbtools.app classes
     var Format = Java.type('oracle.dbtools.app.Format');
@@ -608,7 +588,7 @@ i5_define_global_functions:
 --    - if neither a CRLF nor a LF is used (single line) then use the default, OS specific System.lineSeparator()
 -- Ensure that only theLineSeparator is used in the input.
 -- This section might change the target.input and requires a reparse.
--- However, the reparse is done in the next section I6, which can handle an amended target.input.
+-- However, the reparse is done in the section I6, which can handle an amended target.input.
 -- This way the overhead of determining and normalizing line separators can be minimized.
 
 i10_determine_and_normalize_line_separators:
@@ -642,13 +622,30 @@ i10_determine_and_normalize_line_separators:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I6: Remove duplicate empty lines.
+-- I11: Enforce unquoted identifiers.
 -- --------------------------------------------------------------------------------------------------------------------
 
--- Replace multiple, consecutive empty lines with one empty line.
--- This code changes the input (target.input) and the lexer tokens (target.src).
--- Therefore this code must run at the beginning of the Arbori program.
-i6_remove_duplicate_empty_lines:
+-- Removes the quotes in quoted identifiers, if the following is true:
+--    - The option keepQuotedIdentifiers is not set or set to false
+--    - The identifier starts and ends with a double quote.
+--    - The first character after the initial double quote is a letter (A-Z) in upper case.
+--    - The subsequent characters are one of the following:
+--       - A-Z (upper case only)
+--       - 0-9
+--       - _ (underscore)
+--       - # (hash)
+--       - $ (dollar)
+--       - Ä (A umlaut, undocumented, but valid)
+--       - Ö (O umlaut, undocumented, but valid)
+--       - Ü (U umlaut, undocumented, but valid)
+--    - The identifier is not part of a code section for which the formatter is disabled.
+--    - The identifier is not part of a conditional compilation block.
+--    - The identifier is not a reserved keyword
+--
+-- This section changes the target.input and requires a reparse.
+-- However, the reparse is done in the section I6, which can handle an amended target.input.
+
+i11_enforce_unquoted_identifiers:
     runOnce
 -> {
     var offOnRanges = [];
@@ -681,6 +678,100 @@ i6_remove_duplicate_empty_lines:
         return false;
     }
 
+    var reservedKeywords = new HashSet(Arrays.asList("ACCESS","ADD","AFTER","ALL","ALLOW","ALTER","ANALYTIC","AND",
+        "ANY","ANYSCHEMA","AS","ASC","ASSOCIATE","AUDIT","AUTHID","AUTOMATIC","AUTONOMOUS_TRANSACTION","BEFORE",
+        "BEGIN","BETWEEN","BULK","BY","BYTE","CANONICAL","CASE","CASE-SENSITIVE","CHAR","CHECK","CLUSTER","COLUMN",
+        "COLUMN_VALUE","COMMENT","COMPOUND","COMPRESS","CONNECT","CONNECT_BY_ROOT","CONSTANT","CONSTRAINT",
+        "CONSTRUCTOR","CORRUPT_XID","CORRUPT_XID_ALL","CREATE","CROSSEDITION","CURRENT","CUSTOMDATUM","CYCLE",
+        "DATE","DB_ROLE_CHANGE","DECIMAL","DECLARE","DECREMENT","DEFAULT","DEFAULTS","DEFINE","DEFINER","DELETE",
+        "DESC","DETERMINISTIC","DIMENSION","DISALLOW","DISASSOCIATE","DISTINCT","DROP","EACH","EDITIONING","ELSE",
+        "ELSIF","END","EVALNAME","EXCEPT","EXCEPTION","EXCEPTIONS","EXCEPTION_INIT","EXCLUSIVE","EXISTS","EXTERNAL",
+        "FETCH","FILE","FLOAT","FOLLOWING","FOLLOWS","FOR","FORALL","FROM","GOTO","GRANT","GROUP","HAVING","HIDE",
+        "HIER_ANCESTOR","HIER_LAG","HIER_LEAD","HIER_PARENT","IDENTIFIED","IF","IGNORE","IMMEDIATE","IMMUTABLE",
+        "IN","INCREMENT","INDEX","INDICATOR","INDICES","INITIAL","INITIALLY","INLINE","INSERT","INSTEAD","INTEGER",
+        "INTERSECT","INTO","INVISIBLE","IS","ISOLATION","JAVA","JSON_EXISTS","JSON_TABLE","LATERAL","LEVEL","LIBRARY",
+        "LIKE","LIKE2","LIKE4","LIKEC","LOCK","LOGON","LONG","MAXEXTENTS","MAXVALUE","MEASURES","MERGE","MINUS",
+        "MINVALUE","MLSLABEL","MODE","MODIFY","MULTISET","MUTABLE","NAN","NAV","NCHAR_CS","NESTED_TABLE_ID","NOAUDIT",
+        "NOCOMPRESS","NOCOPY","NOCYCLE","NONSCHEMA","NORELY","NOT","NOVALIDATE","NOWAIT","NULL","NUMBER","OF",
+        "OFFLINE","ON","ONLINE","ONLY","OPTION","OR","ORADATA","ORDER","ORDINALITY","OVER","OVERRIDING",
+        "PARALLEL_ENABLE","PARTITION","PASSING","PAST","PCTFREE","PIPELINED","PIVOT","PRAGMA","PRECEDES",
+        "PRECEDING","PRESENT","PRIOR","PROCEDURE","PUBLIC","RAW","REFERENCES","REFERENCING","REJECT","RELY",
+        "RENAME","REPEAT","RESOURCE","RESPECT","RESTRICT_REFERENCES","RESULT_CACHE","RETURNING","REVOKE","ROW",
+        "ROWID","ROWNUM","ROWS","SELECT","SEQUENTIAL","SERIALIZABLE","SERIALLY_REUSABLE","SERVERERROR","SESSION",
+        "SET","SETS","SHARE","SIBLINGS","SINGLE","SIZE","SMALLINT","SOME","SQLDATA","SQL_MACRO","STANDALONE",
+        "START","SUBMULTISET","SUBPARTITION","SUCCESSFUL","SUPPRESSES_WARNING_6009","SYNONYM","SYSDATE","TABLE",
+        "THE","THEN","TO","TRIGGER","UDF","UID","UNBOUNDED","UNDER","UNION","UNIQUE","UNLIMITED","UNPIVOT","UNTIL",
+        "UPDATE","UPSERT","USER","USING","VALIDATE","VALUES","VARCHAR","VARCHAR2","VARRAY","VARYING","VIEW",
+        "WHEN","WHENEVER","WHERE","WHILE","WINDOW","WITH","XMLATTRIBUTES","XMLEXISTS","XMLFOREST","XMLNAMESPACES",
+        "XMLQUERY","XMLROOT","XMLSCHEMA","XMLSERIALIZE","XMLTABLE"));
+
+    var isKeyword = function(token) {
+        return reservedKeywords.contains(replaceAll(token.content,'"', ""));
+    }
+
+    var isUnquotingAllowed = function(token) {
+        if (!token.content.matches('^"[A-Z][A-Z0-9_$#ÄÖÜ]*"$')) {
+            return false;
+        }
+        if (isKeyword(token)) {
+            return false;
+        }
+        return true;
+    }
+
+    var findAndConvertQuotedIdentifiers = function() {
+        var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
+        populateOffOnRanges(tokens);
+        var newInput = new StringBuilder(target.input);
+        var delpos = [];
+        var hiddenTokenCount = 0;
+        var conditionalBlock = false;
+        for (i = 0; i < tokens.length; i++) {
+            var type = tokens[i].type;
+            if (type == Token.MACRO_SKIP) {
+                var content = tokens[i].content.toLowerCase();
+                if (content.indexOf("$if ") == 0) {
+                    conditionalBlock = true;
+                } else if (content.indexOf("$end") == 0) {
+                    conditionalBlock = false;
+                }
+            }
+            if (type == Token.DQUOTED_STRING && isUnquotingAllowed(tokens[i]) && !inOffOnRange(tokens[i].begin) && !conditionalBlock) {
+                delpos.push(tokens[i].begin);
+                delpos.push(tokens[i].end-1);
+                logger.fine(struct.getClass(), "i11_enforce_unquoted_identifiers: at " + (i-hiddenTokenCount) + ".");
+            } else if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS ||
+                type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
+            {
+                hiddenTokenCount++;
+            }
+        }
+        var i = delpos.length - 1;
+        while (i >= 0) {
+            newInput.deleteCharAt(delpos[i]);
+            i--;
+        }
+        target.input = newInput.toString();
+    }
+    // get custom option keepQuotedIdentifiers (might not exist)
+    var keepQuotedIdentifiers = struct.options.get("keepQuotedIdentifiers");
+
+    if (keepQuotedIdentifiers == null || !keepQuotedIdentifiers) {
+        findAndConvertQuotedIdentifiers();
+    }
+}
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I6: Remove duplicate empty lines.
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- Replace multiple, consecutive empty lines with one empty line.
+-- This code changes the input (target.input) and the lexer tokens (target.src).
+-- Therefore this code must run at the beginning of the Arbori program.
+-- The functions populateOffOnRanges and inOffOnRange are defined in I11.
+i6_remove_duplicate_empty_lines:
+    runOnce
+-> {
     var removeDuplicateEmptyLines = function() {
         var tokens = LexerToken.parse(target.input,true);  // parse with WS symbols
         populateOffOnRanges(tokens);
@@ -734,6 +825,29 @@ i6_remove_duplicate_empty_lines:
     // enable next line to print all node names on the console (e.g. when SQLDev UI shows unnamed nodes)
     // target.root.printTree();
 }
+
+-- --------------------------------------------------------------------------------------------------------------------
+-- I4: Define identifiers
+-- --------------------------------------------------------------------------------------------------------------------
+
+-- analytic functions, to be treated as keywords
+i4_analytics:
+      [identifier) identifier
+    & [call) analytic_function
+    & [call = [identifier
+;
+
+-- all identifiers
+i4_ids:
+    [identifier) identifier
+;
+
+-- Callback function to reduce the list of keywords by the identifiers provided here
+-- This is relevant for general options "Keyword case" and "Indentifier case".
+identifiers:
+    i4_ids - i4_analytics
+->
+;
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- I7: Keep existing whitespace.
