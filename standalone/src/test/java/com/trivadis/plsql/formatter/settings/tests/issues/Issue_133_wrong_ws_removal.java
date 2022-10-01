@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_133_wrong_ws_removal extends ConfiguredTestFormatter {
 
     @Test
@@ -19,11 +21,11 @@ public class Issue_133_wrong_ws_removal extends ConfiguredTestFormatter {
                 SELECT CASE "A1"."JOB" WHEN 'ANALYST' THEN 3000 END  "CASEJOBWHEN'ANALYST'THEN3000END" FROM "SCOTT"."EMP" "A1"
                 """;
         var expandedExpected = """
-                select case "A1"."JOB"
+                select case A1.JOB
                           when 'ANALYST' then
                              3000
                        end "CASEJOBWHEN'ANALYST'THEN3000END"
-                  from "SCOTT"."EMP" "A1"
+                  from SCOTT.EMP A1
                 """;
         try {
             var expandedActual = formatter.format(expanded);
