@@ -3,9 +3,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A18_indent_comment extends ConfiguredTestFormatter {
 
     @Nested

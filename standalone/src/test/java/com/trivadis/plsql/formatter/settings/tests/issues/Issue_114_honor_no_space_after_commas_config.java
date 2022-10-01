@@ -2,14 +2,17 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_114_honor_no_space_after_commas_config extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
         getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
     }

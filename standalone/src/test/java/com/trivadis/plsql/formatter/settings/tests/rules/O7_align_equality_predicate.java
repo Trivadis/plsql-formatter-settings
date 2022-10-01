@@ -1,18 +1,17 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O7_align_equality_predicate extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().alignEquality, true);
         }
@@ -68,9 +67,10 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().alignTabColAliases, false);
         }

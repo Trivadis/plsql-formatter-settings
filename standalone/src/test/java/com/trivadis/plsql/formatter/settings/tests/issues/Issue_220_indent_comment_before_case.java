@@ -2,7 +2,9 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_220_indent_comment_before_case extends ConfiguredTestFormatter {
 
     @Test

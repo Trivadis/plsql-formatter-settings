@@ -3,9 +3,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
 
     @Test

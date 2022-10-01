@@ -1,18 +1,17 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().breakOnSubqueries, true);
         }
@@ -57,9 +56,10 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().breakOnSubqueries, false);
         }

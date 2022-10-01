@@ -1,16 +1,15 @@
 package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class Cursor_for_loop_statement extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Select {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().breakOnSubqueries, false);
         }

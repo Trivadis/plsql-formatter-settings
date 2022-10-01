@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_129_in_out_parameter extends ConfiguredTestFormatter {
 
     @Test

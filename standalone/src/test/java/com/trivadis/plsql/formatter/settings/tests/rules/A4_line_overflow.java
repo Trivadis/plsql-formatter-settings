@@ -2,18 +2,17 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class A4_line_overflow extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class original {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().maxCharLineSize, 120);
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
@@ -151,9 +150,10 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_before {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().maxCharLineSize, 30);
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
@@ -207,9 +207,10 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().maxCharLineSize, 30);
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);

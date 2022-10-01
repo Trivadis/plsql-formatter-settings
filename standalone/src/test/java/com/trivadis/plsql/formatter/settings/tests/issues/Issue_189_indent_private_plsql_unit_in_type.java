@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_189_indent_private_plsql_unit_in_type extends ConfiguredTestFormatter {
 
     @Test

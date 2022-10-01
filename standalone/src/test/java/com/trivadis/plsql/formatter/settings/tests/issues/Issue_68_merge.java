@@ -3,7 +3,9 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_68_merge extends ConfiguredTestFormatter {
 
     @Test
@@ -67,6 +69,7 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                        where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test
@@ -142,5 +145,6 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                        where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
+        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
     }
 }

@@ -2,18 +2,17 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Indented_actions_inlined_conditions {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.IndentedActions);
         }
@@ -138,9 +137,10 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Terse {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.Terse);
         }
@@ -250,9 +250,10 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Line_breaks_after_conditions_and_actions {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.SeparateConditionsActions);
         }
@@ -372,9 +373,10 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Indented_conditions_and_actions {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.IndentedConditionsActions);
         }

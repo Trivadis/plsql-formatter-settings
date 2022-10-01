@@ -2,18 +2,17 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class R6_align_parameters extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_before {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
             getFormatter().options.put(getFormatter().spaceAfterCommas, true);
@@ -62,9 +61,10 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
             getFormatter().options.put(getFormatter().spaceAfterCommas, true);
@@ -159,9 +159,10 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after_dont_align_named_args {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
             getFormatter().options.put(getFormatter().spaceAfterCommas, true);

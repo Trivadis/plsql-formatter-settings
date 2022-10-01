@@ -2,23 +2,23 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
         getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Default {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.Default);
         }
@@ -397,9 +397,10 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Inside {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.Inside);
         }
@@ -454,9 +455,10 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Outside {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.Outside);
         }
@@ -511,9 +513,10 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class NoSpace {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
             getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.NoSpace);
         }
