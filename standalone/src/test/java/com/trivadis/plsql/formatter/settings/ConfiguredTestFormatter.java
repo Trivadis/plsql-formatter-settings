@@ -22,21 +22,23 @@ public abstract class ConfiguredTestFormatter {
             formatter = new Format();
             configureFormatter();
         } else {
-            // General
+            // Format (first tab)
+            setOption(getFormatter().adjustCaseOnly, false);
+            // General - Advanced Format
             setOption(getFormatter().kwCase, Format.Case.lower);
             setOption(getFormatter().idCase, Format.Case.NoCaseChange);
             setOption(getFormatter().singleLineComments, Format.InlineComments.CommentsUnchanged);
-            // Alignment
+            // Alignment - Advanced Format
             setOption(getFormatter().alignTabColAliases, false);
             setOption(getFormatter().alignTypeDecl, true);
             setOption(getFormatter().alignNamedArgs, true);
             setOption(getFormatter().alignAssignments, true);
             setOption(getFormatter().alignEquality, false);
             setOption(getFormatter().alignRight, true);
-            // Indentation
+            // Indentation - Advanced Format
             setOption(getFormatter().identSpaces, 3);
             setOption(getFormatter().useTab, false);
-            // Line Breaks
+            // Line Breaks - Advanced Format
             setOption(getFormatter().breaksComma, Format.Breaks.After);
             setOption(getFormatter().commasPerLine, 1); // irrelevant
             setOption(getFormatter().breaksConcat, Format.Breaks.Before);
@@ -49,10 +51,13 @@ public abstract class ConfiguredTestFormatter {
             setOption(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X1);
             setOption(getFormatter().breaksAfterSelect, false);
             setOption(getFormatter().flowControl, Format.FlowControl.IndentedActions);
-            // White Space
+            // White Space - Advanced Format
             setOption(getFormatter().spaceAroundOperators, true);
             setOption(getFormatter().spaceAfterCommas, true);
             setOption(getFormatter().spaceAroundBrackets, Format.Space.Default);
+            // Undocumented
+            setOption(getFormatter().formatThreshold, 1); // don't format input with less than threshold tokens
+            setOption(getFormatter().formatWhenSyntaxError, false);
             // Custom
             setOption("keepQuotedIdentifiers", false);
         }
