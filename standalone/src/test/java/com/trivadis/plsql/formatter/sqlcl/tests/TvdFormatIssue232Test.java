@@ -58,7 +58,7 @@ public class TvdFormatIssue232Test extends AbstractSqlclTest {
     }
 
     @Test
-    public void format_markdown() throws IOException {
+    public void format_markdown() {
         var actual = runCommand( "tvdformat " + getTempDir() + "/issue-232.md");
         Assertions.assertTrue(actual.contains("issue-232.md"));
         var actualContent = getFormattedContent("issue-232.md");
