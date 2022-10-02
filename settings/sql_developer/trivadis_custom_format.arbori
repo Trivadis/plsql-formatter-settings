@@ -170,16 +170,16 @@ i5_define_global_variables:
 -> {
     // java.lang classes
     var Integer = Java.type('java.lang.Integer');
-    var System = Java.type('java.lang.System');
     var StringBuilder = Java.type('java.lang.StringBuilder');
+    var System = Java.type('java.lang.System');
 
     // java.util classes
     var ArrayList = Java.type('java.util.ArrayList');
+    var Arrays = Java.type('java.util.Arrays');
     var HashMap = Java.type('java.util.HashMap');
     var HashSet = Java.type('java.util.HashSet');
     var Pattern = Java.type("java.util.regex.Pattern");
     var Collectors = Java.type('java.util.stream.Collectors');
-    var Arrays = Java.type('java.util.Arrays');
 
     // oracle.dbtools.app classes
     var Format = Java.type('oracle.dbtools.app.Format');
@@ -710,7 +710,7 @@ i11_enforce_unquoted_identifiers:
     }
 
     var isUnquotingAllowed = function(token) {
-        if (!token.content.matches('^"[A-Z][A-Z0-9_$#ÄÖÜ]*"$')) {
+        if (!Pattern.matches('^"[A-Z][A-Z0-9_$#ÄÖÜ]*"$', token.content)) {
             return false;
         }
         if (isKeyword(token)) {
