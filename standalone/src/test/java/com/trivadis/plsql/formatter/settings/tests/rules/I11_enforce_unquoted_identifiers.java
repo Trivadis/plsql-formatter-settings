@@ -34,10 +34,10 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
         @Test
         public void all_allowed_chars() throws IOException {
             var input = """
-                    select "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$#ÄÖÜ" from "T";
+                    select "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$#" from "T";
                     """;
             var expected = """
-                    select abcdefghijklmnopqrstuvwxyz0123456789_$#äöü from t;
+                    select abcdefghijklmnopqrstuvwxyz0123456789_$# from t;
                     """.trim();
             var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
