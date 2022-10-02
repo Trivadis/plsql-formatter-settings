@@ -70,7 +70,7 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
                 }
                 """.replace("#XML#", getXML())
                 .replace("#ARBORI#", getArbori())
-                .replace("#TEMP_DIR#", getTempDir().toString())
+                .replace("#TEMP_DIR#", getTempDir())
                 .replace("\\", "/");
         var configFile = Paths.get(getTempDir() + "/config.json");
         Files.write(configFile, configFileContent.getBytes());
