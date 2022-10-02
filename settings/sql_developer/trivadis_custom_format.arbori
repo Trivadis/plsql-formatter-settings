@@ -642,6 +642,12 @@ i10_determine_and_normalize_line_separators:
 --    - The identifier is not part of a conditional compilation block.
 --    - The identifier is not a reserved keyword
 --
+-- Quoted identifiers look like strings in Java and other languages. The parser in SQLDev 22.2.0 does not
+-- understand Java stored procedures. Trying to format a Java stored procedure leads to a syntax error.
+-- However, the formatter tries nonetheless to format the code with a best effort approach. This will lead
+-- to a broken formatter result. To avoid that, the undocumented formatter option "formatWhenSyntaxError"
+-- must be set to "false".
+--
 -- This section changes the target.input and requires a reparse.
 -- However, the reparse is done in the section I6, which can handle an amended target.input.
 
