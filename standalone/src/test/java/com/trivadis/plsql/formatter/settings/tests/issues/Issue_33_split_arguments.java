@@ -37,7 +37,7 @@ public class Issue_33_split_arguments extends ConfiguredTestFormatter {
 
     @Test
     public void split_nested_args_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 create procedure test_dedup_t_obj is
                    l_input    t_obj_type;
@@ -61,7 +61,7 @@ public class Issue_33_split_arguments extends ConfiguredTestFormatter {
                 end test_dedup_t_obj;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test

@@ -11,7 +11,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
+        setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
     }
 
     @Nested
@@ -20,7 +20,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.Default);
+            setOption(getFormatter().spaceAroundBrackets, Format.Space.Default);
         }
 
         @Test
@@ -402,7 +402,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.Inside);
+            setOption(getFormatter().spaceAroundBrackets, Format.Space.Inside);
         }
 
         @Test
@@ -460,7 +460,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.Outside);
+            setOption(getFormatter().spaceAroundBrackets, Format.Space.Outside);
         }
 
         @Test
@@ -518,7 +518,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundBrackets, Format.Space.NoSpace);
+            setOption(getFormatter().spaceAroundBrackets, Format.Space.NoSpace);
         }
 
         @Test

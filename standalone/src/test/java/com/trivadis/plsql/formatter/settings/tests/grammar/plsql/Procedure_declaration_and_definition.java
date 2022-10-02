@@ -14,7 +14,7 @@ public class Procedure_declaration_and_definition extends ConfiguredTestFormatte
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test

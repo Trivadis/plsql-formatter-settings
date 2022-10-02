@@ -13,9 +13,9 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
 
         @BeforeEach
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, true);
-            getFormatter().options.put(getFormatter().alignAssignments, true);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignAssignments, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
         }
 
         @Test
@@ -75,9 +75,9 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, true);
-            getFormatter().options.put(getFormatter().alignAssignments, true);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignAssignments, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
         }
 
         @Test

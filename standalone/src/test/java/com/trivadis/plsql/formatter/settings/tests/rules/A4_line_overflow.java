@@ -14,9 +14,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().maxCharLineSize, 120);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.None);
+            setOption(getFormatter().maxCharLineSize, 120);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().breaksConcat, Format.Breaks.None);
         }
 
         @Test
@@ -155,9 +155,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().maxCharLineSize, 30);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.Before);
+            setOption(getFormatter().maxCharLineSize, 30);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().breaksConcat, Format.Breaks.Before);
         }
 
         @Test
@@ -212,9 +212,9 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().maxCharLineSize, 30);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.Before);
+            setOption(getFormatter().maxCharLineSize, 30);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().breaksConcat, Format.Breaks.Before);
         }
 
         @Test

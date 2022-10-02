@@ -10,7 +10,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+        setOption(getFormatter().breakOnSubqueries, false);
     }
 
     @Nested
@@ -19,7 +19,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakAnsiiJoin, true);
+            setOption(getFormatter().breakAnsiiJoin, true);
         }
 
         @Test
@@ -305,7 +305,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakAnsiiJoin, false);
+            setOption(getFormatter().breakAnsiiJoin, false);
         }
 
         @Test

@@ -14,7 +14,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.BeforeAndAfter);
+            setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.BeforeAndAfter);
         }
 
         @Test
@@ -66,7 +66,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.Before);
+            setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.Before);
         }
 
         @Test
@@ -114,7 +114,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.After);
+            setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.After);
         }
 
         @Test
@@ -162,7 +162,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
+            setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
         }
 
         @Test

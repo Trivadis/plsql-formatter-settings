@@ -14,7 +14,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.IndentedActions);
+            setOption(getFormatter().flowControl, Format.FlowControl.IndentedActions);
         }
 
         @Test
@@ -142,7 +142,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.Terse);
+            setOption(getFormatter().flowControl, Format.FlowControl.Terse);
         }
 
         @Test
@@ -255,7 +255,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.SeparateConditionsActions);
+            setOption(getFormatter().flowControl, Format.FlowControl.SeparateConditionsActions);
         }
 
         @Test
@@ -378,7 +378,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.IndentedConditionsActions);
+            setOption(getFormatter().flowControl, Format.FlowControl.IndentedConditionsActions);
         }
 
         @Test

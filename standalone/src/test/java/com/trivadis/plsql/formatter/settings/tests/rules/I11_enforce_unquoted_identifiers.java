@@ -14,8 +14,8 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put("keepQuotedIdentifiers", false);
-            getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+            setOption("keepQuotedIdentifiers", false);
+            setOption(getFormatter().idCase, Format.Case.lower);
         }
 
         @Test
@@ -242,8 +242,8 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put("keepQuotedIdentifiers", true);
-            getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+            setOption("keepQuotedIdentifiers", true);
+            setOption(getFormatter().idCase, Format.Case.lower);
         }
 
         @Test

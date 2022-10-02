@@ -11,11 +11,11 @@ public class R2_indentation extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
-        getFormatter().options.put(getFormatter().alignRight, false);
-        getFormatter().options.put(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
-        getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().alignRight, false);
+        setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.None);
+        setOption(getFormatter().breakOnSubqueries, false);
     }
 
     @Nested

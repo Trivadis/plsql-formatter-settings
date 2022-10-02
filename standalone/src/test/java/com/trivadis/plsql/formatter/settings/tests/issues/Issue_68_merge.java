@@ -41,7 +41,7 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
 
     @Test
     public void merge_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 merge into people_target pt
                 using people_source ps
@@ -69,7 +69,7 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                        where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
 
     @Test
     public void merge_subquery_commas_before_and_sl_comments() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 merge into people_target pt
                 using (
@@ -145,6 +145,6 @@ public class Issue_68_merge extends ConfiguredTestFormatter {
                        where ps.title = 'Mr';
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 }

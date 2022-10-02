@@ -14,7 +14,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.Before);
+            setOption(getFormatter().breaksConcat, Format.Breaks.Before);
         }
 
         @Test
@@ -70,7 +70,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.After);
+            setOption(getFormatter().breaksConcat, Format.Breaks.After);
         }
 
         @Test
@@ -126,7 +126,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.None);
+            setOption(getFormatter().breaksConcat, Format.Breaks.None);
         }
 
         @Test

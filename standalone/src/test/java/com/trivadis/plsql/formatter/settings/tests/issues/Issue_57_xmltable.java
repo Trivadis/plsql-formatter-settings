@@ -28,7 +28,7 @@ public class Issue_57_xmltable extends ConfiguredTestFormatter {
 
     @Test
     public void xmltable_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select stg.payload_type
                      , xt_hdr.*
@@ -43,6 +43,6 @@ public class Issue_57_xmltable extends ConfiguredTestFormatter {
                        ) hdr;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 }

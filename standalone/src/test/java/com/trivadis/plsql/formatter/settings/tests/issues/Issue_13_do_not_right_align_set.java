@@ -11,7 +11,7 @@ public class Issue_13_do_not_right_align_set extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().identSpaces, 4);
+        setOption(getFormatter().identSpaces, 4);
     }
 
     @Test

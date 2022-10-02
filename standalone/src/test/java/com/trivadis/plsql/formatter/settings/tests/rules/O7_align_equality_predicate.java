@@ -13,7 +13,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignEquality, true);
+            setOption(getFormatter().alignEquality, true);
         }
 
         @Test
@@ -72,7 +72,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTabColAliases, false);
+            setOption(getFormatter().alignTabColAliases, false);
         }
 
         @Test

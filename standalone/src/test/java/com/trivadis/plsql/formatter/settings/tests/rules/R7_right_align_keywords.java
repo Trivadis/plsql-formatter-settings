@@ -14,9 +14,9 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breakOnSubqueries, false);
         }
 
         @Test
@@ -160,8 +160,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -328,8 +328,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -469,8 +469,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -536,8 +536,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -595,8 +595,8 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test

@@ -13,7 +13,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignAssignments, true);
+            setOption(getFormatter().alignAssignments, true);
         }
 
         @Test
@@ -149,7 +149,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignAssignments, false);
+            setOption(getFormatter().alignAssignments, false);
         }
 
         @Test

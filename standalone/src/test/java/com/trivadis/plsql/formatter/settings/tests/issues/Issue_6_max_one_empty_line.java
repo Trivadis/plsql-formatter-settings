@@ -11,7 +11,7 @@ public class Issue_6_max_one_empty_line extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().kwCase, Format.Case.NoCaseChange);
+        setOption(getFormatter().kwCase, Format.Case.NoCaseChange);
     }
 
     @Test

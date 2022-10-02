@@ -25,7 +25,7 @@ public class Issue_64_update extends ConfiguredTestFormatter {
 
     @Test
     public void update_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 update my_table
                    set n01 = 1

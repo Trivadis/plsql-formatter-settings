@@ -25,7 +25,7 @@ public class Issue_30_into_clause extends ConfiguredTestFormatter {
 
     @Test
     public void into_clause_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select namespace
                      , key
@@ -37,6 +37,6 @@ public class Issue_30_into_clause extends ConfiguredTestFormatter {
                  where id = p_id;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 }

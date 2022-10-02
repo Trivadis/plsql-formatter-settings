@@ -13,7 +13,7 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTabColAliases, true);
+            setOption(getFormatter().alignTabColAliases, true);
         }
 
         @Test
@@ -74,7 +74,7 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTabColAliases, false);
+            setOption(getFormatter().alignTabColAliases, false);
         }
 
         @Test

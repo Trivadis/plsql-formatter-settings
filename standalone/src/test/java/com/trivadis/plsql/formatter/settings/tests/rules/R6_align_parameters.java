@@ -14,9 +14,9 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignNamedArgs, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignNamedArgs, true);
         }
 
         @Test
@@ -66,9 +66,9 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignNamedArgs, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignNamedArgs, true);
         }
 
         @Test
@@ -164,9 +164,9 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignNamedArgs, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignNamedArgs, false);
         }
 
         @Test

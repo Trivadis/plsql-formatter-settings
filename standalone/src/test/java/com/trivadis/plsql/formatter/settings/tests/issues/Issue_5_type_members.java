@@ -12,7 +12,7 @@ public class Issue_5_type_members extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().kwCase, Format.Case.lower);
+        setOption(getFormatter().kwCase, Format.Case.lower);
     }
 
     @Test

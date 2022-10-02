@@ -14,13 +14,13 @@ public class Issue_126_create_view_column_list extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put("identSpaces", 2);
-        getFormatter().options.put("idCase", Format.Case.lower);
+        setOption("identSpaces", 2);
+        setOption("idCase", Format.Case.lower);
     }
 
     @Test
     public void dbms_metadata_view() throws IOException {
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().spaceAfterCommas, false);
         var input = """
                   CREATE OR REPLACE FORCE EDITIONABLE VIEW "COVID_COVPN"."DUAL_V" ("DUMMY1", "DUMMY2", "DUMMY3", "DUMMY4", "DUMMY5", "DUMMY6", "DUMMY7", "DUMMY8", "DUMMY9", "DUMMY10", "DUMMY11", "DUMMY12", "DUMMY13", "DUMMY14", "DUMMY15", "DUMMY16", "DUMMY17", "DUMMY18", "DUMMY19", "DUMMY20", "DUMMY21", "DUMMY22", "DUMMY23", "DUMMY24", "DUMMY25", "DUMMY26", "DUMMY27", "DUMMY28", "DUMMY29", "DUMMY30", "DUMMY31", "DUMMY32", "DUMMY33", "DUMMY34", "DUMMY35", "DUMMY36", "DUMMY37", "DUMMY38", "DUMMY39", "DUMMY40", "DUMMY41", "DUMMY42", "DUMMY43", "DUMMY44", "DUMMY45", "DUMMY46", "DUMMY47", "DUMMY48", "DUMMY49", "DUMMY50") AS\s
                   select dummy dummy1,

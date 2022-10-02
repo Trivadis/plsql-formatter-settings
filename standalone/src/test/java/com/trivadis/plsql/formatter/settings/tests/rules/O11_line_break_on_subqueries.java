@@ -13,7 +13,7 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakOnSubqueries, true);
+            setOption(getFormatter().breakOnSubqueries, true);
         }
 
         @Test
@@ -61,7 +61,7 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+            setOption(getFormatter().breakOnSubqueries, false);
         }
 
         @Test

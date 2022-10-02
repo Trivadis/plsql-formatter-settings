@@ -14,9 +14,9 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignRight, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignRight, false);
         }
 
         @Test
@@ -51,7 +51,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b,
@@ -66,7 +66,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -90,7 +90,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_sl_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b, -- single line comment
@@ -106,7 +106,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -129,7 +129,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b, /* multi line comment */
@@ -144,7 +144,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -168,7 +168,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space_before_comma() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b /* multi line comment */,
@@ -184,7 +184,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
     }
 
@@ -194,9 +194,9 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignRight, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignRight, false);
         }
 
         @Test
@@ -219,7 +219,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b
@@ -234,7 +234,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -257,7 +257,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_sl_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b -- single line comment
@@ -272,7 +272,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -295,7 +295,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b /* multi line comment */
@@ -310,7 +310,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -334,7 +334,7 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space_before_comma() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b /* multi line comment */
@@ -350,7 +350,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
     }
 }

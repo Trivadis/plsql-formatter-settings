@@ -12,8 +12,8 @@ public class Issue_214_lost_line_breaks_in_values_clause extends ConfiguredTestF
 
     @BeforeAll
     public void setup_non_trivadis_default_settings() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().spaceAfterCommas, false);
     }
 
     @Test

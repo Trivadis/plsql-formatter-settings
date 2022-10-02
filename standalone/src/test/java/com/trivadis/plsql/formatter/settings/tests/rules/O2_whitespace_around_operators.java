@@ -13,7 +13,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundOperators, true);
+            setOption(getFormatter().spaceAroundOperators, true);
         }
 
         @Test
@@ -79,7 +79,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundOperators, false);
+            setOption(getFormatter().spaceAroundOperators, false);
         }
 
         @Test

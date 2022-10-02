@@ -9,7 +9,7 @@ public class Issue_54_align_table_alias extends ConfiguredTestFormatter {
 
     @Test
     public void align_table_alias() {
-        getFormatter().options.put(getFormatter().alignTabColAliases, true);
+        setOption(getFormatter().alignTabColAliases, true);
         var sql = """
                 begin
                    for rec in (

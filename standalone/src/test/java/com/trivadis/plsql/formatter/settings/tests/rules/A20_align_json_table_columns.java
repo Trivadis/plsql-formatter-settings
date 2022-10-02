@@ -12,7 +12,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
 
     @Test
     public void commas_before() throws IOException {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var input = """
                 select jt.*
                   from j_purchaseorder
@@ -39,7 +39,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
 
     @Test
     public void commas_after() throws IOException {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
         var input = """
                 select jt.*
                   from j_purchaseorder,
@@ -66,7 +66,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
 
     @Test
     public void commas_after_break_after_open_paren() throws IOException {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
         var input = """
                 select jt.*
                   from j_purchaseorder,
@@ -98,7 +98,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
     @Test
     public void commas_no_break() throws IOException {
         // should look like Format.Breaks.After, force breaks on columns
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.None);
+        setOption(getFormatter().breaksComma, Format.Breaks.None);
         var input = """
                 select jt.*
                   from j_purchaseorder,

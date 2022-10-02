@@ -12,7 +12,7 @@ public class Issue_150_define extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup_non_trivadis_default_settings() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test

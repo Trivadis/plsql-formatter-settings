@@ -12,8 +12,8 @@ public class A10_align_parameter_modes extends ConfiguredTestFormatter {
 
     @BeforeEach
     public void setup() {
-        getFormatter().options.put(getFormatter().alignTypeDecl, true);
-        getFormatter().options.put(getFormatter().alignAssignments, true);
+        setOption(getFormatter().alignTypeDecl, true);
+        setOption(getFormatter().alignAssignments, true);
     }
 
 

@@ -11,7 +11,7 @@ public class Cursor_for_loop_statement extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+            setOption(getFormatter().breakOnSubqueries, false);
         }
 
         @Test

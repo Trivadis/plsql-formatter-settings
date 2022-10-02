@@ -13,8 +13,8 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, true);
-            getFormatter().options.put(getFormatter().alignAssignments, true);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignAssignments, true);
         }
 
         @Test
@@ -187,8 +187,8 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, false);
-            getFormatter().options.put(getFormatter().alignAssignments, false);
+            setOption(getFormatter().alignTypeDecl, false);
+            setOption(getFormatter().alignAssignments, false);
         }
 
         @Test

@@ -13,7 +13,7 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAfterSelect, true);
+            setOption(getFormatter().breaksAfterSelect, true);
         }
 
         @Test
@@ -55,7 +55,7 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
 
         @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAfterSelect, false);
+            setOption(getFormatter().breaksAfterSelect, false);
         }
 
         @Test

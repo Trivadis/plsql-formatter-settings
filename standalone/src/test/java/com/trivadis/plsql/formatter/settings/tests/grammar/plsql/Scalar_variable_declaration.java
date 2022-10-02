@@ -14,8 +14,8 @@ public class Scalar_variable_declaration extends ConfiguredTestFormatter {
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().spaceAfterCommas, false);
     }
 
     @Test

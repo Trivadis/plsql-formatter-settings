@@ -40,7 +40,7 @@ public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
 
     @Test
     public void subselect_with_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select table_name
                      , (
@@ -52,12 +52,12 @@ public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
                   from user_tables t;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test
     public void subselect_with_commas_before_with_alias() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select table_name
                      , (
@@ -69,7 +69,7 @@ public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
                   from user_tables t;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
 
     @Test
     public void first_subselect_with_commas_before() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select (
                           select count(1)
@@ -113,12 +113,12 @@ public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
                   from user_tables t;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test
     public void first_subselect_with_commas_before_with_alias() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select (
                           select count(1)
@@ -129,7 +129,7 @@ public class Issue_78_correlated_subquery extends ConfiguredTestFormatter {
                   from user_tables t;
                 """;
         formatAndAssert(sql);
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 
     @Test

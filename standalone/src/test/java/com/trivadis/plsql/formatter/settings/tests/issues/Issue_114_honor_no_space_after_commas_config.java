@@ -14,12 +14,12 @@ public class Issue_114_honor_no_space_after_commas_config extends ConfiguredTest
 
     @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
     }
 
     @Test
     public void no_space_after_comma() throws IOException {
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().spaceAfterCommas, false);
         var input = """
                 select empno
                      , nvl(mgr, 0) as mgr
@@ -38,7 +38,7 @@ public class Issue_114_honor_no_space_after_commas_config extends ConfiguredTest
 
     @Test
     public void space_after_comma() throws IOException {
-        getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+        setOption(getFormatter().spaceAfterCommas, true);
         var input = """
                 select empno
                       ,nvl(mgr,0) as mgr
