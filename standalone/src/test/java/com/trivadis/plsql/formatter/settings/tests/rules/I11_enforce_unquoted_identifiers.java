@@ -2,6 +2,7 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
+import oracle.dbtools.parser.plsql.SyntaxError;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -197,8 +198,10 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
         }
 
         @Test
-        @Disabled("Java source leads to parse error. Formatter will ignore them by default.")
-        public void skip_java_strings() throws IOException {
+        public void skip_java_strings() {
+            // works only with "setOption(getFormatter().formatWhenSyntaxError, true);"
+            // settings this option to false will most probably break the Java code to be formatted.
+            // it's a good example showing that code with syntax errors must not be formatted.
             var input = """
                     create or replace and resolve java source named "Welcome" as
                     public class Welcome {
@@ -215,24 +218,8 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                                         
                     select greet('Scott') from dual;
                     """;
-            var expected = """
-                    create or replace and resolve java source named "Welcome" as
-                    public class Welcome {
-                       public static String greet(String name) {
-                          return "WELCOME" + " " + name + "!";
-                       }
-                    }
-                    /
-                    
-                    create or replace function greet(in_name in varchar2) return varchar2
-                    as language java
-                    name 'Welcome.greet(java.lang.String) return java.lang.String';
-                    /
-                    
-                    select greet('Scott') from dual;
-                    """.trim();
-            var actual = formatter.format(input);
-            Assertions.assertEquals(expected, actual);
+            SyntaxError thrown = Assertions.assertThrows (SyntaxError.class, () -> formatter.format(input), "Expected syntax error.");
+            Assertions.assertTrue(thrown.getMessage().contains("Syntax Error at line 4, column 23"));
         }
     }
 
