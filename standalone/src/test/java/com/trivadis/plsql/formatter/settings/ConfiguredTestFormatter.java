@@ -11,15 +11,51 @@ import java.util.Map;
 import java.util.logging.LogManager;
 
 public abstract class ConfiguredTestFormatter {
-    protected final Format formatter;
+    protected static Format formatter;
 
     public ConfiguredTestFormatter() {
         super();
-        System.setProperty("polyglot.engine.WarnInterpreterOnly","false");
-        setArboriHome();
-        loadLoggingConf();
-        formatter = new Format();
-        configureFormatter();
+        if (formatter == null) {
+            System.setProperty("polyglot.engine.WarnInterpreterOnly","false");
+            setArboriHome();
+            loadLoggingConf();
+            formatter = new Format();
+            configureFormatter();
+        } else {
+            // General
+            setOption(getFormatter().kwCase, Format.Case.lower);
+            setOption(getFormatter().idCase, Format.Case.NoCaseChange);
+            setOption(getFormatter().singleLineComments, Format.InlineComments.CommentsUnchanged);
+            // Alignment
+            setOption(getFormatter().alignTabColAliases, false);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignNamedArgs, true);
+            setOption(getFormatter().alignAssignments, true);
+            setOption(getFormatter().alignEquality, false);
+            setOption(getFormatter().alignRight, true);
+            // Indentation
+            setOption(getFormatter().identSpaces, 3);
+            setOption(getFormatter().useTab, false);
+            // Line Breaks
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().commasPerLine, 1); // irrelevant
+            setOption(getFormatter().breaksConcat, Format.Breaks.Before);
+            setOption(getFormatter().breaksAroundLogicalConjunctions, Format.Breaks.Before);
+            setOption(getFormatter().breakAnsiiJoin, true);
+            setOption(getFormatter().breakParenCondition, true);
+            setOption(getFormatter().breakOnSubqueries, true);
+            setOption(getFormatter().maxCharLineSize, 120);
+            setOption(getFormatter().forceLinebreaksBeforeComment, false);
+            setOption(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X1);
+            setOption(getFormatter().breaksAfterSelect, false);
+            setOption(getFormatter().flowControl, Format.FlowControl.IndentedActions);
+            // White Space
+            setOption(getFormatter().spaceAroundOperators, true);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().spaceAroundBrackets, Format.Space.Default);
+            // Custom
+            setOption("keepQuotedIdentifiers", false);
+        }
     }
 
     private void setArboriHome() {
@@ -61,9 +97,15 @@ public abstract class ConfiguredTestFormatter {
     private void configureFormatter() {
         var map = getOptions();
         for (String key : map.keySet()) {
-            formatter.options.put(key, map.get(key));
+            setOption(key, map.get(key));
         }
-        formatter.options.put(formatter.formatProgramURL, getArboriFileName());
+        setOption(formatter.formatProgramURL, getArboriFileName());
+    }
+
+    public void setOption(String key, Object value) {
+        // do not use put method to keep Format.programInstance
+        formatter.options.remove(key);
+        formatter.options.putIfAbsent(key, value);
     }
 
     public Format getFormatter() {
@@ -71,6 +113,7 @@ public abstract class ConfiguredTestFormatter {
     }
 
     public void resetOptions() {
+        formatter = new Format();
         configureFormatter();
     }
 
