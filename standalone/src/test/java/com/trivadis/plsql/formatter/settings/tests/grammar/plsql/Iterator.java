@@ -43,7 +43,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    for i immutable number(5, 2) in reverse 1..10 by 0.5
@@ -82,7 +82,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    for i mutable pls_integer in 1, repeat i + 1 while i < 10
@@ -123,7 +123,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_calling_code_type is table of integer index by varchar2(2);
@@ -172,7 +172,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_calling_code_type is table of integer index by varchar2(2);
@@ -226,7 +226,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_calling_code_type is table of integer index by varchar2(2);
@@ -271,7 +271,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    for r in

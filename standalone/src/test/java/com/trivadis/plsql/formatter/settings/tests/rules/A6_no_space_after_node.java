@@ -18,7 +18,7 @@ public class A6_no_space_after_node extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    <<my_label>>

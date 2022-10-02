@@ -32,7 +32,7 @@ public class Exception_init_pragma extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    deadlock_detected exception;

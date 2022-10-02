@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.logging.LogManager;
 
 public abstract class ConfiguredTestFormatter {
-    protected static Format formatter;
+    private static Format formatter;
 
     public ConfiguredTestFormatter() {
         super();
-        if (formatter == null) {
+        if (getFormatter() == null) {
             System.setProperty("polyglot.engine.WarnInterpreterOnly","false");
             setArboriHome();
             loadLoggingConf();
@@ -104,13 +104,13 @@ public abstract class ConfiguredTestFormatter {
         for (String key : map.keySet()) {
             setOption(key, map.get(key));
         }
-        setOption(formatter.formatProgramURL, getArboriFileName());
+        setOption(getFormatter().formatProgramURL, getArboriFileName());
     }
 
     public void setOption(String key, Object value) {
         // do not use put method to keep Format.programInstance
-        formatter.options.remove(key);
-        formatter.options.putIfAbsent(key, value);
+        getFormatter().options.remove(key);
+        getFormatter().options.putIfAbsent(key, value);
     }
 
     public Format getFormatter() {
@@ -129,7 +129,7 @@ public abstract class ConfiguredTestFormatter {
     public void formatAndAssert(CharSequence expected, boolean resetOptions) {
         try {
             var expectedTrimmed = expected.toString().trim();
-            var actual = formatter.format(expectedTrimmed);
+            var actual = getFormatter().format(expectedTrimmed);
             Assertions.assertEquals(expectedTrimmed, actual);
         } catch (IOException e) {
             throw new RuntimeException(e);

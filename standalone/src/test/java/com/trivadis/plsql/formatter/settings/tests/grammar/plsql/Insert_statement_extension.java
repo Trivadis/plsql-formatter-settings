@@ -39,7 +39,7 @@ public class Insert_statement_extension extends ConfiguredTestFormatter {
                   END LOOP;
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    default_week schedule%rowtype;
@@ -75,7 +75,7 @@ public class Insert_statement_extension extends ConfiguredTestFormatter {
                 record;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    insert into t

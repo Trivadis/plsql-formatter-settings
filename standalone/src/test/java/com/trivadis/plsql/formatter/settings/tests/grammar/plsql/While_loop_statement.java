@@ -54,7 +54,7 @@ public class While_loop_statement extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    done boolean := FALSE;

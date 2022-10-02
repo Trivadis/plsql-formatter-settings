@@ -29,7 +29,7 @@ public class Sql_macro_clause extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function date_string(dat date)
                    return varchar2 sql_macro(scalar) is
@@ -52,7 +52,7 @@ public class Sql_macro_clause extends ConfiguredTestFormatter {
                    RETURN 'SELECT * FROM t FETCH FIRST take.n ROWS ONLY';
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function take(n number,
                                      t dbms_tf.table_t)
@@ -82,7 +82,7 @@ public class Sql_macro_clause extends ConfiguredTestFormatter {
                    RETURN 'SELECT * FROM t FETCH FIRST take.n ROWS ONLY';
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function take(n number,
                                      t dbms_tf.table_t)

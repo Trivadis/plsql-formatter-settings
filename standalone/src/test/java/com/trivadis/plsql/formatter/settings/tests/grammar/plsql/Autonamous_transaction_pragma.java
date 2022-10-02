@@ -23,7 +23,7 @@ public class Autonamous_transaction_pragma extends ConfiguredTestFormatter {
                 end pkg;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package body pkg is
                    procedure p is

@@ -45,7 +45,7 @@ public class A12_line_breaks_before_then extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -77,7 +77,7 @@ public class A12_line_breaks_before_then extends ConfiguredTestFormatter {
                        dummy
                   from dual;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 

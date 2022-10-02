@@ -33,7 +33,7 @@ public class Aggregate_clause extends ConfiguredTestFormatter {
                 ) return geometry
                    aggregate using spatialunionroutines;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 

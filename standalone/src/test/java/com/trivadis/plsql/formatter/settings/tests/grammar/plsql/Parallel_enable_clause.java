@@ -29,7 +29,7 @@ public class Parallel_enable_clause extends ConfiguredTestFormatter {
                 return;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f(
                    in_cursor in sys_refcursor
@@ -71,7 +71,7 @@ public class Parallel_enable_clause extends ConfiguredTestFormatter {
                 return;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f(
                    in_cursor in sys_refcursor

@@ -26,7 +26,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                 ,company_id    number           path 'Company_ID'
                 ) hdr;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select stg.payload_type
                      , xt_hdr.*
@@ -59,7 +59,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                 company_id    number           path 'Company_ID'
                 ) hdr;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select stg.payload_type,
                        xt_hdr.*
@@ -88,7 +88,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                 columns    source        varchar2(50)     path 'Source',  action_type   varchar2(50)     path 'Action_Type',  message_type  varchar2(40)     path 'Message_Type', company_id    number           path 'Company_ID'
                 ) hdr;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select stg.payload_type, xt_hdr.*
                   from stg, xmltable(

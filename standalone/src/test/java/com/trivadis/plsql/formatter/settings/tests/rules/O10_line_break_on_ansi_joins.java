@@ -28,7 +28,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -44,7 +44,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e join dept d using (deptno);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -60,7 +60,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e inner join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -76,7 +76,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e left join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -92,7 +92,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e left outer join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -109,7 +109,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e right join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -125,7 +125,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e full join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -141,7 +141,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e full outer join dept d on d.deptno = e.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -157,7 +157,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e cross join dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -172,7 +172,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e natural join dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -187,7 +187,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.ename
                       from emp e   natural   inner   join   dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -202,7 +202,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.job, e.ename
                       from emp e partition by (e.job) right outer join dept d on e.deptno = d.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.job, e.ename
                       from emp e partition by (e.job)
@@ -218,7 +218,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.job, e.ename
                       from emp e partition by (e.job) right join dept d on e.deptno = d.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.job, e.ename
                       from emp e partition by (e.job)
@@ -234,7 +234,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.job, e.ename
                      from dept d partition by (e.job) left outer join emp e on e.deptno = d.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.job, e.ename
                       from dept d partition by (e.job)
@@ -250,7 +250,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                     select d.dname, e.job, e.ename
                      from dept d partition by (e.job) left join emp e on e.deptno = d.deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.job, e.ename
                       from dept d partition by (e.job)
@@ -267,7 +267,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                      from emp e cross apply (select * from dept d
                                              where d.deptno = e.empno);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from emp e
@@ -285,7 +285,7 @@ public class O10_line_break_on_ansi_joins extends ConfiguredTestFormatter {
                      from dept d outer apply (select * from emp e
                                               where e.deptno = d.empno);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname, e.ename
                       from dept d

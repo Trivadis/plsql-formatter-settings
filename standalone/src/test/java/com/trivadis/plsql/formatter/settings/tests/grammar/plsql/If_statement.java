@@ -36,7 +36,7 @@ public class If_statement extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    procedure p(sales number)

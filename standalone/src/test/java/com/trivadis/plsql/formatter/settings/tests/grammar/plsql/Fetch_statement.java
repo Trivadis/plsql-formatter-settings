@@ -27,7 +27,7 @@ public class Fetch_statement extends ConfiguredTestFormatter {
                    close c1;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    open c1;
@@ -62,7 +62,7 @@ public class Fetch_statement extends ConfiguredTestFormatter {
                    close c1;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    open c1;

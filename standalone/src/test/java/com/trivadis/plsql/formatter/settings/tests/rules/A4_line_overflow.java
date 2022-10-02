@@ -28,7 +28,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // a subsequent formatter call will fix the missing indentations
             var expected = """
                     create or replace package pkg as
@@ -55,7 +55,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                               84,641,8409,8408,647,645,643,9802,9809,9810,9804,9803,9806,9807,75382,75440,75997,76043,76092,76670,76720,76831,77395,77441,77482,78048,78131,78181,78740,78788,78832,79379,79426,79495,80042,80071,80241,80786,80842,80900,81439,81443,81451,81455,81474,81475,81476,81477,81484,81485,81486,81487,81488,81489,81490,81491,81500,81501,81502,81503,81509,81534,81535,81536,81537,81556,81557,81558,81762,81763,81772,82293,82294,82295,82296,82300,82301,82302,82303,82304,82318,82322,82323,82324,82325,82326,82327,82338,82339,82340,82341,82342,82346,82347,82348,82349,82350,82358,82359
                            );
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -90,7 +90,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     mdsys.stringlist(
                     'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values'));
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from table(
@@ -114,7 +114,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     from table(
                     mdsys.stringlist('this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values', 'this', 'is', 'a', 'string', 'list', 'with', 'some', 'values'));
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // the first formatter results produces wrong indents for subsequent lines
             // and A4 might split the lines at the wrong position for subsequent formatter calls
             var expected = """
@@ -132,7 +132,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
             // a second formatter call fixes the indent, but adds unwanted line breaks.
             // this is an expected result.
             // fixing that would require a correct indent calculation in A4, which would requires a lot of code duplication.
-            var actual2 = formatter.format(actual);
+            var actual2 = getFormatter().format(actual);
             var expected2 = """
                     select *
                       from table(
@@ -172,7 +172,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into t (
@@ -201,7 +201,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual2 = formatter.format(actual);
+            var actual2 = getFormatter().format(actual);
             assertEquals(expected2, actual2);
         }
     }
@@ -229,7 +229,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into t (
@@ -258,7 +258,7 @@ public class A4_line_overflow extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual2 = formatter.format(actual);
+            var actual2 = getFormatter().format(actual);
             assertEquals(expected2, actual2);
         }
     }

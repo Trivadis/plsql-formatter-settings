@@ -76,7 +76,7 @@ public class Issue_139_xmltable extends ConfiguredTestFormatter {
                     lot.source_system = lin.source_system
                     AND lot.item_no = lin.item_no;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -103,12 +103,12 @@ public class Issue_139_xmltable extends ConfiguredTestFormatter {
                 AND lot.item_no = lin.item_no;
                 """;
         // initial formatter call
-        var expected = formatter.format(input);
+        var expected = getFormatter().format(input);
         // second formatter call
-        var actual = formatter.format(expected);
+        var actual = getFormatter().format(expected);
         assertEquals(expected, actual);
         // third formatter call
-        actual = formatter.format(expected);
+        actual = getFormatter().format(expected);
         assertEquals(expected, actual);
     }
 }

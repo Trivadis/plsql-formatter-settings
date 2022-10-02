@@ -17,7 +17,7 @@ public class Accessible_by_clause extends ConfiguredTestFormatter {
                 by (procedure p2);
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pkg as
                    procedure p1

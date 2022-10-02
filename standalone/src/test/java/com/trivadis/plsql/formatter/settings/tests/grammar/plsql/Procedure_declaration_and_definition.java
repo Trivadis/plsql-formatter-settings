@@ -31,7 +31,7 @@ public class Procedure_declaration_and_definition extends ConfiguredTestFormatte
                 );
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pkg 
                 is
@@ -62,7 +62,7 @@ public class Procedure_declaration_and_definition extends ConfiguredTestFormatte
                 end;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package body pkg
                 is

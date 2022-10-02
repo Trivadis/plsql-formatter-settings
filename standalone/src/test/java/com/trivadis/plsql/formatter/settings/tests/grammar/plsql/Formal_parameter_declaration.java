@@ -26,7 +26,7 @@ public class Formal_parameter_declaration extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create procedure p(
                    p1                 integer,

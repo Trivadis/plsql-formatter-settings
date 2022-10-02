@@ -31,7 +31,7 @@ public class A10_align_parameter_modes extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create procedure p(
                    p1     in     integer,
@@ -56,7 +56,7 @@ public class A10_align_parameter_modes extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create procedure p(p1     in     integer,
                                    p22222 out    integer,

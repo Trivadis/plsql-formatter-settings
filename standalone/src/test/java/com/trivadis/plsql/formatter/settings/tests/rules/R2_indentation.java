@@ -30,7 +30,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null;
@@ -55,7 +55,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null;
@@ -84,7 +84,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        begin
@@ -116,7 +116,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        l_a integer;
@@ -154,7 +154,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        p1(
@@ -186,7 +186,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l1 := f1(
@@ -217,7 +217,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        type t_xyz is record(
@@ -250,7 +250,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        if a = b then
@@ -287,7 +287,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        case a
@@ -325,7 +325,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        case
@@ -357,7 +357,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        loop
@@ -383,7 +383,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        for i in 1..10
@@ -409,7 +409,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        for i in 1..10
@@ -435,7 +435,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        while a != b
@@ -461,7 +461,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        while a != b
@@ -494,7 +494,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     <<outer_block>>
                     begin
@@ -532,7 +532,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l_filter := case
@@ -568,7 +568,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l_filter := case l_value
@@ -604,7 +604,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(
                        p1 in varchar2
@@ -632,7 +632,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create function f(
                        p1 in varchar2
@@ -665,7 +665,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     );
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace type obj_type as object (
                        a integer
@@ -702,7 +702,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace type body obj_type as
                                         
@@ -744,7 +744,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package abc as
                        g_pkgname constant varchar2(32) := 'ABC';
@@ -790,7 +790,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package body abc as
                        g_pkgname constant varchar2(32) := 'ABC';
@@ -850,7 +850,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select a, b, c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace view v as
                        select a,b,c
@@ -878,7 +878,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select *
                     from b;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace view v as
                        with
@@ -912,7 +912,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     from employees
                     with read only;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create view emp_sal (
                        emp_id
@@ -941,7 +941,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     from t
                     group by a;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,sum(
@@ -961,7 +961,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select * from t
                     ) t2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                     from t,(
@@ -980,7 +980,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     select * from t2 where c1 is not null
                     );
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                     from t1
@@ -1000,7 +1000,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     connect by
                     prior empno = mgr;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select level
                           ,ename
@@ -1022,7 +1022,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     connect by
                     prior empno = mgr;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select level
                           ,ename
@@ -1042,7 +1042,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     by
                     deptno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select deptno,count(*)
                     from emp
@@ -1062,7 +1062,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     having
                     count(*) > 4;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select deptno,count(*)
                     from emp
@@ -1082,7 +1082,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     ename
                     ,empno;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select empno,ename
                     from emp
@@ -1107,7 +1107,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     )
                     ) p;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select value(p) as col
                     from table(
@@ -1150,7 +1150,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                                     on hps.location_id = hl.location_id
                           );
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             assertEquals(expected, actual);
         }
 
@@ -1186,7 +1186,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                                )
                          ) e;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             assertEquals(expected, actual);
         }
 
@@ -1208,7 +1208,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     where ename = 'MARTIN'
                     );
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                     from (
@@ -1252,7 +1252,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                            ) as mov_count
                     from employees;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             assertEquals(expected, actual);
         }
 
@@ -1307,7 +1307,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                           ,object_name
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             assertEquals(expected, actual);
         }
 
@@ -1330,7 +1330,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     ,'3'
                     );
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     insert into t (
                        c1
@@ -1359,7 +1359,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     from dual
                     where dummy = 'X');
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     insert all
                     into t1 (
@@ -1383,7 +1383,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     values
                     ('1', '2', '3');
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     insert into t
                        (c1,c2,c3)
@@ -1405,7 +1405,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     from dual
                     where dummy = 'X';
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     insert all
                     into t1
@@ -1436,7 +1436,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     log errors into error_table
                     reject limit 10;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     update t
                     set c1 = 1
@@ -1463,7 +1463,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     where -- force new line
                     1=1;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     update t
                     set c1 = 1
@@ -1487,7 +1487,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                         where c1 = 1
                         and c2 = 2;
                         """;
-                var actual = formatter.format(input);
+                var actual = getFormatter().format(input);
                 var expected = """
                         delete
                                from t
@@ -1512,7 +1512,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                         end;
                         /
                         """;
-                var actual = formatter.format(input);
+                var actual = getFormatter().format(input);
                 var expected = """
                         begin
                            delete t
@@ -1549,7 +1549,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     where 1 = 1
                     and 2 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -1582,7 +1582,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     where 1 = 2
                     and 2 = 1;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -1627,7 +1627,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     )
                     where s.c3 = 3;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -1670,7 +1670,7 @@ public class R2_indentation extends ConfiguredTestFormatter {
                     (s.id, s.c1)
                     where s.c3 = 3;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s

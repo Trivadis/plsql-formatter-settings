@@ -28,7 +28,7 @@ public class A19_restore_indent_in_conditional_branch extends ConfiguredTestForm
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         // 3 space indentation, applied only for p2
         // keywords are changed to lowercase in conditional compilation block
         var expected = """

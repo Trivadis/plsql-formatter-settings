@@ -23,7 +23,7 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
                            b as b
                       from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a123 as a,
                            b    as b
@@ -48,7 +48,7 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
                       from t123 a
                      cross join t456 b;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t123      a

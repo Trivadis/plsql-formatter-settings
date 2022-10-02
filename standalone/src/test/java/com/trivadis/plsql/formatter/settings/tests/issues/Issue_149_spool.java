@@ -48,7 +48,7 @@ public class Issue_149_spool extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -83,7 +83,7 @@ public class Issue_149_spool extends ConfiguredTestFormatter {
                 end hello_world;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 

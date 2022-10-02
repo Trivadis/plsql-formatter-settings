@@ -28,7 +28,7 @@ public class Element_specification extends ConfiguredTestFormatter {
                 number
                 );
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create type demo_typ2
                 as

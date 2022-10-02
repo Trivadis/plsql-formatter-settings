@@ -28,7 +28,7 @@ public class Serially_reusable_pragma extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace package bodiless_pkg authid definer is
                    pragma serially_reusable;
@@ -65,7 +65,7 @@ public class Serially_reusable_pragma extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pkg
                 is

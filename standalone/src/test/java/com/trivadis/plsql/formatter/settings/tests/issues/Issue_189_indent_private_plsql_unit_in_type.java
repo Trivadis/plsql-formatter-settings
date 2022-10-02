@@ -45,7 +45,7 @@ public class Issue_189_indent_private_plsql_unit_in_type extends ConfiguredTestF
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

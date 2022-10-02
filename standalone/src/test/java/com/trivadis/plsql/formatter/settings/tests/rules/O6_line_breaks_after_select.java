@@ -28,7 +28,7 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
                     having count(*) > 2
                     order by emp_count desc;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select
                        d.deptno, d.dname, count(*) as emp_count
@@ -70,7 +70,7 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
                     having count(*) > 2
                     order by emp_count desc;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.deptno, d.dname, count(*) as emp_count
                       from emp e

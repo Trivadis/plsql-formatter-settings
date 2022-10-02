@@ -32,7 +32,7 @@ public class Qualified_expression extends ConfiguredTestFormatter {
                   DBMS_OUTPUT.PUT_LINE(print_bool(v_aa1(3)));
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_aa is table of boolean index by pls_integer;
@@ -57,7 +57,7 @@ public class Qualified_expression extends ConfiguredTestFormatter {
                 result := vec_t (FOR i IN 1..n => 2*i);
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    result := vec_t(for i in 1..n => fib(i));
@@ -76,7 +76,7 @@ public class Qualified_expression extends ConfiguredTestFormatter {
                 result := vec_t (FOR i IN 2..n BY 2 INDEX i/2 => i);
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    result := vec_t(for i, j in pairs of vec index i => j + n);
@@ -98,7 +98,7 @@ public class Qualified_expression extends ConfiguredTestFormatter {
                                    SEQUENCE => i);
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    result := vec_t(for v in values of v1, reverse values of v2 sequence => v);
@@ -114,7 +114,7 @@ public class Qualified_expression extends ConfiguredTestFormatter {
         var input = """
                 v := vec_rec_t( FOR r rec_t IN (EXECUTE IMMEDIATE query_var) SEQUENCE => r);
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 v := vec_rec_t(for r rec_t in (execute immediate query_var) sequence => r);
                 """;

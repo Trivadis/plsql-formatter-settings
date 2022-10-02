@@ -14,7 +14,7 @@ public class A5_no_space_before_node extends ConfiguredTestFormatter {
         var input = """
                 select 'a'  |   |   'b' from t;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select 'a' || 'b' from t;
                 """;
@@ -26,7 +26,7 @@ public class A5_no_space_before_node extends ConfiguredTestFormatter {
         var input = """
                 select t   .   column from t;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select t.column from t;
                 """;
@@ -39,7 +39,7 @@ public class A5_no_space_before_node extends ConfiguredTestFormatter {
                 select t
                        .   column from t;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select t.column from t;
                 """;
@@ -51,7 +51,7 @@ public class A5_no_space_before_node extends ConfiguredTestFormatter {
         var input = """
                 begin null; end; /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    null;
@@ -67,7 +67,7 @@ public class A5_no_space_before_node extends ConfiguredTestFormatter {
                 select 5   /   2
                   from dual;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select 5 / 2
                   from dual;

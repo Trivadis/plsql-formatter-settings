@@ -31,7 +31,7 @@ public class Return_statement extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    return a * b / c;
@@ -49,7 +49,7 @@ public class Return_statement extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    return;

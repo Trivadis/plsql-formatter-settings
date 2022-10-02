@@ -18,7 +18,7 @@ public class Forall_statement extends ConfiguredTestFormatter {
                     where department_id = depts(i);
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    forall i in depts.first..depts.last

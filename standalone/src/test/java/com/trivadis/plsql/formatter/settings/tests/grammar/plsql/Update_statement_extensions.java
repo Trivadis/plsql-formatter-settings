@@ -44,7 +44,7 @@ public class Update_statement_extensions extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    default_week schedule%rowtype;

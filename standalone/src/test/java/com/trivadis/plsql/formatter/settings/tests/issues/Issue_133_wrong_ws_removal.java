@@ -28,7 +28,7 @@ public class Issue_133_wrong_ws_removal extends ConfiguredTestFormatter {
                   from SCOTT.EMP A1
                 """;
         try {
-            var expandedActual = formatter.format(expanded);
+            var expandedActual = getFormatter().format(expanded);
             assertEquals(expandedExpected, expandedActual);
         } catch (NullPointerException e) {
             // ignore java.lang.NullPointerException: Cannot invoke "oracle.dbtools.parser.ParseNode.children()" because "parent" is null
@@ -59,7 +59,7 @@ public class Issue_133_wrong_ws_removal extends ConfiguredTestFormatter {
                        end
                   from emp;
                 """;
-        var originalActual = formatter.format(original);
+        var originalActual = getFormatter().format(original);
         assertEquals(originalExpected, originalActual);
     }
 }

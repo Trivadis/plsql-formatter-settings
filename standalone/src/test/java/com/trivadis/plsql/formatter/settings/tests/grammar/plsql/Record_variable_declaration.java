@@ -39,7 +39,7 @@ public class Record_variable_declaration extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type deptrectyp is
@@ -90,7 +90,7 @@ public class Record_variable_declaration extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type name_rec is record(
@@ -146,7 +146,7 @@ public class Record_variable_declaration extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type full_name is varray(2) of varchar2(20);

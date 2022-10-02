@@ -30,7 +30,7 @@ public class Sqlerrm_function extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    dbms_output.put_line('SQLERRM(-6511): ' || to_char(sqlerrm(-6511)));

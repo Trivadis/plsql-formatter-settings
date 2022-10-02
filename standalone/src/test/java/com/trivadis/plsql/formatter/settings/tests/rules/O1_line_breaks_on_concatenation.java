@@ -26,7 +26,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -50,7 +50,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -82,7 +82,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -106,7 +106,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(

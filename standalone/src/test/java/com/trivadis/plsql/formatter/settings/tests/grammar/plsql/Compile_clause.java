@@ -24,7 +24,7 @@ public class Compile_clause extends ConfiguredTestFormatter {
                      settings
                       ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 alter
                  function f

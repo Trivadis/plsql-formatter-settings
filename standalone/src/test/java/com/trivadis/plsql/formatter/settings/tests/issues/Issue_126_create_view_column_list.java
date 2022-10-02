@@ -180,7 +180,7 @@ public class Issue_126_create_view_column_list extends ConfiguredTestFormatter {
                          dummy dummy50
                     from dual;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

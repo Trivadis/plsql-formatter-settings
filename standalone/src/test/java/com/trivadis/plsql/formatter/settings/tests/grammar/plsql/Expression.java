@@ -21,7 +21,7 @@ public class Expression extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    a integer := 2 ** 2 * 3 ** 2;

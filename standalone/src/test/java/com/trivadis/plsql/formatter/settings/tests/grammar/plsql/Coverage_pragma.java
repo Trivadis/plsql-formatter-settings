@@ -37,7 +37,7 @@ public class Coverage_pragma extends ConfiguredTestFormatter {
                    end if;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    if (x > 0) then

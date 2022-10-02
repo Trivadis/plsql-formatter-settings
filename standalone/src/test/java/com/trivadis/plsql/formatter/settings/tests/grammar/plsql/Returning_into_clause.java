@@ -45,7 +45,7 @@ public class Returning_into_clause extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type emprec is record(
@@ -111,7 +111,7 @@ public class Returning_into_clause extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    emp_id         employees_temp.employee_id%type := 299;
@@ -165,7 +165,7 @@ public class Returning_into_clause extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type numlist is table of employees.employee_id%type;
@@ -234,7 +234,7 @@ public class Returning_into_clause extends ConfiguredTestFormatter {
                   END LOOP;
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type numlist is table of number;

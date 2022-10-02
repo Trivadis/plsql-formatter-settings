@@ -33,7 +33,7 @@ public class Cursor_variable_declaration extends ConfiguredTestFormatter {
                 null;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type cur_type is

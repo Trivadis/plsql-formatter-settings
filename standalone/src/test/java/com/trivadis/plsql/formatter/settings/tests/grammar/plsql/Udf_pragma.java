@@ -30,7 +30,7 @@ public class Udf_pragma extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f(in_str in varchar2) return varchar2
                 as

@@ -55,7 +55,7 @@ public class Collection_variable_declaration extends ConfiguredTestFormatter {
                    null;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type x_type is
@@ -84,7 +84,7 @@ public class Collection_variable_declaration extends ConfiguredTestFormatter {
                    null;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type x_type is varray(10) of varchar2(10) not null;

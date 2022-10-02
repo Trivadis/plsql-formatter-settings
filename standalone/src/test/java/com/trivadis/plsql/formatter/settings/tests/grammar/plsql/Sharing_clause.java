@@ -32,7 +32,7 @@ public class Sharing_clause extends ConfiguredTestFormatter {
                 t
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create view v
                 sharing = metadata
@@ -58,7 +58,7 @@ public class Sharing_clause extends ConfiguredTestFormatter {
                 t
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create view v
                 sharing = none

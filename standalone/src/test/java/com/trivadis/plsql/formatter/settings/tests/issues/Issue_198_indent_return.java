@@ -38,7 +38,7 @@ public class Issue_198_indent_return extends ConfiguredTestFormatter {
                           end;
                 end bool_to_int;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 

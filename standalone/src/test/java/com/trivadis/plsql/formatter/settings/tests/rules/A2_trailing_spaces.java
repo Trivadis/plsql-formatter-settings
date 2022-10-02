@@ -17,7 +17,7 @@ public class A2_trailing_spaces extends ConfiguredTestFormatter {
                 end;\s\s\s
                 /\s\s\s
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    null;

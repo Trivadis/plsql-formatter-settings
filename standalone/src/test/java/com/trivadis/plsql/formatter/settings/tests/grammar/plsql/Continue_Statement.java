@@ -36,7 +36,7 @@ public class Continue_Statement extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    v_employees employees%rowtype;
@@ -82,7 +82,7 @@ public class Continue_Statement extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    <<outer_loop>>

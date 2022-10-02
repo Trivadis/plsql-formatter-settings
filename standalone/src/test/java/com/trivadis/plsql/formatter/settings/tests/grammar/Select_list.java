@@ -37,7 +37,7 @@ public class Select_list extends ConfiguredTestFormatter {
 
     @Test
     public void select_list_comma_before() {
-        setOption(formatter.breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 select case a
                           when 1 then
@@ -61,6 +61,6 @@ public class Select_list extends ConfiguredTestFormatter {
                   from t2;
                 """;
         formatAndAssert(sql, true);
-        setOption(formatter.breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
     }
 }

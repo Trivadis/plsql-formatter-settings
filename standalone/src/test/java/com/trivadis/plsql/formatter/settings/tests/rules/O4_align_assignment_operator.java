@@ -40,7 +40,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        a1234    := '1';
@@ -80,7 +80,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        a1234   varchar2(2)  := '1';
@@ -108,7 +108,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create package pkg is
                        function f(
@@ -130,7 +130,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create package pkg is
                        function f(p1 in varchar2 := '1',

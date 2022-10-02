@@ -26,7 +26,7 @@ public class Default_collation_clause extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace procedure p
                    default collation using_nls_comp

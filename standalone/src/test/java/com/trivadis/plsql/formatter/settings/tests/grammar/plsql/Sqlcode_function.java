@@ -46,7 +46,7 @@ public class Sqlcode_function extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace procedure p
                    authid definer

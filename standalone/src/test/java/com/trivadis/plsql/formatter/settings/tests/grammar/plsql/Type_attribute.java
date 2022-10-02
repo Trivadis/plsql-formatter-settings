@@ -33,7 +33,7 @@ public class Type_attribute extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    surname employees.last_name%type;

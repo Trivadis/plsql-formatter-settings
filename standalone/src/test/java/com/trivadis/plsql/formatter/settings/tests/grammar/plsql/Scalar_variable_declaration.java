@@ -33,7 +33,7 @@ public class Scalar_variable_declaration extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    part_number      number(6);     -- SQL data type
@@ -71,7 +71,7 @@ public class Scalar_variable_declaration extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    var number(6,2) not null :=

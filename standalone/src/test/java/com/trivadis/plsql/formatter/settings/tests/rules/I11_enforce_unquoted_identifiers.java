@@ -27,7 +27,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
             var expected = """
                     select dummy from sys.dual;
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -39,7 +39,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
             var expected = """
                     select abcdefghijklmnopqrstuvwxyz0123456789_$#äöü from t;
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -55,7 +55,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                       from "SYS"."DUAL" -- @formatter:on
                      where dummy is not null;
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -105,7 +105,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                 end;
                 /
                 """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -135,7 +135,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                       from "TABLE"
                      where "COLUMN" = 1;
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -161,7 +161,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                     end;
                     /
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -193,7 +193,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                     end;
                     /
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
 
@@ -218,7 +218,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
                                         
                     select greet('Scott') from dual;
                     """;
-            SyntaxError thrown = Assertions.assertThrows (SyntaxError.class, () -> formatter.format(input), "Expected syntax error.");
+            SyntaxError thrown = Assertions.assertThrows (SyntaxError.class, () -> getFormatter().format(input), "Expected syntax error.");
             Assertions.assertTrue(thrown.getMessage().contains("Syntax Error at line 4, column 23"));
         }
     }
@@ -241,7 +241,7 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
             var expected = """
                     select "DUMMY" from "SYS"."DUAL";
                     """.trim();
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             Assertions.assertEquals(expected, actual);
         }
     }

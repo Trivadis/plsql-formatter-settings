@@ -27,7 +27,7 @@ public class Raise_statement extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    raise my_exception;
@@ -45,7 +45,7 @@ public class Raise_statement extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    raise;

@@ -29,7 +29,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key     => '1'
@@ -49,7 +49,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1', in_value => 'yes', in_comment => 'something');
@@ -81,7 +81,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key     => '1',
@@ -101,7 +101,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1', in_value => 'yes', in_comment => 'something');
@@ -121,7 +121,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                            ) as value
                       from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select pkg.add(
                               in_key     => '1',
@@ -144,7 +144,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     p222222 => '12345689.12345689.')) as value
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select f1(p1    => '12345689.12345689.',
                               p2222 => 'yes',
@@ -179,7 +179,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1',
@@ -199,7 +199,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1', in_value => 'yes', in_comment => 'something');

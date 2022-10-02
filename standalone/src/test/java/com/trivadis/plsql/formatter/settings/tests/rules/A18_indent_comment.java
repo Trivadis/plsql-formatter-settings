@@ -18,7 +18,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
             var input = """
                     begin /* comment 1 */ null; /* comment 2 */ null; end; /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin /* comment 1 */
                        null; /* comment 2 */
@@ -42,7 +42,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        -- comment
@@ -63,7 +63,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        -- comment
@@ -83,7 +83,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null; -- comment
@@ -104,7 +104,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     /
                        -- a comment
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null;
@@ -138,7 +138,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        /* ------------------------
@@ -176,7 +176,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        /* ------------------------
@@ -205,7 +205,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null; /* comment */
@@ -227,7 +227,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null; /* comment
@@ -251,7 +251,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null; /* comment
@@ -287,7 +287,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package pkg as
                        /*
@@ -323,7 +323,7 @@ public class A18_indent_comment extends ConfiguredTestFormatter {
                         * a comment
                         */
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        null;

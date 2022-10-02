@@ -34,7 +34,7 @@ public class For_loop_statement extends ConfiguredTestFormatter {
                 example;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    <<example>>

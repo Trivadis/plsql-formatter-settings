@@ -52,7 +52,7 @@ public class Collection_method_invokation extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 set serveroutput on size unlimited
                 declare

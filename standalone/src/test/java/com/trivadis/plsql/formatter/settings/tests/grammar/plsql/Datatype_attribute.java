@@ -62,7 +62,7 @@ public class Datatype_attribute extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    t_coll t_collection_type;

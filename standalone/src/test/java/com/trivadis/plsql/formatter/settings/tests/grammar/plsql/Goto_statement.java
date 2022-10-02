@@ -30,7 +30,7 @@ public class Goto_statement extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    p varchar2(30);
@@ -73,7 +73,7 @@ public class Goto_statement extends ConfiguredTestFormatter {
                 ;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    goto target;

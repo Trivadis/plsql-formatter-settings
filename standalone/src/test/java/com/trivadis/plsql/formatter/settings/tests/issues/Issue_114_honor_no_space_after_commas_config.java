@@ -32,7 +32,7 @@ public class Issue_114_honor_no_space_after_commas_config extends ConfiguredTest
                       ,ename
                   from emp e;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -51,7 +51,7 @@ public class Issue_114_honor_no_space_after_commas_config extends ConfiguredTest
                      , ename
                   from emp e;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 

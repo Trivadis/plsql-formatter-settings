@@ -24,7 +24,7 @@ public class Exit_statement extends ConfiguredTestFormatter {
                 loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    loop

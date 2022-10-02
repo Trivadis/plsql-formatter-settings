@@ -33,7 +33,7 @@ public class Issue_129_in_out_parameter extends ConfiguredTestFormatter {
                    null;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

@@ -17,7 +17,7 @@ public class Execute_immediate_statement extends ConfiguredTestFormatter {
                 returning into r1;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    execute immediate '...'
@@ -35,7 +35,7 @@ public class Execute_immediate_statement extends ConfiguredTestFormatter {
                 using in d, e, f;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    execute immediate '...'
@@ -54,7 +54,7 @@ public class Execute_immediate_statement extends ConfiguredTestFormatter {
                 using in d, e, f;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    execute immediate '...'
@@ -73,7 +73,7 @@ public class Execute_immediate_statement extends ConfiguredTestFormatter {
                    bulk collect into a, b, c;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    execute immediate '...'

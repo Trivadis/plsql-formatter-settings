@@ -27,7 +27,7 @@ public class Basic_loop_statement extends ConfiguredTestFormatter {
                 ;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    <<infinite_loop>>

@@ -18,7 +18,7 @@ public class Deterministic_clause extends ConfiguredTestFormatter {
                    return dbms_lob.getlength(a);
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace function text_length(a clob)
                    return number

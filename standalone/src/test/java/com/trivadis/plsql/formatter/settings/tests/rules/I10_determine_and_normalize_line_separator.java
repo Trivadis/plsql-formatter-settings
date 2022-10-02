@@ -14,7 +14,7 @@ public class I10_determine_and_normalize_line_separator extends ConfiguredTestFo
     public void mixed_to_crlf() throws IOException {
         var input = "select\n*\r\nfrom emp where deptno = 20\norder by sal;";
         var expected = "select *\r\n  from emp\r\n where deptno = 20\r\n order by sal;";
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -22,7 +22,7 @@ public class I10_determine_and_normalize_line_separator extends ConfiguredTestFo
     public void lf_only() throws IOException {
         var input = "select\n*\nfrom emp where deptno = 20\norder by sal;";
         var expected = "select *\n  from emp\n where deptno = 20\n order by sal;";
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -30,7 +30,7 @@ public class I10_determine_and_normalize_line_separator extends ConfiguredTestFo
     public void crlf_only() throws IOException {
         var input = "select\r\n*\r\nfrom emp where deptno = 20\r\norder by sal;";
         var expected = "select *\r\n  from emp\r\n where deptno = 20\r\n order by sal;";
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -38,7 +38,7 @@ public class I10_determine_and_normalize_line_separator extends ConfiguredTestFo
     public void system_default() throws IOException {
         var input = "begin null; end;";
         var expected = "begin" + System.lineSeparator() + "   null;" + System.lineSeparator() + "end;";
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         Assertions.assertEquals(expected, actual);
     }
 }

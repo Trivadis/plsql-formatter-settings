@@ -24,7 +24,7 @@ public class R5_commas extends ConfiguredTestFormatter {
             var input = """
                     select a , b , c from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a, b, c from t;
                     """;
@@ -39,7 +39,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                          , b
@@ -58,7 +58,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,b
@@ -77,7 +77,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                          , b
@@ -97,7 +97,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,b
@@ -117,7 +117,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                          , b
@@ -136,7 +136,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,b
@@ -155,7 +155,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a
@@ -175,7 +175,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a
@@ -207,7 +207,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -226,7 +226,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -245,7 +245,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b -- single line comment
@@ -264,7 +264,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b -- single line comment
@@ -283,7 +283,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b /* multi line comment */
@@ -302,7 +302,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b /* multi line comment */
@@ -321,7 +321,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a,
@@ -341,7 +341,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a,

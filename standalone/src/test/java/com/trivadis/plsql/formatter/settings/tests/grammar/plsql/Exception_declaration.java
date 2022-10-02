@@ -20,7 +20,7 @@ public class Exception_declaration extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    e_invalid_operation exception;

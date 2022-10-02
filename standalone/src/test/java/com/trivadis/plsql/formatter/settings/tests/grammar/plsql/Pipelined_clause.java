@@ -32,7 +32,7 @@ public class Pipelined_clause extends ConfiguredTestFormatter {
                 return;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f
                    return some_type
@@ -61,7 +61,7 @@ public class Pipelined_clause extends ConfiguredTestFormatter {
                 return;
                 end;
                 """.replace("#ROW_OR_TABLE#", row_or_table);
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f
                    return some_type
@@ -113,7 +113,7 @@ public class Pipelined_clause extends ConfiguredTestFormatter {
                                 
                 END skip_col_pkg;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package skip_col_pkg as
                                 

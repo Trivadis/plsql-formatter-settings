@@ -28,7 +28,7 @@ public class Inline_pragma extends ConfiguredTestFormatter {
                  end;
                  /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create procedure p1(x pls_integer) is
                    pragma inline (p1, 'YES');

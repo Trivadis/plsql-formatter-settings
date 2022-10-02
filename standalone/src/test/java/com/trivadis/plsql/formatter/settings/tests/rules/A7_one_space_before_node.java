@@ -14,7 +14,7 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
         var input = """
                 select a    as   my_col from t;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select a as my_col from t;
                 """;
@@ -26,7 +26,7 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
         var input = """
                 select a my_col from t   my_alias;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select a my_col from t my_alias;
                 """;
@@ -41,7 +41,7 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
                 end pkg;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pkg is
                    function f(p1 in number) return integer;
@@ -61,7 +61,7 @@ public class A7_one_space_before_node extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    a :=

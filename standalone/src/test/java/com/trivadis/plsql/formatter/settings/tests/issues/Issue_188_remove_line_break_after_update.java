@@ -30,7 +30,7 @@ public class Issue_188_remove_line_break_after_update extends ConfiguredTestForm
                    set sal = sal + 10
                  where sal < 3000;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

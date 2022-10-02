@@ -18,7 +18,7 @@ public class Null_statement extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    null;

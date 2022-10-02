@@ -34,7 +34,7 @@ public class Delete_statement_extension extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    my_emp_id number(6);
@@ -72,7 +72,7 @@ public class Delete_statement_extension extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    delete

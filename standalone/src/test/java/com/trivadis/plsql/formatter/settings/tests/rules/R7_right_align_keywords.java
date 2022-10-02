@@ -38,7 +38,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        select -- comment
@@ -82,7 +82,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        select -- a comment
@@ -142,7 +142,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create view v as
                        select a
@@ -173,7 +173,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create view v as
                        select a,
@@ -192,7 +192,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t where a = 2 and b = 3 or c = 4;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -213,7 +213,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t where case when a = 2 and b = 3 or c = 4 then 1 end = 1;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -238,7 +238,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t where a = 2 and (b = 3 or c = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -259,7 +259,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     from t where a = 2 and (b = 3
                     or c = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -287,7 +287,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        for r in (
@@ -311,7 +311,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     distinct deptno
                     from emp;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // do move right-margin!
             var expected = """
                     select -- force line break
@@ -342,7 +342,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into t
@@ -379,7 +379,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into mytable t (
@@ -420,7 +420,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     select c1, c2
                     from t4;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     insert all
                       into t1 (c1, c2)
@@ -448,7 +448,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into phs1 (c1)
@@ -483,7 +483,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where first_name = 'Douglas'
                     and last_name = 'Grant';
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     update employees
                        set job_id = 'SA_MAN',
@@ -511,7 +511,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        update t
@@ -549,7 +549,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where c1 = 1
                     and c2 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     delete
                       from t
@@ -573,7 +573,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        delete t
@@ -615,7 +615,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where 1 = 1
                     and 2 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -648,7 +648,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where 1 = 2
                     and 2 = 1;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -693,7 +693,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     )
                     where s.c3 = 3;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s

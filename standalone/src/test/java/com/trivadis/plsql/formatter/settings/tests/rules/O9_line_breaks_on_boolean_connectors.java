@@ -24,7 +24,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                       from t
                      where a = 1 and b = 2 and (c = 3 or d = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -46,7 +46,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                            and b = 2 and
                            (c = 3 or d = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -76,7 +76,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                       from t
                      where a = 1 and b = 2 and (c = 3 or d = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -96,7 +96,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                            and b = 2 and
                            (c = 3 or d = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -124,7 +124,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                       from t
                      where a = 1 and b = 2 and (c = 3 or d = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -144,7 +144,7 @@ public class O9_line_breaks_on_boolean_connectors extends ConfiguredTestFormatte
                            and b = 2 and
                            (c = 3 or d = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t

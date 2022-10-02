@@ -23,7 +23,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
                        ,phone_num varchar2(200) path '$.number')
                        ) as jt;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select jt.*
                   from j_purchaseorder
@@ -50,7 +50,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
                        phone_num varchar2(200) path '$.number')
                        ) as jt;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select jt.*
                   from j_purchaseorder,
@@ -79,7 +79,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
                        )
                        ) as jt;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select jt.*
                   from j_purchaseorder,
@@ -107,7 +107,7 @@ public class A20_align_json_table_columns extends ConfiguredTestFormatter {
                        columns (row_number for ordinality,phone_type varchar2(10) path '$.type',phone_num varchar2(200) path '$.number')
                        ) as jt;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select jt.*
                   from j_purchaseorder,

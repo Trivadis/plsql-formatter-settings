@@ -22,7 +22,7 @@ public class Invokers_rights_and_definers_rights_clause extends ConfiguredTestFo
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f
                    return integer
@@ -49,7 +49,7 @@ public class Invokers_rights_and_definers_rights_clause extends ConfiguredTestFo
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f
                    return integer

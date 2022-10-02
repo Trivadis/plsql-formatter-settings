@@ -33,7 +33,7 @@ public class Explicit_Cursor extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    cursor c1 return departments%rowtype;    -- Declare c1
@@ -103,7 +103,7 @@ public class Explicit_Cursor extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    cursor c(job     varchar2,
@@ -188,7 +188,7 @@ public class Explicit_Cursor extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type emp_cur_typ is ref cursor;

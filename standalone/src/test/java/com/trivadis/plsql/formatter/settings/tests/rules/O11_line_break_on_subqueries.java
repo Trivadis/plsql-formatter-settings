@@ -23,7 +23,7 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
                            (select count(*) from emp e where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname,
                            (select count(*) from emp e where e.deptno = d.deptno) as emp_count
@@ -41,7 +41,7 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
                              where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname,
                            (

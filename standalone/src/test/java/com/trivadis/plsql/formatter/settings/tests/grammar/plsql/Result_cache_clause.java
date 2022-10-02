@@ -34,7 +34,7 @@ public class Result_cache_clause extends ConfiguredTestFormatter {
                   RETURN NULL; -- simplified
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace function get_value(p_param   varchar2,
                                                      p_app_id  number,
@@ -83,7 +83,7 @@ public class Result_cache_clause extends ConfiguredTestFormatter {
                 END
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function get_value(
                    p_param   varchar2,

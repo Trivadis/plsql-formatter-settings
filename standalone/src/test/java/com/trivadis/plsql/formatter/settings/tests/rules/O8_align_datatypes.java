@@ -22,7 +22,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
             var input = """
                     declare l_a date;l_bbbbbbb varchar2(30);l_ccc pls_integer;begin null;end;/
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        l_a       date;
@@ -42,7 +42,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                     declare co_a date := sysdate;co_bbbbbbb varchar2(30) default 'a';
                     co_ccc pls_integer :=10;begin null;end;/
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        co_a       date         := sysdate;
@@ -74,7 +74,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        type dept_rec_typ is
@@ -136,7 +136,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package body ABC as
                        co_pkg_name constant varchar2(32) := 'ABC';

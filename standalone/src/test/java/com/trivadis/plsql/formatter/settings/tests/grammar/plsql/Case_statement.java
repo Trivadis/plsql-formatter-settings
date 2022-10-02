@@ -99,7 +99,7 @@ public class Case_statement extends ConfiguredTestFormatter {
                 ;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    grade char(1);

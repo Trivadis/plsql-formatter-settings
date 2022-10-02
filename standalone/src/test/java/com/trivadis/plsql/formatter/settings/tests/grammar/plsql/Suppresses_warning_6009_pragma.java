@@ -34,7 +34,7 @@ public class Suppresses_warning_6009_pragma extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create procedure p1
                    authid definer

@@ -28,7 +28,7 @@ public class Constant_declaration extends ConfiguredTestFormatter {
                 ;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    co_true integer not null :=

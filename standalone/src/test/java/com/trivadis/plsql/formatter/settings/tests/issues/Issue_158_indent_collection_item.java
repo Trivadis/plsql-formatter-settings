@@ -79,7 +79,7 @@ public class Issue_158_indent_collection_item extends ConfiguredTestFormatter {
                                 
                 end if;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
        assertEquals(expected, actual);
    }
 

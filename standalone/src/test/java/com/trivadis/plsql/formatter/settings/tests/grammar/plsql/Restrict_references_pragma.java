@@ -30,7 +30,7 @@ public class Restrict_references_pragma extends ConfiguredTestFormatter {
                 END finance;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace package finance as
                    function compound_(
@@ -71,7 +71,7 @@ public class Restrict_references_pragma extends ConfiguredTestFormatter {
                 end
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pkg
                 is

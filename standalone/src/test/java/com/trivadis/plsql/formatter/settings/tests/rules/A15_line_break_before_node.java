@@ -14,7 +14,7 @@ public class A15_line_break_before_node extends ConfiguredTestFormatter {
         var input = """
                  insert all into t (c1) (select 1 as c1 from dual where 1 = 10);
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 insert all
                   into t (c1)

@@ -30,7 +30,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer
                                      , p2 in integer
@@ -54,7 +54,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer
                                      , p2 in integer
@@ -92,7 +92,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer,
                                        p2 in integer,
@@ -116,7 +116,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer,
                                        p2 in integer,

@@ -28,7 +28,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
             var input = """
                     select count  (   *   )  from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select count (*) from dual;
                     """;
@@ -42,7 +42,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                       from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -60,7 +60,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -82,7 +82,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace function f(
                        p1 in integer
@@ -112,7 +112,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package pkg is
                        function f(
@@ -144,7 +144,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package body pkg is
                        function f(
@@ -170,7 +170,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace procedure p(
                        p1 in integer
@@ -200,7 +200,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package pkg is
                        procedure p(
@@ -232,7 +232,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package body pkg is
                        procedure p(
@@ -270,7 +270,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select f(
                               'a1234567890',
@@ -313,7 +313,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        p(
@@ -348,7 +348,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        cursor c1(
@@ -379,7 +379,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        open c2(
@@ -410,7 +410,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
             var input = """
                     select count  (   *   )  from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select count( * )from dual;
                     """;
@@ -424,7 +424,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                       from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -442,7 +442,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -468,7 +468,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
             var input = """
                     select count  (   *   )  from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select count (*) from dual;
                     """;
@@ -482,7 +482,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                       from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -500,7 +500,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -526,7 +526,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
             var input = """
                     select count  (   *   )  from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select count(*)from dual;
                     """;
@@ -540,7 +540,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                       from t
                      where c1 in  (  1, 2, 3, 4, 5  )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t
@@ -558,7 +558,7 @@ public class O3_whitespace_around_parenthesis extends ConfiguredTestFormatter {
                               1, 2, 3, 4, 5
                            )  and 1 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t

@@ -36,7 +36,7 @@ public class Named_cursor_attribute extends ConfiguredTestFormatter {
                 end
                 ;
                 """.replace("#ATTR#", attr);
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    if not c1%#ATTR# then

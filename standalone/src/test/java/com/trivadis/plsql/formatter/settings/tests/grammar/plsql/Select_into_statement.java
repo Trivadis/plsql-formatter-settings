@@ -26,7 +26,7 @@ public class Select_into_statement extends ConfiguredTestFormatter {
                   WHERE employee_id = 100;
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    select salary * 0.10 into bonus
@@ -59,7 +59,7 @@ public class Select_into_statement extends ConfiguredTestFormatter {
                   ;
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    select employee_id,

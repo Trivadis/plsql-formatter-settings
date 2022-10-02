@@ -20,7 +20,7 @@ public class Assignment_statement extends ConfiguredTestFormatter {
                 object . attribute := 5;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    collection_variable(index) := 1;
@@ -72,7 +72,7 @@ public class Assignment_statement extends ConfiguredTestFormatter {
                 ;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    collection_variable(index) :=

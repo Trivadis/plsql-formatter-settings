@@ -125,7 +125,7 @@ public class A3_formatter_off_on extends ConfiguredTestFormatter {
                   from dual; -- @formatter:on
                 select * from dual;
                 """.trim();
-        var actual = formatter.format(unformatted);
+        var actual = getFormatter().format(unformatted);
         Assertions.assertEquals(expected, actual);
     }
 }

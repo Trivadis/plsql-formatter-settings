@@ -30,7 +30,7 @@ public class Rowtype_attribute extends ConfiguredTestFormatter {
                 null;
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    dept_rec departments%rowtype;

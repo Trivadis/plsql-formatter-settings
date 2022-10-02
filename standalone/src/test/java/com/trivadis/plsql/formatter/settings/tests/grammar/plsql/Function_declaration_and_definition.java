@@ -29,7 +29,7 @@ public class Function_declaration_and_definition extends ConfiguredTestFormatter
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    -- Declare and define function
@@ -87,7 +87,7 @@ public class Function_declaration_and_definition extends ConfiguredTestFormatter
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f(
                    p in varchar2

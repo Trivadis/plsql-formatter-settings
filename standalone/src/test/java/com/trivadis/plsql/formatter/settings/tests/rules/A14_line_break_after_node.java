@@ -14,7 +14,7 @@ public class A14_line_break_after_node extends ConfiguredTestFormatter {
         var input = """
                 create or replace view v as select * from t;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace view v as
                    select * from t;

@@ -24,7 +24,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
                      where job = 'CLERK'
                        and deptno = 10;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from emp
@@ -49,7 +49,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
                     end filter_critera
                     from emp;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select ename,
                            case

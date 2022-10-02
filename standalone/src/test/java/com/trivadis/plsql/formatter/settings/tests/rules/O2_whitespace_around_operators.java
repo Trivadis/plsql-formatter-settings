@@ -21,7 +21,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
             var input = """
                     select a+b-c*d/e from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a + b - c * d / e from dual;
                     """;
@@ -38,7 +38,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            /e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890
                            + b1234567890
@@ -60,7 +60,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890 +
                            b1234567890 -
@@ -87,7 +87,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
             var input = """
                     select a  +  b  -  c  *  d  /  e from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a+b-c*d/e from dual;
                     """;
@@ -104,7 +104,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            / e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890
                            +b1234567890
@@ -126,7 +126,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890+
                            b1234567890-
