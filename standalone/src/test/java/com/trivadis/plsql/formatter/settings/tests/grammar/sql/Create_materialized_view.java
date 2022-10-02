@@ -2,16 +2,18 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.sql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Create_materialized_view extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup_non_trivadis_default_settings() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -64,9 +66,9 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                      from eba_proj_countries eba_proj_countries;
                 """;
         // first call that just splits the subquery across multiple lines due to max line size overflow
-        var intermediate = formatter.format(input);
+        var intermediate = getFormatter().format(input);
         // second call to formats the subquery once it consumes more than one line
-        var actual = formatter.format(intermediate);
+        var actual = getFormatter().format(intermediate);
         assertEquals(expected, actual);
     }
 
@@ -79,7 +81,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                 create materialized view mv1 as
                    select * from hr.employees;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -104,7 +106,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                               where co.country_id = cu.country_id
                           );
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -133,7 +135,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                       and p.prod_id = s.prod_id
                     group by t.calendar_year, p.prod_id;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -168,7 +170,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                       and s.cust_id = c.cust_id
                     group by t.calendar_month_desc, c.cust_state_province;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -198,7 +200,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                       and s.cust_id = c.cust_id
                     group by t.calendar_month_desc, c.cust_state_province;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -217,7 +219,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                 as
                    select * from product_information;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -232,7 +234,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                 as
                    select * from orders;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -255,7 +257,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                 as
                    select * from employees;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -288,7 +290,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                    select *
                      from sh.customers@local;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -320,7 +322,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                      from order_items
                     where quantity > 5;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -341,7 +343,7 @@ public class Create_materialized_view extends ConfiguredTestFormatter {
                     where o.order_id = o.order_id
                       and o.sales_rep_id = 165;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

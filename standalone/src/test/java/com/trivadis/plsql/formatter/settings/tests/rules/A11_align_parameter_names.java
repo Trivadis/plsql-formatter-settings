@@ -2,9 +2,7 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
@@ -15,9 +13,9 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
 
         @BeforeEach
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, true);
-            getFormatter().options.put(getFormatter().alignAssignments, true);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignAssignments, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
         }
 
         @Test
@@ -32,7 +30,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer
                                      , p2 in integer
@@ -56,7 +54,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer
                                      , p2 in integer
@@ -72,13 +70,14 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, true);
-            getFormatter().options.put(getFormatter().alignAssignments, true);
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignAssignments, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
         }
 
         @Test
@@ -93,7 +92,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer,
                                        p2 in integer,
@@ -117,7 +116,7 @@ public class A11_align_parameter_names extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p(p1 in integer,
                                        p2 in integer,

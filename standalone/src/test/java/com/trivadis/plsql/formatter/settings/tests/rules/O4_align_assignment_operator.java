@@ -1,20 +1,19 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O4_align_assignment_operator extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignAssignments, true);
+            setOption(getFormatter().alignAssignments, true);
         }
 
         @Test
@@ -41,7 +40,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        a1234    := '1';
@@ -81,7 +80,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        a1234   varchar2(2)  := '1';
@@ -109,7 +108,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create package pkg is
                        function f(
@@ -131,7 +130,7 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create package pkg is
                        function f(p1 in varchar2 := '1',
@@ -145,11 +144,12 @@ public class O4_align_assignment_operator extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignAssignments, false);
+            setOption(getFormatter().alignAssignments, false);
         }
 
         @Test

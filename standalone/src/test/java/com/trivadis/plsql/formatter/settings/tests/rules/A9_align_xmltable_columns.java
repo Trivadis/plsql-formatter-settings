@@ -3,14 +3,16 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
 
     @Test
     public void commas_before() throws IOException {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var input = """
                 select stg.payload_type
                 ,xt_hdr.*
@@ -24,7 +26,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                 ,company_id    number           path 'Company_ID'
                 ) hdr;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select stg.payload_type
                      , xt_hdr.*
@@ -43,7 +45,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
 
     @Test
     public void commas_after() throws IOException {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
         var input = """
                 select stg.payload_type,
                 xt_hdr.*
@@ -57,7 +59,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                 company_id    number           path 'Company_ID'
                 ) hdr;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select stg.payload_type,
                        xt_hdr.*
@@ -77,7 +79,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
     @Test
     public void commas_no_break() throws IOException {
         // should look like Format.Breaks.After, force breaks on columns
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.None);
+        setOption(getFormatter().breaksComma, Format.Breaks.None);
         var input = """
                 select stg.payload_type, xt_hdr.*
                 from stg, xmltable(
@@ -86,7 +88,7 @@ public class A9_align_xmltable_columns extends ConfiguredTestFormatter {
                 columns    source        varchar2(50)     path 'Source',  action_type   varchar2(50)     path 'Action_Type',  message_type  varchar2(40)     path 'Message_Type', company_id    number           path 'Company_ID'
                 ) hdr;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select stg.payload_type, xt_hdr.*
                   from stg, xmltable(

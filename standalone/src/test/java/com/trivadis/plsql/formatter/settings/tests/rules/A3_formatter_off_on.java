@@ -3,9 +3,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A3_formatter_off_on extends ConfiguredTestFormatter {
 
     @Test
@@ -123,7 +125,7 @@ public class A3_formatter_off_on extends ConfiguredTestFormatter {
                   from dual; -- @formatter:on
                 select * from dual;
                 """.trim();
-        var actual = formatter.format(unformatted);
+        var actual = getFormatter().format(unformatted);
         Assertions.assertEquals(expected, actual);
     }
 }

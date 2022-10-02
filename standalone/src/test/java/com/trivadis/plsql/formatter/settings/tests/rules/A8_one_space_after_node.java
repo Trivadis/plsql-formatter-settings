@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A8_one_space_after_node extends ConfiguredTestFormatter {
 
     @Test
@@ -19,7 +21,7 @@ public class A8_one_space_after_node extends ConfiguredTestFormatter {
                 end pkg;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace package pkg is
                    g_variable integer;
@@ -34,7 +36,7 @@ public class A8_one_space_after_node extends ConfiguredTestFormatter {
         var input = """
                 select * from     t;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select * from t;
                 """;

@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Element_specification extends ConfiguredTestFormatter {
 
     @Test
@@ -26,7 +28,7 @@ public class Element_specification extends ConfiguredTestFormatter {
                 number
                 );
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create type demo_typ2
                 as

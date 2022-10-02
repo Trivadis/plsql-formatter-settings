@@ -3,9 +3,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class R3_one_command_per_line extends ConfiguredTestFormatter {
 
     @Nested
@@ -16,7 +18,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
             var input = """
                     column empno format 999; column ename format a20; show con_name
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     column empno format 999;
                     column ename format a20;
@@ -45,7 +47,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
             var input = """
                     select * from emp; delete from emp where empno = 9999; update emp set sal=sal+1 where empno=9999;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select * from emp;
                     delete from emp where empno = 9999;
@@ -75,7 +77,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
             var input = """
                     create procedure p is l1 integer; l2 date; begin null; if l1 = 1 then null; null; elsif l1 = 2 then null; else null; end if; end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p is
                        l1 integer;
@@ -116,7 +118,7 @@ public class R3_one_command_per_line extends ConfiguredTestFormatter {
                                end loop;
                            end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create procedure p is
                        l1 integer;

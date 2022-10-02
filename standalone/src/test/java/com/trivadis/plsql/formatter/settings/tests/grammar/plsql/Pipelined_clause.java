@@ -2,18 +2,20 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Pipelined_clause extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -29,7 +31,7 @@ public class Pipelined_clause extends ConfiguredTestFormatter {
                 return;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f
                    return some_type
@@ -58,7 +60,7 @@ public class Pipelined_clause extends ConfiguredTestFormatter {
                 return;
                 end;
                 """.replace("#ROW_OR_TABLE#", row_or_table);
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f
                    return some_type
@@ -110,7 +112,7 @@ public class Pipelined_clause extends ConfiguredTestFormatter {
                                 
                 END skip_col_pkg;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package skip_col_pkg as
                                 

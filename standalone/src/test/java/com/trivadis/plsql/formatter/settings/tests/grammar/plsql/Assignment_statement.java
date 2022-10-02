@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Assignment_statement extends ConfiguredTestFormatter {
 
     @Test
@@ -18,7 +20,7 @@ public class Assignment_statement extends ConfiguredTestFormatter {
                 object . attribute := 5;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    collection_variable(index) := 1;
@@ -70,7 +72,7 @@ public class Assignment_statement extends ConfiguredTestFormatter {
                 ;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    collection_variable(index) :=

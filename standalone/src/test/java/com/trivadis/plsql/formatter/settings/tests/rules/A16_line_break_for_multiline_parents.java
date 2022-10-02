@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatter {
 
     @Test
@@ -21,7 +23,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 select deptno, empno, ename from emp
                 where empno > 7000 order by empno;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select deptno, empno, ename
                   from emp
@@ -45,7 +47,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 insert into mytable t (a, b, c, d) values ('a', 'b', 'c', 'd') return a, b, c, d
                 into l_a, l_b, l_c, l_d log errors into mytable_errors ('bad') reject limit 10;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 insert into mytable t (a, b, c, d)
                 values ('a', 'b', 'c', 'd')
@@ -63,7 +65,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 into t3 (c1, c2) values (c1, c2) log errors
                 into mytable_errors ('bad') reject limit 10 select c1, c2 from t4;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 insert all
                   into t1 (c1, c2)
@@ -87,7 +89,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 values (c1, c2) log errors into mytable_errors ('bad') reject limit 10
                 select c1, c2 from t4;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 insert first
                    when c5 = 1 then
@@ -123,7 +125,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 delete from t where 1 = 1 return c1 into l_c1 log errors into error_table
                 reject limit 10;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 delete from t
                  where 1 = 1
@@ -140,7 +142,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 select deptno, empno, ename,
                 hiredate from emp;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select deptno,
                        empno,
@@ -157,7 +159,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 select * from emp order by deptno, empno, ename,
                 hiredate;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select *
                   from emp
@@ -175,7 +177,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 select count(*) from emp group by deptno, empno, ename,
                 hiredate;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select count(*)
                   from emp
@@ -198,7 +200,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    select empno, ename, job, mgr, hiredate, sal, comm, deptno
@@ -231,7 +233,7 @@ public class A16_line_break_for_multiline_parents extends ConfiguredTestFormatte
                 merge into t
                 using s on (s.id = t.id) when not matched then insert (t.id, t.c1) values (s.id, s.c1) where s.c3 = 3;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 merge into t
                 using s

@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Deprecate_pragma extends ConfiguredTestFormatter {
 
     @Test
@@ -21,7 +23,7 @@ public class Deprecate_pragma extends ConfiguredTestFormatter {
                 procedure bar;
                 end pack1;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pack1 as
                    pragma deprecate (pack1);
@@ -48,7 +50,7 @@ public class Deprecate_pragma extends ConfiguredTestFormatter {
                    procedure bar;
                 end pack5;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create package pack5 authid definer as
                    pragma deprecate (

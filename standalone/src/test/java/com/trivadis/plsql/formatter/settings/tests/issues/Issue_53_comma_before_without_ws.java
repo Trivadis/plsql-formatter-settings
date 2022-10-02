@@ -3,13 +3,15 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_53_comma_before_without_ws extends ConfiguredTestFormatter {
 
     @Test
     public void commas_before_no_ws() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().spaceAfterCommas, false);
         var sql = """
                 begin
                    for rec in (

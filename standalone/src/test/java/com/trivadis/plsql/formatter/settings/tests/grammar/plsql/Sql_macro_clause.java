@@ -2,16 +2,18 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Sql_macro_clause extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -26,7 +28,7 @@ public class Sql_macro_clause extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function date_string(dat date)
                    return varchar2 sql_macro(scalar) is
@@ -49,7 +51,7 @@ public class Sql_macro_clause extends ConfiguredTestFormatter {
                    RETURN 'SELECT * FROM t FETCH FIRST take.n ROWS ONLY';
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function take(n number,
                                      t dbms_tf.table_t)
@@ -79,7 +81,7 @@ public class Sql_macro_clause extends ConfiguredTestFormatter {
                    RETURN 'SELECT * FROM t FETCH FIRST take.n ROWS ONLY';
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function take(n number,
                                      t dbms_tf.table_t)

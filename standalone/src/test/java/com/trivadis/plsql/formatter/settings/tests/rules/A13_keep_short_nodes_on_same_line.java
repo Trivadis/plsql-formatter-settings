@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
 
     @Test
@@ -21,7 +23,7 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
                   from dual
                  where (1, 2, 3) = (select 1, 2, 3 from dual);
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -39,7 +41,7 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
                   from dual
                  where dummy = any ('A', 'B', 'C', 'X', 'Y', 'Z');
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -61,7 +63,7 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -77,7 +79,7 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
                 select sum(sal) as emp_sal
                   from emp;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -111,7 +113,7 @@ public class A13_keep_short_nodes_on_same_line extends ConfiguredTestFormatter {
                   from dual
                  where dummy is not null;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

@@ -2,7 +2,9 @@ package com.trivadis.plsql.formatter.settings.tests.grammar;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Paren_expr_list extends ConfiguredTestFormatter {
 
     @Test

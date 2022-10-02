@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class A19_restore_indent_in_conditional_branch extends ConfiguredTestFormatter {
 
     @Test
@@ -26,7 +28,7 @@ public class A19_restore_indent_in_conditional_branch extends ConfiguredTestForm
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         // 3 space indentation, applied only for p2
         // keywords are changed to lowercase in conditional compilation block
         var expected = """

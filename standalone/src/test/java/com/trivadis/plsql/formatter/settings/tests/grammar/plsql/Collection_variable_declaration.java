@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Collection_variable_declaration extends ConfiguredTestFormatter {
 
     @Test
@@ -53,7 +55,7 @@ public class Collection_variable_declaration extends ConfiguredTestFormatter {
                    null;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type x_type is
@@ -82,7 +84,7 @@ public class Collection_variable_declaration extends ConfiguredTestFormatter {
                    null;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type x_type is varray(10) of varchar2(10) not null;

@@ -2,14 +2,16 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_5_type_members extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().kwCase, Format.Case.lower);
+        setOption(getFormatter().kwCase, Format.Case.lower);
     }
 
     @Test

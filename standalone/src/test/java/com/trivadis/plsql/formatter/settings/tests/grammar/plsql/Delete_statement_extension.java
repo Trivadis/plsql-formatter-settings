@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Delete_statement_extension extends ConfiguredTestFormatter {
 
     @Test
@@ -32,7 +34,7 @@ public class Delete_statement_extension extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    my_emp_id number(6);
@@ -70,7 +72,7 @@ public class Delete_statement_extension extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    delete

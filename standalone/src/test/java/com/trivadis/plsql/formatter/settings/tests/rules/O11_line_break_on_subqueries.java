@@ -1,20 +1,19 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakOnSubqueries, true);
+            setOption(getFormatter().breakOnSubqueries, true);
         }
 
         @Test
@@ -24,7 +23,7 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
                            (select count(*) from emp e where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname,
                            (select count(*) from emp e where e.deptno = d.deptno) as emp_count
@@ -42,7 +41,7 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
                              where e.deptno = d.deptno) as emp_count
                       from dept d;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.dname,
                            (
@@ -57,11 +56,12 @@ public class O11_line_break_on_subqueries extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+            setOption(getFormatter().breakOnSubqueries, false);
         }
 
         @Test

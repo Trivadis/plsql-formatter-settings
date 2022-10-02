@@ -1,21 +1,20 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O8_align_datatypes extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, true);
-            getFormatter().options.put(getFormatter().alignAssignments, true);
+            setOption(getFormatter().alignTypeDecl, true);
+            setOption(getFormatter().alignAssignments, true);
         }
 
         @Test
@@ -23,7 +22,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
             var input = """
                     declare l_a date;l_bbbbbbb varchar2(30);l_ccc pls_integer;begin null;end;/
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        l_a       date;
@@ -43,7 +42,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                     declare co_a date := sysdate;co_bbbbbbb varchar2(30) default 'a';
                     co_ccc pls_integer :=10;begin null;end;/
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        co_a       date         := sysdate;
@@ -75,7 +74,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     declare
                        type dept_rec_typ is
@@ -137,7 +136,7 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create or replace package body ABC as
                        co_pkg_name constant varchar2(32) := 'ABC';
@@ -183,12 +182,13 @@ public class O8_align_datatypes extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTypeDecl, false);
-            getFormatter().options.put(getFormatter().alignAssignments, false);
+            setOption(getFormatter().alignTypeDecl, false);
+            setOption(getFormatter().alignAssignments, false);
         }
 
         @Test

@@ -2,22 +2,21 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class R7_right_align_keywords extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Select_commas_before {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().breakOnSubqueries, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breakOnSubqueries, false);
         }
 
         @Test
@@ -39,7 +38,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        select -- comment
@@ -83,7 +82,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        select -- a comment
@@ -143,7 +142,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create view v as
                        select a
@@ -156,12 +155,13 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Select_commas_after {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -173,7 +173,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     create view v as
                        select a,
@@ -192,7 +192,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t where a = 2 and b = 3 or c = 4;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -213,7 +213,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t where case when a = 2 and b = 3 or c = 4 then 1 end = 1;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -238,7 +238,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     c
                     from t where a = 2 and (b = 3 or c = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -259,7 +259,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     from t where a = 2 and (b = 3
                     or c = 4);
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -287,7 +287,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        for r in (
@@ -311,7 +311,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     distinct deptno
                     from emp;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // do move right-margin!
             var expected = """
                     select -- force line break
@@ -323,12 +323,13 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Insert {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -341,7 +342,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into t
@@ -378,7 +379,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into mytable t (
@@ -419,7 +420,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     select c1, c2
                     from t4;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     insert all
                       into t1 (c1, c2)
@@ -447,7 +448,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        insert into phs1 (c1)
@@ -463,12 +464,13 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Update {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -481,7 +483,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where first_name = 'Douglas'
                     and last_name = 'Grant';
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     update employees
                        set job_id = 'SA_MAN',
@@ -509,7 +511,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        update t
@@ -529,12 +531,13 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Delete {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -546,7 +549,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where c1 = 1
                     and c2 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     delete
                       from t
@@ -570,7 +573,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        delete t
@@ -587,12 +590,13 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Merge {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -611,7 +615,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where 1 = 1
                     and 2 = 2;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -644,7 +648,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     where 1 = 2
                     and 2 = 1;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s
@@ -689,7 +693,7 @@ public class R7_right_align_keywords extends ConfiguredTestFormatter {
                     )
                     where s.c3 = 3;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     merge into t
                     using s

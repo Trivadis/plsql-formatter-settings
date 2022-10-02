@@ -2,16 +2,18 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Result_cache_clause extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -31,7 +33,7 @@ public class Result_cache_clause extends ConfiguredTestFormatter {
                   RETURN NULL; -- simplified
                 END;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create or replace function get_value(p_param   varchar2,
                                                      p_app_id  number,
@@ -80,7 +82,7 @@ public class Result_cache_clause extends ConfiguredTestFormatter {
                 END
                 ;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function get_value(
                    p_param   varchar2,

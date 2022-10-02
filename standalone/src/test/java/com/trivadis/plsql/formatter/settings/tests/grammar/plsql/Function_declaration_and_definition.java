@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Function_declaration_and_definition extends ConfiguredTestFormatter {
 
     @Test
@@ -27,7 +29,7 @@ public class Function_declaration_and_definition extends ConfiguredTestFormatter
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    -- Declare and define function
@@ -85,7 +87,7 @@ public class Function_declaration_and_definition extends ConfiguredTestFormatter
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 create function f(
                    p in varchar2

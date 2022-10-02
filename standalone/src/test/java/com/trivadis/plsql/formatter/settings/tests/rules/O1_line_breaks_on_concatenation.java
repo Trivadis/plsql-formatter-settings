@@ -2,20 +2,19 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Breaks_Before {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.Before);
+            setOption(getFormatter().breaksConcat, Format.Breaks.Before);
         }
 
         @Test
@@ -27,7 +26,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -51,7 +50,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -66,11 +65,12 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Breaks_After {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.After);
+            setOption(getFormatter().breaksConcat, Format.Breaks.After);
         }
 
         @Test
@@ -82,7 +82,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -106,7 +106,7 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
                        );
                     end;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        dbms_output.put_line(
@@ -121,11 +121,12 @@ public class O1_line_breaks_on_concatenation extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Breaks_None {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksConcat, Format.Breaks.None);
+            setOption(getFormatter().breaksConcat, Format.Breaks.None);
         }
 
         @Test

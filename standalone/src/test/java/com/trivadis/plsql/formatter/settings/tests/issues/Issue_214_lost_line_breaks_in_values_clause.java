@@ -2,15 +2,17 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_214_lost_line_breaks_in_values_clause extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup_non_trivadis_default_settings() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-        getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().spaceAfterCommas, false);
     }
 
     @Test

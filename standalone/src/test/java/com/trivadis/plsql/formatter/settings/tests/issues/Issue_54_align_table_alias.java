@@ -2,12 +2,14 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_54_align_table_alias extends ConfiguredTestFormatter {
 
     @Test
     public void align_table_alias() {
-        getFormatter().options.put(getFormatter().alignTabColAliases, true);
+        setOption(getFormatter().alignTabColAliases, true);
         var sql = """
                 begin
                    for rec in (

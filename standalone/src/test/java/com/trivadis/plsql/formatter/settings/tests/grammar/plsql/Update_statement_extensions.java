@@ -2,16 +2,18 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Update_statement_extensions extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -41,7 +43,7 @@ public class Update_statement_extensions extends ConfiguredTestFormatter {
                 END;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    default_week schedule%rowtype;

@@ -2,16 +2,18 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Iterator extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -40,7 +42,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    for i immutable number(5, 2) in reverse 1..10 by 0.5
@@ -79,7 +81,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    for i mutable pls_integer in 1, repeat i + 1 while i < 10
@@ -120,7 +122,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_calling_code_type is table of integer index by varchar2(2);
@@ -169,7 +171,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_calling_code_type is table of integer index by varchar2(2);
@@ -223,7 +225,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 declare
                    type t_calling_code_type is table of integer index by varchar2(2);
@@ -268,7 +270,7 @@ public class Iterator extends ConfiguredTestFormatter {
                 end loop;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 begin
                    for r in

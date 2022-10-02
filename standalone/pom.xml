@@ -17,7 +17,7 @@
         <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
         <reflections.version>0.10.2</reflections.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <javassist.version>3.29.0-GA</javassist.version>
+        <javassist.version>3.29.2-GA</javassist.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
     </properties>
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
+            <version>31.1-jre</version>
             <scope>test</scope>
         </dependency>
         <!-- SQLcl dependencies not available in public Maven repositories -->
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.8.2</version>
+            <version>5.9.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

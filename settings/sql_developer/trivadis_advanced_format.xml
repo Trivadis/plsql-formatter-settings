@@ -30,4 +30,5 @@
     <spaceAfterCommas>true</spaceAfterCommas>
     <kwCase>oracle.dbtools.app.Format.Case.lower</kwCase>
     <formatWhenSyntaxError>false</formatWhenSyntaxError>
+    <keepQuotedIdentifiers>false</keepQuotedIdentifiers>
 </options>

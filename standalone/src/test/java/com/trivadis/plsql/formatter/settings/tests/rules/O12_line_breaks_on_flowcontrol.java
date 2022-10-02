@@ -2,20 +2,19 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Indented_actions_inlined_conditions {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.IndentedActions);
+            setOption(getFormatter().flowControl, Format.FlowControl.IndentedActions);
         }
 
         @Test
@@ -26,7 +25,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        if a = 1 then
@@ -50,7 +49,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        case
@@ -75,7 +74,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l_value := case a
@@ -98,7 +97,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case a when 1 then b when 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case a
                               when 1 then
@@ -120,7 +119,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case when a = 1 then b when a = 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case
                               when a = 1 then
@@ -138,11 +137,12 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Terse {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.Terse);
+            setOption(getFormatter().flowControl, Format.FlowControl.Terse);
         }
 
         @Test
@@ -153,7 +153,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        if a = 1 then b;
@@ -174,7 +174,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        case
@@ -196,7 +196,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l_value := case a
@@ -216,7 +216,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case a when 1 then b when 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case a
                               when 1 then b
@@ -235,7 +235,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case when a = 1 then b when a = 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case
                               when a = 1 then b
@@ -250,11 +250,12 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Line_breaks_after_conditions_and_actions {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.SeparateConditionsActions);
+            setOption(getFormatter().flowControl, Format.FlowControl.SeparateConditionsActions);
         }
 
         @Test
@@ -265,7 +266,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        if a = 1
@@ -288,7 +289,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        case
@@ -312,7 +313,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l_value := case a
@@ -334,7 +335,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case a when 1 then b when 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case a
                               when 1
@@ -355,7 +356,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case when a = 1 then b when a = 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case
                               when a = 1
@@ -372,11 +373,12 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Indented_conditions_and_actions {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().flowControl, Format.FlowControl.IndentedConditionsActions);
+            setOption(getFormatter().flowControl, Format.FlowControl.IndentedConditionsActions);
         }
 
         @Test
@@ -387,7 +389,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        if
@@ -415,7 +417,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        case
@@ -444,7 +446,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        l_value := case a
@@ -471,7 +473,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case a when 1 then b when 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case a
                               when
@@ -497,7 +499,7 @@ public class O12_line_breaks_on_flowcontrol extends ConfiguredTestFormatter {
                     select case when a = 1 then b when a = 2 then c else d end, dummy
                     from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select case
                               when

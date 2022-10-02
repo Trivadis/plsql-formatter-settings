@@ -2,33 +2,35 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_139_xmltable extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup_non_trivadis_default_settings() {
         // General
-        getFormatter().options.put(getFormatter().kwCase, Format.Case.UPPER);
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().kwCase, Format.Case.UPPER);
+        setOption(getFormatter().idCase, Format.Case.lower);
         // Alignment
-        getFormatter().options.put(getFormatter().alignTabColAliases, true);
-        getFormatter().options.put(getFormatter().alignAssignments, false);
-        getFormatter().options.put(getFormatter().alignRight, false);
+        setOption(getFormatter().alignTabColAliases, true);
+        setOption(getFormatter().alignAssignments, false);
+        setOption(getFormatter().alignRight, false);
         // Indentation
-        getFormatter().options.put("identSpaces", 4);
+        setOption("identSpaces", 4);
         // Line Breaks
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-        getFormatter().options.put(getFormatter().commasPerLine, 5); // irrelevant
-        getFormatter().options.put(getFormatter().breakAnsiiJoin, false);
-        getFormatter().options.put(getFormatter().breakParenCondition, false);
-        getFormatter().options.put(getFormatter().breakOnSubqueries, false);
-        getFormatter().options.put(getFormatter().maxCharLineSize, 150);
-        getFormatter().options.put(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X1);
-        getFormatter().options.put("breaksAfterSelect", true);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().commasPerLine, 5); // irrelevant
+        setOption(getFormatter().breakAnsiiJoin, false);
+        setOption(getFormatter().breakParenCondition, false);
+        setOption(getFormatter().breakOnSubqueries, false);
+        setOption(getFormatter().maxCharLineSize, 150);
+        setOption(getFormatter().extraLinesAfterSignificantStatements, Format.BreaksX2.X1);
+        setOption("breaksAfterSelect", true);
     }
 
     @Test
@@ -73,7 +75,7 @@ public class Issue_139_xmltable extends ConfiguredTestFormatter {
                     lot.source_system = lin.source_system
                     AND lot.item_no = lin.item_no;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -100,12 +102,12 @@ public class Issue_139_xmltable extends ConfiguredTestFormatter {
                 AND lot.item_no = lin.item_no;
                 """;
         // initial formatter call
-        var expected = formatter.format(input);
+        var expected = getFormatter().format(input);
         // second formatter call
-        var actual = formatter.format(expected);
+        var actual = getFormatter().format(expected);
         assertEquals(expected, actual);
         // third formatter call
-        actual = formatter.format(expected);
+        actual = getFormatter().format(expected);
         assertEquals(expected, actual);
     }
 }

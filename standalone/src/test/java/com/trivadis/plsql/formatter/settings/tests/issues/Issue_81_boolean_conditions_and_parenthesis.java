@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_81_boolean_conditions_and_parenthesis extends ConfiguredTestFormatter {
 
     @Test
@@ -18,7 +20,7 @@ public class Issue_81_boolean_conditions_and_parenthesis extends ConfiguredTestF
                  where (owner = 'SYSTEM' and (table_name = 'REDO_DB' or table_name = 'REDO_LOG'))
                     or (owner = 'SYS' and (table_name = 'ALERT_QT' or table_name = 'ALL_UNIFIED_AUDIT_ACTIONS'));
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -34,7 +36,7 @@ public class Issue_81_boolean_conditions_and_parenthesis extends ConfiguredTestF
                    end if;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -59,7 +61,7 @@ public class Issue_81_boolean_conditions_and_parenthesis extends ConfiguredTestF
                    end if;
                 end;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 }

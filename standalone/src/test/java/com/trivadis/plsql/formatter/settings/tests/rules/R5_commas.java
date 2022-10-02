@@ -2,22 +2,21 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class R5_commas extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_before {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignRight, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignRight, false);
         }
 
         @Test
@@ -25,7 +24,7 @@ public class R5_commas extends ConfiguredTestFormatter {
             var input = """
                     select a , b , c from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a, b, c from t;
                     """;
@@ -40,7 +39,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                          , b
@@ -52,14 +51,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b,
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,b
@@ -67,6 +66,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -77,7 +77,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                          , b
@@ -90,14 +90,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_sl_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b, -- single line comment
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,b
@@ -106,6 +106,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -116,7 +117,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                          , b
@@ -128,14 +129,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b, /* multi line comment */
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a
                           ,b
@@ -143,6 +144,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -153,7 +155,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a
@@ -166,14 +168,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space_before_comma() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a,
                            b /* multi line comment */,
                            c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a
@@ -182,17 +184,19 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignRight, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignRight, false);
         }
 
         @Test
@@ -203,7 +207,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -215,14 +219,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b,
@@ -230,6 +234,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -240,7 +245,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b -- single line comment
@@ -252,14 +257,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_sl_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b -- single line comment
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b -- single line comment
@@ -267,6 +272,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -277,7 +283,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b /* multi line comment */
@@ -289,14 +295,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b /* multi line comment */
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a,
                            b /* multi line comment */
@@ -304,6 +310,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
 
         @Test
@@ -314,7 +321,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                          , c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a,
@@ -327,14 +334,14 @@ public class R5_commas extends ConfiguredTestFormatter {
 
         @Test
         public void select_statement_with_ml_comment_without_space_before_comma() throws IOException {
-            getFormatter().options.put(getFormatter().spaceAfterCommas, false);
+            setOption(getFormatter().spaceAfterCommas, false);
             var input = """
                     select a
                           ,b /* multi line comment */
                           ,c
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             // cannot add line break after multi-line comment! SQLDev bug.
             var expected = """
                     select a,
@@ -343,6 +350,7 @@ public class R5_commas extends ConfiguredTestFormatter {
                     from t;
                     """;
             assertEquals(expected, actual);
+            setOption(getFormatter().spaceAfterCommas, true);
         }
     }
 }

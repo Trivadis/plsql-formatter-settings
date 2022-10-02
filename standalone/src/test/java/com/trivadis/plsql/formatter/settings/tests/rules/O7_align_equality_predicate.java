@@ -1,20 +1,19 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O7_align_equality_predicate extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignEquality, true);
+            setOption(getFormatter().alignEquality, true);
         }
 
         @Test
@@ -25,7 +24,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
                      where job = 'CLERK'
                        and deptno = 10;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from emp
@@ -50,7 +49,7 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
                     end filter_critera
                     from emp;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select ename,
                            case
@@ -68,11 +67,12 @@ public class O7_align_equality_predicate extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTabColAliases, false);
+            setOption(getFormatter().alignTabColAliases, false);
         }
 
         @Test

@@ -2,9 +2,11 @@ package com.trivadis.plsql.formatter.settings.tests.grammar;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Json_functions extends ConfiguredTestFormatter {
 
     @Test
@@ -64,7 +66,7 @@ public class Json_functions extends ConfiguredTestFormatter {
                        )
                   from dept d;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select json_object(
                           'deptno' : d.deptno,
@@ -88,7 +90,7 @@ public class Json_functions extends ConfiguredTestFormatter {
                        ) as "Last Name"
                   from dual;
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         var expected = """
                 select json_value(
                           '{firstname:"John"}',

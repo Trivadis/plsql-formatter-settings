@@ -2,22 +2,21 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class R6_align_parameters extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_before {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignNamedArgs, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.Before);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignNamedArgs, true);
         }
 
         @Test
@@ -30,7 +29,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key     => '1'
@@ -50,7 +49,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1', in_value => 'yes', in_comment => 'something');
@@ -62,13 +61,14 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignNamedArgs, true);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignNamedArgs, true);
         }
 
         @Test
@@ -81,7 +81,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key     => '1',
@@ -101,7 +101,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1', in_value => 'yes', in_comment => 'something');
@@ -121,7 +121,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                            ) as value
                       from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select pkg.add(
                               in_key     => '1',
@@ -144,7 +144,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     p222222 => '12345689.12345689.')) as value
                     from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select f1(p1    => '12345689.12345689.',
                               p2222 => 'yes',
@@ -159,13 +159,14 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class Commas_after_dont_align_named_args {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
-            getFormatter().options.put(getFormatter().spaceAfterCommas, true);
-            getFormatter().options.put(getFormatter().alignNamedArgs, false);
+            setOption(getFormatter().breaksComma, Format.Breaks.After);
+            setOption(getFormatter().spaceAfterCommas, true);
+            setOption(getFormatter().alignNamedArgs, false);
         }
 
         @Test
@@ -178,7 +179,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1',
@@ -198,7 +199,7 @@ public class R6_align_parameters extends ConfiguredTestFormatter {
                     end;
                     /
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     begin
                        pkg.add(in_key => '1', in_value => 'yes', in_comment => 'something');

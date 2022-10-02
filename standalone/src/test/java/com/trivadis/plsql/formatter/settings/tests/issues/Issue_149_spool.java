@@ -2,16 +2,18 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Issue_149_spool extends ConfiguredTestFormatter {
 
-    @BeforeEach
+    @BeforeAll
     public void setup_non_trivadis_default_settings() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+        setOption(getFormatter().idCase, Format.Case.lower);
     }
 
     @Test
@@ -45,7 +47,7 @@ public class Issue_149_spool extends ConfiguredTestFormatter {
                 end;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 
@@ -80,7 +82,7 @@ public class Issue_149_spool extends ConfiguredTestFormatter {
                 end hello_world;
                 /
                 """;
-        var actual = formatter.format(input);
+        var actual = getFormatter().format(input);
         assertEquals(expected, actual);
     }
 

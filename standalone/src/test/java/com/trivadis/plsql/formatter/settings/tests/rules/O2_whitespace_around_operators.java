@@ -1,20 +1,19 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundOperators, true);
+            setOption(getFormatter().spaceAroundOperators, true);
         }
 
         @Test
@@ -22,7 +21,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
             var input = """
                     select a+b-c*d/e from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a + b - c * d / e from dual;
                     """;
@@ -39,7 +38,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            /e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890
                            + b1234567890
@@ -61,7 +60,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890 +
                            b1234567890 -
@@ -75,11 +74,12 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().spaceAroundOperators, false);
+            setOption(getFormatter().spaceAroundOperators, false);
         }
 
         @Test
@@ -87,7 +87,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
             var input = """
                     select a  +  b  -  c  *  d  /  e from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a+b-c*d/e from dual;
                     """;
@@ -104,7 +104,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            / e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890
                            +b1234567890
@@ -126,7 +126,7 @@ public class O2_whitespace_around_operators extends ConfiguredTestFormatter {
                            e1234567890
                       from dual;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a1234567890+
                            b1234567890-

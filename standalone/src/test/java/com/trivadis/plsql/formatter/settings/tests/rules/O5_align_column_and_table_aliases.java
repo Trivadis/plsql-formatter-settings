@@ -1,20 +1,19 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTabColAliases, true);
+            setOption(getFormatter().alignTabColAliases, true);
         }
 
         @Test
@@ -24,7 +23,7 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
                            b as b
                       from t;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select a123 as a,
                            b    as b
@@ -49,7 +48,7 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
                       from t123 a
                      cross join t456 b;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select *
                       from t123      a
@@ -70,11 +69,12 @@ public class O5_align_column_and_table_aliases extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().alignTabColAliases, false);
+            setOption(getFormatter().alignTabColAliases, false);
         }
 
         @Test

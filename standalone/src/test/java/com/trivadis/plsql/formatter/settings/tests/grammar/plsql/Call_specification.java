@@ -2,7 +2,9 @@ package com.trivadis.plsql.formatter.settings.tests.grammar.plsql;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Call_specification extends ConfiguredTestFormatter {
 
     @Test
@@ -16,7 +18,7 @@ public class Call_specification extends ConfiguredTestFormatter {
                 ) is
                    language c
                    library sys.utl_xml_lib
-                   name "KUXPARSEQUERY"
+                   name KUXPARSEQUERY
                    with context parameters (
                       context,
                       in_current_userid ocinumber,

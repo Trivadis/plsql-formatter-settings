@@ -1,20 +1,19 @@
 package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
 public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class True {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAfterSelect, true);
+            setOption(getFormatter().breaksAfterSelect, true);
         }
 
         @Test
@@ -29,7 +28,7 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
                     having count(*) > 2
                     order by emp_count desc;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select
                        d.deptno, d.dname, count(*) as emp_count
@@ -51,11 +50,12 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class False {
 
-        @BeforeEach
+        @BeforeAll
         public void setup() {
-            getFormatter().options.put(getFormatter().breaksAfterSelect, false);
+            setOption(getFormatter().breaksAfterSelect, false);
         }
 
         @Test
@@ -70,7 +70,7 @@ public class O6_line_breaks_after_select extends ConfiguredTestFormatter {
                     having count(*) > 2
                     order by emp_count desc;
                     """;
-            var actual = formatter.format(input);
+            var actual = getFormatter().format(input);
             var expected = """
                     select d.deptno, d.dname, count(*) as emp_count
                       from emp e

@@ -2,7 +2,9 @@ package com.trivadis.plsql.formatter.settings.examples;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AllroundAutomations extends ConfiguredTestFormatter {
 
     @Test
