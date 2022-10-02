@@ -2,22 +2,24 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class Issue_167_leading_commas_and_comments extends ConfiguredTestFormatter {
 
-    @BeforeAll
-    public void setup_non_trivadis_default_settings() {
-        getFormatter().options.put(getFormatter().idCase, Format.Case.lower);
+    @BeforeEach
+    public void setup() {
+        setOption(getFormatter().idCase, Format.Case.lower);
+    }
+
+    @AfterEach
+    public void teardown() {
+        resetOptions();
     }
 
     @Test
     public void leading_commas() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.Before);
+        setOption(getFormatter().breaksComma, Format.Breaks.Before);
         var sql = """
                 create or replace package test_pkg authid definer as
                                 
@@ -37,7 +39,7 @@ public class Issue_167_leading_commas_and_comments extends ConfiguredTestFormatt
 
     @Test
     public void trailing_commas() {
-        getFormatter().options.put(getFormatter().breaksComma, Format.Breaks.After);
+        setOption(getFormatter().breaksComma, Format.Breaks.After);
         var sql = """
                 create or replace package test_pkg authid definer as
                                 
