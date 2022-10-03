@@ -200,8 +200,8 @@ public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
         @Test
         public void skip_java_strings() {
             // works only with "setOption(getFormatter().formatWhenSyntaxError, true);"
-            // settings this option to false will most probably break the Java code to be formatted.
-            // it's a good example showing that code with syntax errors must not be formatted.
+            // setting this option to false will most probably break the Java code to be formatted.
+            // it's a good example that with syntax errors must not be formatted.
             var input = """
                     create or replace and resolve java source named "Welcome" as
                     public class Welcome {
