@@ -635,9 +635,6 @@ i10_determine_and_normalize_line_separators:
 --       - _ (underscore)
 --       - # (hash)
 --       - $ (dollar)
---       - Ä (A umlaut, undocumented, but valid)
---       - Ö (O umlaut, undocumented, but valid)
---       - Ü (U umlaut, undocumented, but valid)
 --    - The identifier is not part of a code section for which the formatter is disabled.
 --    - The identifier is not part of a conditional compilation block.
 --    - The identifier is not a reserved keyword
@@ -716,7 +713,7 @@ i11_enforce_unquoted_identifiers:
     }
 
     var isUnquotingAllowed = function(token) {
-        if (!Pattern.matches('^"[A-Z][A-Z0-9_$#ÄÖÜ]*"$', token.content)) {
+        if (!Pattern.matches('^"[A-Z][A-Z0-9_$#]*"$', token.content)) {
             return false;
         }
         if (isKeyword(token)) {
