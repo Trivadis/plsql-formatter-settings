@@ -2902,7 +2902,7 @@ r2_common:
     | [node) xmltable
     | [node) json_table
     | [node) JSON_columns_clause
-    | [node) expr & [node-1) '(' & [node^) query_table_expression
+    | [node) expr & [node-1) '(' & [node^) query_table_expression & ![node-2) 'XMLTABLE'
     | [node) pls_expr & [node-1) '(' & ![node^) paren_expr_list
     | [node) compound_condition & [node-1) '('
     | [node^) function
