@@ -129,7 +129,7 @@ skipWhiteSpaceBeforeNode:
 -- - I3: Do not format nodes.
 -- - I5: Define global variables and functions.
 -- - I10: Determine and normalize line separators.
--- - I11: Enforce unquoted identifiers.
+-- - I11: Enforce nonquoted identifiers.
 -- - I6: Remove duplicate empty lines.
 -- - I4: Define identifiers.
 -- - I7: Keep existing whitespace.
@@ -622,7 +622,7 @@ i10_determine_and_normalize_line_separators:
 }
 
 -- --------------------------------------------------------------------------------------------------------------------
--- I11: Enforce unquoted identifiers.
+-- I11: Enforce nonquoted identifiers.
 -- --------------------------------------------------------------------------------------------------------------------
 
 -- Removes the quotes in quoted identifiers, if the following is true:
@@ -648,7 +648,7 @@ i10_determine_and_normalize_line_separators:
 -- This section changes the target.input and requires a reparse.
 -- However, the reparse is done in the section I6, which can handle an amended target.input.
 
-i11_enforce_unquoted_identifiers:
+i11_enforce_nonquoted_identifiers:
     runOnce
 -> {
     var offOnRanges = [];
@@ -742,7 +742,7 @@ i11_enforce_unquoted_identifiers:
             if (type == Token.DQUOTED_STRING && isUnquotingAllowed(tokens[i]) && !inOffOnRange(tokens[i].begin) && !conditionalBlock) {
                 delpos.push(tokens[i].begin);
                 delpos.push(tokens[i].end-1);
-                logger.fine(struct.getClass(), "i11_enforce_unquoted_identifiers: at " + (i-hiddenTokenCount) + ".");
+                logger.fine(struct.getClass(), "i11_enforce_nonquoted_identifiers: at " + (i-hiddenTokenCount) + ".");
             } else if (type == Token.LINE_COMMENT || type == Token.COMMENT || type == Token.WS ||
                 type == Token.MACRO_SKIP || type == Token.SQLPLUSLINECONTINUE_SKIP)
             {

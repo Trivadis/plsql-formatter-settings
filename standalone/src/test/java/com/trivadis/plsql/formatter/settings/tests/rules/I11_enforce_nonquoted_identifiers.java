@@ -7,7 +7,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 
-public class I11_enforce_unquoted_identifiers extends ConfiguredTestFormatter {
+public class I11_enforce_nonquoted_identifiers extends ConfiguredTestFormatter {
 
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
