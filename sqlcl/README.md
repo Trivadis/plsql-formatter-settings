@@ -6,7 +6,7 @@ You can apply the formatter settings in SQL Developer. Another option is to appl
 
 ## Why not Use `FORMAT FILE`?
 
-Yes, you can use the built-in `FORMAT FILE` command. Here's the help output from SQLcl 22.2.1:
+Yes, you can use the built-in `FORMAT FILE` command. Here's the help output from SQLcl 22.3.0:
 
 ```
 FORMAT
@@ -28,7 +28,7 @@ We recommend you download, clone, or fork this repository when you plan to use [
 However, [`format.js`](format.js) also works as a standalone script. Here's the usage:
 
 ```
-Trivadis PL/SQL & SQL Formatter (format.js), version 22.2.1
+Trivadis PL/SQL & SQL Formatter (format.js), version 22.3.0
 
 usage: script format.js <rootPath> [options]
 
