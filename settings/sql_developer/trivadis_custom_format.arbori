@@ -17,7 +17,7 @@
 include "std.arbori"
 
 /**
- * Lightweight Formatter for SQL Developer and SQLcl, version 22.2.2-SNAPSHOT
+ * Lightweight Formatter for SQL Developer and SQLcl, version 22.3.0-SNAPSHOT
  * The idea is to keep the code formatted "as is" and apply chosen formatting rules only.
  *
  * The Arbori program is processed from top to bottom.
@@ -2902,7 +2902,7 @@ r2_common:
     | [node) xmltable
     | [node) json_table
     | [node) JSON_columns_clause
-    | [node) expr & [node-1) '(' & [node^) query_table_expression
+    | [node) expr & [node-1) '(' & [node^) query_table_expression & ![node-2) 'XMLTABLE'
     | [node) pls_expr & [node-1) '(' & ![node^) paren_expr_list
     | [node) compound_condition & [node-1) '('
     | [node^) function
