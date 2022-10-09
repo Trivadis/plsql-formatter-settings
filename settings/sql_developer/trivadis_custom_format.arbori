@@ -729,7 +729,7 @@ i11_enforce_nonquoted_identifiers:
         var delpos = [];
         var hiddenTokenCount = 0;
         var conditionalBlock = false;
-        for (i = 0; i < tokens.length; i++) {
+        for (var i in tokens) {
             var type = tokens[i].type;
             if (type == Token.MACRO_SKIP) {
                 var content = tokens[i].content.toLowerCase();
