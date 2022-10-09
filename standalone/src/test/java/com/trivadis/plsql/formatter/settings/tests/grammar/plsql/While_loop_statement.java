@@ -57,20 +57,20 @@ public class While_loop_statement extends ConfiguredTestFormatter {
         var actual = getFormatter().format(input);
         var expected = """
                 declare
-                   done boolean := FALSE;
+                   done boolean := false;
                 begin
                    while done
                    loop
                       DBMS_OUTPUT.PUT_LINE('This line does not print.');
                       done :=
-                         TRUE;  -- This assignment is not made.
+                         true;  -- This assignment is not made.
                    end loop;
                                 
                    while not done
                    loop
                       DBMS_OUTPUT.PUT_LINE('Hello, world!');
                       done :=
-                         TRUE;
+                         true;
                    end loop;
                 end;
                 /
