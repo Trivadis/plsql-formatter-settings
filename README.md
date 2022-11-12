@@ -148,21 +148,6 @@ Product | Version | File
 
 Please refer to the vendor's documentation for instructions on how to import these settings.
 
-## Issues
-Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/).
-
-* [Questions](https://github.com/Trivadis/plsql-formatter-settings/issues?q=is%3Aissue+label%3Aquestion)
-* [Open enhancements](https://github.com/Trivadis/plsql-formatter-settings/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
-* [Open bugs](https://github.com/Trivadis/plsql-formatter-settings/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
-* [Submit new issue](https://github.com/Trivadis/plsql-formatter-settings/issues/new)
-
-## How to Contribute
-
-1. Describe your idea by [submitting an issue](https://github.com/Trivadis/plsql-formatter-settings/issues/new)
-2. [Fork the PL/SQL & SQL Formatter Settings respository](https://github.com/Trivadis/plsql-formatter-settings/fork)
-3. [Create a branch](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/), commit and publish your changes and enhancements
-4. [Create a pull request](https://help.github.com/articles/creating-a-pull-request/)
-
 ## License
 
 The Trivadis PL/SQL & SQL Formatter Settings are licensed under the Apache License, Version 2.0. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>.
