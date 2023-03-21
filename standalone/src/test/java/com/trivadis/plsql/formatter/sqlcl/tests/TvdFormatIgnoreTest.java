@@ -38,6 +38,20 @@ public class TvdFormatIgnoreTest extends AbstractSqlclTest {
     }
 
     @Test
+    public void ignore_file_and_single_file_to_format() throws IOException {
+        // issue 243
+        var ignoreFileContent = """
+                # Ignore files with syntax errors
+                **/*syntax*
+                """;
+        final Path ignoreFile = Paths.get(getTempDir() + "/ignore.txt");
+        Files.write(ignoreFile, ignoreFileContent.getBytes());
+        var actual = runCommand( "tvdformat " + getTempDir()+"/query.sql" + " ignore=" + getTempDir() + "/ignore.txt");
+        Assertions.assertTrue(actual.contains("1 of 1"));
+    }
+
+
+    @Test
     public void ignore_two_files() throws IOException {
         var ignoreFileContent = """
                 # ignore package bodies
