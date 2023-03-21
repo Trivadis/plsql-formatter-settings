@@ -57,7 +57,7 @@ var getVersion = function() {
 var getFiles = function (rootPath, extensions, ignoreMatcher) {
     var files;
     if (existsFile(rootPath)) {
-        if (isRelevantFile(rootPath, extensions, ignoreMatcher)) {
+        if (isRelevantFile(javaPaths.get(rootPath.toString()), extensions, ignoreMatcher)) {
             files = javaArrays.asList(javaPaths.get(rootPath.toString()));
         } else {
             files = [];
