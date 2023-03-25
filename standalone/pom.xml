@@ -6,17 +6,17 @@
     <!-- The Basics -->
     <groupId>com.trivadis.plsql.formatter</groupId>
     <artifactId>tvdformat</artifactId>
-    <version>22.3.1-SNAPSHOT</version>
+    <version>22.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>11</jdk.version>
         <jdk.test.version>17</jdk.test.version>
         <sqlcl.version>22.3.0</sqlcl.version>
-        <graalvm.version>22.2.0</graalvm.version>
-        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
+        <graalvm.version>22.3.1</graalvm.version>
+        <native.maven.plugin.version>0.9.20</native.maven.plugin.version>
         <reflections.version>0.10.2</reflections.version>
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <javassist.version>3.29.2-GA</javassist.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.9.0</version>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
