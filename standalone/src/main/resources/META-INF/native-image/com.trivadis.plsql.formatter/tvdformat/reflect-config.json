@@ -1,5 +1,27 @@
 [
   {
+    "name": "com.trivadis.plsql.formatter.sandbox.SandboxedFormatter",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name": "com.trivadis.plsql.formatter.sandbox.SandboxedFormatterTask",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
     "name": "com.trivadis.plsql.formatter.ScriptRunnerContext",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,
