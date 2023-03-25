@@ -36,10 +36,6 @@ var javaArrays = Java.type("java.util.Arrays");
 var javaLogManager = Java.type("java.util.logging.LogManager");
 var javaPattern = Java.type("java.util.regex.Pattern");
 var javaCollectors = Java.type("java.util.stream.Collectors");
-// java.util.concurrent
-var javaCallable = Java.type("java.util.concurrent.Callable");
-var javaExecutors = Java.type("java.util.concurrent.Executors");
-var javaTimeUnit = Java.type("java.util.concurrent.TimeUnit");
 // oracle.dbtools
 var javaFormat = Java.type("oracle.dbtools.app.Format");
 var javaFormat$Breaks = Java.type("oracle.dbtools.app.Format$Breaks");
@@ -168,43 +164,37 @@ var getConfiguredFormatter = function (xmlPath, arboriPath) {
 
 var formatInSandbox = function(formatter, original, timeout) {
     if (timeout === 0) {
+        // run formatter without timeout
         return formatter.format(original);
     } else {
-        var executor = javaExecutors.newSingleThreadExecutor();
-        var result;
-        var formatTask = Java.extend(javaCallable, {
-            call: function() {
-                return formatter.format(original);
-            }
-        });
-        var future = executor.submit(new formatTask);
-        try {
-            return future.get(timeout, javaTimeUnit.SECONDS);
-        } catch(e) {
-            // throws java.util.concurrent.ExecutionException: java.lang.IllegalStateException:
-            // Multi threaded access requested by thread Thread[pool-1-thread-1,5,main] but is not
-            // allowed for language(s) js.
-            future.cancel(true);
-            return original;
-        }
-        executor.shutdownNow();
-        return result;
+        // run formatter in a thread with a given timeout in seconds
+        // requires SandboxedFormatter which is not available when running within SQLcl
+        var javaSandboxedFormatter = Java.type("com.trivadis.plsql.formatter.sandbox.SandboxedFormatter");
+        return javaSandboxedFormatter.format(formatter, original, timeout);
     }
 }
 
 var hasParseErrors = function (content, consoleOutput) {
     var newContent = "\n" + content; // ensure correct line number in case of an error
     var tokens = javaLexer.parse(newContent);
-    var parsed = new javaParsed(newContent, tokens, javaSqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
-    var syntaxError = parsed.getSyntaxError();
-    if (syntaxError != null && syntaxError.getMessage() != null) {
+    try {
+        var parsed = new javaParsed(newContent, tokens, javaSqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+        var syntaxError = parsed.getSyntaxError();
+        if (syntaxError != null && syntaxError.getMessage() != null) {
+            if (consoleOutput) {
+                ctx.write(syntaxError.getDetailedMessage());
+                ctx.write("... ");
+            }
+            return true;
+        }
+        return false;
+    } catch (e) {
         if (consoleOutput) {
-            ctx.write(syntaxError.getDetailedMessage());
+            ctx.write("Internal during parse: " + e.getMessage());
             ctx.write("... ");
         }
         return true;
     }
-    return false;
 }
 
 var readFile = function (file) {
@@ -266,8 +256,10 @@ var printUsage = function (asCommand, standalone) {
     ctx.write("                  serr=all reports all syntax errors\n");
     ctx.write("                  serr=ext reports syntax errors for files defined with ext option\n");
     ctx.write("                  serr=mext reports syntax errors for files defined with mext option\n");
-    ctx.write("  timeout=<sec>   time in seconds to wait for the completion of the formatting for a file.\n");
-    ctx.write("                  the default value is 10 seconds, 0 seconds means no timeout.\n");
+    if (standalone) {
+        ctx.write("  timeout=<sec>   time in seconds to wait for the completion of the formatting for a file.\n");
+        ctx.write("                  the default value is 0 seconds, which means no timeout.\n");
+    }
     ctx.write("  --help, -h,     print this help screen and exit\n")
     ctx.write("  --version, -v   print version and exit\n")
     if (!asCommand && !standalone) {
@@ -548,14 +540,20 @@ var processAndValidateArgs = function (args) {
         }
     }
     if (timeout == null) {
-        timeout = 10;
+        timeout = 0;
     } else {
         if (isNaN(timeout)) {
             ctx.write("timeout must be a number.\n\n");
             return result(false);
         }
+        timeout = Number(timeout);
         if (timeout < 0) {
             ctx.write("timeout cannot be less than zero.\n\n");
+            return result(false);
+        }
+        var standalone = javaSystem.getProperty('tvdformat.standalone') != null;
+        if (!standalone) {
+            ctx.write("timeout is not supported in SQLcl, use the standalone formatter tvdformat.\n\n")
             return result(false);
         }
     }
@@ -569,7 +567,7 @@ var formatBuffer = function (formatter, timeout) {
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
     } else {
-        var formatted = javaArrays.asList(formatInSandbox(formatter, original, timeout).split("\n"), );
+        var formatted = javaArrays.asList(formatInSandbox(formatter, original, timeout).split("\n"));
         ctx.getSQLPlusBuffer().getBufferSafe().resetBuffer(formatted);
         ctx.write("done.\n");
         ctx.write(ctx.getSQLPlusBuffer().getBufferSafe().list(false));
