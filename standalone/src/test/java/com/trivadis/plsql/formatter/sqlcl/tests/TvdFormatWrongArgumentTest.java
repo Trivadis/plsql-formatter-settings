@@ -43,6 +43,8 @@ public class TvdFormatWrongArgumentTest extends AbstractSqlclTest {
                                   serr=all reports all syntax errors
                                   serr=ext reports syntax errors for files defined with ext option
                                   serr=mext reports syntax errors for files defined with mext option
+                  timeout=<sec>   time in seconds to wait for the completion of the formatting for a file.
+                                  the default value is 10 seconds, 0 seconds means no timeout.
                   --help, -h,     print this help screen and exit
                   --version, -v   print version and exit
 
