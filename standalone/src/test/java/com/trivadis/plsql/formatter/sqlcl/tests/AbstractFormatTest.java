@@ -22,7 +22,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
                             
-                Expected: constraint,':',"aggr_name",'COUNT','FALSE','-','('... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','FALSE','(','JS... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "mext=");
         assertEquals(expected, actual);
@@ -552,7 +552,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
                                                                                      
-                Expected: constraint,':',"aggr_name",'COUNT','FALSE','-','('... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','FALSE','(','JS... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var configFileContent = """
                 [
@@ -611,7 +611,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
                              ^^^
                                 
-                Expected: constraint,':',"aggr_name",'COUNT','FALSE','-','('... skipped... #3... done... done.
+                Expected: constraint,':',"aggr_name",'COUNT','FALSE','(','JS... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
                 Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
                 Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... Syntax Error at line 6, column 12
@@ -620,7 +620,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
                                 
-                Expected: constraint,':',"aggr_name",'COUNT','FALSE','-','('... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','FALSE','(','JS... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir());
         assertEquals(expected, actual);
@@ -636,7 +636,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
                              ^^^
                                 
-                Expected: constraint,':',"aggr_name",'COUNT','FALSE','-','('... skipped... #3... done... done.
+                Expected: constraint,':',"aggr_name",'COUNT','FALSE','(','JS... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
                 Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
                 Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... skipped.
@@ -658,7 +658,7 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
                                 
-                Expected: constraint,':',"aggr_name",'COUNT','FALSE','-','('... skipped.
+                Expected: constraint,':',"aggr_name",'COUNT','FALSE','(','JS... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "serr=ext");
         assertEquals(expected, actual);

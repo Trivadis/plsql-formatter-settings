@@ -51,7 +51,7 @@ var javaSqlEarley = Java.type("oracle.dbtools.parser.plsql.SqlEarley");
 var javaProgram = Java.type("oracle.dbtools.arbori.Program");
 
 var getVersion = function() {
-    return "22.3.1-SNAPSHOT";
+    return "22.4.0-SNAPSHOT";
 }
 
 var getFiles = function (rootPath, extensions, ignoreMatcher) {
@@ -162,19 +162,39 @@ var getConfiguredFormatter = function (xmlPath, arboriPath) {
     return formatter;
 }
 
+var formatInSandbox = function(formatter, original, timeout) {
+    if (timeout === 0) {
+        // run formatter without timeout
+        return formatter.format(original);
+    } else {
+        // run formatter in a thread with a given timeout in seconds
+        // requires SandboxedFormatter which is not available when running within SQLcl
+        var javaSandboxedFormatter = Java.type("com.trivadis.plsql.formatter.sandbox.SandboxedFormatter");
+        return javaSandboxedFormatter.format(formatter, original, timeout);
+    }
+}
+
 var hasParseErrors = function (content, consoleOutput) {
     var newContent = "\n" + content; // ensure correct line number in case of an error
     var tokens = javaLexer.parse(newContent);
-    var parsed = new javaParsed(newContent, tokens, javaSqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
-    var syntaxError = parsed.getSyntaxError();
-    if (syntaxError != null && syntaxError.getMessage() != null) {
+    try {
+        var parsed = new javaParsed(newContent, tokens, javaSqlEarley.getInstance(), Java.to(["sql_statements"], "java.lang.String[]"));
+        var syntaxError = parsed.getSyntaxError();
+        if (syntaxError != null && syntaxError.getMessage() != null) {
+            if (consoleOutput) {
+                ctx.write(syntaxError.getDetailedMessage());
+                ctx.write("... ");
+            }
+            return true;
+        }
+        return false;
+    } catch (e) {
         if (consoleOutput) {
-            ctx.write(syntaxError.getDetailedMessage());
+            ctx.write("Internal during parse: " + e.getMessage());
             ctx.write("... ");
         }
         return true;
     }
-    return false;
 }
 
 var readFile = function (file) {
@@ -236,6 +256,10 @@ var printUsage = function (asCommand, standalone) {
     ctx.write("                  serr=all reports all syntax errors\n");
     ctx.write("                  serr=ext reports syntax errors for files defined with ext option\n");
     ctx.write("                  serr=mext reports syntax errors for files defined with mext option\n");
+    if (standalone) {
+        ctx.write("  timeout=<sec>   time in seconds to wait for the completion of the formatting for a file.\n");
+        ctx.write("                  the default value is 0 seconds, which means no timeout.\n");
+    }
     ctx.write("  --help, -h,     print this help screen and exit\n")
     ctx.write("  --version, -v   print version and exit\n")
     if (!asCommand && !standalone) {
@@ -310,6 +334,7 @@ var processAndValidateArgs = function (args) {
     var ignorePath = null;
     var ignoreMatcher = null;
     var serr = null;
+    var timeout = null;
     var files = [];
     var result = function (valid) {
         return {
@@ -321,6 +346,7 @@ var processAndValidateArgs = function (args) {
             arboriPath: arboriPath,
             ignoreMatcher: ignoreMatcher,
             serr: serr,
+            timeout: timeout,
             valid: valid
         };
     }
@@ -382,6 +408,9 @@ var processAndValidateArgs = function (args) {
             }
             if (typeof configJson.serr !== 'undefined') {
                 serr = configJson.serr.toLowerCase();
+            }
+            if (typeof configJson.timeout !== 'undefined') {
+                timeout = configJson.timeout;
             }
             if (typeof configJson.files !== 'undefined') {
                 if (!Array.isArray(configJson.files)) {
@@ -447,6 +476,10 @@ var processAndValidateArgs = function (args) {
             serr = args[i].substring(5).toLowerCase();
             continue;
         }
+        if (args[i].toLowerCase().indexOf("timeout=") === 0) {
+            timeout = args[i].substring(8);
+            continue;
+        }
         ctx.write("invalid argument " + args[i] + ".\n\n");
         return result(false);
     }
@@ -506,17 +539,35 @@ var processAndValidateArgs = function (args) {
             return result(false);
         }
     }
+    if (timeout == null) {
+        timeout = 0;
+    } else {
+        if (isNaN(timeout)) {
+            ctx.write("timeout must be a number.\n\n");
+            return result(false);
+        }
+        timeout = Number(timeout);
+        if (timeout < 0) {
+            ctx.write("timeout cannot be less than zero.\n\n");
+            return result(false);
+        }
+        var standalone = javaSystem.getProperty('tvdformat.standalone') != null;
+        if (!standalone) {
+            ctx.write("timeout is not supported in SQLcl, use the standalone formatter tvdformat.\n\n")
+            return result(false);
+        }
+    }
     return result(true);
 }
 
-var formatBuffer = function (formatter) {
+var formatBuffer = function (formatter, timeout) {
     ctx.write("Formatting SQLcl buffer... ");
     ctx.getOutputStream().flush();
     var original = ctx.getSQLPlusBuffer().getBufferSafe().getBuffer();
     if (hasParseErrors(original, true)) {
         ctx.write("skipped.\n");
     } else {
-        var formatted = javaArrays.asList(formatter.format(original).split("\n"));
+        var formatted = javaArrays.asList(formatInSandbox(formatter, original, timeout).split("\n"));
         ctx.getSQLPlusBuffer().getBufferSafe().resetBuffer(formatted);
         ctx.write("done.\n");
         ctx.write(ctx.getSQLPlusBuffer().getBufferSafe().list(false));
@@ -552,7 +603,7 @@ var detectCharset = function(content) {
     return null;
 }
 
-var formatMarkdownFile = function (file, formatter, serr) {
+var formatMarkdownFile = function (file, formatter, serr, timeout) {
     var bytes = javaFiles.readAllBytes(file);
     var charset = detectCharset(bytes);
     if (charset == null) {
@@ -577,7 +628,7 @@ var formatMarkdownFile = function (file, formatter, serr) {
                 result += original.substring(m.start(2), m.end(3));
             } else {
                 ctx.write("done... ")
-                result += formatter.format(m.group(2));
+                result += formatInSandbox(formatter, m.group(2), timeout);
                 result += original.substring(m.end(2), m.end(3));
             }
             pos = m.end(3);
@@ -602,7 +653,7 @@ var getLineSeparator = function (input) {
     return lineSep;
 }
 
-var formatFile = function (file, formatter, serr) {
+var formatFile = function (file, formatter, serr, timeout) {
     var bytes = javaFiles.readAllBytes(file);
     var charset = detectCharset(bytes);
     if (charset == null) {
@@ -616,20 +667,20 @@ var formatFile = function (file, formatter, serr) {
         if (hasParseErrors(original, consoleOutput)) {
             ctx.write("skipped.\n");
         } else {
-            writeFile(file, formatter.format(original) + getLineSeparator(original), charset);
+            writeFile(file, formatInSandbox(formatter, original, timeout) + getLineSeparator(original), charset);
             ctx.write("done.\n");
         }
     }
 }
 
-var formatFiles = function (files, formatter, markdownExtensions, serr) {
+var formatFiles = function (files, formatter, markdownExtensions, serr, timeout) {
     for (var i = 0; i < files.length; i++) {
         ctx.write("Formatting file " + (i + 1) + " of " + files.length + ": " + files[i].toString() + "... ");
         ctx.getOutputStream().flush();
         if (isMarkdownFile(files[i], markdownExtensions)) {
-            formatMarkdownFile(files[i], formatter, serr);
+            formatMarkdownFile(files[i], formatter, serr, timeout);
         } else {
-            formatFile(files[i], formatter, serr);
+            formatFile(files[i], formatter, serr, timeout);
         }
         ctx.getOutputStream().flush();
     }
@@ -675,7 +726,7 @@ var run = function (args) {
         } else {
             var formatter = getConfiguredFormatter(options.xmlPath, options.arboriPath);
             if (options.rootPath === "*") {
-                formatBuffer(formatter);
+                formatBuffer(formatter, options.timeout);
             } else {
                 var files;
                 if (options.files.length > 0) {
@@ -683,7 +734,7 @@ var run = function (args) {
                 } else {
                     files = getFiles(options.rootPath, options.extensions, options.ignoreMatcher);
                 }
-                formatFiles(files, formatter, options.markdownExtensions, options.serr);
+                formatFiles(files, formatter, options.markdownExtensions, options.serr, options.timeout);
             }
         }
     }

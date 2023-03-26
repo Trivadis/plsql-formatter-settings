@@ -6,8 +6,8 @@ This repository provides formatter settings for the [coding style rules](https:/
 
 Settings are primarily provided for
 
-- [Oracle SQLcl, Version 22.3.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
-- [Oracle SQL Developer, Version 22.2.1](https://www.oracle.com/tools/downloads/sqldev-downloads.html) (requires `dbtools-common.jar` from SQLcl 22.3.0)
+- [Oracle SQLcl, Version 22.4.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQL Developer, Version 22.2.1](https://www.oracle.com/tools/downloads/sqldev-downloads.html) (requires `dbtools-common.jar` from SQLcl 22.4.0, however, this breaks the code completion feature)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
