@@ -25,6 +25,36 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
              order by d.department_name, v.employee_id;
             """;
 
+    private final String SLOW_PARSING_CODE = """
+                create or replace package body pkg is
+                  procedure p1 is
+                      l_words text_ct;
+                  begin
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                      l_words := new text_ct('aahed', 'aalii', 'aapas', 'aargh', 'aarti', 'abaca', 'abaci', 'abacs', 'abaft', 'abaht', 'abaka', 'abamp', 'aband', 'abash', 'abask', 'abaya', 'abbas', 'abbed', 'abbes', 'abcee', 'abeam', 'abear', 'abeat', 'abeer', 'abele', 'abeng', 'abers', 'abets', 'abeys', 'abies', 'abius', 'abjad', 'abjud', 'abler', 'ables', 'ablet', 'ablow', 'abmho', 'abnet', 'abohm');
+                  end p1;
+                end pkg;
+                /
+                """;
+
     @Test
     public void jsonArrayDirTest() throws ScriptException, IOException {
         var configFileContent = """
@@ -79,5 +109,57 @@ public class TvdFormatTest extends AbstractTvdFormatTest {
         var actual = getFormattedContent("query.sql").replace("\r", "");
         Assertions.assertEquals(EXPECTED_QUERY_SQL, actual);
         Assertions.assertTrue(getConsoleOutput().contains("1 of 2"));
+    }
+
+    @Test
+    public void jsonObjectFileWithTimeoutTest() throws ScriptException, IOException {
+        var inputFile = Paths.get(getTempDir() + "/input.sql");
+        Files.write(inputFile, SLOW_PARSING_CODE.getBytes());
+        var configFileContent = """
+                {
+                    "xml": "#XML#",
+                    "arbori": "#ARBORI#",
+                    "files": [
+                        "#TEMP_DIR#/input.sql"
+                    ],
+                    "timeout": 1
+                }
+                """.replace("#XML#", getXML())
+                .replace("#ARBORI#", getArbori())
+                .replace("#TEMP_DIR#", getTempDir())
+                .replace("\\", "/");
+        var configFile = Paths.get(getTempDir() + "/config.json");
+        Files.write(configFile, configFileContent.getBytes());
+        var args = new String[]{getTempDir() + "/config.json"};
+        TvdFormat.main(args);
+        var actual = getFormattedContent("input.sql").replace("\r", "");
+        Assertions.assertEquals(SLOW_PARSING_CODE.trim(), actual.trim());
+        Assertions.assertTrue(getConsoleOutput().contains("timeout..."));
+    }
+
+    @Test
+    public void jsonObjectFileWithoutTimeoutTest() throws ScriptException, IOException {
+        var inputFile = Paths.get(getTempDir() + "/input.sql");
+        Files.write(inputFile, SLOW_PARSING_CODE.getBytes());
+        var configFileContent = """
+                {
+                    "xml": "#XML#",
+                    "arbori": "#ARBORI#",
+                    "files": [
+                        "#TEMP_DIR#/input.sql"
+                    ],
+                    "timeout": 20
+                }
+                """.replace("#XML#", getXML())
+                .replace("#ARBORI#", getArbori())
+                .replace("#TEMP_DIR#", getTempDir())
+                .replace("\\", "/");
+        var configFile = Paths.get(getTempDir() + "/config.json");
+        Files.write(configFile, configFileContent.getBytes());
+        var args = new String[]{getTempDir() + "/config.json"};
+        TvdFormat.main(args);
+        var actual = getFormattedContent("input.sql").replace("\r", "");
+        Assertions.assertNotEquals(SLOW_PARSING_CODE.trim(), actual.trim());
+        Assertions.assertFalse(getConsoleOutput().contains("timeout..."));
     }
 }
