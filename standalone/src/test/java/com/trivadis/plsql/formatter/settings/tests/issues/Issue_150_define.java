@@ -2,6 +2,8 @@ package com.trivadis.plsql.formatter.settings.tests.issues;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
+import oracle.dbtools.parser.plsql.SyntaxError;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,23 +22,25 @@ public class Issue_150_define extends ConfiguredTestFormatter {
         // As a result DEFINE becomes a command, and it starts on a new line
         // Same behavior with START as with @.
         // Fixed in SQLDev 21.4.0.
+        // Syntax error in SQLcl 23.1.0
         var sql = """
                 define table_folder = 'table'
                 set define on
                 @./demo/&&table_folder/drop_demo_tables.sql
                 set define off
                 """;
-        formatAndAssert(sql);
+       Assertions.assertThrows(SyntaxError.class, () -> formatAndAssert(sql));
     }
 
     @Test
     public void commit_after_at_command() {
-        // workaround
+        // workaround for SQLcl 22.2.1 up to 22.4.0 does not work anymore
+        // Syntax error in SQLcl 23.1.0
+        // new workaround is to use start instead of @ and no "./"
         var sql = """
                 define table_folder = 'table'
                 set define on
-                @./demo/&&table_folder/drop_demo_tables.sql
-                commit; -- workaround
+                start demo/&&table_folder/drop_demo_tables.sql
                 set define off
                 """;
         formatAndAssert(sql);
