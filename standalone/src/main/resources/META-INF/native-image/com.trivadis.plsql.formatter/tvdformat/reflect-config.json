@@ -1,645 +1,98 @@
 [
   {
-    "name": "com.trivadis.plsql.formatter.sandbox.SandboxedFormatter",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
+    "name":"[Ljava.awt.event.MouseMotionListener;"
   },
   {
-    "name": "com.trivadis.plsql.formatter.sandbox.SandboxedFormatterTask",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "com.trivadis.plsql.formatter.ScriptRunnerContext",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.io.BufferedWriter",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.io.File",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.io.FileInputStream",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.io.PrintStream",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.lang.Class",
-    "methods": [
-      {
-        "name": "getDeclaredField"
-      }
+    "name":"com.apple.laf.AquaButtonRadioUI",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] },
+      {"name":"createUI","parameterTypes":["javax.swing.JComponent"] }
     ]
   },
   {
-    "name": "java.lang.Integer",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
+    "name":"com.apple.laf.AquaKeyBindings",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
   },
   {
-    "name": "java.lang.reflect.Field",
-    "methods": [
-      {
-        "name": "setAccessible"
-      },
-      {
-        "name": "get"
-      }
+    "name":"com.apple.laf.AquaLookAndFeel",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.apple.laf.AquaMnemonicHandler$AltProcessor",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.apple.laf.AquaUtilControlSize$PropertySizeListener",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"java.awt.SystemColor",
+    "fields":[
+      {"name":"activeCaption"},
+      {"name":"activeCaptionBorder"},
+      {"name":"activeCaptionText"},
+      {"name":"control"},
+      {"name":"controlDkShadow"},
+      {"name":"controlHighlight"},
+      {"name":"controlLtHighlight"},
+      {"name":"controlShadow"},
+      {"name":"controlText"},
+      {"name":"desktop"},
+      {"name":"inactiveCaption"},
+      {"name":"inactiveCaptionBorder"},
+      {"name":"inactiveCaptionText"},
+      {"name":"info"},
+      {"name":"infoText"},
+      {"name":"menu"},
+      {"name":"menuText"},
+      {"name":"scrollbar"},
+      {"name":"text"},
+      {"name":"textHighlight"},
+      {"name":"textHighlightText"},
+      {"name":"textInactiveText"},
+      {"name":"textText"},
+      {"name":"window"},
+      {"name":"windowBorder"},
+      {"name":"windowText"}
     ]
   },
   {
-    "name": "java.lang.String",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.lang.StringBuilder",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.lang.System",
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.net.URI",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.nio.ByteBuffer",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.nio.charset.Charset",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.nio.file.Files",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.nio.file.FileSystems",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.nio.file.Paths",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.ArrayList",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.Arrays",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.Collection",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.Collections$UnmodifiableSortedMap",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.HashMap",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.HashMap$KeySet",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.HashSet",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.Iterator",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.logging.LogManager",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.regex.Matcher",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.regex.Pattern",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.SortedMap",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.stream.Collectors",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.stream.ReferencePipeline$Head",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.stream.Stream",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "java.util.TreeSet",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format$Breaks",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format$BreaksX2",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format$Case",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format$FlowControl",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format$InlineComments",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Format$Space",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.app.Persist2XML",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.arbori.Program",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.arbori.SqlProgram",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.Lexer",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.LexerToken",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.Parsed",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.ParseNode",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.plsql.SqlEarley",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.plsql.SyntaxError",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.Substitutions",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.parser.Token",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.util.Logger",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "oracle.dbtools.util.Service",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
-  },
-  {
-    "name": "org.graalvm.polyglot.Engine",
-    "methods": [
-      {
-        "name": "getImpl",
-        "parameterTypes": []
-      }
+    "name":"java.awt.event.KeyEvent",
+    "fields":[
+      {"name":"VK_DOWN"},
+      {"name":"VK_LEFT"},
+      {"name":"VK_RIGHT"},
+      {"name":"VK_SPACE"},
+      {"name":"VK_UP"}
     ]
   },
   {
-    "name": "org.graalvm.polyglot.management.Management"
+    "name":"oracle.dbtools.app.Format",
+    "methods":[
+      {"name":"breaksAfterComma","parameterTypes":[] },
+      {"name":"breaksAfterConcat","parameterTypes":[] },
+      {"name":"breaksAfterLogicalConjunction","parameterTypes":[] },
+      {"name":"breaksBeforeComma","parameterTypes":[] },
+      {"name":"breaksBeforeConcat","parameterTypes":[] },
+      {"name":"breaksBeforeLogicalConjunction","parameterTypes":[] },
+      {"name":"dontFormatNode","parameterTypes":["oracle.dbtools.parser.Parsed","java.util.Map"] },
+      {"name":"identifiers","parameterTypes":["oracle.dbtools.parser.Parsed","java.util.Map"] },
+      {"name":"indentConditions","parameterTypes":[] }
+    ]
   },
   {
-    "name": "sun.nio.cs.MS1252$Holder",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
+    "name":"oracle.dbtools.app.Persist2XML",
+    "methods":[{"name":"values","parameterTypes":["oracle.dbtools.parser.Parsed","java.util.Map"] }]
   },
   {
-    "name": "sun.nio.cs.SingleByte$Decoder",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
+    "name":"org.graalvm.polyglot.Engine",
+    "methods":[{"name":"getImpl","parameterTypes":[] }]
   },
   {
-    "name": "sun.nio.cs.UTF_8$Decoder",
-    "allDeclaredConstructors": true,
-    "allDeclaredMethods": true,
-    "allDeclaredFields": true,
-    "allDeclaredClasses": true,
-    "allPublicConstructors": true,
-    "allPublicMethods": true,
-    "allPublicFields": true,
-    "allPublicClasses": true
+    "name":"org.graalvm.polyglot.management.Management"
+  },
+  {
+    "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
   }
 ]

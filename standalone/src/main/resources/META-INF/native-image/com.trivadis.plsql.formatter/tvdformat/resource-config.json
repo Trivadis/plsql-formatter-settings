@@ -1,68 +1,75 @@
 {
-  "resources": {
-    "includes": [
+  "resources":{
+    "includes":[
       {
-        "pattern": "\\QMETA-INF/services/com.oracle.truffle.api.TruffleLanguage$Provider\\E"
+        "pattern":"\\QMETA-INF/services/com.oracle.truffle.api.TruffleLanguage$Provider\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/com.oracle.truffle.api.instrumentation.TruffleInstrument$Provider\\E"
+        "pattern":"\\QMETA-INF/services/com.oracle.truffle.api.instrumentation.TruffleInstrument$Provider\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/com.oracle.truffle.api.library.DefaultExportProvider\\E"
+        "pattern":"\\QMETA-INF/services/com.oracle.truffle.api.library.DefaultExportProvider\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/com.oracle.truffle.api.object.LayoutFactory\\E"
+        "pattern":"\\QMETA-INF/services/com.oracle.truffle.api.object.LayoutFactory\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/com.oracle.truffle.js.runtime.Evaluator\\E"
+        "pattern":"\\QMETA-INF/services/com.oracle.truffle.js.runtime.Evaluator\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"
+        "pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/javax.script.ScriptEngineFactory\\E"
+        "pattern":"\\QMETA-INF/services/javax.script.ScriptEngineFactory\\E"
       },
       {
-        "pattern": "\\QMETA-INF/services/org.graalvm.polyglot.impl.AbstractPolyglotImpl\\E"
+        "pattern":"\\Qcom/oracle/truffle/nfi/backend/libffi/LibFFILanguage.class\\E"
       },
       {
-        "pattern": "\\Qcom/oracle/truffle/nfi/backend/libffi/LibFFILanguage.class\\E"
+        "pattern":"\\Qformat.js\\E"
       },
       {
-        "pattern": "\\Qformat.js\\E"
+        "pattern":"\\Qoracle/dbtools/app/format.prg\\E"
       },
       {
-        "pattern": "\\Qoracle/dbtools/app/format.prg\\E"
+        "pattern":"\\Qoracle/dbtools/app/persist2xml.prg\\E"
       },
       {
-        "pattern": "\\Qoracle/dbtools/app/persist2xml.prg\\E"
+        "pattern":"\\Qoracle/dbtools/arbori/arbori.grammar\\E"
       },
       {
-        "pattern": "\\Qoracle/dbtools/arbori/arbori.grammar\\E"
+        "pattern":"\\Qoracle/dbtools/arbori/std.arbori\\E"
       },
       {
-        "pattern": "\\Qoracle/dbtools/arbori/std.arbori\\E"
+        "pattern":"\\Qoracle/dbtools/parser/js/js.grammar\\E"
       },
       {
-        "pattern": "\\Qoracle/dbtools/parser/js/js.grammar\\E"
+        "pattern":"\\Qoracle/dbtools/parser/plsql/allRules.txt\\E"
       },
       {
-        "pattern": "\\Qoracle/dbtools/parser/plsql/allRules.txt\\E"
-      },
-      {
-        "pattern": "\\Qoracle/dbtools/parser/plsql/doc/frequencies.txt\\E"
-      },
-      {
-        "pattern": "\\Qoracle/dbtools/parser/xml.grammar\\E"
+        "pattern":"\\Qoracle/dbtools/parser/xml.grammar\\E"
       }
-    ]
-  },
-  "bundles": [
+    ]},
+  "bundles":[
     {
-      "name": "oracle.dbtools.util.Messages",
-      "locales": [
-        ""
-      ]
+      "name":"com.apple.laf.resources.aqua",
+      "classNames":["com.apple.laf.resources.aqua"]
+    },
+    {
+      "name":"com.sun.swing.internal.plaf.basic.resources.basic",
+      "classNames":["com.sun.swing.internal.plaf.basic.resources.basic"]
+    },
+    {
+      "name":"oracle.dbtools.util.Messages",
+      "locales":[""]
+    },
+    {
+      "name":"sun.awt.resources.awt",
+      "classNames":["sun.awt.resources.awt"]
+    },
+    {
+      "name":"sun.awt.resources.awtosx",
+      "classNames":["sun.awt.resources.awtosx"]
     }
   ]
 }
