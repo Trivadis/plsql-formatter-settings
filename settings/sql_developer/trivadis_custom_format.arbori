@@ -3666,6 +3666,16 @@ o8_declarations:
     var datatypes = new HashMap();
 }
 
+o8_package_variables:
+      [scope) pkg_spec
+    & [name) decl_id
+    & [parent) basic_d
+    & name = node-1
+    & scope < name^
+    & parent = name^
+    & [parent = [name
+;
+
 o8_variables:
       [scope) decl_list
     & [name) decl_id
@@ -3702,7 +3712,8 @@ o8_external_params:
 ;
 
 o8_find_type_declarations:
-      o8_variables
+      o8_package_variables
+    | o8_variables
     | o8_records
     | o8_attributes
     | o8_external_params
@@ -3746,6 +3757,20 @@ o4_declarations:
     var assignmentsWithValue = new HashMap();
 }
 
+o4_package_spec:
+      [scope) pkg_spec
+    & [node) default_expr_opt
+    & scope < node
+;
+
+o4_function_in_package_spec:
+      [scope) pkg_spec
+    & [func) fml_part
+    & [node) default_expr_opt
+    & func < node
+    & scope < func
+;
+
 o4_declare_section:
       [scope) decl_list
     & [node) default_expr_opt
@@ -3767,7 +3792,8 @@ o4_function:
 ;
 
 o4_find_assignments:
-      (o4_declare_section - o4_function_in_declare_section)
+      (o4_package_spec - o4_function_in_package_spec)
+    | (o4_declare_section - o4_function_in_declare_section)
     | o4_function
 -> {
     if (alignAssignments) {
