@@ -17,7 +17,7 @@
 include "std.arbori"
 
 /**
- * Lightweight Formatter for SQL Developer and SQLcl, version 22.4.1-SNAPSHOT
+ * Lightweight Formatter for SQL Developer and SQLcl, version 23.1.0-SNAPSHOT
  * The idea is to keep the code formatted "as is" and apply chosen formatting rules only.
  *
  * The Arbori program is processed from top to bottom.
@@ -1876,7 +1876,7 @@ a15_various:
       [node) insert_into_clause & [node^^) multi_table_insert
     | [node) subquery & [node^) multi_table_insert
     | [node) subprg_property
-    | [node) ')' & [node^) create_view#___0
+    | [node) ')' & [node^) create_view1___2
     | [node) ')' & [node^) create_materialized_view2___0
 ;
 
@@ -1900,7 +1900,7 @@ a15_is_or_as:
 ;
 
 a15_view_column_alias:
-      [parent) create_view#___0
+      [parent) create_view1___2
     & [node) alias_in_out_constraints
     & parent < node
 ;
@@ -1932,7 +1932,7 @@ a15_line_break_before:
 -- --------------------------------------------------------------------------------------------------------------------
 
 a14_line_break_after:
-      [node) 'AS' & [node^) create_view#
+      [node) 'AS' & [node^) create_view1
     | [node) 'AS' & [node^) create_materialized_view
 -> {
     var node = tuple.get("node");
@@ -2417,7 +2417,7 @@ o10_join_clause_break_keywords:
               & ![keyword-1) 'CROSS'
               & ![keyword-1) 'NATURAL'
               & ![keyword-1) outer_join_type
-              & ![keyword-1) "inner_cross_join_clause"___0
+              & ![keyword-1) "inner_cross_join_clause___0"
           --| [keyword) 'PARTITION'
           | [keyword) 'ON'
           | [keyword) 'USING'
@@ -2960,8 +2960,8 @@ r2_case_expression_plsql:
 ;
 
 r2_view:
-      [node) create_view#___0
-    | [node) subquery & [node^) create_view#
+      [node) create_view1___2
+    | [node) subquery & [node^) create_view1
 ;
 
 r2_materialized_view:
@@ -3048,7 +3048,7 @@ r2_decrement_left_margin:
                 | [node^) xmltable
                 | [node^) json_table
                 | [node^) JSON_columns_clause
-                | [node^) create_view#___0
+                | [node^) create_view1___2
                 | [node^) create_materialized_view2___0
                 | [node^) insert_into_clause___0
                 | [node^) par_expr_list
