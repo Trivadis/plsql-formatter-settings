@@ -6,15 +6,15 @@
     <!-- The Basics -->
     <groupId>com.trivadis.plsql.formatter</groupId>
     <artifactId>tvdformat</artifactId>
-    <version>22.4.1-SNAPSHOT</version>
+    <version>23.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>11</jdk.version>
         <jdk.test.version>17</jdk.test.version>
-        <sqlcl.version>22.4.0</sqlcl.version>
+        <sqlcl.version>23.1.0</sqlcl.version>
         <graalvm.version>22.3.1</graalvm.version>
-        <native.maven.plugin.version>0.9.20</native.maven.plugin.version>
+        <native.maven.plugin.version>0.9.21</native.maven.plugin.version>
         <reflections.version>0.10.2</reflections.version>
         <slf4j.version>2.0.7</slf4j.version>
         <javassist.version>3.29.2-GA</javassist.version>
@@ -152,6 +152,15 @@
             </testResource>
         </testResources>
         <plugins>
+            <plugin>
+                <!-- workaround for https://issues.apache.org/jira/browse/MRESOURCES-269 -->
+                <!-- see also https://issues.apache.org/jira/browse/MRESOURCES-237 -->
+                <!-- need to copy content of file not symbolic link, still an issue in 3.3.1 -->
+                <!-- cannot use <filtering>true</filtering> because windows-1252.sql failed with MalformedInputException -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
