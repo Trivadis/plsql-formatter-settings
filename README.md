@@ -2,12 +2,12 @@
 
 ## Introduction
 
-This repository provides formatter settings for the [coding style rules](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.0/3-coding-style/coding-style/#rules) of the Trivadis PL/SQL & SQL Coding Guidelines.
+This repository provides formatter settings for the [coding style rules](https://trivadis.github.io/plsql-and-sql-coding-guidelines/v4.3/3-coding-style/coding-style/#rules) of the Trivadis PL/SQL & SQL Coding Guidelines.
 
 Settings are primarily provided for
 
-- [Oracle SQLcl, Version 23.1.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
-- [Oracle SQL Developer, Version 23.1.0](https://www.oracle.com/tools/downloads/sqldev-downloads.html)
+- [Oracle SQLcl, Version 23.3.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQL Developer, Version 23.1.0](https://www.oracle.com/tools/downloads/sqldev-downloads.html) with patched `dbtools-common.jar``
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
