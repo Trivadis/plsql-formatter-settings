@@ -19,7 +19,7 @@
         <slf4j.version>2.0.9</slf4j.version>
         <javassist.version>3.29.2-GA</javassist.version>
         <skip.native>true</skip.native>
-        <disable.logging>false</disable.logging>
+        <disable.logging>true</disable.logging>
     </properties>
     <dependencies>
         <!-- GraalVM JavaScript engine -->
