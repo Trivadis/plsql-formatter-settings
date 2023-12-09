@@ -12,7 +12,6 @@
     <breaksComma>oracle.dbtools.app.Format.Breaks.After</breaksComma>
     <breaksAroundLogicalConjunctions>oracle.dbtools.app.Format.Breaks.Before</breaksAroundLogicalConjunctions>
     <alignNamedArgs>true</alignNamedArgs>
-    <formatProgramURL>default</formatProgramURL>
     <formatThreshold>1</formatThreshold>
     <spaceAroundOperators>true</spaceAroundOperators>
     <useTab>false</useTab>
