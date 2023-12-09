@@ -56,44 +56,46 @@ The reason is that the underlying parser uses AWT/Swing components (for whatever
 AWT/Swing components are supported on AMD/Linux platforms only by GraalVM.
 As a result this build process will produce a non-working native image on most platforms.
 
-You will see the following stacktrace similar to the following when running the resulting native image:
+You will see the following stacktrace similar to the following when running the resulting native image 
+(based on SQLcl 23.3.0 on macOS 14.1.2 with an M-series chip):
 
 ```
-	at com.oracle.svm.core.jdk.NativeLibrarySupport.loadLibraryRelative(NativeLibrarySupport.java:120)
-	at java.base@17.0.6/java.lang.ClassLoader.loadLibrary(ClassLoader.java:50)
-	at java.base@17.0.6/java.lang.Runtime.loadLibrary0(Runtime.java:818)
-	at java.base@17.0.6/java.lang.System.loadLibrary(System.java:1989)
-	at java.desktop@17.0.6/java.awt.Toolkit$2.run(Toolkit.java:1388)
-	at java.desktop@17.0.6/java.awt.Toolkit$2.run(Toolkit.java:1386)
-	at java.base@17.0.6/java.security.AccessController.executePrivileged(AccessController.java:168)
-	at java.base@17.0.6/java.security.AccessController.doPrivileged(AccessController.java:318)
-	at java.desktop@17.0.6/java.awt.Toolkit.loadLibraries(Toolkit.java:1385)
-	at java.desktop@17.0.6/java.awt.Toolkit.initStatic(Toolkit.java:1423)
-	at java.desktop@17.0.6/java.awt.Toolkit.<clinit>(Toolkit.java:1397)
-	at java.desktop@17.0.6/java.awt.Component.<clinit>(Component.java:624)
-	at java.base@17.0.6/java.lang.Class.ensureInitialized(DynamicHub.java:528)
-	at java.base@17.0.6/java.lang.Class.ensureInitialized(DynamicHub.java:528)
-	at java.base@17.0.6/java.lang.Class.ensureInitialized(DynamicHub.java:528)
-	at java.base@17.0.6/java.lang.Class.ensureInitialized(DynamicHub.java:528)
-	at java.base@17.0.6/java.lang.Class.ensureInitialized(DynamicHub.java:528)
+Exception in thread "main" javax.script.ScriptException: java.lang.Exception: java.lang.UnsatisfiedLinkError: no awt in java.library.path
+	at org.graalvm.nativeimage.builder/com.oracle.svm.core.jdk.NativeLibrarySupport.loadLibraryRelative(NativeLibrarySupport.java:136)
+	at java.base@17.0.9/java.lang.ClassLoader.loadLibrary(ClassLoader.java:50)
+	at java.base@17.0.9/java.lang.Runtime.loadLibrary0(Runtime.java:818)
+	at java.base@17.0.9/java.lang.System.loadLibrary(System.java:1989)
+	at java.desktop@17.0.9/java.awt.Toolkit$2.run(Toolkit.java:1388)
+	at java.desktop@17.0.9/java.awt.Toolkit$2.run(Toolkit.java:1386)
+	at java.base@17.0.9/java.security.AccessController.executePrivileged(AccessController.java:171)
+	at java.base@17.0.9/java.security.AccessController.doPrivileged(AccessController.java:318)
+	at java.desktop@17.0.9/java.awt.Toolkit.loadLibraries(Toolkit.java:1385)
+	at java.desktop@17.0.9/java.awt.Toolkit.initStatic(Toolkit.java:1423)
+	at java.desktop@17.0.9/java.awt.Toolkit.<clinit>(Toolkit.java:1397)
+	at java.desktop@17.0.9/java.awt.Component.<clinit>(Component.java:624)
+	at java.base@17.0.9/java.lang.Class.ensureInitialized(DynamicHub.java:579)
+	at java.base@17.0.9/java.lang.Class.ensureInitialized(DynamicHub.java:579)
+	at java.base@17.0.9/java.lang.Class.ensureInitialized(DynamicHub.java:579)
+	at java.base@17.0.9/java.lang.Class.ensureInitialized(DynamicHub.java:579)
+	at java.base@17.0.9/java.lang.Class.ensureInitialized(DynamicHub.java:579)
 	at oracle.dbtools.parser.Visual.<init>(Visual.java:404)
 	at oracle.dbtools.parser.Grammar.parseGrammarFile(Grammar.java:172)
 	at oracle.dbtools.parser.Grammar.parseGrammarFile(Grammar.java:152)
-	at oracle.dbtools.arbori.Program.getRules(Program.java:277)
-	at oracle.dbtools.arbori.Program.getArboriParser(Program.java:187)
-	at oracle.dbtools.arbori.Program.compile(Program.java:330)
-	at oracle.dbtools.arbori.Program.compile(Program.java:319)
-	at oracle.dbtools.arbori.Program.compile(Program.java:316)
-	at oracle.dbtools.app.XML2Table.<init>(XML2Table.java:70)
-	at oracle.dbtools.app.Persist2XML.<init>(Persist2XML.java:48)
-	at oracle.dbtools.app.Persist2XML.read(Persist2XML.java:95)
-	at <js>.configure(<eval>:104)
-	at <js>.getConfiguredFormatter(<eval>:161)
-	at <js>.run(<eval>:727)
+	at oracle.dbtools.arbori.Program.getRules(Program.java:285)
+	at oracle.dbtools.arbori.Program.getArboriParser(Program.java:194)
+	at oracle.dbtools.arbori.Program.compile(Program.java:338)
+	at oracle.dbtools.arbori.Program.compile(Program.java:327)
+	at oracle.dbtools.arbori.SqlProgram.<init>(SqlProgram.java:32)
+	at oracle.dbtools.app.Format$3.<init>(Format.java:343)
+	at oracle.dbtools.app.Format.format(Format.java:343)
+	at <js>.formatInSandbox(<eval>:168)
+	at <js>.formatFile(<eval>:670)
+	at <js>.formatFiles(<eval>:683)
+	at <js>.run(<eval>:737)
 	at <js>.:program(<eval>:803)
-	at org.graalvm.sdk/org.graalvm.polyglot.Context.eval(Context.java:399)
-	at org.graalvm.js.scriptengine/com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:478)
-	at org.graalvm.js.scriptengine/com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:420)
+	at org.graalvm.sdk/org.graalvm.polyglot.Context.eval(Context.java:403)
+	at org.graalvm.js.scriptengine/com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:485)
+	at org.graalvm.js.scriptengine/com.oracle.truffle.js.scriptengine.GraalJSScriptEngine.eval(GraalJSScriptEngine.java:427)
 	at com.trivadis.plsql.formatter.TvdFormat.run(TvdFormat.java:36)
 	at com.trivadis.plsql.formatter.TvdFormat.main(TvdFormat.java:49)
 ```
@@ -105,10 +107,10 @@ See also [macOS: no awt in java.library.path](https://github.com/oracle/graal/is
 
 ## How to Build
 
-1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 23.1.0
-2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases) and install the GraalVM JDK 17 22.3.1
+1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 23.3.0
+2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-17.0.9) and install the GraalVM JDK 17.0.9
 3. Go to the `bin` directory of the GraalVM JDK and run `./gu install js native-image visualvm`. For native image on Windows you need to [download](https://visualstudio.microsoft.com/downloads/) Visual Studio Community 2022 and install the C++ compiler. Use `x64 Native Tools Command Prompt for VS 2022` to get a terminal window with the correct environment.
-4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.9.1
+4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.9.6
 5. [Download](https://git-scm.com/downloads) and install a git command line client
 6. Clone the plsql-formatter-settings repository. The repository uses symbolic links. On Windows you have to use `git clone -c core.symlinks=true https://github.com/Trivadis/plsql-formatter-settings.git` as Administrator to make it work. See also [Symbolic Links in Windows](https://github.com/git-for-windows/git/wiki/Symbolic-Links) for more information.
 7. Open a terminal window in the plsql-formatter-settings root folder and type
