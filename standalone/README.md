@@ -31,7 +31,7 @@ The parameters are the same as for the [SQLcl command `tvdformat`](../sqlcl/READ
 
 A native image is a platform specific executable. It does not require a JDK at runtime. A native image uses less resources and is faster. The following images can be produced with a GraalVM JDK 17:
 
-OS      | amd64 (Intel))? | aarch64 (ARM)? |
+OS      | amd64 (Intel)?  | aarch64 (ARM)? |
 ------- | :-------------: | :------------: |
 macOS   | yes             | yes            |
 Linux   | yes             | yes            |
