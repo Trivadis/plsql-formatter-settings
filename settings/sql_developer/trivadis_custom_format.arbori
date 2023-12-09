@@ -17,7 +17,7 @@
 include "std.arbori"
 
 /**
- * Lightweight Formatter for SQL Developer and SQLcl, version 23.1.1-SNAPSHOT
+ * Lightweight Formatter for SQL Developer and SQLcl, version 23.3.0-SNAPSHOT
  * The idea is to keep the code formatted "as is" and apply chosen formatting rules only.
  *
  * The Arbori program is processed from top to bottom.
@@ -1679,9 +1679,9 @@ a8_accessible_by:
 a8_merge:
       [node) 'MERGE' & [node^) merge
     | [node) 'INTO' & [node^) merge
-    | [node-1) 'INTO' & ![node+1) 'USING' & [node^) merge
-    | [node-2) 'INTO' & ![node+1) 'USING' & [node^) merge
-    | [node) 'USING' & [node^) merge
+    | [node-1) 'INTO' & ![node+1) 'USING' & [node^) merge___2
+    | [node-2) 'INTO' & ![node+1) 'USING' & [node^) merge___2
+    | [node) 'USING' & [node^) merge___2
     | [node) 'WHEN' & ([node^) merge_update_clause | [node^) merge_insert_clause)
     | [node) 'NOT' & [node^) merge_insert_clause
     | [node) 'MATCHED' & ([node^) merge_update_clause | [node^) merge_insert_clause)
@@ -2532,7 +2532,7 @@ a16_delete:
 a16_merge:
       [parent) merge
     & (
-          [node) 'USING'
+          [node) merge___2
         | [node) 'ON'
         | [node) merge_update_clause
         | [node) merge_insert_clause
@@ -3106,7 +3106,7 @@ r2_increment_left_margin_by_keyword_outside_update_delete_merge:
 
 -- use merge keyword for right alignment (5 chars)
 r2_increment_left_margin_by_keyword_outside_node_for_merge:
-      [node) merge___2 & [keyword) 'USING' & [node^) merge & keyword+1 = node
+      [keyword) 'USING' & [node^) merge___2 & keyword+1 = node
     | [node) condition & [keyword) 'ON' & [node^) merge & keyword+2 = node
     | [node) ')' & [keyword) 'ON' & [node^) merge & keyword+3 = node
 -> {
@@ -3456,11 +3456,18 @@ r7_delete:
 r7_merge:
       [parent) merge
     & (
-          [keyword) 'USING'
-        | [keyword) 'ON'
+          [keyword) 'ON'
         | [keyword) 'WHEN'
         | [keyword) 'LOG'
         | [keyword) 'REJECT'
+      )
+    & parent < keyword
+;
+
+r7_merge_using:
+      [parent) merge___2
+    & (
+          [keyword) 'USING'
       )
     & parent < keyword
 ;
@@ -3495,6 +3502,7 @@ r7_right_align_keywords:
     | r7_update
     | r7_delete
     | r7_merge
+    | r7_merge_using
     | r7_merge_update_clause
     | r7_merge_insert_clause
 -> {

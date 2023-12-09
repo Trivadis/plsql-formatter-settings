@@ -28,7 +28,7 @@ We recommend you download, clone, or fork this repository when you plan to use [
 However, [`format.js`](format.js) also works as a standalone script. Here's the usage:
 
 ```
-Trivadis PL/SQL & SQL Formatter (format.js), version 23.1.0
+Trivadis PL/SQL & SQL Formatter (format.js), version 23.3.0
 
 usage: script format.js <rootPath> [options]
 

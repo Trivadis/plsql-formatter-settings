@@ -6,17 +6,17 @@
     <!-- The Basics -->
     <groupId>com.trivadis.plsql.formatter</groupId>
     <artifactId>tvdformat</artifactId>
-    <version>23.1.1-SNAPSHOT</version>
+    <version>23.3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>11</jdk.version>
         <jdk.test.version>17</jdk.test.version>
-        <sqlcl.version>23.1.0</sqlcl.version>
-        <graalvm.version>22.3.1</graalvm.version>
-        <native.maven.plugin.version>0.9.21</native.maven.plugin.version>
+        <sqlcl.version>23.3.0</sqlcl.version>
+        <graalvm.version>22.3.4</graalvm.version>
+        <native.maven.plugin.version>0.9.28</native.maven.plugin.version>
         <reflections.version>0.10.2</reflections.version>
-        <slf4j.version>2.0.7</slf4j.version>
+        <slf4j.version>2.0.9</slf4j.version>
         <javassist.version>3.29.2-GA</javassist.version>
         <skip.native>true</skip.native>
         <disable.logging>true</disable.logging>
@@ -26,20 +26,20 @@
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>${graalvm.version}</version>
+            <version>23.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>${graalvm.version}</version>
+            <version>23.1.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- SQLcl dependencies available in public Maven repositories -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>32.1.3-jre</version>
             <scope>test</scope>
         </dependency>
         <!-- SQLcl dependencies not available in public Maven repositories -->
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.9.2</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
