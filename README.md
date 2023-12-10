@@ -15,6 +15,32 @@ JDK 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar works with
 
 See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) for settings supporting older versions.
 
+## Patching SQL Developer
+
+SQL Developer is slowly reaching the end of its life cycle. The days when SQL Developer and SQLcl were released almost simultaneously every quarter are long gone. We can continue to expect regular SQLcl releases, but with the availability of SQL Developer as a Visual Studio Code Extension, SQL Developer will only be updated sporadically.
+
+A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rule due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl. 
+
+However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer as follows:
+
+1. Quit SQL Developer
+   
+   We are going to patch SQL Developer. This is not possible on Windows if SQL Developer is running. On other OS this might have strange effects. Therefore quit SQL Developer.
+
+2. Rename SQL Developer’s `dbtools-common.jar`
+
+   Find the `dbtools-common.jar` in your SQL Developer installation. In our case it's in `/Applications/SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/lib`. Rename this file to `dbtools-common.original.jar`.
+
+3. Copy SQLcl’s `dbtools-common.jar`
+
+   Find the `dbtools-common.jar` in your SQLcl installation. In our case it's in `/usr/local/bin/sqlcl/lib`. Copy the file to the SQL Developer’s directory (where `dbtools-common.original.jar` is located).
+
+4. Start SQL Developer
+
+   Open an editor and test if the formatter is working.
+
+We have successfully tested this procedure with SQL Developer 23.1.1. However, there were cases in the past where this did not work. For example, using the JAR of SQLcl 20.3.0 in SQL Developer 20.2.0. Replacing a JAR requires a certain level of compatiblity. We therefore expect that this procedure will no longer work with an upcoming version of SQLcl. We will update this section as soon as we know more.
+
 ## Deviating Settings
 
 Please note that these settings do not comply with rule 5. Line breaks are placed after a comma and not before. All other rules are followed. However, you can easily change this in the preferences.
