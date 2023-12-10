@@ -238,6 +238,34 @@
                                 <exclude>**</exclude>
                             </excludes>
                         </filter>
+                        <filter>
+                            <!-- remove word (transitive), confilict with graal-sdk -->
+                            <artifact>*:*word*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove word (nativeimage), confilict with graal-sdk -->
+                            <artifact>*:*nativeimage*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove word (collections), confilict with graal-sdk -->
+                            <artifact>*:*collections*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- remove word (polyglot), confilict with graal-sdk -->
+                            <artifact>*:*polyglot*</artifact>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </filter>
                     </filters>
                 </configuration>
             </plugin>
