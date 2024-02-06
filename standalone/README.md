@@ -31,13 +31,13 @@ The parameters are the same as for the [SQLcl command `tvdformat`](../sqlcl/READ
 
 A native image is a platform specific executable. It does not require a JDK at runtime. A native image uses less resources and is faster. The following images can be produced with a GraalVM JDK 17:
 
-OS      | amd64 (Intel)?  | aarch64 (ARM)? |
-------- | :-------------: | :------------: |
-macOS   | yes             | yes            |
-Linux   | yes             | yes            |
-Windows | yes             | -              |
+| OS      | amd64 (Intel)? | aarch64 (ARM)? |
+|---------|:--------------:|:--------------:|
+| macOS   |      yes       |      yes       |
+| Linux   |      yes       |      yes       |
+| Windows |      yes       |       -        |
 
-Currently there is no way to produce an ARM based (aarch64) native image for Windows. 
+Currently, there is no way to produce an ARM based (aarch64) native image for Windows. 
 
 Native images are not part of a release. You have to build them yourself as described [below](#how-to-build).
 
@@ -82,14 +82,14 @@ The parameters are the same as for the [executable JAR](#executable-jar).
 
     You can define the following optional parameters: 
 
-    | Parameter                  | Value   | Meaning |
-    | -------------------------- | ------- | ------- |
-    | `skip.native`              | `true`  | Do not produce a native image (default) |
-    |                            | `false` | Produce a native image |
-    | `skipTests`                | `true`  | Run tests (default) |
-    |                            | `false` | Do not run tests |
+    | Parameter                  | Value   | Meaning                                           |
+    | -------------------------- | ------- |---------------------------------------------------|
+    | `skip.native`              | `true`  | Do not produce a native image (default)           |
+    |                            | `false` | Produce a native image                            |
+    | `skipTests`                | `true`  | Do not run tests                                  |
+    |                            | `false` | Run tests (default)                               |
     | `disable.logging`          | `true`  | Disable logging message during test run (default) |
-    |                            | `false` | Enable logging message during test run |
+    |                            | `false` | Enable logging message during test run            |
 
     Here's a fully qualified example to produce a native image and run all integration tests:
 
