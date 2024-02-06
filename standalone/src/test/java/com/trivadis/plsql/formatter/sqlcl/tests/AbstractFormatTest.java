@@ -21,8 +21,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                             
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
-                            
-                Expected: expr#,function,literal,factor,boolean_primary,func... skipped.
+                Expected: constraint,'.',iterator_control_list,':','CONSTRAI
+                ... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "mext=");
         assertEquals(expected, actual);
@@ -551,8 +551,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
-                                                                                     
-                Expected: expr#,function,literal,factor,boolean_primary,func... skipped.
+                Expected: constraint,'.',iterator_control_list,':','CONSTRAI
+                ... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var configFileContent = """
                 [
@@ -604,14 +604,14 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
     public void process_dir_all_errors(final RunType runType) {
         // console output
         var expected = """
-                                
+                
                 Formatting file 1 of 4: #TEMP_DIR#/markdown.md... #1... done... #2... Syntax Error at line 6, column 13
                                 
                                 
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
                              ^^^
-                                
-                Expected: expr#,function,literal,factor,boolean_primary,func... skipped... #3... done... done.
+                Expected: constraint,'.',iterator_control_list,':','CONSTRAI
+                ... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
                 Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
                 Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... Syntax Error at line 6, column 12
@@ -619,8 +619,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
-                                
-                Expected: expr#,function,literal,factor,boolean_primary,func... skipped.
+                Expected: constraint,'.',iterator_control_list,':','CONSTRAI
+                ... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir());
         assertEquals(expected, actual);
@@ -635,8 +635,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                     for r in /*(*/ select x.* from x join y on y.a = x.a)
                              ^^^
-                                
-                Expected: expr#,function,literal,factor,boolean_primary,func... skipped... #3... done... done.
+                Expected: constraint,'.',iterator_control_list,':','CONSTRAI
+                ... skipped... #3... done... done.
                 Formatting file 2 of 4: #TEMP_DIR#/package_body.pkb... done.
                 Formatting file 3 of 4: #TEMP_DIR#/query.sql... done.
                 Formatting file 4 of 4: #TEMP_DIR#/syntax_error.sql... skipped.
@@ -657,8 +657,8 @@ public abstract class AbstractFormatTest extends AbstractSqlclTest {
                                 
                    for r in /*(*/ select x.* from x join y on y.a = x.a)
                             ^^^
-                                
-                Expected: expr#,function,literal,factor,boolean_primary,func... skipped.
+                Expected: constraint,'.',iterator_control_list,':','CONSTRAI
+                ... skipped.
                 """.replace("#TEMP_DIR#", getTempDir());
         var actual = run(runType, getTempDir(), "serr=ext");
         assertEquals(expected, actual);
