@@ -211,15 +211,24 @@
                         <filter>
                             <!-- include required packages for formatter -->
                             <artifact>*:*dbtools-common*</artifact>
-                            <includes>
-                                <include>oracle/dbtools/app/**</include>
-                                <include>oracle/dbtools/arbori/**</include>
-                                <include>oracle/dbtools/parser/**</include>
-                                <include>oracle/dbtools/raptor/*</include>
-                                <include>oracle/dbtools/raptor/utils/**</include>
-                                <include>oracle/dbtools/util/**</include>
-                                <include>oracle/dbtools/scripting/**</include>
-                            </includes>
+                            <excludes>
+                                <exclude>oracle/dbtools/common/**</exclude>
+                                <exclude>oracle/dbtools/connections/**</exclude>
+                                <exclude>oracle/dbtools/dap/**</exclude>
+                                <exclude>oracle/dbtools/data/**</exclude>
+                                <exclude>oracle/dbtools/db/**</exclude>
+                                <exclude>oracle/dbtools/extension/**</exclude>
+                                <exclude>oracle/dbtools/insight/**</exclude>
+                                <exclude>oracle/dbtools/jdbc/**</exclude>
+                                <exclude>oracle/dbtools/ocidbmetrics/**</exclude>
+                                <exclude>oracle/dbtools/raptor/**</exclude>
+                                <exclude>oracle/dbtools/rest/**</exclude>
+                                <exclude>oracle/dbtools/scripting/**</exclude>
+                                <exclude>oracle/dbtools/security/**</exclude>
+                                <exclude>oracle/dbtools/transfer/**</exclude>
+                                <exclude>oracle/dbtools/util/**</exclude>
+                                <exclude>oracle/dbtools/xml/**</exclude>
+                            </excludes>
                         </filter>
                         <filter>
                             <!-- remove reflections -->
@@ -238,34 +247,6 @@
                         <filter>
                             <!-- remove javassist (transitive) -->
                             <artifact>*:*javassist*</artifact>
-                            <excludes>
-                                <exclude>**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <!-- remove word (transitive), confilict with graal-sdk -->
-                            <artifact>*:*word*</artifact>
-                            <excludes>
-                                <exclude>**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <!-- remove word (nativeimage), confilict with graal-sdk -->
-                            <artifact>*:*nativeimage*</artifact>
-                            <excludes>
-                                <exclude>**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <!-- remove word (collections), confilict with graal-sdk -->
-                            <artifact>*:*collections*</artifact>
-                            <excludes>
-                                <exclude>**</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <!-- remove word (polyglot), confilict with graal-sdk -->
-                            <artifact>*:*polyglot*</artifact>
                             <excludes>
                                 <exclude>**</exclude>
                             </excludes>
