@@ -202,6 +202,7 @@ public class I11_enforce_nonquoted_identifiers extends ConfiguredTestFormatter {
             // works only with "setOption(getFormatter().formatWhenSyntaxError, true);"
             // setting this option to false will most probably break the Java code to be formatted.
             // it's a good example that with syntax errors must not be formatted.
+            // SQLcl 23.4.0 can parse Java source without errors, we have to ignore the code in the Arbori program.
             var input = """
                     create or replace and resolve java source named "Welcome" as
                     public class Welcome {
@@ -213,13 +214,12 @@ public class I11_enforce_nonquoted_identifiers extends ConfiguredTestFormatter {
                                         
                     create or replace function greet(in_name in varchar2) return varchar2
                     as language java
-                    name 'Welcome.greet(java.lang.String) return java.lang.String';
+                       name 'Welcome.greet(java.lang.String) return java.lang.String';
                     /
                                         
                     select greet('Scott') from dual;
                     """;
-            SyntaxError thrown = Assertions.assertThrows (SyntaxError.class, () -> getFormatter().format(input), "Expected syntax error.");
-            Assertions.assertTrue(thrown.getMessage().contains("Syntax Error at line 4, column 23"));
+            formatAndAssert(input);
         }
     }
 
