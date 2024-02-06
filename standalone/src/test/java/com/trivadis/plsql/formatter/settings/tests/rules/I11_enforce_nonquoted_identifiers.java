@@ -2,7 +2,6 @@ package com.trivadis.plsql.formatter.settings.tests.rules;
 
 import com.trivadis.plsql.formatter.settings.ConfiguredTestFormatter;
 import oracle.dbtools.app.Format;
-import oracle.dbtools.parser.plsql.SyntaxError;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
