@@ -29,8 +29,7 @@ public class Json_functions extends ConfiguredTestFormatter {
                                                    'mgr' : e.mgr,
                                                    'hiredate' : to_char(e.hiredate, 'YYYY-MM-DD'),
                                                    'sal' : e.sal,
-                                                   'comm' : e.comm
-                                                   absent on null
+                                                   'comm' : e.comm absent on null
                                                    returning clob
                                                 )
                                              )
