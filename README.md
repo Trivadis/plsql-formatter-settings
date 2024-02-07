@@ -23,7 +23,9 @@ SQL Developer is slowly reaching the end of its life cycle. The days when SQL De
 
 A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rule due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl. 
 
-However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer as follows:
+However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer. Unfortunatelly the classes are not 100% compatible with the SQL Developer. As a a result, we have to keep some original classes, which complicates the patching process a bit.
+
+Here's the full procedure to use `dbtools-common.jar` from SQLcl 23.4.0 in SQL Developer 23.1.1.345:
 
 1. Quit SQL Developer
    
@@ -37,11 +39,31 @@ However, we know that the grammars and the formatter are provided in a JAR calle
 
    Find the `dbtools-common.jar` in your SQLcl installation. In our case it's in `/usr/local/bin/sqlcl/lib`. Copy the file to the SQL Developer’s directory (where `dbtools-common.original.jar` is located).
 
-4. Start SQL Developer
+4. Patch SQLcl's `dbtools-common.jar`
 
-   Open an editor and test if the formatter is working.
+   Open a terminal window in the `lib` folder where `dbtools-common.original.jar` and `dbtools-commmon.jar` are located and run the following commands to copy the class `oracle.dbtools.parser.ParserNode.class` to `dbtools-common.jar`:
 
-We have successfully tested this procedure with SQL Developer 23.1.1. However, there were cases in the past where this did not work. For example, using the JAR of SQLcl 20.3.0 in SQL Developer 20.2.0. Replacing a JAR requires a certain level of compatiblity. We therefore expect that this procedure will no longer work with an upcoming version of SQLcl. We will update this section as soon as we know more.
+   ```bash
+   jar -xvf dbtools-common.original.jar oracle/dbtools/parser/ParseNode.class
+   jar -u0vMf dbtools-common.jar oracle/dbtools
+   rm -rf oracle
+   ```
+
+   This step is necessary to ensure that the "Code Outline" continues to work in SQL Developer.
+
+5. Clear SQL Developer's cache
+
+   Delete the following directory:
+
+   - On Windows: `%APPDATA%\SQL Developer\system23.1.1.345.2114\system_cache`
+   - On other platforms: `$HOME/.sqldeveloper/system23.1.1.345.2114/system_cache`
+
+   This step is necessary to ensure no other version of `dbtools-common.jar` is used from the cache. You will all
+   window settings. However, all other preferences including your connections are preserved.
+
+6. Start SQL Developer
+
+   Open an editor and test if the formatter and code outline is working.
 
 ## Deviating Settings
 
