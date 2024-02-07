@@ -17,7 +17,7 @@
 include "std.arbori"
 
 /**
- * Lightweight Formatter for SQL Developer and SQLcl, version 23.3.1-SNAPSHOT
+ * Lightweight Formatter for SQL Developer and SQLcl, version 23.4.0-SNAPSHOT
  * The idea is to keep the code formatted "as is" and apply chosen formatting rules only.
  *
  * The Arbori program is processed from top to bottom.
@@ -157,8 +157,21 @@ d1_initialize_timer:
 dontFormatNode:
       [node) numeric_literal
     | [node) path             -- expected in SQL*Plus, SQLcl commands only
+    | [node) "create_java"
 ->
 ;
+
+enableKeepQutoedIdentifiersForCall:
+    runOnce
+-> {
+    var keepQuotedIdentifiersForCall = false;
+}
+
+enforceKeepQuotedIdentifiersForCall:
+    [node) "create_java"
+-> {
+    keepQuotedIdentifiersForCall = true;
+}
 
 -- --------------------------------------------------------------------------------------------------------------------
 -- I5: Define global variables and functions.
@@ -638,6 +651,7 @@ i10_determine_and_normalize_line_separators:
 --    - The identifier is not part of a code section for which the formatter is disabled.
 --    - The identifier is not part of a conditional compilation block.
 --    - The identifier is not a reserved keyword
+--    - The variable keepQuotedIdentifiersForCall is true (set at the beginning, disabled for Java)
 --
 -- Quoted identifiers look like strings in Java and other languages. The parser in SQLDev 22.2.0 does not
 -- understand Java stored procedures. Trying to format a Java stored procedure leads to a syntax error.
@@ -759,7 +773,7 @@ i11_enforce_nonquoted_identifiers:
     // get custom option keepQuotedIdentifiers (might not exist)
     var keepQuotedIdentifiers = struct.options.get("keepQuotedIdentifiers");
 
-    if (keepQuotedIdentifiers == null || !keepQuotedIdentifiers) {
+    if ((keepQuotedIdentifiers == null || !keepQuotedIdentifiers) && !keepQuotedIdentifiersForCall) {
         findAndConvertQuotedIdentifiers();
     }
 }

@@ -23,13 +23,14 @@ public class Issue_150_define extends ConfiguredTestFormatter {
         // Same behavior with START as with @.
         // Fixed in SQLDev 21.4.0.
         // Syntax error in SQLcl 23.1.0
+        // Fixed in SQLcl 24.0.0
         var sql = """
                 define table_folder = 'table'
                 set define on
                 @./demo/&&table_folder/drop_demo_tables.sql
                 set define off
                 """;
-       Assertions.assertThrows(SyntaxError.class, () -> formatAndAssert(sql));
+       formatAndAssert(sql);
     }
 
     @Test

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.IOException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled("Bug in SQLDev 23.1, SQLcl 23.3")
+@Disabled("Bug in SQLDev 23.1.1.345, SQLcl 23.3.0, SQLcl 23.4.0")
 public class Issue_256_linebreak_in_string extends ConfiguredTestFormatter {
     @Test
     public void escaped_entity_in_string() throws IOException {

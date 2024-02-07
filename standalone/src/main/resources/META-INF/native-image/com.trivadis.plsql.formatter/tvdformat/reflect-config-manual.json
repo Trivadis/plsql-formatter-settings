@@ -191,6 +191,28 @@
     "allPublicClasses": true
   },
   {
+    "name": "java.nio.file.FileSystem",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
+    "name": "java.nio.file.PathMatcher",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicClasses": true
+  },
+  {
     "name": "java.nio.file.Paths",
     "allDeclaredConstructors": true,
     "allDeclaredMethods": true,

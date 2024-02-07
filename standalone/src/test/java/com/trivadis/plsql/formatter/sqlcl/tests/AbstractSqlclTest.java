@@ -1,5 +1,6 @@
 package com.trivadis.plsql.formatter.sqlcl.tests;
 
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import oracle.dbtools.raptor.newscriptrunner.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ public abstract class AbstractSqlclTest {
 
     protected final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
     protected final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
-    protected final ScriptContext scriptContext = new SimpleScriptContext();
+    protected final ScriptContext scriptContext = scriptEngine.getContext();
     protected final ScriptRunnerContext ctx = new ScriptRunnerContext();
     protected final ScriptExecutor sqlcl = new ScriptExecutor(null);
     protected final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -66,7 +67,9 @@ public abstract class AbstractSqlclTest {
         var bindings = new SimpleBindings();
         bindings.put("polyglot.js.allowHostAccess", true);
         bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
+        bindings.put("allowExperimentalOptions", true);
         scriptContext.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+        ((GraalJSScriptEngine)scriptEngine).getPolyglotContext().enter();
         sqlcl.setOut(bufferedOutputStream);
         ctx.setOutputStreamWrapper(wrapListenBufferOutputStream);
         sqlcl.setScriptRunnerContext(ctx);
