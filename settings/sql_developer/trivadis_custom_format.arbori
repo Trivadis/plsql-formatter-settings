@@ -3376,7 +3376,7 @@ r7_select:
         | [keyword) 'JOIN'
         | [keyword) 'PARTITION'
         | [keyword) 'BY'
-        | [keyword) 'ON'
+        | [keyword) 'ON' & ![keyword+1) 'CONVERSION'
         | [keyword) 'USING'
         | [keyword) 'OUTER'
         | [keyword) 'APPLY'
