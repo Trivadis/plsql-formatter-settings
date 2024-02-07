@@ -2075,12 +2075,18 @@ r3_case_expressions:
     & parent < node
 ;
 
+r3_no_commands:
+    [node) sqlplus_command & [oserror) 'OSERROR' & [oserror+1 = [node
+;
+
 r3_commands:
-      r3_sqlplus_commands
-    | r3_sql_commands
-    | r3_plsql_commands
-    | r3_plsql_keywords
-    | r3_case_expressions
+    (
+          r3_sqlplus_commands
+        | r3_sql_commands
+        | r3_plsql_commands
+        | r3_plsql_keywords
+        | r3_case_expressions
+    ) - r3_no_commands
 -> {
     var node = tuple.get("node");
     // do not add a line break on the first line.
