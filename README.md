@@ -6,10 +6,12 @@ This repository provides formatter settings for the [coding style rules](https:/
 
 Settings are primarily provided for
 
-- [Oracle SQLcl, Version 23.3.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
+- [Oracle SQLcl, Version 23.4.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
 - [Oracle SQL Developer, Version 23.1.1](https://www.oracle.com/tools/downloads/sqldev-downloads.html) (requires `dbtools-common.jar` from SQLcl 23.3.0)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
+
+Please note, that these settings cannot be used in [Oracle SQL Developer for VSCode 23.4.0](https://marketplace.visualstudio.com/items?itemName=Oracle.sql-developer). And it does not work in the embedded version of SQLcl 23.3.1.0, which cannot run JavaScript. 
 
 JDK 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar works with JDK 11 or newer.
 
