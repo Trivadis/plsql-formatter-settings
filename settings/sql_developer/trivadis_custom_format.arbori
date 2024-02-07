@@ -1851,7 +1851,7 @@ a8_one_space_after:
     | a8_update
 -> {
     var node = tuple.get("node");
-    if (!hasCommentsBetweenPos(node.from, node.to)) {
+    if (overrideIndents(node.from) && !hasCommentsBetweenPos(node.from, node.to)) {
         struct.putNewline(node.to, " ");
         var content = target.src.get(node.from).content;
         logger.fine(struct.getClass(), "a8_one_space_after: <" + content + "> at " + node.to + ".");
