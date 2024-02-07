@@ -11,7 +11,7 @@ This project contains JUnit tests for
 - the SQLcl command `tvdformat`
 - the standalone exectable `tvdformat` 
 
-The project requires a JDK 17, but it produces a Java 11 executable JAR file. A GraalVM JDK is required only if you want to build a [native image](https://www.graalvm.org/reference-manual/native-image/).
+The project requires a JDK 17. A GraalVM JDK 21.0.2 is required if you want to build a [native image](https://www.graalvm.org/reference-manual/native-image/).
 
 ## Running the Standalone Formatter
 

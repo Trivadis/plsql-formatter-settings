@@ -13,7 +13,7 @@ These settings have been defined and tested with the product versions mentioned 
 
 Please note, that these settings cannot be used in [Oracle SQL Developer for VSCode 23.4.0](https://marketplace.visualstudio.com/items?itemName=Oracle.sql-developer). And it does not work in the embedded version of SQLcl 23.3.1.0, which cannot run JavaScript. 
 
-JDK 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar works with JDK 11 or newer.
+JDK 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar requires JDK 17 or newer.
 
 See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) for settings supporting older versions.
 
