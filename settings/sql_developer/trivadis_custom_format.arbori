@@ -3406,7 +3406,7 @@ r7_single_table_insert:
         | [keyword) 'RETURNING'
         | [keyword) 'LOG'
         | [keyword) 'REJECT'
-        | [keyword) 'SELECT' & ![keyword^^-1) '(' & ![keyword^^^-1) '('
+        | [keyword) 'SELECT' & ![keyword^^-1) '(' & ![keyword^^^-1) '(' & ![keyword^^^^-1) '('
       )
     & insert < keyword
     & parent < insert
