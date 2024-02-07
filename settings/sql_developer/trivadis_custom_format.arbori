@@ -2413,7 +2413,7 @@ o10_join_clause_keywords:
           | [keyword) 'JOIN'
           | [keyword) 'PARTITION'
           | [keyword) 'BY'
-          | [keyword) 'ON'
+          | [keyword) 'ON' & ![keyword+1) 'CONVERSION'
           | [keyword) 'USING'
           | [keyword) 'OUTER'
           | [keyword) 'APPLY'
@@ -2439,7 +2439,7 @@ o10_join_clause_break_keywords:
               & ![keyword-1) outer_join_type
               & ![keyword-1) "inner_cross_join_clause___0"
           --| [keyword) 'PARTITION'
-          | [keyword) 'ON'
+          | [keyword) 'ON' & ![keyword+1) 'CONVERSION'
           | [keyword) 'USING'
           | [keyword) 'OUTER' & [keyword+1) 'APPLY'
       )
