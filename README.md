@@ -23,7 +23,7 @@ SQL Developer is slowly reaching the end of its life cycle. The days when SQL De
 
 A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rules due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl. 
 
-However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer. Unfortunatelly the classes are not 100% compatible with the SQL Developer. As a a result, we have to keep some original classes, which complicates the patching process a bit.
+However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer. Unfortunatelly the classes are not 100% compatible with SQL Developer. As a a result, we have to keep some original classes, which complicates the patching process a bit.
 
 Here's the full procedure to use `dbtools-common.jar` from SQLcl 23.4.0 in SQL Developer 23.1.1.345:
 
