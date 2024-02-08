@@ -21,7 +21,7 @@ See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) fo
 
 SQL Developer is slowly reaching the end of its life cycle. The days when SQL Developer and SQLcl were released almost simultaneously every quarter are long gone. We can continue to expect regular SQLcl releases, but with the availability of SQL Developer as a Visual Studio Code Extension, SQL Developer will only be updated sporadically.
 
-A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rule due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl. 
+A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rules due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl. 
 
 However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer. Unfortunatelly the classes are not 100% compatible with the SQL Developer. As a a result, we have to keep some original classes, which complicates the patching process a bit.
 
@@ -58,8 +58,8 @@ Here's the full procedure to use `dbtools-common.jar` from SQLcl 23.4.0 in SQL D
    - On Windows: `%APPDATA%\SQL Developer\system23.1.1.345.2114\system_cache`
    - On other platforms: `$HOME/.sqldeveloper/system23.1.1.345.2114/system_cache`
 
-   This step is necessary to ensure no other version of `dbtools-common.jar` is used from the cache. You will all
-   window settings. However, all other preferences including your connections are preserved.
+   This step is necessary to ensure no other version of `dbtools-common.jar` is used from the cache. All
+   window preferences will be reset to factory settings. However, all other preferences including your connections are preserved.
 
 6. Start SQL Developer
 
