@@ -52,7 +52,7 @@ The parameters are the same as for the [executable JAR](#executable-jar).
 ## How to Build
 
 1. [Download](https://www.oracle.com/tools/downloads/sqlcl-downloads.html) and install SQLcl 23.4.0
-2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-17.0.9) and install the GraalVM JDK 21.0.2
+2. [Download](https://github.com/graalvm/graalvm-ce-builds/releases/tag/jdk-21.0.2) and install the GraalVM JDK 21.0.2
 3. For native image on Windows you need to [download](https://visualstudio.microsoft.com/downloads/) Visual Studio Community 2022 and install the C++ compiler. Use `x64 Native Tools Command Prompt for VS 2022` to get a terminal window with the correct environment.
 4. [Download](https://maven.apache.org/download.cgi) and install Apache Maven 3.9.6
 5. [Download](https://git-scm.com/downloads) and install a git command line client
