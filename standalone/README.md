@@ -17,7 +17,7 @@ The project requires a JDK 17. A GraalVM JDK 21.0.2 is required if you want to b
 
 ### Executable JAR
 
-The `tvdformat.jar` is a shaded, executable JAR that is part of a [release](https://github.com/Trivadis/plsql-formatter-settings/releases). It contains all dependent Java classes and needs a JDK 11 or higher at runtime.
+The `tvdformat.jar` is a shaded, executable JAR that is part of a [release](https://github.com/Trivadis/plsql-formatter-settings/releases). It contains all dependent Java classes and needs a JDK 17 or higher at runtime.
 
 To run it, open a terminal window and type
 
