@@ -1,3 +1,9 @@
+# Discontinuation Notice
+
+@PhilippSalvisberg no longer work for Trivadis - Part of Accenture and no one at Trivadis/Accenture will continue this project. Therefore, this GitHub repository was archived on 30 August 2024.
+
+However, @PhilippSalvisberg decided to create a fork and continue this project under [PhilippSalvisberg/plsql-formatter-settings](https://github.com/PhilippSalvisberg/plsql-formatter-settings).
+
 # PL/SQL & SQL Formatter Settings
 
 ## Introduction
@@ -7,11 +13,11 @@ This repository provides formatter settings for the [coding style rules](https:/
 Settings are primarily provided for
 
 - [Oracle SQLcl, Version 23.4.0](https://www.oracle.com/tools/downloads/sqlcl-downloads.html)
-- [Oracle SQL Developer, Version 23.1.1.345](https://www.oracle.com/tools/downloads/sqldev-downloads.html) (requires `dbtools-common.jar` from SQLcl 23.4.0 using `ParseNode.class` from SQL Developer 23.1.1.345) 
+- [Oracle SQL Developer, Version 23.1.1.345](https://www.oracle.com/tools/downloads/sqldev-downloads.html) (requires `dbtools-common.jar` from SQLcl 23.4.0 using `ParseNode.class` from SQL Developer 23.1.1.345)
 
 These settings have been defined and tested with the product versions mentioned above. They might not work in other versions.
 
-Please note, that these settings cannot be used in [Oracle SQL Developer for VSCode 23.4.0](https://marketplace.visualstudio.com/items?itemName=Oracle.sql-developer). And it does not work in the embedded version of SQLcl 23.3.1.0, which cannot run JavaScript. 
+Please note, that these settings cannot be used in [Oracle SQL Developer for VSCode 23.4.0](https://marketplace.visualstudio.com/items?itemName=Oracle.sql-developer). And it does not work in the embedded version of SQLcl 23.3.1.0, which cannot run JavaScript.
 
 JDK 11 is required for SQLDev and SQLcl. The standalone tvdformat.jar requires JDK 17 or newer.
 
@@ -21,14 +27,14 @@ See [releases](https://github.com/Trivadis/plsql-formatter-settings/releases) fo
 
 SQL Developer is slowly reaching the end of its life cycle. The days when SQL Developer and SQLcl were released almost simultaneously every quarter are long gone. We can continue to expect regular SQLcl releases, but with the availability of SQL Developer as a Visual Studio Code Extension, SQL Developer will only be updated sporadically.
 
-A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rules due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl. 
+A new SQLcl version typically comes with enhancements and bug fixes in the area of PL/SQL and SQL grammar. And this also requires an adaptation of the formatting rules due to symbol name changes etc. And as a result, these formatting rules can actually only be used in SQLcl.
 
 However, we know that the grammars and the formatter are provided in a JAR called `dbtools-common.jar`. And this JAR file also exists in the SQL Developer distribution. This means that in order to be able to use the current formatting rules in SQL Developer, we have to copy the `dbtools-common.jar` file from SQLcl to SQL Developer. Unfortunatelly the classes are not 100% compatible with SQL Developer. As a a result, we have to keep some original classes, which complicates the patching process a bit.
 
 Here's the full procedure to use `dbtools-common.jar` from SQLcl 23.4.0 in SQL Developer 23.1.1.345:
 
 1. Quit SQL Developer
-   
+
    We are going to patch SQL Developer. This is not possible on Windows if SQL Developer is running. On other OS this might have strange effects. Therefore quit SQL Developer.
 
 2. Rename SQL Developer’s `dbtools-common.jar`
@@ -75,7 +81,7 @@ Please note that these settings do not comply with rule 5. Line breaks are place
 
 ### Common
 
-Clone this repository or download the ZIP file and extract it. 
+Clone this repository or download the ZIP file and extract it.
 
 ### SQLcl
 
@@ -125,7 +131,7 @@ The Arbori program implements a [lightweight formatter](https://www.salvis.com/b
 - `select`
 - `update`
 
-Other statements like `create table` or `create tablespace` are basically left as is. There are some exceptions like adding line breaks after reaching the maximum line length and changing the case of keywords and identifiers. But that's it. 
+Other statements like `create table` or `create tablespace` are basically left as is. There are some exceptions like adding line breaks after reaching the maximum line length and changing the case of keywords and identifiers. But that's it.
 
 If you need a heavyweight formatter to enforce the conformity of your code, you will need to use the default Arbori program provided by the SQL Developer team.
 
@@ -133,9 +139,9 @@ In any case, you can use our SQLcl JavaScript [`format.js`](sqlcl/README.md), th
 
 ### Disable Formatter
 
-The formatter is enabled by default. You can disable the formatter with a single-line or multi-line comment containing `@formatter:off`. From that point on, whitespace are kept as is. To re-enable the formatter use `@formatter:on`. 
+The formatter is enabled by default. You can disable the formatter with a single-line or multi-line comment containing `@formatter:off`. From that point on, whitespace are kept as is. To re-enable the formatter use `@formatter:on`.
 
-Supported Marker Comment | Action | Origin 
+Supported Marker Comment | Action | Origin
 -- | -- | --
 `@formatter:off` | Disables formatter | Eclipse IDE
 `@formatter:on` | Enables formatter | Eclipse IDE
@@ -148,7 +154,7 @@ Here's an example showing the code after calling the formatter:
 
 ```sql
 -- @formatter:off
-select decode(dummy, 'X', 1 
+select decode(dummy, 'X', 1
                    , 'Y', 2
                    , 'Z', 3
                         , 0) /* @formatter:on */
@@ -168,7 +174,7 @@ SQL Developer uses its own parse tree query language called Arbori for its advan
 - [Semantic Analysis with Arbori](https://vadimtropashko.files.wordpress.com/2019/11/arbori.pdf)
 - [Arbori Semantic Actions](https://vadimtropashko.wordpress.com/2019/08/01/arbori-semantic-actions/)
 - [Custom Formatting in SQLDev 4.2](https://vadimtropashko.wordpress.com/2017/01/03/custom-formatting-in-sqldev-4-2/)
-- [Formula for Formatting](https://vadimtropashko.wordpress.com/2017/09/28/formatting-formulas/) 
+- [Formula for Formatting](https://vadimtropashko.wordpress.com/2017/09/28/formatting-formulas/)
 - [Custom Syntax Coloring](https://vadimtropashko.wordpress.com/2018/10/10/custom-syntax-coloring/)
 - [Arbori 20.2](https://vadimtropashko.wordpress.com/2020/06/19/arbori-20-2/)
 - [Java Script Conditions](https://vadimtropashko.wordpress.com/2020/05/29/java-script-conditions/)
@@ -177,12 +183,12 @@ Thank you, Vadim Tropashko for providing this valuable information.
 
 #### JavaScript Global Variables
 
-To get the most out of the dynamic JavaScript actions from an Arbori program, you should know the following global variables and their corresponding Java class. 
+To get the most out of the dynamic JavaScript actions from an Arbori program, you should know the following global variables and their corresponding Java class.
 
 Variable | Type                                             | JAR File
 -------- | ------------------------------------------------ | -----------------------
 `struct` | oracle.dbtools.app.Format                        | dbtools-common.jar
-`target` | oracle.dbtools.parser.Parsed                     | dbtools-common.jar 
+`target` | oracle.dbtools.parser.Parsed                     | dbtools-common.jar
 `tuple`  | HashMap<String, oracle.dbtools.parser.ParseNode> | dbtools-common.jar
 `logger` | oracle.dbtools.util.Logger                       | dbtools-common.jar
 

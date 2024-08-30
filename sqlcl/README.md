@@ -1,9 +1,3 @@
-# Discontinuation Notice
-
-@PhilippSalvisberg no longer work for Trivadis - Part of Accenture and no one at Trivadis/Accenture will continue this project. Therefore, this GitHub repository was archived on 30 August 2024.
-
-However, @PhilippSalvisberg decided to create a fork and continue this project under [PhilippSalvisberg/plsql-formatter-settings](https://github.com/PhilippSalvisberg/plsql-formatter-settings).
-
 # Formatting Code with SQLcl
 
 ## Introduction
