@@ -1,3 +1,9 @@
+# Discontinuation Notice
+
+@PhilippSalvisberg no longer work for Trivadis - Part of Accenture and no one at Trivadis/Accenture will continue this project. Therefore, this GitHub repository was archived on 30 August 2024.
+
+However, @PhilippSalvisberg decided to create a fork and continue this project under [PhilippSalvisberg/plsql-formatter-settings](https://github.com/PhilippSalvisberg/plsql-formatter-settings).
+
 # Formatting Code with SQLcl
 
 ## Introduction
@@ -17,7 +23,7 @@ FORMAT RULES <filename> - Loads formatter preferences file from SQL Developer ex
 FORMAT FILE <input_file> <output_file>
 ```
 
-You can use a directory for `<input_file>` and `output_file`. It can be even the same. Only files that are parsed without errors are formatted. This is good. However, you cannot configure an `.arbori` file as input. `FORMAT RULES` can only load the `.xml` file. 
+You can use a directory for `<input_file>` and `output_file`. It can be even the same. Only files that are parsed without errors are formatted. This is good. However, you cannot configure an `.arbori` file as input. `FORMAT RULES` can only load the `.xml` file.
 
 So, if you want to have full control over the formatting result you have to use the script or the custom command, especially if you want to format SQL code blocks within Markdown files.
 
@@ -131,7 +137,7 @@ An ignore file contains file patterns. It's similar to `.gitignore`. Here's an e
 ```
 # ignore all files under an "archive" subdirectory
 **/archive/**
-              
+
 # ignore files containing "test" in the file name
 **/*test*
 ```
